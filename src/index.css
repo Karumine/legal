@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@media print {
+  html, body {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background-color: white;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  
+  .print-hide {
+    display: none !important;
+  }
+  
+  .print-page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0;
+    padding: 15mm 15mm 15mm 30mm; /* top right bottom left - extra left for binding */
+    page-break-after: always;
+    page-break-inside: avoid;
+    background-color: white;
+    box-sizing: border-box; /* ensure padding is inside width */
+    box-shadow: none;
+    overflow: hidden;
+  }
+}
+
+/* Screen styles for preview */
+@media screen {
+  .print-page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 15mm 15mm 15mm 30mm;
+    background-color: white;
+    box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+}
