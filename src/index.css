@@ -32,6 +32,10 @@
     box-shadow: none;
     overflow: hidden;
   }
+  
+  .print-page:last-of-type {
+    page-break-after: auto;
+  }
 }
 
 /* Screen styles for preview */

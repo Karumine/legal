@@ -96,6 +96,43 @@ export default function GuaranteeForm({ data, onChange }: Props) {
           </div>
         </section>
 
+        {/* Marital Status */}
+        <section className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+          <h3 className="font-semibold text-lg mb-4 text-slate-700">Marital Status (สถานภาพสมรส)</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <div className="space-x-4">
+                <label className="inline-flex items-center">
+                  <input type="radio" name="isMarried" checked={!data.isMarried} onChange={() => onChange({ ...data, isMarried: false })} className="text-blue-600 border-gray-300" />
+                  <span className="ml-2 text-sm text-gray-700">โสด / ไม่ได้จดทะเบียนสมรส</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input type="radio" name="isMarried" checked={data.isMarried} onChange={() => onChange({ ...data, isMarried: true })} className="text-blue-600 border-gray-300" />
+                  <span className="ml-2 text-sm text-gray-700">สมรสจดทะเบียน</span>
+                </label>
+              </div>
+            </div>
+
+            {data.isMarried && (
+              <div className="space-y-4 mt-4 pt-4 border-t border-gray-100">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Spouse Name (ชื่อคู่สมรส)</label>
+                  <input type="text" name="spouseName" value={data.spouseName} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Spouse ID Card No. (เลขบัตรปชช. คู่สมรส)</label>
+                  <input type="text" name="spouseIdCard" value={data.spouseIdCard} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Spouse Address (ที่อยู่คู่สมรส)</label>
+                  <input type="text" name="spouseAddress" value={data.spouseAddress} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
         {/* Reference Contract Details */}
         <section className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
           <h3 className="font-semibold text-lg mb-4 text-slate-700">Reference Contract (สัญญาหลัก)</h3>

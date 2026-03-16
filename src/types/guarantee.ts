@@ -19,6 +19,12 @@ export interface GuaranteeData {
   guarantorIdCard: string; // 3 4004 00412 18 8
   guarantorAddress: string;
 
+  // Marital Status
+  isMarried: boolean;
+  spouseName: string;
+  spouseIdCard: string;
+  spouseAddress: string;
+
   // Reference Contract Details
   refContractCompany: string; // บริษัท น้ำดื่มขอนแก่น จำกัด
   refContractNo: string; // AGA/73-LA2025
@@ -44,6 +50,11 @@ export const initialGuaranteeData: GuaranteeData = {
   guarantorName: 'นายวชิระ ตาแหวน',
   guarantorIdCard: '3 4004 00412 18 8',
   guarantorAddress: 'เลขที่ 98/109 หมู่ที่ 6 ตำบลคลองสาม อำเภอคลองหลวง จังหวัดปทุมธานี',
+
+  isMarried: false,
+  spouseName: 'นางสาวนงคราญ สายโอราช',
+  spouseIdCard: '1 2345 67890 12 3',
+  spouseAddress: 'เลขที่ 18/40 หมู่ที่ 5 ตำบลคลองสาม อำเภอคลองหลวง จังหวัดปทุมธานี',
 
   refContractCompany: 'บริษัท น้ำดื่มขอนแก่น จำกัด',
   refContractNo: 'AGA/73-LA2025',
