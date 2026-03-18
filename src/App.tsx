@@ -1,80 +1,281 @@
 import { useState } from 'react';
-import { initialContractData } from './types/contract';
-import { initialGuaranteeData } from './types/guarantee';
-import ContractForm from './components/ContractForm';
-import ContractPreview from './components/ContractPreview';
-import GuaranteeForm from './components/GuaranteeForm';
+import { Printer, FileText, Eye } from 'lucide-react';
+import { initialAppData, CONTRACT_TYPE_LABELS } from './types/app';
+import type { AppData, CompanyInfo, HirePurchaseData, BuybackData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData } from './types/app';
+import CompanyModeSelector from './components/CompanyModeSelector';
+import CompanyInfoForm from './components/CompanyInfoForm';
+import ContractTypeSelector from './components/ContractTypeSelector';
+import HirePurchaseForm from './components/HirePurchaseForm';
+import HirePurchasePreview from './components/HirePurchasePreview';
+import BuybackForm from './components/BuybackForm';
+import BuybackPreview from './components/BuybackPreview';
+import GuarantorForm from './components/GuarantorForm';
 import GuaranteePreview from './components/GuaranteePreview';
-import { Printer, FileText, ShieldCheck } from 'lucide-react';
+import JointVentureForm from './components/JointVentureForm';
+import ServiceAgreementForm from './components/ServiceAgreementForm';
+import FeePaymentForm from './components/FeePaymentForm';
+import ContractPreview from './components/ContractPreview';
+import type { GuaranteeData } from './types/guarantee';
+import type { ContractData } from './types/contract';
+
+type PreviewTab = 'contract' | 'buyback' | 'guarantee' | 'jointVenture' | 'serviceAgreement' | 'feePayment';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'fee' | 'guarantee'>('fee');
-  const [feeData, setFeeData] = useState(initialContractData);
-  const [guaranteeData, setGuaranteeData] = useState(initialGuaranteeData);
+  const [data, setData] = useState<AppData>(initialAppData);
+  const [activePreview, setActivePreview] = useState<PreviewTab>('contract');
 
   const handlePrint = () => {
     window.print();
   };
 
+  const updateField = <K extends keyof AppData>(field: K, value: AppData[K]) => {
+    setData(prev => ({ ...prev, [field]: value }));
+  };
+
+  // Build GuaranteeData from AppData and a specific GuarantorData
+  const buildGuaranteeData = (guarantor: GuarantorData): GuaranteeData => ({
+    contractNo: data.hirePurchaseData.contractNo ? `AGA/XX-SUR` : '',
+    effectiveDate: data.hirePurchaseData.contractDate,
+    lenderCompany: data.agileInfo.companyName,
+    lenderDirectors: data.agileInfo.directors,
+    lenderAddress: data.agileInfo.address,
+    lenderTaxId: data.agileInfo.taxId,
+    borrowerCompany: data.companyMode === 'agileTK' ? 'บริษัท ฐิติกร จำกัด (มหาชน)' : '',
+    borrowerDirectors: data.companyMode === 'agileTK' ? 'นางสาวปฐมา พรประภา และนายประพล พรประภา' : '',
+    borrowerAddress: data.companyMode === 'agileTK' ? 'เลขที่ 69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร' : '',
+    borrowerTaxId: data.companyMode === 'agileTK' ? '0107546000130' : '',
+    guarantorName: guarantor.guarantorName,
+    guarantorIdCard: guarantor.guarantorIdCard,
+    guarantorAddress: guarantor.guarantorAddress,
+    isMarried: guarantor.isMarried,
+    spouseName: guarantor.spouseName,
+    spouseIdCard: guarantor.spouseIdCard,
+    spouseAddress: guarantor.spouseAddress,
+    refContractCompany: data.customerInfo.companyName,
+    refContractNo: data.hirePurchaseData.contractNo,
+    refContractDate: data.hirePurchaseData.contractDate,
+    guaranteeAmountText: '',
+    guaranteeAmountNumber: data.hirePurchaseData.totalAmount,
+  });
+
+  // Build preview tabs: main contract → buyback → guarantee → additional contracts
+  const previewTabs: { key: PreviewTab; label: string }[] = [
+    { key: 'contract', label: CONTRACT_TYPE_LABELS[data.contractType] },
+  ];
+  if (data.hasBuyback) {
+    previewTabs.push({ key: 'buyback', label: 'สัญญารับซื้อคืน' });
+  }
+  previewTabs.push({ key: 'guarantee', label: `สัญญาค้ำประกัน (${data.guarantors.length})` });
+  previewTabs.push({ key: 'jointVenture', label: 'สัญญาค้าร่วม' });
+  previewTabs.push({ key: 'serviceAgreement', label: 'สัญญาจ้างบริการ' });
+  previewTabs.push({ key: 'feePayment', label: 'สัญญาชำระค่าธรรมเนียม' });
+
+  const renderContractPreview = () => {
+    if (data.contractType === 'hirePurchase') {
+      return (
+        <HirePurchasePreview
+          data={data.hirePurchaseData}
+          agileInfo={data.agileInfo}
+          customerInfo={data.customerInfo}
+        />
+      );
+    }
+    // Placeholder for other main contract types
+    return (
+      <div className="print-page relative flex items-center justify-center">
+        <div className="text-center text-slate-400">
+          <FileText size={48} className="mx-auto mb-4 opacity-50" />
+          <h3 className="text-lg font-semibold">{CONTRACT_TYPE_LABELS[data.contractType]}</h3>
+          <p className="text-sm mt-2">Preview จะเพิ่มในภายหลัง</p>
+        </div>
+      </div>
+    );
+  };
+
+  const renderPlaceholderPreview = (title: string) => (
+    <div className="print-page relative flex items-center justify-center">
+      <div className="text-center text-slate-400">
+        <FileText size={48} className="mx-auto mb-4 opacity-50" />
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="text-sm mt-2">Preview จะเพิ่มในภายหลัง</p>
+      </div>
+    </div>
+  );
+
+  // Build ContractData for the fee payment preview
+  const buildFeeContractData = (): ContractData => ({
+    contractNo: data.feePaymentData.contractNo,
+    effectiveDate: data.feePaymentData.effectiveDate,
+    customerCompany: data.customerInfo.companyName,
+    customerDirector: data.customerInfo.directors,
+    customerAddress: data.customerInfo.address,
+    customerTaxId: data.customerInfo.taxId,
+    items: data.feePaymentData.items,
+  });
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100 print:bg-white print:h-auto print:overflow-visible">
       {/* Left Panel: Form */}
-      <div className="w-[450px] flex-shrink-0 border-r border-gray-300 print:hidden overflow-y-auto bg-white shadow-lg z-10 flex flex-col h-full">
-        <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-4 z-20 shadow-sm">
-           <div className="flex justify-between items-center mb-4">
-              <h1 className="text-xl font-bold tracking-tight text-slate-800">Control Panel</h1>
-              <button 
-                onClick={handlePrint}
-                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm"
-              >
-                <Printer size={16} /> Print
-              </button>
-           </div>
-           
-           {/* Tab Navigation */}
-           <div className="flex space-x-1 p-1 bg-slate-100 rounded-lg">
-             <button
-               onClick={() => setActiveTab('fee')}
-               className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium rounded-md transition-colors ${
-                 activeTab === 'fee' 
-                   ? 'bg-white text-blue-700 shadow-sm ring-1 ring-slate-200' 
-                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
-               }`}
-             >
-               <FileText size={16} />
-               สัญญาค่าธรรมเนียม
-             </button>
-             <button
-               onClick={() => setActiveTab('guarantee')}
-               className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 text-sm font-medium rounded-md transition-colors ${
-                 activeTab === 'guarantee' 
-                   ? 'bg-white text-blue-700 shadow-sm ring-1 ring-slate-200' 
-                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
-               }`}
-             >
-               <ShieldCheck size={16} />
-               สัญญาค้ำประกัน
-             </button>
-           </div>
+      <div className="w-[900px] flex-shrink-0 border-r border-gray-300 print:hidden overflow-y-auto bg-white shadow-lg z-10 flex flex-col h-full">
+        {/* Header */}
+        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 z-20 shadow-sm">
+          <div className="flex justify-between items-center">
+            <h1 className="text-xl font-bold tracking-tight text-slate-800">Control Panel</h1>
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm"
+            >
+              <Printer size={16} /> Print
+            </button>
+          </div>
         </div>
-        
-        <div className="flex-1 overflow-y-auto">
-          {activeTab === 'fee' ? (
-            <ContractForm data={feeData} onChange={setFeeData} />
-          ) : (
-            <GuaranteeForm data={guaranteeData} onChange={setGuaranteeData} />
+
+        {/* Form Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-5">
+          {/* Step 1: Company Mode */}
+          <CompanyModeSelector
+            value={data.companyMode}
+            onChange={(mode: CompanyMode) => updateField('companyMode', mode)}
+          />
+
+          {/* Step 2: Company Info */}
+          <CompanyInfoForm
+            agileInfo={data.agileInfo}
+            customerInfo={data.customerInfo}
+            onAgileChange={(info: CompanyInfo) => updateField('agileInfo', info)}
+            onCustomerChange={(info: CompanyInfo) => updateField('customerInfo', info)}
+          />
+
+          {/* Step 3: Contract Type (4 main types) */}
+          <ContractTypeSelector
+            value={data.contractType}
+            onChange={(type: ContractType) => updateField('contractType', type)}
+          />
+
+          {/* Step 4: Main Contract Form */}
+          {data.contractType === 'hirePurchase' && (
+            <HirePurchaseForm
+              data={data.hirePurchaseData}
+              onChange={(hp: HirePurchaseData) => updateField('hirePurchaseData', hp)}
+            />
           )}
+          {data.contractType !== 'hirePurchase' && (
+            <section className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+              <div className="text-center py-8 text-slate-400">
+                <FileText size={32} className="mx-auto mb-2 opacity-50" />
+                <p className="text-sm font-medium">{CONTRACT_TYPE_LABELS[data.contractType]}</p>
+                <p className="text-xs mt-1">ฟอร์มจะเพิ่มในภายหลัง</p>
+              </div>
+            </section>
+          )}
+
+          {/* Step 5: Buyback Toggle */}
+          <section className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={data.hasBuyback}
+                onChange={(e) => updateField('hasBuyback', e.target.checked)}
+                className="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+              />
+              <div>
+                <span className="font-semibold text-slate-700">รับซื้อคืน</span>
+                <p className="text-xs text-slate-500">ติ๊กเลือกถ้าต้องการเพิ่มสัญญารับซื้อคืน</p>
+              </div>
+            </label>
+          </section>
+
+          {/* Step 5.1: Buyback Form (conditional) */}
+          {data.hasBuyback && (
+            <BuybackForm
+              data={data.buybackData}
+              onChange={(bb: BuybackData) => updateField('buybackData', bb)}
+            />
+          )}
+
+          {/* Step 6: Guarantors */}
+          <GuarantorForm
+            data={data.guarantors}
+            onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
+          />
+
+          {/* ── Additional Contracts (after guarantor) ── */}
+          <div className="border-t-2 border-slate-300 pt-5 mt-2">
+            <h3 className="font-bold text-slate-600 text-sm mb-4 uppercase tracking-wider">สัญญาเพิ่มเติม</h3>
+
+            {/* Contract 4: สัญญาค้าร่วม */}
+            <div className="space-y-5">
+              <JointVentureForm
+                data={data.jointVentureData}
+                onChange={(jv: JointVentureData) => updateField('jointVentureData', jv)}
+              />
+
+              {/* Contract 5: สัญญาจ้างบริการ */}
+              <ServiceAgreementForm
+                data={data.serviceAgreementData}
+                onChange={(sa: ServiceAgreementData) => updateField('serviceAgreementData', sa)}
+              />
+
+              {/* Contract 6: สัญญาชำระค่าธรรมเนียม */}
+              <FeePaymentForm
+                data={data.feePaymentData}
+                onChange={(fp: FeePaymentData) => updateField('feePaymentData', fp)}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Right Panel: Preview */}
-      <div className="flex-1 overflow-y-auto bg-slate-200 p-8 print:p-0 print:bg-white print:overflow-visible flex flex-col items-center">
-        <div className="w-[210mm] print:w-[210mm] print:h-[297mm] print:max-w-none">
-           {activeTab === 'fee' ? (
-             <ContractPreview data={feeData} />
-           ) : (
-             <GuaranteePreview data={guaranteeData} />
-           )}
+      <div className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col">
+        {/* Preview Tab Navigation */}
+        <div className="sticky top-0 z-10 bg-slate-200 px-6 pt-4 pb-2 print:hidden">
+          <div className="flex gap-1 bg-white rounded-lg p-1 shadow-sm border border-slate-200 flex-wrap">
+            {previewTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActivePreview(tab.key)}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
+                  activePreview === tab.key
+                    ? 'bg-slate-800 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                }`}
+              >
+                <Eye size={12} />
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Preview Content */}
+        <div className="flex-1 p-6 print:p-0 flex flex-col items-center">
+          <div className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0">
+            {activePreview === 'contract' && renderContractPreview()}
+            {activePreview === 'buyback' && data.hasBuyback && (
+              <BuybackPreview
+                data={data.buybackData}
+                agileInfo={data.agileInfo}
+                customerInfo={data.customerInfo}
+              />
+            )}
+            {activePreview === 'guarantee' && (
+              <div className="space-y-8 print:space-y-0">
+                {data.guarantors.map((guarantor) => (
+                  <div key={guarantor.id}>
+                    <GuaranteePreview data={buildGuaranteeData(guarantor)} />
+                    {/* Add page break between guarantors for printing */}
+                    <div className="hidden print:block page-break" style={{ pageBreakBefore: 'always' }}></div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {activePreview === 'jointVenture' && renderPlaceholderPreview('สัญญาค้าร่วม')}
+            {activePreview === 'serviceAgreement' && renderPlaceholderPreview('สัญญาจ้างบริการ')}
+            {activePreview === 'feePayment' && (
+              <ContractPreview data={buildFeeContractData()} />
+            )}
+          </div>
         </div>
       </div>
     </div>
