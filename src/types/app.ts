@@ -180,10 +180,10 @@ export const initialAppData: AppData = {
   },
 
   customerInfo: {
-    companyName: '',
-    directors: '',
-    address: '',
-    taxId: '',
+    companyName: 'บริษัท นันทะวรรณ กรีนดริ้งค์ จำกัด',
+    directors: 'นางสาวรัตนา หมู่ทอง',
+    address: 'เลขที่ 39 หมู่ที่ 4 ตำบลวังจุฬา อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา',
+    taxId: '0145561001530',
     phone: '',
   },
 
@@ -229,7 +229,7 @@ export const initialAppData: AppData = {
 
     lessor1Signatories: 'นายพรรษา เริงพิทยา และ นายกอบพงษ์ ศรีสุธี',
     lessor2Signatories: 'นางสาวปัทมา พรประภา และ นายประพล พรประภา',
-    lesseeSignatories: '',
+    lesseeSignatories: 'นางสาวรัตนา หมู่ทอง',
     witnesses: '',
     businessPurpose: 'โรงงานผลิตและจำหน่ายน้ำดื่มและรับจ้างผลิตน้ำดื่มในแบรนด์ของลูกค้าของผู้เช่าซื้อ',
     installationLocation: '39 หมู่ 4 ตำบลวังจุฬา อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา',

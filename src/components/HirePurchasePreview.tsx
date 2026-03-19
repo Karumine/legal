@@ -1,5 +1,5 @@
 import PageHeader from './PageHeader';
-import type { HirePurchaseData, CompanyInfo } from '../types/app';
+import type { HirePurchaseData, CompanyInfo, CollateralAsset } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 
 interface Props {
@@ -26,7 +26,8 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
   const assetCount = data.assets?.length || 0;
   const overflowAssets = assetCount > firstPageMax ? data.assets!.slice(firstPageMax) : [];
   const overflowPagesCount = Math.ceil(overflowAssets.length / subsequentPageMax);
-  const totalPages = 7 + overflowPagesCount; // Pages: 1(Assets), 2(Sec2), 3(Sec3.1-2), 4(Sec3.3-4.4), 5(Sec5.1-2), 6(Sec5.3-5.5), 7(Sec6) + Overflow
+  const collateralOverflow = (data.collateralAssets || []).length > 3;
+  const totalPages = 22 + overflowPagesCount + (collateralOverflow ? 1 : 0); // 2 Pages Intro + Overflow + 14 Contract + 2 Sigs + 4 Annexes
 
   const renderPageFooter = (pageNum: number) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
@@ -85,6 +86,29 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
     const thaiLetters = ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'];
     return thaiLetters[idx] || (idx + 1).toString();
   };
+
+  const renderCollateralAsset = (asset: CollateralAsset, idx: number) => (
+    <div key={idx} className="flex gap-4">
+      <span>({getThaiIndex(idx)})</span>
+      <div className="flex-1">
+        {asset.type === 'land' && asset.landDetails && (
+          <div>
+            <span className="font-bold">การจำนองที่ดิน :</span> ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> ตำบล <Highlight>{asset.landDetails.subDistrict}</Highlight> อำเภอ <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตามเอกสารแนบท้ายหมายเลข 6
+          </div>
+        )}
+        {asset.type === 'cash' && (
+          <div>
+            <span className="font-bold">เงินสด :</span> เงินสดจำนวน <Highlight>{formatCurrency(asset.cashAmount || '0')}</Highlight> บาท
+          </div>
+        )}
+        {asset.type === 'machinery' && (
+          <div>
+            <span className="font-bold">เครื่องจักร :</span> <Highlight>{asset.machineryDetails}</Highlight>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
   const renderTotalSummary = () => (
     <div className="mt-4 font-bold">
@@ -418,7 +442,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           <div className="font-bold mb-4">5. หน้าที่และความรับผิดชอบของผู้เช่าซื้อ</div>
 
           <div className="flex gap-4">
-            <span className="">5.1.</span>
+            <span className="">5.1</span>
             <div className="flex-1 space-y-4">
               <div className="underline">การใช้ทรัพย์สินที่เช่าซื้อ</div>
               <div className="flex gap-4">
@@ -443,7 +467,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           </div>
 
           <div className="flex gap-4">
-            <span className="">5.2.</span>
+            <span className="">5.2</span>
             <div className="flex-1 space-y-2">
               <div className="underline">ค่าใช้จ่ายและค่าธรรมเนียม</div>
               <div>
@@ -460,7 +484,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
-            <span className="">5.3.</span>
+            <span className="">5.3</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การเข้าถึงข้อมูลการใช้งานและการตรวจสอบสภาพของทรัพย์สิน</div>
               <div>
@@ -470,7 +494,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           </div>
 
           <div className="flex gap-4">
-            <span className="">5.4.</span>
+            <span className="">5.4</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การรับประกันและการบริการบำรุงรักษาทรัพย์สิน โดยผู้ผลิต</div>
               <div>
@@ -480,7 +504,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           </div>
 
           <div className="flex gap-4">
-            <span className="">5.5.</span>
+            <span className="">5.5</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การประกันภัยทรัพย์สิน</div>
               <div>
@@ -489,7 +513,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
         </div>
-        {renderPageFooter(6 + overflowPagesCount)}
+        {renderPageFooter(8 + overflowPagesCount)}
       </div>
 
       {/* Contract Sections Page 7 - Section 6 */}
@@ -502,14 +526,14 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.1.</span>
+            <span className="">6.1</span>
             <div className="flex-1">
               ในวันที่เข้าทำสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงจัดหาหลักประกันให้แก่ผู้ให้เช่าซื้อ โดยมูลค่าของหลักประกัน ภายใต้เงื่อนไขที่กำหนดในข้อ 6.4 ของสัญญาฉบับนี้จะต้องมีมูลค่ารวมกันไม่น้อยกว่า <Highlight>{collateralValueFormatted}</Highlight> บาท (<Highlight>{collateralValueThai}</Highlight>) หรือตามที่ผู้ให้เช่าซื้อเห็นสมควร
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.2.</span>
+            <span className="">6.2</span>
             <div className="flex-1 space-y-2">
               <div>ในการทำสัญญาเช่าซื้อฉบับนี้ ผู้เช่าซื้อได้ตกลงทำสัญญาค้ำประกันโดยบุคคลภายนอก (“บุคคลค้ำประกัน”)</div>
               <div className="flex gap-4">
@@ -522,36 +546,475 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.3.</span>
+            <span className="">6.3</span>
             <div className="flex-1 space-y-4">
               <div>ผู้เช่าซื้อตกลงว่าบรรดาทรัพย์สินดังต่อไปนี้ (“ทรัพย์สินหลักประกัน”) เป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า</div>
               
-              {(data.collateralAssets || []).map((asset, idx) => (
-                <div key={idx} className="flex gap-4">
-                  <span>({getThaiIndex(idx)})</span>
-                  <div className="flex-1">
-                    {asset.type === 'land' && asset.landDetails && (
-                      <div>
-                        <span className="font-bold">การจำนองที่ดิน :</span> ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> ตำบล <Highlight>{asset.landDetails.subDistrict}</Highlight> อำเภอ <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตามเอกสารแนบท้ายหมายเลข 6
-                      </div>
-                    )}
-                    {asset.type === 'cash' && (
-                      <div>
-                        <span className="font-bold">เงินสด :</span> เงินสดจำนวน <Highlight>{formatCurrency(asset.cashAmount || '0')}</Highlight> บาท
-                      </div>
-                    )}
-                    {asset.type === 'machinery' && (
-                      <div>
-                        <span className="font-bold">เครื่องจักร :</span> <Highlight>{asset.machineryDetails}</Highlight>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+              {(data.collateralAssets || []).slice(0, 3).map((asset, idx) => renderCollateralAsset(asset, idx))}
             </div>
           </div>
         </div>
-        {renderPageFooter(totalPages)}
+        {renderPageFooter(9 + overflowPagesCount)}
+      </div>
+
+      {/* Contract Sections Page 8 - Continued Section 6.3 */}
+      {collateralOverflow && (
+        <div className="print-page relative min-h-[1050px] p-24">
+          <PageHeader />
+          <div className="mt-8 space-y-6">
+            <div className="flex gap-4">
+              <span className="opacity-0">6.3</span>
+              <div className="flex-1 space-y-4">
+                {(data.collateralAssets || []).slice(3).map((asset, idx) => renderCollateralAsset(asset, idx + 3))}
+              </div>
+            </div>
+          </div>
+          {renderPageFooter(10 + overflowPagesCount)}
+        </div>
+      )}
+
+      {/* Contract Sections Page 9 - Sections 6.4-6.7 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <div className="mt-8 space-y-6">
+          <div className="mb-4 text-justify">
+            นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
+          </div>
+
+          <div className="flex gap-4">
+            <span className="">6.4</span>
+            <div className="flex-1 text-justify">
+              คู่สัญญาทั้งสามฝ่ายตกลงว่าสิทธิของผู้ให้เช่าซื้อเหนือทรัพย์สินที่เป็นหลักประกันตามข้อ 6.3 ของสัญญาฉบับนี้ นั้น เป็นไปตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <span className="">6.5</span>
+            <div className="flex-1 text-justify">
+              ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ (“ผู้ประเมินมูลค่าทรัพย์สิน”) และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <span className="">6.6</span>
+            <div className="flex-1 text-justify">
+              ในกรณีที่ทรัพย์สินหลักประกันเป็นสิ่งปลูกสร้าง และ/หรือ เครื่องจักร ผู้เช่าซื้อตกลงจัดให้มีการทำประกันภัยทรัพย์สินบนสิ่งปลูกสร้าง และ/หรือ เครื่องจักรที่เป็นทรัพย์สินหลักประกันกับบริษัทประกันภัยที่ผู้ให้เช่าซื้อยอมรับ ตลอดระยะเวลาจนกว่าผู้เช่าซื้อจะชำระหนี้ตามสัญญาฉบับนี้จนครบถ้วน โดยผู้เช่าซื้อจะเป็นผู้ชำระเบี้ยประกันและค่าใช้จ่าย และให้ผู้ให้เช่าซื้อเป็นผู้รับผลประโยชน์ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
+            </div>
+          </div>
+
+    <div className="flex gap-4">
+            <span className="">6.7</span>
+            <div className="flex-1 space-y-4">
+              <div>
+                ผู้เช่าซื้อตกลงว่าหากมูลค่าทรัพย์สินหลักประกันลดลงน้อยกว่ามูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อจะนำทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกันจนครบมูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ภายใน 30 (สามสิบ) วัน นับจากวันที่ผู้เช่าซื้อได้รับแจ้งจากผู้ให้เช่าซื้อ
+              </div>
+              <div>
+                หากผู้เช่าซื้อประสงค์จะขอขยายระยะเวลาการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อจะต้องแจ้งให้ตัวแทนเช่าซื้อทราบเป็นลายลักษณ์อักษรล่วงหน้าก่อนครบกำหนดในวรรคแรกไม่น้อยกว่า 7 (เจ็ด) วัน และหากผู้ให้เช่าซื้อตกลงยินยอมให้ขยายระยะเวลาในการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ให้ถือว่าผู้ให้เช่าซื้อยินยอมให้ขยายระยะเวลาเฉพาะคราวดังกล่าวเท่านั้น ทั้งนี้ ระยะเวลา หรือ การยินยอมดังกล่าวให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+              </div>
+            </div>
+          </div>
+        </div>
+        {renderPageFooter(11 + overflowPagesCount)}
+      </div>
+
+      {/* Contract Sections Page 10 - Sections 6.8-6.12 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <div className="mt-8 space-y-6">
+          <div className="flex gap-4">
+            <span className="">6.8</span>
+            <div className="flex-1">
+              โดยไม่คำนึงถึงข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงว่าในกรณีที่ผู้ให้เช่าซื้อได้ร้องขอให้ผู้ให้เช่าซื้อจัดหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อตกลงจัดหาทรัพย์สินเพิ่มเติมแก่ผู้ให้เช่าซื้อภายใน 1 (หนึ่ง) เดือน นับจากวันที่ผู้ให้เช่าซื้อร้องขอ ทั้งนี้ ผู้ให้เช่าซื้อตกลงว่าจะไม่ใช้สิทธิในข้อนี้โดยไม่มีเหตุอันสมควร
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <span className="">6.9</span>
+            <div className="flex-1">
+              ผู้เช่าซื้อตกลงเป็นผู้รับผิดชอบในค่าธรรมเนียม ค่าจดทะเบียน ค่าภาษีอากร อากรแสตมป์ การประเมินมูลค่าทรัพย์สิน หรือค่าใช้จ่ายอื่นใดอันเกี่ยวข้องกับสัญญาหรือเอกสารที่เกี่ยวข้องกับทรัพย์สินหลักประกัน หรือการให้หลักประกันใด ๆ ตามที่ระบุในข้อ 6.3 ของสัญญาฉบับนี้ แต่เพียงผู้เดียว
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <span className="">6.10</span>
+            <div className="flex-1">
+              ภายหลังจากที่ผู้เช่าซื้อได้ปฏิบัติหน้าที่ตามสัญญาฉบับนี้เสร็จสิ้นแล้ว ผู้ให้เช่าซื้อตกลงจะดำเนินการตามที่จำเป็นเพื่อส่งคืนหลักประกันดังกล่าวแก่ผู้เช่าซื้อ ภายใน 1 (หนึ่ง) เดือน หลังจากที่ผู้เช่าซื้อได้ปฏิบัติหน้าที่ตามสัญญานี้เสร็จสิ้นดังกล่าว
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <span className="">6.11</span>
+            <div className="flex-1">
+              ในกรณีที่ผู้เช่าซื้อมีการนำทรัพย์สินหลักประกันมาเป็นหลักประกันให้แก่ผู้ให้เช่าซื้อ ถ้าผู้ให้เช่าซื้อบังคับหลักประกันไม่ว่าจะด้วยวิธีการขายทอดตลาดแล้ว ได้เงินสุทธิไม่พอชำระหนี้ หรือเอาทรัพย์สินหลักประกันหลุดเป็นสิทธิและราคาทรัพย์สินหลักประกันนั้นต่ำกว่าจำนวนหนี้อยู่เท่าใด ผู้เช่าซื้อยอมรับชำระหนี้ที่ขาดจำนวนนั้นจากทรัพย์สินอื่นของผู้เช่าซื้อให้แก่ผู้ให้เช่าซื้อตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ จนครบถ้วน
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <span className="">6.12</span>
+            <div className="flex-1">
+              กรณีที่มีเครื่องจักรเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อยินยอมและอนุญาตให้ผู้ให้เช่าซื้อฝ่ายใดฝ่ายหนึ่ง ตัวแทนหรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งโดยชอบจากผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินหรือตัวแทนจำหน่ายทรัพย์สินที่ใช้เป็นหลักประกัน ให้มีสิทธิเข้าถึงข้อมูลการใช้งานทรัพย์สินหลักประกันทั้งในการใช้งานและการบำรุงรักษา เพื่อให้สามารถตรวจสอบประสิทธิภาพของทรัพย์สินหลักประกันได้ในระหว่างที่สัญญาฉบับนี้มีผลบังคับใช้ ทั้งนี้ ไม่ว่าการเข้าถึงข้อมูลดังกล่าวจะกระทำผ่านทางระบบออนไลน์ หรือทางการติดต่อสื่อสารใด ๆ ทั้งนี้ หากผู้ให้เช่าซื้อฝ่ายใดฝ่ายหนึ่งตรวจพบว่า ทรัพย์สินหรือส่วนหนึ่งส่วนใดของทรัพย์สินเสียหาย ชำรุด หรืออยู่ในสภาพที่ไม่เหมาะสมแก่การใช้งาน ตัวแทนเช่าซื้อจะดำเนินการแจ้งเป็นลายลักษณ์อักษรไปยังผู้เช่าซื้อเพื่อให้ทราบเรื่องดังกล่าว และให้ดำเนินการซ่อมแซมทรัพย์สินในการนี้ ผู้เช่าซื้อตกลงที่จะทำการซ่อมแซมทรัพย์สินหลักประกันให้กลับคืนสู่สภาพที่ดีและเหมาะสมในการใช้งานได้อย่างมีประสิทธิภาพ ภายในระยะเวลาที่ผู้ให้เช่าซื้อกำหนด โดยค่าใช้จ่ายทั้งหมดให้ถือเป็นหน้าที่ของผู้เช่าซื้อแต่เพียงผู้เดียว
+            </div>
+          </div>
+        </div>
+        {renderPageFooter(12 + overflowPagesCount)}
+      </div>
+
+      {/* Contract Sections Page 11 - Sections 7, 8, 9 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <div className="mt-8 space-y-8">
+          <div className="space-y-4">
+            <div className="font-bold">7. การโอนกรรมสิทธิ์ให้แก่ผู้เช่าซื้อ</div>
+            <div className="indent-8 text-justify">
+              เมื่อผู้เช่าซื้อได้ชำระเงินค่าเช่าซื้อ และค่าใช้จ่าย ๆ ที่ผู้ให้เช่าซื้อเรียกเก็บได้ตามสัญญานี้จนครบถ้วน ผู้ให้เช่าซื้อตกลงให้กรรมสิทธิในทรัพย์สินที่เช่าซื้อเป็นของผู้เช่าซื้อทันที โดยผู้เช่าซื้อตกลงชำระค่าธรรมเนียมการโอน ทะเบียนทรัพย์สินที่เช่าซื้อให้แก่หน่วยงานราชการที่เกี่ยวข้อง (ถ้ามี) ภาษีมูลค่าเพิ่ม และภาษีอากรที่เกี่ยวข้อง
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="font-bold">8. การผิดนัดชำระหนี้</div>
+            <div className="indent-8 text-justify">
+              หากผู้เช่าซื้อผิดนัดชำระหนี้ตามสัญญาฉบับนี้ ผู้เช่าซื้อยินยอมและตกลงชำระค่าปรับกรณีผิดนัดชำระเงินใด ๆ ตามสัญญาฉบับนี้ ในอัตราร้อยละ 18 (สิบแปด) ต่อปี บนจำนวนต้นเงินงวดที่ผิดนัดชำระ นับแต่วันที่ครบกำหนดชำระหนี้นั้น ๆ เป็นต้นไปจนถึงวันที่ผู้เช่าซื้อได้ชำระหนี้ค้างชำระจนครบถ้วน ทั้งนี้ อัตราดอกเบี้ยผิดนัดชำระหนี้ผู้เช่าซื้อตกลงยินยอมชำระอัตราดอกเบี้ยผิดนัดดังกล่าวตามที่ผู้ให้เช่าซื้อกำหนด และไม่ว่าอัตราดอกเบี้ยผิดนัดนั้นจะเพิ่มขึ้นหรือลดลง ผู้ให้เช่าซื้อทั้งสองฝ่ายไม่ต้องบอกกล่าวผู้เช่าซื้อล่วงหน้า และมิต้องได้รับความยินยอมจากผู้เช่าซื้อก่อน โดยคู่สัญญาทั้งสามฝ่ายถือปฏิบัติเช่นนี้ตลอดไป จนกว่าผู้เช่าซื้อจะชำระค่างวดเช่าซื้อแก่ผู้ให้เช่าซื้อจนครบถ้วน
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="font-bold">9. การบอกเลิกสัญญา</div>
+            <div className="flex gap-4">
+              <span className="">9.1.</span>
+              <div className="flex-1 text-justify">
+                กรณีหากผู้เช่าซื้อผิดนัดไม่ชำระค่าเช่าซื้องวดหนึ่งงวดใด หรือไม่ปฏิบัติตามเงื่อนไขและรายละเอียดที่กำหนดไว้ในสัญญาฉบับนี้ และ/หรือ สัญญาและเอกสารอื่นใดที่เกี่ยวข้องกับทรัพย์สินหลักประกันหรือไม่ปฏิบัติตามข้อกำหนดของผู้ให้เช่าซื้อทั้งหมดแต่เพียงบางส่วน เป็นเหตุให้ผู้ให้เช่าซื้อได้รับความเสียหาย ผู้ให้เช่าซื้อมีสิทธิบอกเลิกสัญญาได้ ภายใต้บทบัญญัติตามกฎหมาย โดยเมื่อมีการเลิกสัญญาฉบับนี้ ผู้ให้เช่าซื้อตกลงว่าบรรดาเงินที่ผู้เช่าซื้อได้ชำระมาแล้วแต่ก่อน ให้รับเป็นของผู้ให้เช่าซื้อ และผู้ให้เช่าซื้อมีสิทธิที่จะกลับเข้าครองทรัพย์สินที่เช่าซื้อได้
+              </div>
+            </div>
+          </div>
+        </div>
+        {renderPageFooter(13 + overflowPagesCount)}
+      </div>
+
+      {/* Contract Sections Page 12 - Sections 9.2, 10 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <div className="mt-8 space-y-6">
+          <div className="flex gap-4">
+            <span className="">9.2.</span>
+            <div className="flex-1 text-justify">
+              ผู้ให้เช่าซื้อทั้งสองฝ่ายมีสิทธิได้รับชดใช้บรรดาค่าใช้จ่าย ค่าฤชาธรรมเนียม หรือค่าธรรมเนียมทั้งปวงที่เกี่ยวข้องกับการดำเนินการทางกฎหมาย การทวงถาม การค้นหา ติดตามตัวผู้เช่าซื้อ หรือทรัพย์สิน และการติดตามเอาทรัพย์สินคืนมาจากการครอบครองของผู้เช่าซื้อ หรือบุคคล ห้างร้าน หรือบริษัทอื่นใด
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="font-bold">10. การบอกกล่าว</div>
+            <div className="indent-8 text-justify">
+              การติดต่อหรือบอกกล่าวซึ่งทำขึ้นโดยคู่สัญญาฝ่ายหนึ่งและส่งไปยังคู่สัญญาอีกฝ่ายหนึ่ง ให้ทำเป็นหนังสือหากมิได้ระบุไว้เป็นอย่างอื่นอาจส่งโดยทางโทรสารหรือส่งทางไปรษณีย์ หรือให้คนนำไปส่งเองก็ดี ให้ส่งไปยังคู่สัญญาทุกฝ่ายตามที่อยู่ที่ได้ระบุไว้ข้างต้นของสัญญาฉบับนี้ และให้ถือว่าหนังสือบอกกล่าวนั้นได้ส่งโดยชอบแล้วเมื่อได้ดำเนินการดังต่อไปนี้
+            </div>
+            
+            <div className="space-y-4 pt-4">
+              <div className="flex gap-4">
+                <span>(ก)</span>
+                <div className="flex-1">ในกรณีที่ส่งโดยบุคคล (By Hand) ให้มีผลเมื่อได้จัดส่งหนังสือบอกกล่าว</div>
+              </div>
+              <div className="flex gap-4">
+                <span>(ข)</span>
+                <div className="flex-1">ในกรณีที่ส่งทางไปรษณีย์ลงทะเบียน ให้มีผลภายในวันที่กำหนดในใบตอบรับทางไปรษณีย์หรือใบรับที่เป็นลายลักษณ์อักษรอื่น</div>
+              </div>
+              <div className="flex gap-4">
+                <span>(ค)</span>
+                <div className="flex-1">ในกรณีที่ส่งทางโทรสาร ให้มีผลเมื่อครบกำหนด 1 (หนึ่ง) วัน นับแต่วันที่ส่งหนังสือบอกกล่าว</div>
+              </div>
+              <div className="flex gap-4">
+                <span>(ง)</span>
+                <div className="flex-1">ในกรณีที่ส่งทางอิเล็กทรอนิกส์ ให้มีผลในวันถัดไป</div>
+              </div>
+            </div>
+
+            <div className="indent-8 text-justify mt-6">
+              หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่ว่าในการส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มีผลนั้นมิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้ว ในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป
+            </div>
+
+            <div className="indent-8 text-justify">
+              หากคู่สัญญาฝ่ายหนึ่งฝ่ายใดต้องการเปลี่ยนสถานที่อยู่ คู่สัญญาฝ่ายนั้นต้องแจ้งให้คู่สัญญาอีกฝ่ายทราบล่วงหน้าเป็นลายลักษณ์อักษรไม่น้อยกว่า 5 (ห้า) วันทำการก่อนวันที่ย้ายหรือเปลี่ยนแปลงสถานที่อยู่ ในกรณีเช่นนี้คู่สัญญาฝ่ายที่ได้รับแจ้งการเปลี่ยนแปลงสถานที่อยู่จะส่งคำบอกกล่าวให้แก่คู่สัญญาฝ่ายที่แจ้งเปลี่ยนแปลงสถานที่อยู่ตามรายละเอียดที่ได้รับแจ้งดังกล่าว
+            </div>
+          </div>
+        </div>
+        {renderPageFooter(14 + overflowPagesCount)}
+      </div>
+
+      {/* Contract Sections Page 13 - Sections 11, 12, 13, 14 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <div className="mt-8 space-y-8">
+          <div className="space-y-4">
+            <div className="font-bold">11. การโอนสิทธิ และ/หรือ หน้าที่</div>
+            <div className="indent-8 text-justify">
+              ผู้ให้เช่าซื้อมีสิทธิอย่างเต็มที่ที่จะจำหน่าย จ่ายโอน สิทธิ และ/หรือ หน้าที่ มอบ จำนำ ก่อภาระผูกพัน นำไปวางประกัน หรือจำหน่ายโดยการอื่น ซึ่งส่วนหนึ่งส่วนใดหรือทั้งหมดของสิทธิ กรรมสิทธิ์ และผลประโยชน์ของผู้ให้เช่าซื้อตามสัญญาฉบับนี้และเอกสารที่เกี่ยวข้องกับหลักประกัน และให้บุคคลผู้รับโอนสิทธิ และ/หรือ หน้าที่สามารถรับไปทั้งสิทธิ และ/หรือ หน้าที่ตามสัญญาฉบับนี้และเอกสาร ทั้งนี้ ผู้ให้เช่าซื้อที่ประสงค์จะโอนสิทธิ และ/หรือ หน้าที่ควรมีหนังสือบอกกล่าวไปยังผู้เช่าซื้อภายใน 30 (สามสิบ) วัน นับแต่วันที่มีการโอนสิทธิ และ/หรือ หน้าที่
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="font-bold">12. การใช้สิทธิ</div>
+            <div className="indent-8 text-justify">
+              การที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งไม่ใช้สิทธิหรือล่าช้าในการใช้สิทธิใด ๆ ภายใต้สัญญาฉบับนี้ มิให้ถือว่าการไม่ใช้สิทธิหรือการล่าช้าดังกล่าวเป็นการสละสิทธิของคู่สัญญาฝ่ายนั้น
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="font-bold">13. การแยกต่างหากของสัญญา</div>
+            <div className="indent-8 text-justify">
+              ข้อกำหนดต่าง ๆ ในสัญญาฉบับนี้แต่ละข้อเป็นอิสระต่างหากจากกัน หากข้อสัญญาข้อใดข้อหนึ่งภายใต้สัญญาฉบับนี้ไม่สมบูรณ์ เป็นโมฆะ ขัดต่อกฎหมาย หรือไม่อาจบังคับใช้ได้ตามกฎหมายไม่ว่าในกรณีใด ๆ ให้ถือว่าข้อสัญญาหรือข้อกำหนดอื่น ๆ ในสัญญาฉบับนี้ ยังคงมีผลใช้บังคับได้ตามกฎหมาย
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="font-bold">14. ต้นฉบับหรือตัวจริง บรรดาสรรพเอกสารที่เกี่ยวกับการทำสัญญานี้</div>
+            <div className="indent-8 text-justify">
+              บรรดาต้นฉบับหรือสำเนาเอกสารใด ที่เกี่ยวกับการทำสัญญาเช่าซื้อฉบับนี้ทั้งที่มีอยู่ก่อนหรือในขณะที่ทำสัญญาฉบับนี้ หรือที่อาจจะเกิดขึ้นในภายหลังโดยความตกลงและยินยอมของคู่สัญญาทั้งสามฝ่าย รวมตลอดถึงเอกสารแนบท้ายสัญญาฉบับนี้ (ถ้ามี) คู่สัญญาทั้งสามฝ่ายตกลงให้ถือเอาเอกสารทั้งหมดที่เกี่ยวข้องเป็นส่วนหนึ่งและเป็นสาระสำคัญของสัญญาเช่าซื้อฉบับนี้ด้วยทุกประการ
+            </div>
+          </div>
+        </div>
+        {renderPageFooter(15 + overflowPagesCount)}
+      </div>
+
+      {/* Contract Sections Page 14 - Sections 15, 16 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <div className="mt-8 space-y-8">
+          <div className="space-y-4">
+            <div className="font-bold">15. การแก้ไขสัญญา</div>
+            <div className="indent-8 text-justify">
+              รายละเอียดในสัญญาฉบับนี้ คู่สัญญาฝ่ายใดฝ่ายหนึ่งจะเปลี่ยนแปลงหรือแก้ไขโดยไม่ได้รับการยินยอมเป็นลายลักษณ์อักษรจากคู่สัญญาอีกฝ่ายมิได้ เว้นแต่การเปลี่ยนแปลงและแก้ไขนั้น จะได้ทำเป็นลายลักษณ์อักษร และลงนามโดยคู่สัญญาทั้งสามฝ่ายตามสัญญาฉบับนี้ และให้ถือว่าการแก้ไขสัญญาดังกล่าวเป็นส่วนหนึ่งของสัญญาฉบับนี้
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="font-bold">16. กฎหมายที่ใช้บังคับ</div>
+            <div className="indent-8 text-justify">
+              สัญญาฉบับนี้ให้ใช้บังคับและตีความตามกฎหมายไทย ข้อพิพาท ข้อโต้แย้ง หรือสิทธิเรียกร้องใด ๆ ที่เกิดจากหรือที่เกี่ยวกับสัญญาฉบับนี้ซึ่งไม่สามารถตกลงกันได้ระหว่างคู่สัญญาให้นำเสนอต่อศาลไทยที่มีเขตอำนาจ
+            </div>
+          </div>
+
+          <div className="text-center mt-12 font-bold italic text-gray-600">
+            (คู่สัญญาลงนามในหน้าถัดไป)
+          </div>
+        </div>
+        {renderPageFooter(16 + overflowPagesCount)}
+      </div>
+
+      {/* Signature Page 1 - Lessor 1 & Purchaser */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
+        <div className="mt-8 text-justify leading-relaxed">
+          สัญญาฉบับนี้ทำขึ้นมา 3 (สาม) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
+        </div>
+
+        <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px]">
+          {/* Left Column: Lessor 1 */}
+          <div className="border-r border-black p-4 space-y-12">
+            <div className="font-bold underline">ผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
+            <div className="font-bold">{data.lessor1.name}</div>
+            
+            <div className="pt-8 space-y-12">
+              {data.lessor1Signatories.split(' และ ').map((sig, idx) => (
+                <div key={idx} className="space-y-2">
+                  <div className="border-b border-black w-full h-8"></div>
+                  <div className="flex gap-2">
+                    <span>ชื่อ:</span>
+                    <div className="flex-1">{sig.trim()}</div>
+                  </div>
+                </div>
+              ))}
+              
+              <div className="pt-4">
+                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                <div className="mt-2">{data.lessor1.name}</div>
+              </div>
+
+              <div className="pt-8 space-y-4">
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4"></span>
+                  <span>)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Purchaser */}
+          <div className="p-4 space-y-12">
+            <div className="font-bold underline">ผู้เช่าซื้อ:</div>
+            <div className="font-bold">
+              <Highlight>{customerInfo.companyName}</Highlight>
+            </div>
+            
+            <div className="pt-8 space-y-12">
+              {(data.lesseeSignatories || customerInfo.directors).split(' และ ').map((sig, idx) => (
+                <div key={idx} className="space-y-2">
+                  <div className="border-b border-black w-full h-8"></div>
+                  <div className="flex gap-2">
+                    <span>ชื่อ:</span>
+                    <div className="flex-1">
+                      <Highlight>{sig.trim()}</Highlight>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              
+              <div className="pt-12">
+                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                <div className="mt-2">
+                  <Highlight>{customerInfo.companyName}</Highlight>
+                </div>
+              </div>
+
+              <div className="pt-8 space-y-4">
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4"></span>
+                  <span>)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {renderPageFooter(totalPages - 4)}
+      </div>
+
+      {/* Signature Page 2 - Lessor 2 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
+        
+        <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px]">
+          {/* Left Column: Lessor 2 */}
+          <div className="border-r border-black p-4 space-y-12">
+            <div className="font-bold underline">ผู้ให้เช่าซื้อฝ่ายที่ 2: {data.lessor2.name}</div>
+            
+            <div className="pt-8 space-y-12">
+              {data.lessor2Signatories.split(' และ ').map((sig, idx) => (
+                <div key={idx} className="space-y-2">
+                  <div className="border-b border-black w-full h-8"></div>
+                  <div className="flex gap-2">
+                    <span>ชื่อ:</span>
+                    <div className="flex-1 font-bold">
+                      {sig.trim()}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              
+              <div className="pt-4">
+                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                <div className="mt-2">{data.lessor2.name}</div>
+              </div>
+
+              <div className="pt-8 space-y-4">
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4"></span>
+                  <span>)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Empty */}
+          <div className="p-4 space-y-12">
+          </div>
+        </div>
+        {renderPageFooter(totalPages - 4)}
+      </div>
+
+      {/* Annex Page 1 - Image 9 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
+        <div className="mt-4 flex flex-col items-center justify-center space-y-1">
+          <div className="text-[15px] font-bold underline">เอกสารแนบท้ายหมายเลข 1</div>
+          <div className="text-[15px] font-bold underline">ทรัพย์สินที่เช่าซื้อ</div>
+        </div>
+        {renderPageFooter(19 + overflowPagesCount)}
+      </div>
+
+      {/* Annex Page 2 - Image 10 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
+        <div className="mt-4 flex flex-col items-center justify-center space-y-1 text-center">
+          <div className="text-[15px] font-bold underline">เอกสารแนบท้ายหมายเลข 2</div>
+          <div className="text-[15px] font-bold underline">รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ</div>
+        </div>
+        {renderPageFooter(20 + overflowPagesCount)}
+      </div>
+
+      {/* Annex Page 3 - Image 11 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
+        <div className="mt-4 flex flex-col items-center justify-center space-y-1">
+          <div className="text-[15px] font-bold underline">เอกสารแนบท้ายหมายเลข 3</div>
+          <div className="text-[15px] font-bold underline">รายละเอียดการส่งมอบเครื่องจักร</div>
+        </div>
+        {renderPageFooter(21 + overflowPagesCount)}
+      </div>
+
+      {/* Annex Page 4 - Image 14 */}
+      <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
+        <div className="mt-4 flex flex-col items-center justify-center space-y-1 mb-6">
+          <div className="text-[15px] font-bold underline">เอกสารแนบท้ายหมายเลข 4</div>
+          <div className="text-[15px] font-bold underline text-center">ข้อตกลงและหลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระเงินต้นพร้อมดอกเบี้ย</div>
+        </div>
+
+        <div className="mb-6 text-justify">
+          เอกสารฉบับนี้เป็นส่วนหนึ่งของสัญญาเช่าซื้อเลขที่ <Highlight>{data.contractNo}</Highlight> ลงวันที่ <Highlight>{data.contractDate}</Highlight> โดยคู่สัญญาทุกฝ่ายตกลงและยืนยัน ดังนี้
+        </div>
+
+        <div className="space-y-4 mb-12 text-justify">
+          <div className="pl-6 -indent-6">
+            1. การส่งมอบเช็ค : ผู้เช่าซื้อตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่าเช่าซื้อให้แก่ผู้ให้เช่าซื้อ จำนวนทั้งสิ้น <Highlight>96 ฉบับ</Highlight> เพื่อเป็นการชำระค่างวดเช่าซื้อ (<Highlight>งวดที่ 1 ถึง งวดที่ 48</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ 2 ฉบับ ให้แก่ผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบบัดนี้
+          </div>
+          <div className="pl-6 -indent-6">
+            2. รายละเอียดการชำระ : เช็คแต่ละฉบับจะถูกสั่งจ่ายในนามผู้ให้เช่าซื้อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ "รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ" ตามเอกสารแนบท้ายหมายเลข 2 ของสัญญาเช่าซื้อฉบับนี้
+          </div>
+          <div className="pl-6 -indent-6">
+            3. การยืนยันรายละเอียดและสำเนาภาพถ่ายเช็ค : คู่สัญญาทุกฝ่ายตกลงให้ถือว่า "ใบรับเช็ค" หรือ "สำเนาภาพถ่ายเช็คทั้งหมด" ที่มีการลงนามรับมอบโดยผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
+          </div>
+          <div className="pl-6 -indent-6">
+            4. ความรับผิดทางอาญา : ผู้เช่าซื้อยืนยันและรับรองว่าเช็คทุกฉบับที่ส่งมอบเป็นเช็คที่ออกโดยชอบด้วยกฎหมายเพื่อชำระหนี้ที่มีอยู่จริงและบังคับได้ตามกฎหมาย หากเช็คฉบับใดถูกธนาคารปฏิเสธการจ่ายเงินไม่ว่าด้วยเหตุใดๆ ผู้เช่าซื้อยอมรับว่าตนมีเจตนาหรืออาจเล็งเห็นผลที่จะไม่ให้มีการใช้เงินตามเช็คนั้น และยินยอมให้ผู้ให้เช่าซื้อดำเนินคดีตาม <span className="underline">พระราชบัญญัติว่าด้วยความผิดอันเกิดจากการใช้เช็ค พ.ศ. 2534</span> และที่แก้ไขเพิ่มเติม รวมถึงความรับผิดทางแพ่งและทางอาญาในส่วนอื่นๆ ที่เกี่ยวข้องโดยพลัน
+          </div>
+          <div className="pl-6 -indent-6">
+            5. ความเป็นส่วนหนึ่งของสัญญา : ข้อตกลงตามเอกสารแนบท้ายนี้ให้ถือเป็นส่วนหนึ่งของสัญญาเช่าซื้อฉบับนี้ หากความในเอกสารฉบับนี้ขัดหรือแย้งกับสัญญาเช่าซื้อให้ถือตามข้อความในเอกสารแนบท้ายนี้ในส่วนที่เกี่ยวกับการชำระหนี้ด้วยเช็ค
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-x-8 gap-y-16 mt-20">
+          <div className="space-y-12">
+            <div className="space-y-4">
+              <div className="flex items-end gap-2">
+                <span>ลงชื่อ</span>
+                <div className="border-b border-black flex-1 h-6"></div>
+                <span className="whitespace-nowrap">ผู้ให้เช่าซื้อฝ่ายที่ 1 / ผู้รับเช็ค</span>
+              </div>
+              <div className="text-center group">( {data.lessor1.name || 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด'} )</div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-end gap-2">
+                <span>ลงชื่อ</span>
+                <div className="border-b border-black flex-1 h-6"></div>
+                <span className="whitespace-nowrap">ผู้ให้เช่าซื้อฝ่ายที่ 2 / ผู้รับเช็ค</span>
+              </div>
+              <div className="text-center group">( {data.lessor2.name || 'บริษัท ฐิติกร จำกัด (มหาชน)'} )</div>
+            </div>
+          </div>
+
+          <div className="space-y-4 self-start">
+            <div className="flex items-end gap-2">
+              <span>ลงชื่อ</span>
+              <div className="border-b border-black flex-1 h-6"></div>
+              <span className="whitespace-nowrap">ผู้เช่าซื้อ/ผู้ส่งมอบเช็ค</span>
+            </div>
+            <div className="text-center group">
+              ( <Highlight>{customerInfo.companyName}</Highlight> )
+            </div>
+          </div>
+        </div>
+
+        {renderPageFooter(22 + overflowPagesCount)}
       </div>
     </div>
   );
