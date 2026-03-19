@@ -115,3 +115,4 @@ export default function ContractPreview({ data }: Props) {
     </div>
   );
 }
+

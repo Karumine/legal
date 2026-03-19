@@ -180,3 +180,4 @@ export default function GuarantorForm({ data, onChange }: Props) {
     </section>
   );
 }
+

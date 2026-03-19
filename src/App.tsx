@@ -32,6 +32,38 @@ function App() {
     setData(prev => ({ ...prev, [field]: value }));
   };
 
+  const updateAgileInfo = (info: CompanyInfo) => {
+    setData(prev => ({
+      ...prev,
+      agileInfo: info,
+      hirePurchaseData: {
+        ...prev.hirePurchaseData,
+        lessor1: {
+          ...prev.hirePurchaseData.lessor1,
+          name: info.companyName,
+          taxId: info.taxId,
+          address: info.address,
+        }
+      }
+    }));
+  };
+
+  const updateTkInfo = (info: CompanyInfo) => {
+    setData(prev => ({
+      ...prev,
+      tkInfo: info,
+      hirePurchaseData: {
+        ...prev.hirePurchaseData,
+        lessor2: {
+          ...prev.hirePurchaseData.lessor2,
+          name: info.companyName,
+          taxId: info.taxId,
+          address: info.address,
+        }
+      }
+    }));
+  };
+
   // Build GuaranteeData from AppData and a specific GuarantorData
   const buildGuaranteeData = (guarantor: GuarantorData): GuaranteeData => ({
     contractNo: data.hirePurchaseData.contractNo ? `AGA/XX-SUR` : '',
@@ -75,7 +107,6 @@ function App() {
       return (
         <HirePurchasePreview
           data={data.hirePurchaseData}
-          agileInfo={data.agileInfo}
           customerInfo={data.customerInfo}
         />
       );
@@ -141,8 +172,10 @@ function App() {
           {/* Step 2: Company Info */}
           <CompanyInfoForm
             agileInfo={data.agileInfo}
+            tkInfo={data.tkInfo}
             customerInfo={data.customerInfo}
-            onAgileChange={(info: CompanyInfo) => updateField('agileInfo', info)}
+            onAgileChange={updateAgileInfo}
+            onTkChange={updateTkInfo}
             onCustomerChange={(info: CompanyInfo) => updateField('customerInfo', info)}
           />
 
@@ -235,11 +268,10 @@ function App() {
               <button
                 key={tab.key}
                 onClick={() => setActivePreview(tab.key)}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
-                  activePreview === tab.key
-                    ? 'bg-slate-800 text-white shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${activePreview === tab.key
+                  ? 'bg-slate-800 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }`}
               >
                 <Eye size={12} />
                 {tab.label}

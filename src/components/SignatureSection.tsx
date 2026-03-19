@@ -53,7 +53,7 @@ export default function SignatureSection({ data }: Props) {
           <div>
             <div className="font-bold mb-4">ผู้ชำระค่าธรรมเนียม:</div>
             <div className="font-bold">
-              <span className="bg-yellow-200 print:bg-transparent leading-relaxed px-1 rounded">{data.customerCompany || '\u00A0'}</span>
+              <span className="bg-yellow-200 leading-relaxed px-1 rounded">{data.customerCompany || '\u00A0'}</span>
             </div>
           </div>
 
@@ -64,7 +64,7 @@ export default function SignatureSection({ data }: Props) {
                    <div className="flex flex-col items-center">
                      <div className="border-b border-black w-[80%] h-[36px] mb-2"></div>
                      <div className="text-center">
-                       ( <span className="bg-yellow-200 print:bg-transparent leading-relaxed px-1 rounded">{data.customerDirector || '\u00A0'}</span> )
+                       ( <span className="bg-yellow-200 leading-relaxed px-1 rounded">{data.customerDirector || '\u00A0'}</span> )
                      </div>
                    </div>
                    <div className="flex flex-col items-center relative -top-2 invisible">
@@ -79,7 +79,7 @@ export default function SignatureSection({ data }: Props) {
                 <div className="flex flex-col text-center">
                    <div>กรรมการผู้มีอำนาจลงนาม</div>
                    <div className="mt-1 min-h-[28px]">
-                     <span className="bg-yellow-200 print:bg-transparent leading-relaxed px-1 rounded">{data.customerCompany || '\u00A0'}</span>
+                     <span className="bg-yellow-200 leading-relaxed px-1 rounded">{data.customerCompany || '\u00A0'}</span>
                    </div>
                 </div>
              </div>
@@ -101,3 +101,4 @@ export default function SignatureSection({ data }: Props) {
     </div>
   );
 }
+

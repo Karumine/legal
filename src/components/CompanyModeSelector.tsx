@@ -51,3 +51,4 @@ export default function CompanyModeSelector({ value, onChange }: Props) {
     </section>
   );
 }
+

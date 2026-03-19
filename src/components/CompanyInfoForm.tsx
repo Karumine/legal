@@ -5,8 +5,10 @@ import { searchCompanyByTaxId } from '../services/dbdService';
 
 interface Props {
   agileInfo: CompanyInfo;
+  tkInfo: CompanyInfo;
   customerInfo: CompanyInfo;
   onAgileChange: (info: CompanyInfo) => void;
+  onTkChange: (info: CompanyInfo) => void;
   onCustomerChange: (info: CompanyInfo) => void;
 }
 
@@ -50,8 +52,8 @@ function InfoFields({ label, info, onChange, showSearch }: {
   };
 
   return (
-    <div className="space-y-3">
-      <h4 className="font-medium text-sm text-slate-600 border-b border-slate-100 pb-2">{label}</h4>
+    <div className="space-y-3 bg-slate-50 p-4 rounded-lg border border-slate-100">
+      <h4 className="font-bold text-sm text-blue-800 border-b border-blue-100 pb-2">{label}</h4>
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">เลข Tax ID</label>
         <div className="flex gap-2">
@@ -60,7 +62,7 @@ function InfoFields({ label, info, onChange, showSearch }: {
             value={info.taxId}
             onChange={(e) => handleChange('taxId', e.target.value)}
             className="block flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-            placeholder="0145554003035"
+            placeholder="011XXXXXXXXXX"
           />
           {showSearch && (
             <button
@@ -81,7 +83,7 @@ function InfoFields({ label, info, onChange, showSearch }: {
           type="text"
           value={info.companyName}
           onChange={(e) => handleChange('companyName', e.target.value)}
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
         />
       </div>
       <div>
@@ -90,16 +92,15 @@ function InfoFields({ label, info, onChange, showSearch }: {
           type="text"
           value={info.directors}
           onChange={(e) => handleChange('directors', e.target.value)}
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
         />
       </div>
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่</label>
-        <input
-          type="text"
+        <textarea
           value={info.address}
           onChange={(e) => handleChange('address', e.target.value)}
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white h-20"
         />
       </div>
       <div>
@@ -108,21 +109,37 @@ function InfoFields({ label, info, onChange, showSearch }: {
           type="text"
           value={info.phone}
           onChange={(e) => handleChange('phone', e.target.value)}
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
         />
       </div>
     </div>
   );
 }
 
-export default function CompanyInfoForm({ agileInfo, customerInfo, onAgileChange, onCustomerChange }: Props) {
+export default function CompanyInfoForm({ 
+  agileInfo, 
+  tkInfo, 
+  customerInfo, 
+  onAgileChange, 
+  onTkChange, 
+  onCustomerChange 
+}: Props) {
   return (
-    <section className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-      <h3 className="font-semibold text-lg mb-3 text-slate-700">ข้อมูลบริษัท</h3>
-      <div className="grid grid-cols-2 gap-6">
-        <InfoFields label="🏢 Agile (ฝ่ายที่ 1)" info={agileInfo} onChange={onAgileChange} />
-        <InfoFields label="🏬 ลูกค้า (ฝ่ายที่ 2)" info={customerInfo} onChange={onCustomerChange} showSearch />
+    <section className="bg-white p-5 rounded-lg shadow-sm border border-slate-200">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+        <h3 className="font-bold text-xl text-slate-800">ข้อมูลบริษัท (3 ฝ่าย)</h3>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="space-y-6">
+          <InfoFields label="🏢 Agile (ฝ่ายที่ 1)" info={agileInfo} onChange={onAgileChange} />
+          <InfoFields label="👤 ลูกค้า (ฝ่ายที่ 3)" info={customerInfo} onChange={onCustomerChange} showSearch />
+        </div>
+        <div className="space-y-6">
+          <InfoFields label="🏢 TK (ฝ่ายที่ 2)" info={tkInfo} onChange={onTkChange} />
+        </div>
       </div>
     </section>
   );
 }
+

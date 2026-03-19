@@ -144,3 +144,4 @@ export default function FeePaymentForm({ data, onChange }: Props) {
     </section>
   );
 }
+

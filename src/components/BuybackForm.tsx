@@ -77,3 +77,4 @@ export default function BuybackForm({ data, onChange }: Props) {
     </section>
   );
 }
+

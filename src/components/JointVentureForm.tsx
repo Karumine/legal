@@ -43,3 +43,4 @@ export default function JointVentureForm({ data, onChange }: Props) {
     </section>
   );
 }
+

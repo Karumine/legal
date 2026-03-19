@@ -206,3 +206,4 @@ export default function ContractForm({ data, onChange }: Props) {
     </div>
   );
 }
+
