@@ -9,7 +9,7 @@ export default function SignatureSection({ data }: Props) {
     <div className="mt-4">
       <div className="grid grid-cols-2 divide-x divide-black border border-black text-[13px]">
         {/* Left Column - Company */}
-        <div className="p-6 flex flex-col min-h-[380px]">
+        <div className="p-6 flex flex-col min-h-[420px]">
           <div>
             <div className="font-bold mb-4">ผู้รับค่าธรรมเนียม:</div>
             <div className="font-bold">บริษัท อาไจล์ แอสเซ็ทส์ จำกัด</div>

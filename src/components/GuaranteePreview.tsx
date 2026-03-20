@@ -310,12 +310,15 @@ export default function GuaranteePreview({ data }: Props) {
             <div className="grid grid-cols-2 divide-x divide-black">
               {/* Left: Lender 1 */}
               <div className="p-4 flex flex-col min-h-[400px]">
-                <div className="font-bold mb-2">ผู้ให้เช่าซื้อฝ่ายที่ 1 : <Highlight>{data.lenderCompany}</Highlight></div>
-                
-                <div className="pt-8 space-y-12">
+                <div className="flex-1 pt-1 space-y-12">
+                  <div className="font-bold mb-2 text-[13px]">
+                    <div>ผู้ให้เช่าซื้อฝ่ายที่ 1 :</div>
+                    <Highlight>{data.lenderCompany}</Highlight>
+                  </div>
+                  
                   {data.lenderDirectors.split(/\s*และ\s*/).map((sig, idx) => (
                     <div key={idx} className="space-y-2">
-                      <div className="border-b border-black w-full h-8"></div>
+                      <div className="border-b border-black w-full h-12"></div>
                       <div className="flex gap-2">
                         <span>ชื่อ:</span>
                         <div className="flex-1">{sig.trim()}</div>
@@ -330,24 +333,27 @@ export default function GuaranteePreview({ data }: Props) {
                       <div><Highlight>{data.lenderCompany}</Highlight></div>
                     </div>
                   </div>
+                </div>
 
-                  <div className="pt-8 space-y-4">
-                    <div className="font-bold">พยาน:</div>
-                    <div className="flex flex-col items-center">
-                      <div className="border-b border-black w-[80%] h-8 mb-1"></div>
-                      <div className="text-center">(<span className="inline-block w-[150px]"></span>)</div>
-                    </div>
+                <div className="mt-auto pt-8 space-y-4">
+                  <div className="font-bold">พยาน:</div>
+                  <div className="flex flex-col items-center">
+                    <div className="border-b border-black w-[80%] h-12 mb-1"></div>
+                    <div className="text-center">(<span className="inline-block w-[150px]"></span>)</div>
                   </div>
                 </div>
               </div>
 
               {/* Right: Guarantor */}
               <div className="p-4 flex flex-col min-h-[400px]">
-                <div className="font-bold mb-2">ผู้ค้ำประกัน : <Highlight>{data.guarantorName}</Highlight></div>
-                
-                <div className="pt-8 space-y-12">
+                <div className="flex-1 pt-1 space-y-12">
+                  <div className="font-bold mb-2 text-[13px]">
+                    <div>ผู้ค้ำประกัน :</div>
+                    <Highlight>{data.guarantorName}</Highlight>
+                  </div>
+                  
                   <div className="space-y-2">
-                    <div className="border-b border-black w-full h-8"></div>
+                    <div className="border-b border-black w-full h-12"></div>
                     <div className="flex gap-2">
                       <span>ชื่อ:</span>
                       <div className="flex-1">
@@ -355,13 +361,13 @@ export default function GuaranteePreview({ data }: Props) {
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  <div className="pt-24 space-y-4">
-                    <div className="font-bold">พยาน:</div>
-                    <div className="flex flex-col items-center">
-                      <div className="border-b border-black w-[80%] h-8 mb-1"></div>
-                      <div className="text-center">(<span className="inline-block w-[150px]"></span>)</div>
-                    </div>
+                <div className="mt-auto pt-8 space-y-4">
+                  <div className="font-bold">พยาน:</div>
+                  <div className="flex flex-col items-center">
+                    <div className="border-b border-black w-[80%] h-12 mb-1"></div>
+                    <div className="text-center">(<span className="inline-block w-[150px]"></span>)</div>
                   </div>
                 </div>
               </div>
@@ -380,34 +386,42 @@ export default function GuaranteePreview({ data }: Props) {
         <PageHeader />
         
         <div className="mt-8 border border-black text-[12px]">
-          <div className="p-4 min-h-[400px] flex flex-col">
-            <div className="font-bold mb-2">ผู้ให้เช่าซื้อฝ่ายที่ 2 : <Highlight>{data.borrowerCompany}</Highlight></div>
-            <div className="mt-8 max-w-[50%] space-y-12">
-              {data.borrowerDirectors.split(/\s*และ\s*/).map((sig, idx) => (
-                <div key={idx} className="space-y-2">
-                  <div className="border-b border-black w-full h-8"></div>
-                  <div className="flex gap-2">
-                    <span>ชื่อ:</span>
-                    <div className="flex-1">{sig.trim()}</div>
-                  </div>
+          <div className="grid grid-cols-2 divide-x divide-black">
+            <div className="p-4 min-h-[400px] flex flex-col">
+              <div className="flex-1 mt-2 space-y-12">
+                <div className="font-bold mb-2 text-[13px]">
+                  <div>ผู้ให้เช่าซื้อฝ่ายที่ 2 :</div>
+                  <Highlight>{data.borrowerCompany}</Highlight>
                 </div>
-              ))}
-              
-              <div className="pt-4">
-                <div className="font-bold">ตำแหน่ง:</div>
-                <div className="text-center">
-                  <div>กรรมการผู้มีอำนาจลงนาม</div>
-                  <div><Highlight>{data.borrowerCompany}</Highlight></div>
+                {data.borrowerDirectors.split(/\s*และ\s*/).map((sig, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="border-b border-black w-full h-12"></div>
+                    <div className="flex gap-2">
+                      <span>ชื่อ:</span>
+                      <div className="flex-1">{sig.trim()}</div>
+                    </div>
+                  </div>
+                ))}
+                
+                <div className="pt-4">
+                  <div className="font-bold">ตำแหน่ง:</div>
+                  <div className="text-center">
+                    <div>กรรมการผู้มีอำนาจลงนาม</div>
+                    <div><Highlight>{data.borrowerCompany}</Highlight></div>
+                  </div>
                 </div>
               </div>
 
-              <div className="pt-8 space-y-4">
+              <div className="mt-auto pt-8 space-y-4">
                 <div className="font-bold">พยาน:</div>
                 <div className="flex flex-col items-center">
-                  <div className="border-b border-black w-[80%] h-8 mb-1"></div>
+                  <div className="border-b border-black w-[80%] h-12 mb-1"></div>
                   <div className="text-center">(<span className="inline-block w-[150px]"></span>)</div>
                 </div>
               </div>
+            </div>
+            
+            <div className="p-4 flex flex-col min-h-[400px]">
             </div>
           </div>
         </div>

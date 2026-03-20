@@ -1,6 +1,7 @@
 import PageHeader from './PageHeader';
 import type { HirePurchaseData, CompanyInfo, CollateralAsset } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
+import { thaiNumberText } from '../utils/thaiNumberText';
 
 interface Props {
   data: HirePurchaseData;
@@ -27,7 +28,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
   const overflowAssets = assetCount > firstPageMax ? data.assets!.slice(firstPageMax) : [];
   const overflowPagesCount = Math.ceil(overflowAssets.length / subsequentPageMax);
   const collateralOverflow = (data.collateralAssets || []).length > 3;
-  const totalPages = 22 + overflowPagesCount + (collateralOverflow ? 1 : 0); // 2 Pages Intro + Overflow + 14 Contract + 2 Sigs + 4 Annexes
+  const totalPages = 26 + overflowPagesCount + (collateralOverflow ? 1 : 0); // 2 Pages Intro + Overflow + 14 Contract + 2 Sigs + 4 Annexes + padding
 
   const renderPageFooter = (pageNum: number) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
@@ -146,7 +147,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
           </div>
           <div className="pl-6 -indent-6">
-            3. <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{data.lesseeSignatories || customerInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{customerInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
+            3. <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{customerInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
           </div>
         </div>
 
@@ -198,13 +199,13 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
               <tr>
                 <td className="border border-black p-2">ผู้ให้เช่าซื้อฝ่ายที่ 1</td>
                 <td className="border border-black p-2 font-bold">
-                  <Highlight>{data.lessor1.proportion}</Highlight> ({data.lessor1.proportion === '20' ? 'ยี่สิบ' : '...'})
+                  <Highlight>{data.lessor1.proportion}</Highlight> ({thaiNumberText(data.lessor1.proportion)})
                 </td>
               </tr>
               <tr>
                 <td className="border border-black p-2">ผู้ให้เช่าซื้อฝ่ายที่ 2</td>
                 <td className="border border-black p-2 font-bold">
-                  <Highlight>{data.lessor2.proportion}</Highlight> ({data.lessor2.proportion === '80' ? 'แปดสิบ' : '...'})
+                  <Highlight>{data.lessor2.proportion}</Highlight> ({thaiNumberText(data.lessor2.proportion)})
                 </td>
               </tr>
             </tbody>
@@ -225,7 +226,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
                   <span>
                     <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight>
                     <br />
-                    จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท (ตัวอักษร) <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
+                    จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
                   </span>
                 </div>
               </div>
@@ -257,7 +258,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
                       <span>
                         <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight>
                         <br />
-                        จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท (ตัวอักษร) <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
+                        จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
                       </span>
                     </div>
                   </div>
@@ -549,7 +550,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             <span className="">6.3</span>
             <div className="flex-1 space-y-4">
               <div>ผู้เช่าซื้อตกลงว่าบรรดาทรัพย์สินดังต่อไปนี้ (“ทรัพย์สินหลักประกัน”) เป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า</div>
-              
+
               {(data.collateralAssets || []).slice(0, 3).map((asset, idx) => renderCollateralAsset(asset, idx))}
             </div>
           </div>
@@ -575,6 +576,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
 
       {/* Contract Sections Page 9 - Sections 6.4-6.7 */}
       <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="mb-4 text-justify">
             นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
@@ -601,7 +603,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
 
-    <div className="flex gap-4">
+          <div className="flex gap-4">
             <span className="">6.7</span>
             <div className="flex-1 space-y-4">
               <div>
@@ -618,6 +620,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
 
       {/* Contract Sections Page 10 - Sections 6.8-6.12 */}
       <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
             <span className="">6.8</span>
@@ -659,6 +662,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
 
       {/* Contract Sections Page 11 - Sections 7, 8, 9 */}
       <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
         <div className="mt-8 space-y-8">
           <div className="space-y-4">
             <div className="font-bold">7. การโอนกรรมสิทธิ์ให้แก่ผู้เช่าซื้อ</div>
@@ -689,6 +693,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
 
       {/* Contract Sections Page 12 - Sections 9.2, 10 */}
       <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
             <span className="">9.2.</span>
@@ -702,7 +707,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             <div className="indent-8 text-justify">
               การติดต่อหรือบอกกล่าวซึ่งทำขึ้นโดยคู่สัญญาฝ่ายหนึ่งและส่งไปยังคู่สัญญาอีกฝ่ายหนึ่ง ให้ทำเป็นหนังสือหากมิได้ระบุไว้เป็นอย่างอื่นอาจส่งโดยทางโทรสารหรือส่งทางไปรษณีย์ หรือให้คนนำไปส่งเองก็ดี ให้ส่งไปยังคู่สัญญาทุกฝ่ายตามที่อยู่ที่ได้ระบุไว้ข้างต้นของสัญญาฉบับนี้ และให้ถือว่าหนังสือบอกกล่าวนั้นได้ส่งโดยชอบแล้วเมื่อได้ดำเนินการดังต่อไปนี้
             </div>
-            
+
             <div className="space-y-4 pt-4">
               <div className="flex gap-4">
                 <span>(ก)</span>
@@ -736,6 +741,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
 
       {/* Contract Sections Page 13 - Sections 11, 12, 13, 14 */}
       <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
         <div className="mt-8 space-y-8">
           <div className="space-y-4">
             <div className="font-bold">11. การโอนสิทธิ และ/หรือ หน้าที่</div>
@@ -770,6 +776,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
 
       {/* Contract Sections Page 14 - Sections 15, 16 */}
       <div className="print-page relative min-h-[1050px] p-24">
+        <PageHeader />
         <div className="mt-8 space-y-8">
           <div className="space-y-4">
             <div className="font-bold">15. การแก้ไขสัญญา</div>
@@ -801,73 +808,76 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
 
         <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px]">
           {/* Left Column: Lessor 1 */}
-          <div className="border-r border-black p-4 space-y-12">
-            <div className="font-bold underline">ผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
-            <div className="font-bold">{data.lessor1.name}</div>
-            
-            <div className="pt-8 space-y-12">
-              {data.lessor1Signatories.split(' และ ').map((sig, idx) => (
-                <div key={idx} className="space-y-2">
-                  <div className="border-b border-black w-full h-8"></div>
-                  <div className="flex gap-2">
-                    <span>ชื่อ:</span>
-                    <div className="flex-1">{sig.trim()}</div>
-                  </div>
-                </div>
-              ))}
-              
-              <div className="pt-4">
-                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                <div className="mt-2">{data.lessor1.name}</div>
-              </div>
+          <div className="border-r border-black p-4 flex flex-col h-full">
+            <div className="space-y-12">
+              <div className="font-bold underline">ผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
+              <div className="font-bold">{data.lessor1.name}</div>
 
-              <div className="pt-8 space-y-4">
-                <div>พยาน:</div>
-                <div className="border-b border-black w-full h-8"></div>
-                <div className="flex justify-between">
-                  <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4"></span>
-                  <span>)</span>
+              <div className="pt-8 space-y-12">
+                {data.lessor1Signatories.split(' และ ').map((sig, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="border-b border-black w-full h-8"></div>
+                    <div className="flex gap-2">
+                      <span>ชื่อ:</span>
+                      <div className="flex-1">{sig.trim()}</div>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="pt-4">
+                  <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                  <div className="mt-2">{data.lessor1.name}</div>
                 </div>
+              </div>
+            </div>
+
+            <div className="mt-auto pt-8 space-y-4">
+              <div>พยาน:</div>
+              <div className="border-b border-black w-full h-8"></div>
+              <div className="flex justify-between">
+                <span>(</span>
+                <span className="flex-1 border-b border-black mx-4"></span>
+                <span>)</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Purchaser */}
-          <div className="p-4 space-y-12">
-            <div className="font-bold underline">ผู้เช่าซื้อ:</div>
-            <div className="font-bold">
-              <Highlight>{customerInfo.companyName}</Highlight>
-            </div>
-            
-            <div className="pt-8 space-y-12">
-              {(data.lesseeSignatories || customerInfo.directors).split(' และ ').map((sig, idx) => (
-                <div key={idx} className="space-y-2">
-                  <div className="border-b border-black w-full h-8"></div>
-                  <div className="flex gap-2">
-                    <span>ชื่อ:</span>
-                    <div className="flex-1">
-                      <Highlight>{sig.trim()}</Highlight>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              
-              <div className="pt-12">
-                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                <div className="mt-2">
-                  <Highlight>{customerInfo.companyName}</Highlight>
-                </div>
+          <div className="p-4 flex flex-col h-full">
+            <div className="space-y-12">
+              <div className="font-bold underline">ผู้เช่าซื้อ:</div>
+              <div className="font-bold">
+                <Highlight>{customerInfo.companyName}</Highlight>
               </div>
 
-              <div className="pt-8 space-y-4">
-                <div>พยาน:</div>
-                <div className="border-b border-black w-full h-8"></div>
-                <div className="flex justify-between">
-                  <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4"></span>
-                  <span>)</span>
+              <div className="pt-8 space-y-12">
+                {(data.lesseeSignatories || customerInfo.directors).split(' และ ').map((sig, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="border-b border-black w-full h-8"></div>
+                    <div className="flex gap-2">
+                      <span>ชื่อ:</span>
+                      <div className="flex-1">
+                        <Highlight>{sig.trim()}</Highlight>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="pt-4">
+                  <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                  <div className="mt-2">
+                    <Highlight>{customerInfo.companyName}</Highlight>
+                  </div>
                 </div>
+              </div>
+            </div>
+
+            <div className="mt-auto pt-8 space-y-4">
+              <div>พยาน:</div>
+              <div className="border-b border-black w-full h-8"></div>
+              <div className="flex justify-between">
+                <span>(</span>
+                <span className="flex-1 border-b border-black mx-4"></span>
+                <span>)</span>
               </div>
             </div>
           </div>
@@ -878,38 +888,40 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
       {/* Signature Page 2 - Lessor 2 */}
       <div className="print-page relative min-h-[1050px] p-24">
         <PageHeader />
-        
+
         <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px]">
           {/* Left Column: Lessor 2 */}
-          <div className="border-r border-black p-4 space-y-12">
-            <div className="font-bold underline">ผู้ให้เช่าซื้อฝ่ายที่ 2: {data.lessor2.name}</div>
-            
-            <div className="pt-8 space-y-12">
-              {data.lessor2Signatories.split(' และ ').map((sig, idx) => (
-                <div key={idx} className="space-y-2">
-                  <div className="border-b border-black w-full h-8"></div>
-                  <div className="flex gap-2">
-                    <span>ชื่อ:</span>
-                    <div className="flex-1 font-bold">
-                      {sig.trim()}
+          <div className="border-r border-black p-4 flex flex-col h-full">
+            <div className="space-y-12">
+              <div className="font-bold underline">ผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
+              <div className="font-bold">{data.lessor2.name}</div>
+              <div className="pt-8 space-y-12">
+                {data.lessor2Signatories.split(' และ ').map((sig, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="border-b border-black w-full h-8"></div>
+                    <div className="flex gap-2">
+                      <span>ชื่อ:</span>
+                      <div className="flex-1 font-bold">
+                        {sig.trim()}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-              
-              <div className="pt-4">
-                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                <div className="mt-2">{data.lessor2.name}</div>
-              </div>
+                ))}
 
-              <div className="pt-8 space-y-4">
-                <div>พยาน:</div>
-                <div className="border-b border-black w-full h-8"></div>
-                <div className="flex justify-between">
-                  <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4"></span>
-                  <span>)</span>
+                <div className="pt-4">
+                  <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                  <div className="mt-2">{data.lessor2.name}</div>
                 </div>
+              </div>
+            </div>
+
+            <div className="mt-auto pt-8 space-y-4">
+              <div>พยาน:</div>
+              <div className="border-b border-black w-full h-8"></div>
+              <div className="flex justify-between">
+                <span>(</span>
+                <span className="flex-1 border-b border-black mx-4"></span>
+                <span>)</span>
               </div>
             </div>
           </div>
@@ -922,31 +934,31 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
       </div>
 
       {/* Annex Page 1 - Image 9 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] py-10 px-24">
         <PageHeader />
-        <div className="mt-4 flex flex-col items-center justify-center space-y-1">
-          <div className="text-[15px] font-bold underline">เอกสารแนบท้ายหมายเลข 1</div>
-          <div className="text-[15px] font-bold underline">ทรัพย์สินที่เช่าซื้อ</div>
+        <div className="mt-2 flex flex-col items-center justify-center space-y-0.5">
+          <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 1</div>
+          <div className="text-[12px] font-bold underline">ทรัพย์สินที่เช่าซื้อ</div>
         </div>
         {renderPageFooter(19 + overflowPagesCount)}
       </div>
 
       {/* Annex Page 2 - Image 10 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] py-10 px-24">
         <PageHeader />
-        <div className="mt-4 flex flex-col items-center justify-center space-y-1 text-center">
-          <div className="text-[15px] font-bold underline">เอกสารแนบท้ายหมายเลข 2</div>
-          <div className="text-[15px] font-bold underline">รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ</div>
+        <div className="mt-2 flex flex-col items-center justify-center space-y-0.5 text-center">
+          <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 2</div>
+          <div className="text-[12px] font-bold underline">รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ</div>
         </div>
         {renderPageFooter(20 + overflowPagesCount)}
       </div>
 
       {/* Annex Page 3 - Image 11 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] py-10 px-24">
         <PageHeader />
-        <div className="mt-4 flex flex-col items-center justify-center space-y-1">
-          <div className="text-[15px] font-bold underline">เอกสารแนบท้ายหมายเลข 3</div>
-          <div className="text-[15px] font-bold underline">รายละเอียดการส่งมอบเครื่องจักร</div>
+        <div className="mt-2 flex flex-col items-center justify-center space-y-0.5">
+          <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 3</div>
+          <div className="text-[12px] font-bold underline">รายละเอียดการส่งมอบเครื่องจักร</div>
         </div>
         {renderPageFooter(21 + overflowPagesCount)}
       </div>
@@ -954,21 +966,21 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
       {/* Annex Page 4 - Image 14 */}
       <div className="print-page relative min-h-[1050px] p-24">
         <PageHeader />
-        <div className="mt-4 flex flex-col items-center justify-center space-y-1 mb-6">
+        <div className="mt-4 flex flex-col items-center justify-center space-y-1 mb-4">
           <div className="text-[15px] font-bold underline">เอกสารแนบท้ายหมายเลข 4</div>
           <div className="text-[15px] font-bold underline text-center">ข้อตกลงและหลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระเงินต้นพร้อมดอกเบี้ย</div>
         </div>
 
-        <div className="mb-6 text-justify">
-          เอกสารฉบับนี้เป็นส่วนหนึ่งของสัญญาเช่าซื้อเลขที่ <Highlight>{data.contractNo}</Highlight> ลงวันที่ <Highlight>{data.contractDate}</Highlight> โดยคู่สัญญาทุกฝ่ายตกลงและยืนยัน ดังนี้
+        <div className="mb-4 text-justify">
+          เอกสารฉบับนี้เป็นส่วนหนึ่งของสัญญาเช่าซื้อเลขที่ <Highlight>{data.contractNo} ลงวันที่ {data.contractDate}</Highlight> โดยคู่สัญญาทุกฝ่ายตกลงและยืนยัน ดังนี้
         </div>
 
-        <div className="space-y-4 mb-12 text-justify">
+        <div className="space-y-2 mb-6 text-justify">
           <div className="pl-6 -indent-6">
-            1. การส่งมอบเช็ค : ผู้เช่าซื้อตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่าเช่าซื้อให้แก่ผู้ให้เช่าซื้อ จำนวนทั้งสิ้น <Highlight>96 ฉบับ</Highlight> เพื่อเป็นการชำระค่างวดเช่าซื้อ (<Highlight>งวดที่ 1 ถึง งวดที่ 48</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ 2 ฉบับ ให้แก่ผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบบัดนี้
+            1. การส่งมอบเช็ค : ผู้เช่าซื้อตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่าเช่าซื้อให้แก่<span className="underline">ผู้ให้เช่าซื้อ</span> จำนวนทั้งสิ้น <Highlight>96 ฉบับ</Highlight> เพื่อเป็นการชำระค่างวดเช่าซื้อ (<Highlight>งวดที่ 1 ถึง งวดที่ 48</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ 2 ฉบับ ให้แก่ผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบบัดนี้
           </div>
           <div className="pl-6 -indent-6">
-            2. รายละเอียดการชำระ : เช็คแต่ละฉบับจะถูกสั่งจ่ายในนามผู้ให้เช่าซื้อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ "รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ" ตามเอกสารแนบท้ายหมายเลข 2 ของสัญญาเช่าซื้อฉบับนี้
+            2. รายละเอียดการชำระ : เช็คแต่ละฉบับจะถูกสั่งจ่ายในนามผู้ให้เช่าซื้อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ <span className="underline">"รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ"</span> ตามเอกสารแนบท้ายหมายเลข 2 ของสัญญาเช่าซื้อฉบับนี้
           </div>
           <div className="pl-6 -indent-6">
             3. การยืนยันรายละเอียดและสำเนาภาพถ่ายเช็ค : คู่สัญญาทุกฝ่ายตกลงให้ถือว่า "ใบรับเช็ค" หรือ "สำเนาภาพถ่ายเช็คทั้งหมด" ที่มีการลงนามรับมอบโดยผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
@@ -981,40 +993,280 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-16 mt-20">
-          <div className="space-y-12">
-            <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-x-16 gap-y-6 mt-12">
+          <div className="space-y-6">
+            <div className="pb-6">
               <div className="flex items-end gap-2">
-                <span>ลงชื่อ</span>
-                <div className="border-b border-black flex-1 h-6"></div>
-                <span className="whitespace-nowrap">ผู้ให้เช่าซื้อฝ่ายที่ 1 / ผู้รับเช็ค</span>
+                <span className="w-8">ลงชื่อ</span>
+                <div className="border-b border-black border-dotted flex-1 h-6 relative">
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap text-[12px] text-center">
+                    ( {data.lessor1.name || 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด'} )
+                  </div>
+                </div>
+                <span className="whitespace-nowrap text-[11px] w-[100px]" >ผู้ให้เช่าซื้อฝ่ายที่ 1 / ผู้รับเช็ค</span>
               </div>
-              <div className="text-center group">( {data.lessor1.name || 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด'} )</div>
             </div>
 
-            <div className="space-y-4">
+            <div className="pb-6">
               <div className="flex items-end gap-2">
-                <span>ลงชื่อ</span>
-                <div className="border-b border-black flex-1 h-6"></div>
-                <span className="whitespace-nowrap">ผู้ให้เช่าซื้อฝ่ายที่ 2 / ผู้รับเช็ค</span>
+                <span className="w-8">ลงชื่อ</span>
+                <div className="border-b border-black border-dotted flex-1 h-6 relative">
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap text-[12px] text-center">
+                    ( {data.lessor2.name || 'บริษัท ฐิติกร จำกัด (มหาชน)'} )
+                  </div>
+                </div>
+                <span className="whitespace-nowrap text-[11px] w-[100px]">ผู้ให้เช่าซื้อฝ่ายที่ 2 / ผู้รับเช็ค</span>
               </div>
-              <div className="text-center group">( {data.lessor2.name || 'บริษัท ฐิติกร จำกัด (มหาชน)'} )</div>
             </div>
           </div>
 
-          <div className="space-y-4 self-start">
+          <div className="pb-6 self-start">
             <div className="flex items-end gap-2">
-              <span>ลงชื่อ</span>
-              <div className="border-b border-black flex-1 h-6"></div>
-              <span className="whitespace-nowrap">ผู้เช่าซื้อ/ผู้ส่งมอบเช็ค</span>
-            </div>
-            <div className="text-center group">
-              ( <Highlight>{customerInfo.companyName}</Highlight> )
+              <span className="w-8">ลงชื่อ</span>
+              <div className="border-b border-black border-dotted flex-1 h-6 relative">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap text-[12px] text-center">
+                  ( <Highlight>{customerInfo.companyName}</Highlight> )
+                </div>
+              </div>
+              <span className="whitespace-nowrap text-[11px] w-[100px]">ผู้เช่าซื้อ/ผู้ส่งมอบเช็ค</span>
             </div>
           </div>
         </div>
 
         {renderPageFooter(22 + overflowPagesCount)}
+      </div>
+
+      {/* Annex Page 5 - Debt Collection Fees */}
+      <div className="print-page relative min-h-[1050px] py-6 px-24">
+        <PageHeader />
+        <div className="mt-2 flex flex-col items-center justify-center space-y-0.5 mb-1.5">
+          <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 5</div>
+          <div className="text-[12px] font-bold underline text-center">
+            รายละเอียดเกี่ยวกับการติดตามทวงถาม และค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดี
+          </div>
+          <div className="text-[12px] font-bold underline text-center">
+            ประกาศอัตราดอกเบี้ย ค่าปรับ ค่าบริการ ค่าธรรมเนียมใดๆ และค่าใช้จ่ายอันเกิดจากสัญญาตามที่จ่ายไปจริง
+          </div>
+          <div className="text-[12px] font-bold text-center">
+            มีผลบังคับใช้ตั้งแต่วันที่ 1 กรกฎาคม 2564 เป็นต้นไป
+          </div>
+        </div>
+
+        {/* Table 1 */}
+        <table className="w-full border-collapse border border-black text-[12px] mb-1.5">
+          <thead>
+            <tr className="bg-gray-100 text-left">
+              <th colSpan={2} className="border border-black p-1 ">1. ค่าธรรมเนียมในการติดตามทวงถามหนี้</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-black p-1">1.1 กรณีค้างชำระหนี้หนึ่งงวด</td>
+              <td className="border border-black p-1">ไม่เกิน 50 บาท / รอบการทวงถามหนี้</td>
+            </tr>
+            <tr>
+              <td className="border border-black p-1">1.2 กรณีค้างชำระเกินหนึ่งงวด</td>
+              <td className="border border-black p-1">ไม่เกิน 100 บาท / รอบการทวงถามหนี้</td>
+            </tr>
+            <tr>
+              <td className="border border-black p-1">1.3 ลำดับการตัดชำระหนี้</td>
+              <td className="border border-black p-1 text-justify">
+                <span className="underline font-bold text-blue-800 italic">เงินที่ลูกหนี้ชำระเข้ามาจะถูกนำไปตัดชำระตามลำดับ ดังนี้</span><br />
+                (1) ค่าธรรมเนียม (2) ดอกเบี้ย (3) เงินต้นของงวดหนี้ที่ค้างชำระนานที่สุดก่อน
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* Table 2 */}
+        <table className="w-full border-collapse border border-black text-[12px] mb-1.5">
+          <thead>
+            <tr className="bg-gray-100 text-left">
+              <th colSpan={2} className="border border-black p-1">2. ค่าดำเนินการทางกฎหมาย</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-black p-1">2.1 ค่าใช้จ่ายอันเกี่ยวกับการฟ้องร้องดำเนินคดี</td>
+              <td className="border border-black p-1">ตามอัตราที่บริษัทฯได้ชำระไปจริง</td>
+            </tr>
+            <tr>
+              <td className="border border-black p-1">2.2 ค่าธรรมเนียมศาล</td>
+              <td className="border border-black p-1">ตามอัตราที่หน่วยงานราชการนั้นกำหนด หรือ ตามที่กฎหมายกำหนด</td>
+            </tr>
+            <tr>
+              <td className="border border-black p-1">2.3 ค่าใช้จ่ายในการบังคับคดี</td>
+              <td className="border border-black p-1">ตามอัตราที่หน่วยงานราชการนั้นกำหนด หรือ ตามที่กฎหมายกำหนด</td>
+            </tr>
+            <tr>
+              <td className="border border-black p-1 whitespace-nowrap">2.4 ค่าธรรมเนียมในการติดต่อหน่วยงานอื่นๆ</td>
+              <td className="border border-black p-0">
+                <div className="p-1 border-b border-black">กรณีที่เป็นหน่วยงานราชการ : ตามอัตราที่หน่วยงานราชการนั้นกำหนด</div>
+                <div className="p-1">กรณีที่เป็นหน่วยงานเอกชน : ตามอัตราที่หน่วยงานนั้นกำหนด</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* Example Title */}
+        <div className="text-center mt-4 mb-1">
+          <span className="text-[12px] font-bold underline italic">ตัวอย่างการคำนวณค่าธรรมเนียมในการติดตามทวงถามหนี้</span>
+        </div>
+
+        {/* Table 3 */}
+        <table className="w-full border-collapse border border-black text-[12px] text-center mb-4">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-black p-1 text-left"></th>
+              <th className="border border-black p-1">งวดที่ 1<br />(ม.ค.)</th>
+              <th className="border border-black p-1">งวดที่ 2<br />(ก.พ.)</th>
+              <th className="border border-black p-1">งวดที่ 3<br />(มี.ค.)</th>
+              <th className="border border-black p-1">งวดที่ 4<br />(เม.ย.)</th>
+              <th className="border border-black p-1">รวม</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-black p-1 text-left font-bold">กรณีที่ไม่มีการชำระหนี้เพิ่มเติม</td>
+              <td className="border border-black p-1">50 บาท</td>
+              <td className="border border-black p-1">100 บาท</td>
+              <td className="border border-black p-1">100 บาท</td>
+              <td className="border border-black p-1">100 บาท</td>
+              <td className="border border-black p-1 font-bold bg-gray-100">350 บาท</td>
+            </tr>
+            <tr>
+              <td className="border-x border-black p-1 text-left font-bold">กรณีที่มีการชำระหนี้เพิ่มเติม</td>
+              <td className="border-x border-black p-1"></td>
+              <td className="border-x border-black p-1"></td>
+              <td className="border-x border-black p-1"></td>
+              <td className="border-x border-black p-1"></td>
+              <td className="border-x border-black p-1 bg-gray-100"></td>
+            </tr>
+            <tr>
+              <td className="border border-black p-1 text-left pl-4 whitespace-normal leading-tight">
+                - เงินที่ชำระเข้ามาสามารถนำไปตัดชำระค่าธรรมเนียมใน<br />การทวงถามของงวดที่ 1 ได้
+              </td>
+              <td className="border border-black p-1 line-through">50 บาท</td>
+              <td className="border border-black p-1">100 บาท</td>
+              <td className="border border-black p-1">100 บาท</td>
+              <td className="border border-black p-1">100 บาท</td>
+              <td className="border border-black p-1 font-bold bg-gray-100">300 บาท</td>
+            </tr>
+            <tr>
+              <td className="border border-black p-1 text-left pl-4 whitespace-normal leading-tight">
+                - เงินที่ชำระเข้ามาสามารถนำไปตัดชำระค่าธรรมเนียมใน<br />การทวงถามของงวดที่ 1 และ งวดที่ 2 ได้ แต่ยังคงค้างเงิน<br />ต้นงวดที่ 2
+              </td>
+              <td className="border border-black p-1 line-through">50 บาท</td>
+              <td className="border border-black p-1 line-through">100 บาท</td>
+              <td className="border border-black p-1">100 บาท</td>
+              <td className="border border-black p-1">100 บาท</td>
+              <td className="border border-black p-1 font-bold bg-gray-100">200 บาท</td>
+            </tr>
+          </tbody>
+        </table>
+
+        {renderPageFooter(24 + overflowPagesCount)}
+      </div>
+
+      {/* Annex Page 5 (Cont.) - Consent & Signatures */}
+      <div className="print-page relative min-h-[1050px] py-10 px-24">
+        <PageHeader />
+
+        {/* Table 4 - Mixed Payment Example */}
+        <table className="w-full border-collapse border border-black text-[12px] text-center mt-12 mb-12">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-black p-1 text-left"></th>
+              <th className="border border-black p-1">งวดที่ 1<br />(ม.ค.)</th>
+              <th className="border border-black p-1">งวดที่ 2<br />(ก.พ.)</th>
+              <th className="border border-black p-1">งวดที่ 3<br />(มี.ค.)</th>
+              <th className="border border-black p-1">งวดที่ 4<br />(เม.ย.)</th>
+              <th className="border border-black p-1">รวม</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-black p-1 text-left pl-2 whitespace-normal leading-tight h-auto py-4">
+                - เงินที่ชำระเข้ามาสามารถนำไปตัดชำระค่าธรรมเนียมใน<br />
+                การทวงถามของงวดที่ 1 และ งวดที่ 2 ได้ และ<br />
+                สามารถนำเงินส่วนที่เหลือไปตัดเงินต้นงวดที่ 1 และ 2<br />
+                ทั้งหมด
+              </td>
+              <td className="border border-black p-1 line-through">50 บาท</td>
+              <td className="border border-black p-1 line-through">100 บาท</td>
+              <td className="border border-black p-1">50 บาท</td>
+              <td className="border border-black p-1">100 บาท</td>
+              <td className="border border-black p-1 font-bold bg-gray-100">150 บาท</td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* Notes & Consent Section */}
+        <div className="text-[12px] leading-relaxed mb-8">
+          <p className="mb-6">
+            <span className="font-bold underline italic">หมายเหตุ</span><br />
+            อัตราค่าบริการต่างๆ ค่าติดตามทวงถาม และค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดีสามารถเปลี่ยนแปลงได้ ในกรณีที่มีการเปลี่ยนแปลงกฎหมายที่เกี่ยวข้อง ผู้เช่าซื้อรับทราบและตกลงให้ค่าติดตามทวงถามและค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดีตามสัญญาฉบับนี้เป็นไปตามกฎหมายที่เปลี่ยนแปลงไป โดยมิต้องได้รับความยินยอมจากผู้เช่าซื้อก่อน
+          </p>
+          <p className="indent-12 text-justify">
+            ข้าพเจ้าในฐานะผู้เช่าซื้อได้รับทราบและตกลงยินยอมให้ผู้ให้สินเชื่อคิดค่าบริการสำหรับการติดตามทวงถาม และค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดี สำหรับกรณีที่ผู้เช่าซื้อได้ผิดนัดชำระหนี้ตามสัญญาเช่าซื้อฉบับนี้
+          </p>
+        </div>
+
+        {/* Signature Box */}
+        <div className="mt-10 grid grid-cols-2 gap-x-12 gap-y-12 px-4">
+          {/* Lessor 1 */}
+          <div className="flex items-start">
+            <div className="flex flex-col items-center w-[280px]">
+              <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
+              <div className="mt-2 text-center text-[11px] leading-tight">
+                ( {data.lessor1Signatories} )<br />
+                กรรมการผู้มีอำนาจกระทำการ<br />
+                {data.lessor1.name}
+              </div>
+            </div>
+            <span className="text-[12px] ml-2 mt-[4px] whitespace-nowrap">ผู้ให้เช่าซื้อฝ่ายที่ 1</span>
+          </div>
+
+          {/* Lessee */}
+          <div className="flex items-start">
+            <div className="flex flex-col items-center w-[280px]">
+              <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
+              <div className="mt-2 text-center text-[11px] leading-tight">
+                ( {customerInfo.directors || data.lesseeSignatories} )<br />
+                กรรมการผู้มีอำนาจกระทำการ<br />
+                {customerInfo.companyName}
+              </div>
+            </div>
+            <span className="text-[12px] ml-2 mt-[4px] whitespace-nowrap">ผู้เช่าซื้อ</span>
+          </div>
+
+          {/* Lessor 2 */}
+          <div className="flex items-start">
+            <div className="flex flex-col items-center w-[280px]">
+              <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
+              <div className="mt-2 text-center text-[11px] leading-tight">
+                ( {data.lessor2Signatories} )<br />
+                กรรมการผู้มีอำนาจกระทำการ<br />
+                {data.lessor2.name}
+              </div>
+            </div>
+            <span className="text-[12px] ml-2 mt-[4px] whitespace-nowrap">ผู้ให้เช่าซื้อฝ่ายที่ 2</span>
+          </div>
+        </div>
+
+        {renderPageFooter(25 + overflowPagesCount)}
+      </div>
+
+      {/* Annex Page 6 - Collateral Details */}
+      <div className="print-page relative min-h-[1050px] py-10 px-24">
+        <PageHeader />
+        
+        <div className="text-center mt-2">
+          <p className="font-bold underline text-[12px] mb-0.5">เอกสารแนบท้ายหมายเลข 6</p>
+          <p className="font-bold underline text-[12px]">รายละเอียดเกี่ยวกับหลักประกันการเช่าซื้อ</p>
+        </div>
+
+        {renderPageFooter(26 + overflowPagesCount)}
       </div>
     </div>
   );

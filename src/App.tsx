@@ -43,7 +43,8 @@ function App() {
           name: info.companyName,
           taxId: info.taxId,
           address: info.address,
-        }
+        },
+        lessor1Signatories: info.directors
       }
     }));
   };
@@ -59,7 +60,8 @@ function App() {
           name: info.companyName,
           taxId: info.taxId,
           address: info.address,
-        }
+        },
+        lessor2Signatories: info.directors
       }
     }));
   };
@@ -72,10 +74,10 @@ function App() {
     lenderDirectors: data.agileInfo.directors,
     lenderAddress: data.agileInfo.address,
     lenderTaxId: data.agileInfo.taxId,
-    borrowerCompany: data.companyMode === 'agileTK' ? 'บริษัท ฐิติกร จำกัด (มหาชน)' : '',
-    borrowerDirectors: data.companyMode === 'agileTK' ? 'นางสาวปฐมา พรประภา และนายประพล พรประภา' : '',
-    borrowerAddress: data.companyMode === 'agileTK' ? 'เลขที่ 69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร' : '',
-    borrowerTaxId: data.companyMode === 'agileTK' ? '0107546000130' : '',
+    borrowerCompany: data.companyMode === 'agileTK' ? data.tkInfo.companyName : '',
+    borrowerDirectors: data.companyMode === 'agileTK' ? data.tkInfo.directors : '',
+    borrowerAddress: data.companyMode === 'agileTK' ? data.tkInfo.address : '',
+    borrowerTaxId: data.companyMode === 'agileTK' ? data.tkInfo.taxId : '',
     guarantorName: guarantor.guarantorName,
     guarantorIdCard: guarantor.guarantorIdCard,
     guarantorAddress: guarantor.guarantorAddress,
