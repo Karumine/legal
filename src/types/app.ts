@@ -62,6 +62,7 @@ export interface HirePurchaseData {
   downPaymentPercentage: string;
   downPayment: string;
   customGreenText: string;
+  hasCustomGreenText?: boolean;
 
   remainingAmount: string;
   installments: string;
@@ -142,7 +143,7 @@ export interface AppData {
 
   // Buyback
   hasBuyback: boolean;
-  buybackData: BuybackData;
+  buybackData: BuybackData[];
 
   // Guarantors
   guarantors: GuarantorData[];
@@ -173,7 +174,7 @@ export const initialAppData: AppData = {
 
   tkInfo: {
     companyName: 'บริษัท ฐิติกร จำกัด (มหาชน)',
-    directors: 'นางสาวปฐมา พรประภา และนายประพล พรประภา',
+    directors: 'นางสาวปฐมา พรประภา และ นายประพล พรประภา',
     address: 'เลขที่ 69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
     taxId: '0107546000130',
     phone: '02-310-7000',
@@ -214,6 +215,7 @@ export const initialAppData: AppData = {
     downPaymentPercentage: '20',
     downPayment: '5,873,337',
     customGreenText: 'ทั้งนี้ ผู้ให้เช่าซื้อทุกฝ่ายจะชำระเงินค่าเครื่องจักรส่วนที่เหลือ (ที่หักด้วยเงินดาวน์) ให้แก่ผู้ค้าโดยตรงตามสัดส่วนในข้อ 1 โดยตกลงให้ชำระงวดแรกภายในเดือนมิถุนายน 2569 และจะชำระงวดต่อไปตามเงื่อนไขที่ผู้ค้าได้ตกลงไว้กับผู้ให้เช่าซื้อ และตกลงจะชำระค่าเครื่องจักรที่เหลือทั้งหมดต่อเมื่อผู้เช่าซื้อได้รับเครื่องจักร ติดตั้ง ทดสอบ ใช้งานได้โดยสมบูรณ์แล้วเท่านั้น',
+    hasCustomGreenText: true,
     remainingAmount: '23,493,348',
     installments: '48',
     installmentAmount: '665,644.86',
@@ -270,13 +272,15 @@ export const initialAppData: AppData = {
   },
 
   hasBuyback: false,
-  buybackData: {
-    contractNo: '',
-    contractDate: '',
-    buybackPrice: '',
-    buybackDate: '',
-    conditions: '',
-  },
+  buybackData: [
+    {
+      contractNo: '',
+      contractDate: '',
+      buybackPrice: '',
+      buybackDate: '',
+      conditions: '',
+    }
+  ],
 
   guarantors: [
     {

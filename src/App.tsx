@@ -18,14 +18,28 @@ import ContractPreview from './components/ContractPreview';
 import type { GuaranteeData } from './types/guarantee';
 import type { ContractData } from './types/contract';
 
-type PreviewTab = 'contract' | 'buyback' | 'guarantee' | 'jointVenture' | 'serviceAgreement' | 'feePayment';
+type PreviewTab = string;
 
 function App() {
   const [data, setData] = useState<AppData>(initialAppData);
   const [activePreview, setActivePreview] = useState<PreviewTab>('contract');
 
   const handlePrint = () => {
+    const rightPanel = document.getElementById('preview-panel');
+    const scrollPos = rightPanel ? rightPanel.scrollTop : 0;
+    
     window.print();
+
+    // Force repaint after print dialog closes to fix browser bug where 
+    // content disappears when scrolled down.
+    setTimeout(() => {
+      if (rightPanel) {
+        rightPanel.style.display = 'none';
+        rightPanel.offsetHeight; // trigger reflow
+        rightPanel.style.display = '';
+        rightPanel.scrollTop = scrollPos;
+      }
+    }, 100);
   };
 
   const updateField = <K extends keyof AppData>(field: K, value: AppData[K]) => {
@@ -97,9 +111,13 @@ function App() {
     { key: 'contract', label: CONTRACT_TYPE_LABELS[data.contractType] },
   ];
   if (data.hasBuyback) {
-    previewTabs.push({ key: 'buyback', label: 'สัญญารับซื้อคืน' });
+    (data.buybackData || []).forEach((_, idx) => {
+      previewTabs.push({ key: `buyback-${idx}`, label: `สัญญารับซื้อคืน (${idx + 1})` });
+    });
   }
-  previewTabs.push({ key: 'guarantee', label: `สัญญาค้ำประกัน (${data.guarantors.length})` });
+  (data.guarantors || []).forEach((_, idx) => {
+    previewTabs.push({ key: `guarantee-${idx}`, label: `สัญญาค้ำประกัน (${idx + 1})` });
+  });
   previewTabs.push({ key: 'jointVenture', label: 'สัญญาค้าร่วม' });
   previewTabs.push({ key: 'serviceAgreement', label: 'สัญญาจ้างบริการ' });
   previewTabs.push({ key: 'feePayment', label: 'สัญญาชำระค่าธรรมเนียม' });
@@ -110,6 +128,7 @@ function App() {
         <HirePurchasePreview
           data={data.hirePurchaseData}
           customerInfo={data.customerInfo}
+          guarantors={data.guarantors}
         />
       );
     }
@@ -189,19 +208,31 @@ function App() {
 
           {/* Step 4: Main Contract Form */}
           {data.contractType === 'hirePurchase' && (
-            <HirePurchaseForm
-              data={data.hirePurchaseData}
-              onChange={(hp: HirePurchaseData) => updateField('hirePurchaseData', hp)}
-            />
+            <>
+              <HirePurchaseForm
+                data={data.hirePurchaseData}
+                onChange={(hp: HirePurchaseData) => updateField('hirePurchaseData', hp)}
+              />
+              <GuarantorForm
+                data={data.guarantors}
+                onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
+              />
+            </>
           )}
           {data.contractType !== 'hirePurchase' && (
-            <section className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-              <div className="text-center py-8 text-slate-400">
-                <FileText size={32} className="mx-auto mb-2 opacity-50" />
-                <p className="text-sm font-medium">{CONTRACT_TYPE_LABELS[data.contractType]}</p>
-                <p className="text-xs mt-1">ฟอร์มจะเพิ่มในภายหลัง</p>
-              </div>
-            </section>
+            <>
+              <section className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <div className="text-center py-8 text-slate-400">
+                  <FileText size={32} className="mx-auto mb-2 opacity-50" />
+                  <p className="text-sm font-medium">{CONTRACT_TYPE_LABELS[data.contractType]}</p>
+                  <p className="text-xs mt-1">ฟอร์มจะเพิ่มในภายหลัง</p>
+                </div>
+              </section>
+              <GuarantorForm
+                data={data.guarantors}
+                onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
+              />
+            </>
           )}
 
           {/* Step 5: Buyback Toggle */}
@@ -223,16 +254,10 @@ function App() {
           {/* Step 5.1: Buyback Form (conditional) */}
           {data.hasBuyback && (
             <BuybackForm
-              data={data.buybackData}
-              onChange={(bb: BuybackData) => updateField('buybackData', bb)}
+              data={data.buybackData || []}
+              onChange={(bb: BuybackData[]) => updateField('buybackData', bb)}
             />
           )}
-
-          {/* Step 6: Guarantors */}
-          <GuarantorForm
-            data={data.guarantors}
-            onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
-          />
 
           {/* ── Additional Contracts (after guarantor) ── */}
           <div className="border-t-2 border-slate-300 pt-5 mt-2">
@@ -262,23 +287,44 @@ function App() {
       </div>
 
       {/* Right Panel: Preview */}
-      <div className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col">
+      <div id="preview-panel" className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col transform-gpu">
         {/* Preview Tab Navigation */}
         <div className="sticky top-0 z-10 bg-slate-200 px-6 pt-4 pb-2 print:hidden">
-          <div className="flex gap-1 bg-white rounded-lg p-1 shadow-sm border border-slate-200 flex-wrap">
-            {previewTabs.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActivePreview(tab.key)}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${activePreview === tab.key
-                  ? 'bg-slate-800 text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                  }`}
-              >
-                <Eye size={12} />
-                {tab.label}
-              </button>
-            ))}
+          <div className="relative flex items-center bg-white rounded-lg p-1 shadow-sm border border-slate-200">
+            <button 
+              onClick={(e) => {
+                const container = e.currentTarget.nextElementSibling;
+                if (container) container.scrollBy({ left: -200, behavior: 'smooth' });
+              }}
+              className="p-1 px-2 text-slate-500 hover:text-slate-800 transition-colors z-10 bg-white border-r border-slate-100"
+            >
+              ◀
+            </button>
+            <div className="flex gap-1 overflow-x-auto no-scrollbar scroll-smooth flex-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <style>{`.no-scrollbar::-webkit-scrollbar { display: none; }`}</style>
+              {previewTabs.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActivePreview(tab.key)}
+                  className={`flex-shrink-0 flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${activePreview === tab.key
+                    ? 'bg-slate-800 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    }`}
+                >
+                  <Eye size={12} />
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <button 
+              onClick={(e) => {
+                const container = e.currentTarget.previousElementSibling;
+                if (container) container.scrollBy({ left: 200, behavior: 'smooth' });
+              }}
+              className="p-1 px-2 text-slate-500 hover:text-slate-800 transition-colors z-10 bg-white border-l border-slate-100"
+            >
+              ▶
+            </button>
           </div>
         </div>
 
@@ -286,23 +332,15 @@ function App() {
         <div className="flex-1 p-6 print:p-0 flex flex-col items-center">
           <div className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0">
             {activePreview === 'contract' && renderContractPreview()}
-            {activePreview === 'buyback' && data.hasBuyback && (
+            {activePreview.startsWith('buyback-') && data.hasBuyback && (
               <BuybackPreview
-                data={data.buybackData}
+                data={data.buybackData[parseInt(activePreview.split('-')[1]) || 0]}
                 agileInfo={data.agileInfo}
                 customerInfo={data.customerInfo}
               />
             )}
-            {activePreview === 'guarantee' && (
-              <div className="space-y-8 print:space-y-0">
-                {data.guarantors.map((guarantor) => (
-                  <div key={guarantor.id}>
-                    <GuaranteePreview data={buildGuaranteeData(guarantor)} />
-                    {/* Add page break between guarantors for printing */}
-                    <div className="hidden print:block page-break" style={{ pageBreakBefore: 'always' }}></div>
-                  </div>
-                ))}
-              </div>
+            {activePreview.startsWith('guarantee-') && (
+              <GuaranteePreview data={buildGuaranteeData(data.guarantors[parseInt(activePreview.split('-')[1]) || 0])} />
             )}
             {activePreview === 'jointVenture' && renderPlaceholderPreview('สัญญาค้าร่วม')}
             {activePreview === 'serviceAgreement' && renderPlaceholderPreview('สัญญาจ้างบริการ')}

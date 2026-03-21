@@ -1,11 +1,12 @@
 import PageHeader from './PageHeader';
-import type { HirePurchaseData, CompanyInfo, CollateralAsset } from '../types/app';
+import type { HirePurchaseData, CompanyInfo, CollateralAsset, GuarantorData } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { thaiNumberText } from '../utils/thaiNumberText';
 
 interface Props {
   data: HirePurchaseData;
   customerInfo: CompanyInfo;
+  guarantors?: GuarantorData[];
 }
 
 const Highlight = ({ children }: { children: React.ReactNode }) => (
@@ -20,7 +21,7 @@ const GreenHighlight = ({ children }: { children: React.ReactNode }) => (
   </span>
 );
 
-export default function HirePurchasePreview({ data, customerInfo }: Props) {
+export default function HirePurchasePreview({ data, customerInfo, guarantors }: Props) {
 
   const firstPageMax = 3;
   const subsequentPageMax = 6;
@@ -28,7 +29,8 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
   const overflowAssets = assetCount > firstPageMax ? data.assets!.slice(firstPageMax) : [];
   const overflowPagesCount = Math.ceil(overflowAssets.length / subsequentPageMax);
   const collateralOverflow = (data.collateralAssets || []).length > 3;
-  const totalPages = 26 + overflowPagesCount + (collateralOverflow ? 1 : 0); // 2 Pages Intro + Overflow + 14 Contract + 2 Sigs + 4 Annexes + padding
+  const collateralOffset = collateralOverflow ? 1 : 0;
+  const totalPages = 24 + overflowPagesCount + collateralOffset;
 
   const renderPageFooter = (pageNum: number) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
@@ -47,7 +49,17 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
 
   const formatThaiDate = (dateString: string) => {
     if (!dateString) return '';
-    const date = new Date(dateString);
+
+    let date = new Date(dateString);
+    if (dateString.includes('/')) {
+      const parts = dateString.split('/');
+      if (parts.length === 3) {
+        let year = parseInt(parts[2]);
+        if (year > 2500) year -= 543;
+        date = new Date(year, parseInt(parts[1]) - 1, parseInt(parts[0]));
+      }
+    }
+
     if (isNaN(date.getTime())) return dateString;
 
     const days = date.getDate();
@@ -64,23 +76,33 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
     return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
-  const downPaymentAmount = formatCurrency(data.downPayment);
+  const formatCurrencyNoZeroDecimals = (value: string | number) => {
+    if (!value) return '';
+    const num = typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value;
+    if (isNaN(num)) return value.toString();
+    if (num % 1 !== 0) {
+      return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    return num.toLocaleString('en-US');
+  };
+
+  const downPaymentAmount = formatCurrencyNoZeroDecimals(data.downPayment);
   const downPaymentAmountThai = data.downPayment ? thaiBahtText(data.downPayment.replace(/,/g, '')) : '';
 
-  const remainingAmount = formatCurrency(data.remainingAmount);
+  const remainingAmount = formatCurrencyNoZeroDecimals(data.remainingAmount);
   const remainingAmountThai = data.remainingAmount ? thaiBahtText(data.remainingAmount.replace(/,/g, '')) : '';
 
-  const installmentAmountText = formatCurrency(data.installmentAmount);
+  const installmentAmountText = formatCurrencyNoZeroDecimals(data.installmentAmount);
   const installmentAmountThai = data.installmentAmount ? thaiBahtText(data.installmentAmount.replace(/,/g, '')) : '';
 
-  const stampDutyText = formatCurrency(data.stampDuty);
+  const stampDutyText = formatCurrencyNoZeroDecimals(data.stampDuty);
   const stampDutyThai = data.stampDuty ? thaiBahtText(data.stampDuty.replace(/,/g, '')) : '';
 
   const totalCheques = (parseInt(data.chequesPerInstallment || '0') * parseInt(data.installments || '0')).toString();
-  const insurancePremiumFormatted = formatCurrency(data.insurancePremium);
+  const insurancePremiumFormatted = formatCurrencyNoZeroDecimals(data.insurancePremium);
   const insurancePremiumThai = data.insurancePremium ? thaiBahtText(data.insurancePremium.replace(/,/g, '')) : '';
 
-  const collateralValueFormatted = formatCurrency(data.collateralValue);
+  const collateralValueFormatted = formatCurrencyNoZeroDecimals(data.collateralValue);
   const collateralValueThai = data.collateralValue ? thaiBahtText(data.collateralValue.replace(/,/g, '')) : '';
 
   const getThaiIndex = (idx: number) => {
@@ -224,9 +246,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
                 <span className="">(2.1.{idx + 1})</span>
                 <div className="flex-1">
                   <span>
-                    <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight>
-                    <br />
-                    จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
+                    <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight> จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
                   </span>
                 </div>
               </div>
@@ -256,9 +276,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
                     <span className="">(2.1.{globalIdx + 1})</span>
                     <div className="flex-1">
                       <span>
-                        <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight>
-                        <br />
-                        จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
+                        <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight> จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
                       </span>
                     </div>
                   </div>
@@ -318,9 +336,11 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
                 <span className="">(ก)</span>
                 <div className="flex-1">
                   ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก (Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
-                  <div className="mt-4">
-                    <GreenHighlight>{data.customGreenText}</GreenHighlight>
-                  </div>
+                  {data.hasCustomGreenText !== false && data.customGreenText && (
+                    <div className="mt-4">
+                      <GreenHighlight>{data.customGreenText}</GreenHighlight>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex gap-4">
@@ -433,7 +453,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
         </div>
-        {renderPageFooter(5 + overflowPagesCount)}
+        {renderPageFooter(6 + overflowPagesCount)}
       </div>
 
       {/* Contract Sections Page 5 */}
@@ -477,7 +497,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
         </div>
-        {renderPageFooter(5 + overflowPagesCount)}
+        {renderPageFooter(7 + overflowPagesCount)}
       </div>
 
       {/* Contract Sections Page 6 */}
@@ -540,7 +560,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
               <div className="flex gap-4">
                 <span>(ก)</span>
                 <div>
-                  <span className="font-bold">สัญญาค้ำประกันโดยบุคคลภายนอก:</span> <Highlight>{(data.hpGuarantors || []).map((name, i) => `${i + 1}. ${name}`).join(' ')}</Highlight> โดยผู้ค้ำประกันอาจเป็นบุคคลธรรมดาหรือนิติบุคคลซึ่งไม่มีหนี้สินล้นพ้นตัว มีแหล่งรายได้ชัดเจนและมีคุณสมบัติอื่น ๆ ตามที่ผู้ให้สินเชื่อกำหนด โดยผู้ให้สินเชื่อขอสงวนสิทธิในการใช้ดุลยพินิจฝ่ายเดียวในการพิจารณาคุณสมบัติในการเลือกบุคคลผู้เป็นผู้ค้ำประกัน เพื่อเข้าค้ำประกันแทนหรือเพิ่มเติม เพื่อค้ำประกันหนี้สินใด ๆ ภายใต้หรือที่เกี่ยวข้องกับสัญญาฉบับนี้
+                  <span className="font-bold">สัญญาค้ำประกันโดยบุคคลภายนอก:</span> <Highlight>{(guarantors || []).filter(g => g.guarantorName.trim()).map((g, i) => `${i + 1}. ${g.guarantorName}`).join(' ')}</Highlight> โดยผู้ค้ำประกันอาจเป็นบุคคลธรรมดาหรือนิติบุคคลซึ่งไม่มีหนี้สินล้นพ้นตัว มีแหล่งรายได้ชัดเจนและมีคุณสมบัติอื่น ๆ ตามที่ผู้ให้สินเชื่อกำหนด โดยผู้ให้สินเชื่อขอสงวนสิทธิในการใช้ดุลยพินิจฝ่ายเดียวในการพิจารณาคุณสมบัติในการเลือกบุคคลผู้เป็นผู้ค้ำประกัน เพื่อเข้าค้ำประกันแทนหรือเพิ่มเติม เพื่อค้ำประกันหนี้สินใด ๆ ภายใต้หรือที่เกี่ยวข้องกับสัญญาฉบับนี้
                 </div>
               </div>
             </div>
@@ -615,7 +635,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
         </div>
-        {renderPageFooter(11 + overflowPagesCount)}
+        {renderPageFooter(10 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Contract Sections Page 10 - Sections 6.8-6.12 */}
@@ -657,7 +677,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
         </div>
-        {renderPageFooter(12 + overflowPagesCount)}
+        {renderPageFooter(11 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Contract Sections Page 11 - Sections 7, 8, 9 */}
@@ -688,7 +708,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
         </div>
-        {renderPageFooter(13 + overflowPagesCount)}
+        {renderPageFooter(12 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Contract Sections Page 12 - Sections 9.2, 10 */}
@@ -736,7 +756,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
         </div>
-        {renderPageFooter(14 + overflowPagesCount)}
+        {renderPageFooter(13 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Contract Sections Page 13 - Sections 11, 12, 13, 14 */}
@@ -771,7 +791,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
         </div>
-        {renderPageFooter(15 + overflowPagesCount)}
+        {renderPageFooter(14 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Contract Sections Page 14 - Sections 15, 16 */}
@@ -796,7 +816,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             (คู่สัญญาลงนามในหน้าถัดไป)
           </div>
         </div>
-        {renderPageFooter(16 + overflowPagesCount)}
+        {renderPageFooter(15 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Signature Page 1 - Lessor 1 & Purchaser */}
@@ -806,7 +826,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           สัญญาฉบับนี้ทำขึ้นมา 3 (สาม) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
         </div>
 
-        <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px]">
+        <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px] font-bold">
           {/* Left Column: Lessor 1 */}
           <div className="border-r border-black p-4 flex flex-col h-full">
             <div className="space-y-12">
@@ -814,7 +834,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
               <div className="font-bold">{data.lessor1.name}</div>
 
               <div className="pt-8 space-y-12">
-                {data.lessor1Signatories.split(' และ ').map((sig, idx) => (
+                {data.lessor1Signatories.split(/\s*และ\s*/).map((sig, idx) => (
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
                     <div className="flex gap-2">
@@ -850,7 +870,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
               </div>
 
               <div className="pt-8 space-y-12">
-                {(data.lesseeSignatories || customerInfo.directors).split(' และ ').map((sig, idx) => (
+                {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
                     <div className="flex gap-2">
@@ -882,21 +902,21 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             </div>
           </div>
         </div>
-        {renderPageFooter(totalPages - 4)}
+        {renderPageFooter(16 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Signature Page 2 - Lessor 2 */}
       <div className="print-page relative min-h-[1050px] p-24">
         <PageHeader />
 
-        <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px]">
+        <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px] font-bold">
           {/* Left Column: Lessor 2 */}
           <div className="border-r border-black p-4 flex flex-col h-full">
             <div className="space-y-12">
               <div className="font-bold underline">ผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
               <div className="font-bold">{data.lessor2.name}</div>
               <div className="pt-8 space-y-12">
-                {data.lessor2Signatories.split(' และ ').map((sig, idx) => (
+                {data.lessor2Signatories.split(/\s*และ\s*/).map((sig, idx) => (
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
                     <div className="flex gap-2">
@@ -930,7 +950,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           <div className="p-4 space-y-12">
           </div>
         </div>
-        {renderPageFooter(totalPages - 4)}
+        {renderPageFooter(17 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 1 - Image 9 */}
@@ -940,7 +960,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 1</div>
           <div className="text-[12px] font-bold underline">ทรัพย์สินที่เช่าซื้อ</div>
         </div>
-        {renderPageFooter(19 + overflowPagesCount)}
+        {renderPageFooter(18 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 2 - Image 10 */}
@@ -950,7 +970,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 2</div>
           <div className="text-[12px] font-bold underline">รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ</div>
         </div>
-        {renderPageFooter(20 + overflowPagesCount)}
+        {renderPageFooter(19 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 3 - Image 11 */}
@@ -960,15 +980,15 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 3</div>
           <div className="text-[12px] font-bold underline">รายละเอียดการส่งมอบเครื่องจักร</div>
         </div>
-        {renderPageFooter(21 + overflowPagesCount)}
+        {renderPageFooter(20 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 4 - Image 14 */}
       <div className="print-page relative min-h-[1050px] p-24">
         <PageHeader />
         <div className="mt-4 flex flex-col items-center justify-center space-y-1 mb-4">
-          <div className="text-[15px] font-bold underline">เอกสารแนบท้ายหมายเลข 4</div>
-          <div className="text-[15px] font-bold underline text-center">ข้อตกลงและหลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระเงินต้นพร้อมดอกเบี้ย</div>
+          <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 4</div>
+          <div className="text-[12px] font-bold underline text-center">ข้อตกลงและหลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระเงินต้นพร้อมดอกเบี้ย</div>
         </div>
 
         <div className="mb-4 text-justify">
@@ -977,7 +997,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
 
         <div className="space-y-2 mb-6 text-justify">
           <div className="pl-6 -indent-6">
-            1. การส่งมอบเช็ค : ผู้เช่าซื้อตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่าเช่าซื้อให้แก่<span className="underline">ผู้ให้เช่าซื้อ</span> จำนวนทั้งสิ้น <Highlight>96 ฉบับ</Highlight> เพื่อเป็นการชำระค่างวดเช่าซื้อ (<Highlight>งวดที่ 1 ถึง งวดที่ 48</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ 2 ฉบับ ให้แก่ผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบบัดนี้
+            1. การส่งมอบเช็ค : ผู้เช่าซื้อตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่าเช่าซื้อให้แก่<span className="underline">ผู้ให้เช่าซื้อ</span> จำนวนทั้งสิ้น <Highlight>{totalCheques} ฉบับ</Highlight> เพื่อเป็นการชำระค่างวดเช่าซื้อ (<Highlight>งวดที่ 1 ถึง งวดที่ {data.installments}</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ {data.chequesPerInstallment} ฉบับ ให้แก่ผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบบัดนี้
           </div>
           <div className="pl-6 -indent-6">
             2. รายละเอียดการชำระ : เช็คแต่ละฉบับจะถูกสั่งจ่ายในนามผู้ให้เช่าซื้อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ <span className="underline">"รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ"</span> ตามเอกสารแนบท้ายหมายเลข 2 ของสัญญาเช่าซื้อฉบับนี้
@@ -999,8 +1019,8 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
               <div className="flex items-end gap-2">
                 <span className="w-8">ลงชื่อ</span>
                 <div className="border-b border-black border-dotted flex-1 h-6 relative">
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap text-[12px] text-center">
-                    ( {data.lessor1.name || 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด'} )
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap text-[11px] text-center">
+                    ( {data.lessor1.name} )
                   </div>
                 </div>
                 <span className="whitespace-nowrap text-[11px] w-[100px]" >ผู้ให้เช่าซื้อฝ่ายที่ 1 / ผู้รับเช็ค</span>
@@ -1011,8 +1031,8 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
               <div className="flex items-end gap-2">
                 <span className="w-8">ลงชื่อ</span>
                 <div className="border-b border-black border-dotted flex-1 h-6 relative">
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap text-[12px] text-center">
-                    ( {data.lessor2.name || 'บริษัท ฐิติกร จำกัด (มหาชน)'} )
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap text-[11px] text-center">
+                    ( {data.lessor2.name} )
                   </div>
                 </div>
                 <span className="whitespace-nowrap text-[11px] w-[100px]">ผู้ให้เช่าซื้อฝ่ายที่ 2 / ผู้รับเช็ค</span>
@@ -1024,7 +1044,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
             <div className="flex items-end gap-2">
               <span className="w-8">ลงชื่อ</span>
               <div className="border-b border-black border-dotted flex-1 h-6 relative">
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap text-[12px] text-center">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap text-[11px] text-center">
                   ( <Highlight>{customerInfo.companyName}</Highlight> )
                 </div>
               </div>
@@ -1033,7 +1053,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           </div>
         </div>
 
-        {renderPageFooter(22 + overflowPagesCount)}
+        {renderPageFooter(21 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 5 - Debt Collection Fees */}
@@ -1165,7 +1185,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           </tbody>
         </table>
 
-        {renderPageFooter(24 + overflowPagesCount)}
+        {renderPageFooter(22 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 5 (Cont.) - Consent & Signatures */}
@@ -1218,7 +1238,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           <div className="flex items-start">
             <div className="flex flex-col items-center w-[280px]">
               <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
-              <div className="mt-2 text-center text-[11px] leading-tight">
+              <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
                 ( {data.lessor1Signatories} )<br />
                 กรรมการผู้มีอำนาจกระทำการ<br />
                 {data.lessor1.name}
@@ -1231,8 +1251,8 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           <div className="flex items-start">
             <div className="flex flex-col items-center w-[280px]">
               <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
-              <div className="mt-2 text-center text-[11px] leading-tight">
-                ( {customerInfo.directors || data.lesseeSignatories} )<br />
+              <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
+                ( {customerInfo.directors} )<br />
                 กรรมการผู้มีอำนาจกระทำการ<br />
                 {customerInfo.companyName}
               </div>
@@ -1244,7 +1264,7 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           <div className="flex items-start">
             <div className="flex flex-col items-center w-[280px]">
               <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
-              <div className="mt-2 text-center text-[11px] leading-tight">
+              <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
                 ( {data.lessor2Signatories} )<br />
                 กรรมการผู้มีอำนาจกระทำการ<br />
                 {data.lessor2.name}
@@ -1254,19 +1274,19 @@ export default function HirePurchasePreview({ data, customerInfo }: Props) {
           </div>
         </div>
 
-        {renderPageFooter(25 + overflowPagesCount)}
+        {renderPageFooter(23 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 6 - Collateral Details */}
       <div className="print-page relative min-h-[1050px] py-10 px-24">
         <PageHeader />
-        
+
         <div className="text-center mt-2">
           <p className="font-bold underline text-[12px] mb-0.5">เอกสารแนบท้ายหมายเลข 6</p>
           <p className="font-bold underline text-[12px]">รายละเอียดเกี่ยวกับหลักประกันการเช่าซื้อ</p>
         </div>
 
-        {renderPageFooter(26 + overflowPagesCount)}
+        {renderPageFooter(24 + overflowPagesCount + collateralOffset)}
       </div>
     </div>
   );

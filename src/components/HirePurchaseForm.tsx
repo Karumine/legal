@@ -38,7 +38,16 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
 
     // Date calculations
     if (data.firstInstallmentDate && data.installments) {
-      const firstDate = new Date(data.firstInstallmentDate);
+      let firstDate = new Date(data.firstInstallmentDate);
+      if (data.firstInstallmentDate.includes('/')) {
+        const parts = data.firstInstallmentDate.split('/');
+        if (parts.length === 3) {
+          let year = parseInt(parts[2]);
+          if (year > 2500) year -= 543;
+          firstDate = new Date(year, parseInt(parts[1]) - 1, parseInt(parts[0]));
+        }
+      }
+
       if (!isNaN(firstDate.getTime())) {
         // Update payment day if not set or different
         const day = firstDate.getDate().toString();
@@ -51,9 +60,19 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
         if (numMonths > 0) {
           const lastDate = new Date(firstDate);
           lastDate.setMonth(lastDate.getMonth() + (numMonths - 1));
-          const lastIso = lastDate.toISOString().split('T')[0];
-          if (data.lastInstallmentDate !== lastIso) {
-            updates.lastInstallmentDate = lastIso;
+          
+          let lastFormattedStr = '';
+          if (data.firstInstallmentDate.includes('/')) {
+            const y = lastDate.getFullYear() + 543;
+            const m = String(lastDate.getMonth() + 1).padStart(2, '0');
+            const d = String(lastDate.getDate()).padStart(2, '0');
+            lastFormattedStr = `${d}/${m}/${y}`;
+          } else {
+            lastFormattedStr = lastDate.toISOString().split('T')[0];
+          }
+
+          if (data.lastInstallmentDate !== lastFormattedStr) {
+            updates.lastInstallmentDate = lastFormattedStr;
           }
         }
       }
@@ -349,12 +368,12 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
             <h4 className="text-sm font-bold text-blue-800 mb-2">3.2 (ค) ระยะเวลาการผ่อนชำระ</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">เริ่มชำระงวดแรก (DD MM YYYY)</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">เริ่มชำระงวดแรก</label>
                 <input type="date" value={data.firstInstallmentDate || ''} onChange={(e) => handleChange('firstInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">ชำระทุกวันที่ [ดึงจากงวดแรก]</label>
-                <input type="text" value={data.paymentDay || ''} readOnly className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500" />
+                <input type="text" value={data.paymentDay || ''} onChange={(e) => handleChange('paymentDay', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนงวด (เดือน)</label>
@@ -362,7 +381,7 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">สิ้นสุดงวดสุดท้าย [คำนวณอัตโนมัติ]</label>
-                <input type="date" value={data.lastInstallmentDate || ''} readOnly className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500" />
+                <input type="date" value={data.lastInstallmentDate || ''} onChange={(e) => handleChange('lastInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
               </div>
             </div>
           </div>
@@ -384,11 +403,37 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
           </div>
 
           <div className="space-y-3 mt-4 border-t pt-4">
-            <h4 className="font-semibold text-sm text-gray-700">ข้อความเพิ่มเติม (สีไฮไลท์)</h4>
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">ข้อความเพิ่มเติมการจ่ายเงิน (ไฮไลท์สีเขียว)</label>
-              <textarea value={data.customGreenText || ''} onChange={(e) => handleChange('customGreenText', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border h-20" />
+            <div className="flex items-center gap-4 mb-2">
+              <h4 className="font-semibold text-sm text-gray-700">ข้อความไฮไลท์เขียว</h4>
+              <div className="flex items-center gap-4">
+                <label className="flex items-center gap-1 text-sm font-medium">
+                  <input
+                    type="radio"
+                    name="hasCustomGreenText"
+                    checked={data.hasCustomGreenText !== false}
+                    onChange={() => handleChange('hasCustomGreenText', true)}
+                  />
+                  มี
+                </label>
+                <label className="flex items-center gap-1 text-sm font-medium">
+                  <input
+                    type="radio"
+                    name="hasCustomGreenText"
+                    checked={data.hasCustomGreenText === false}
+                    onChange={() => {
+                      handleChange('hasCustomGreenText', false);
+                    }}
+                  />
+                  ไม่มี
+                </label>
+              </div>
             </div>
+            {data.hasCustomGreenText !== false && (
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">ข้อความเพิ่มเติมการจ่ายเงิน (ไฮไลท์สีเขียว)</label>
+                <textarea value={data.customGreenText || ''} onChange={(e) => handleChange('customGreenText', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border h-20" />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -402,45 +447,7 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
             <input type="text" value={data.collateralValue || ''} onChange={(e) => handleChange('collateralValue', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
           </div>
 
-          <div className="border-t pt-4">
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-xs font-medium text-gray-600">ผู้ค้ำประกัน (6.2 ก)</label>
-              <button 
-                type="button" 
-                onClick={() => handleChange('hpGuarantors', [...(data.hpGuarantors || []), ''])}
-                className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-200 hover:bg-blue-100"
-              >
-                + เพิ่มผู้ค้ำ
-              </button>
-            </div>
-            <div className="space-y-2">
-              {(data.hpGuarantors || []).map((name, idx) => (
-                <div key={idx} className="flex gap-2">
-                  <input 
-                    type="text" 
-                    value={name} 
-                    placeholder={`ผู้ค้ำคนที่ ${idx + 1}`}
-                    onChange={(e) => {
-                      const newGuarantors = [...data.hpGuarantors];
-                      newGuarantors[idx] = e.target.value;
-                      handleChange('hpGuarantors', newGuarantors);
-                    }} 
-                    className="flex-1 rounded-md border-gray-300 shadow-sm text-sm p-2 border" 
-                  />
-                  <button 
-                    type="button" 
-                    onClick={() => {
-                      const newGuarantors = data.hpGuarantors.filter((_, i) => i !== idx);
-                      handleChange('hpGuarantors', newGuarantors);
-                    }}
-                    className="text-red-500 hover:text-red-700 p-2"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
+
 
           <div className="border-t pt-4">
             <div className="flex justify-between items-center mb-2">
@@ -602,24 +609,7 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
         </div>
       </section>
 
-      {/* Signatories */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
-        <h3 className="font-semibold text-lg text-blue-700 mb-3">ผู้ลงนาม</h3>
-        <div className="space-y-3">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">ตัวแทนผู้ให้เช่าซื้อ 1</label>
-            <input type="text" value={data.lessor1Signatories} onChange={(e) => handleChange('lessor1Signatories', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">ตัวแทนผู้ให้เช่าซื้อ 2</label>
-            <input type="text" value={data.lessor2Signatories} onChange={(e) => handleChange('lessor2Signatories', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">ตัวแทนผู้เช่าซื้อ</label>
-            <input type="text" value={data.lesseeSignatories} onChange={(e) => handleChange('lesseeSignatories', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 }
