@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Printer, FileText, Eye } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Printer, FileText, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, BuybackData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
@@ -23,6 +23,91 @@ type PreviewTab = string;
 function App() {
   const [data, setData] = useState<AppData>(initialAppData);
   const [activePreview, setActivePreview] = useState<PreviewTab>('contract');
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const [hasMoved, setHasMoved] = useState(false);
+  
+  // Momentum refs
+  const velocityRef = useRef(0);
+  const lastXRef = useRef(0);
+  const lastTimeRef = useRef(0);
+  const animationFrameRef = useRef<number | null>(null);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!tabsRef.current) return;
+    
+    // Stop any existing momentum animation
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
+    setIsDragging(true);
+    setHasMoved(false);
+    startXRef.current = e.pageX - tabsRef.current.offsetLeft;
+    scrollLeftRef.current = tabsRef.current.scrollLeft;
+    
+    lastXRef.current = e.pageX;
+    lastTimeRef.current = Date.now();
+    velocityRef.current = 0;
+  };
+
+  const applyMomentum = () => {
+    if (!tabsRef.current || Math.abs(velocityRef.current) < 0.1) return;
+
+    const step = () => {
+      if (!tabsRef.current || isDragging) return;
+      
+      tabsRef.current.scrollLeft -= velocityRef.current * 10;
+      velocityRef.current *= 0.95; // Decay factor
+
+      if (Math.abs(velocityRef.current) > 0.1) {
+        animationFrameRef.current = requestAnimationFrame(step);
+      } else {
+        animationFrameRef.current = null;
+      }
+    };
+
+    animationFrameRef.current = requestAnimationFrame(step);
+  };
+
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      applyMomentum();
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      applyMomentum();
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !tabsRef.current) return;
+    
+    const currentTime = Date.now();
+    const timeElapsed = currentTime - lastTimeRef.current;
+    
+    if (timeElapsed > 0) {
+      const deltaX = e.pageX - lastXRef.current;
+      velocityRef.current = deltaX / timeElapsed;
+      lastXRef.current = e.pageX;
+      lastTimeRef.current = currentTime;
+    }
+
+    const x = e.pageX - tabsRef.current.offsetLeft;
+    const walk = (x - startXRef.current) * 1.5;
+    
+    if (Math.abs(walk) > 5) {
+      setHasMoved(true);
+      tabsRef.current.scrollLeft = scrollLeftRef.current - walk;
+    }
+  };
 
   const handlePrint = () => {
     const rightPanel = document.getElementById('preview-panel');
@@ -211,7 +296,17 @@ function App() {
             <>
               <HirePurchaseForm
                 data={data.hirePurchaseData}
-                onChange={(hp: HirePurchaseData) => updateField('hirePurchaseData', hp)}
+                onChange={(hp: HirePurchaseData) => {
+                  setData(prev => {
+                    const newData = { ...prev, hirePurchaseData: hp };
+                    if (prev.hirePurchaseData.contractDate !== hp.contractDate && newData.buybackData.length > 0) {
+                      const newBuyback = [...newData.buybackData];
+                      newBuyback[0] = { ...newBuyback[0], contractDate: hp.contractDate };
+                      newData.buybackData = newBuyback;
+                    }
+                    return newData;
+                  });
+                }}
               />
               <GuarantorForm
                 data={data.guarantors}
@@ -241,7 +336,18 @@ function App() {
               <input
                 type="checkbox"
                 checked={data.hasBuyback}
-                onChange={(e) => updateField('hasBuyback', e.target.checked)}
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setData(prev => {
+                    const newData = { ...prev, hasBuyback: checked };
+                    if (checked && newData.buybackData.length > 0 && !newData.buybackData[0].contractDate) {
+                      const newBb = [...newData.buybackData];
+                      newBb[0] = { ...newBb[0], contractDate: prev.hirePurchaseData.contractDate };
+                      newData.buybackData = newBb;
+                    }
+                    return newData;
+                  });
+                }}
                 className="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
               />
               <div>
@@ -256,6 +362,7 @@ function App() {
             <BuybackForm
               data={data.buybackData || []}
               onChange={(bb: BuybackData[]) => updateField('buybackData', bb)}
+              hpDate={data.hirePurchaseData.contractDate}
             />
           )}
 
@@ -288,42 +395,56 @@ function App() {
 
       {/* Right Panel: Preview */}
       <div id="preview-panel" className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col transform-gpu">
-        {/* Preview Tab Navigation */}
         <div className="sticky top-0 z-10 bg-slate-200 px-6 pt-4 pb-2 print:hidden">
-          <div className="relative flex items-center bg-white rounded-lg p-1 shadow-sm border border-slate-200">
-            <button 
+          <div className="relative flex items-center bg-white rounded-lg p-1.5 shadow-sm border border-slate-200">
+            {/* Scroll Left Button */}
+            <button
               onClick={(e) => {
                 const container = e.currentTarget.nextElementSibling;
                 if (container) container.scrollBy({ left: -200, behavior: 'smooth' });
               }}
-              className="p-1 px-2 text-slate-500 hover:text-slate-800 transition-colors z-10 bg-white border-r border-slate-100"
+              className="p-1 px-2 text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-md transition-all z-10 border-r border-slate-100 flex items-center justify-center shrink-0"
             >
-              ◀
+              <ChevronLeft size={18} />
             </button>
-            <div className="flex gap-1 overflow-x-auto no-scrollbar scroll-smooth flex-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+
+            {/* Tabs Container */}
+            <div 
+              ref={tabsRef}
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeave}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+              className={`flex gap-1.5 overflow-x-auto no-scrollbar flex-1 items-center px-1 ${isDragging ? 'cursor-grabbing select-none scroll-auto' : 'cursor-grab scroll-smooth'}`}
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               <style>{`.no-scrollbar::-webkit-scrollbar { display: none; }`}</style>
               {previewTabs.map((tab) => (
                 <button
                   key={tab.key}
-                  onClick={() => setActivePreview(tab.key)}
-                  className={`flex-shrink-0 flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${activePreview === tab.key
-                    ? 'bg-slate-800 text-white shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  onClick={() => {
+                    if (!hasMoved) setActivePreview(tab.key);
+                  }}
+                  className={`flex-shrink-0 flex items-center justify-center gap-2 py-2 px-4 text-xs font-semibold rounded-md transition-all whitespace-nowrap ${activePreview === tab.key
+                    ? 'bg-slate-800 text-white shadow-md ring-1 ring-slate-900 ring-offset-1 ring-offset-white'
+                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                     }`}
                 >
-                  <Eye size={12} />
+                  <Eye size={13} className={activePreview === tab.key ? 'text-white' : 'text-slate-400'} />
                   {tab.label}
                 </button>
               ))}
             </div>
-            <button 
+
+            {/* Scroll Right Button */}
+            <button
               onClick={(e) => {
                 const container = e.currentTarget.previousElementSibling;
                 if (container) container.scrollBy({ left: 200, behavior: 'smooth' });
               }}
-              className="p-1 px-2 text-slate-500 hover:text-slate-800 transition-colors z-10 bg-white border-l border-slate-100"
+              className="p-1 px-2 text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-md transition-all z-10 border-l border-slate-100 flex items-center justify-center shrink-0"
             >
-              ▶
+              <ChevronRight size={18} />
             </button>
           </div>
         </div>
@@ -336,6 +457,8 @@ function App() {
               <BuybackPreview
                 data={data.buybackData[parseInt(activePreview.split('-')[1]) || 0]}
                 agileInfo={data.agileInfo}
+                tkInfo={data.tkInfo}
+                hpData={data.hirePurchaseData}
                 customerInfo={data.customerInfo}
               />
             )}

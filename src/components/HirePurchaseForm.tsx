@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import DirectorInput from './DirectorInput';
 import type { HirePurchaseData, LessorInfo, AssetDetail } from '../types/app';
 
 interface Props {
@@ -137,6 +138,14 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
               onChange={(e) => handleChange('contractDate', e.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
               placeholder="24 มีนาคม 2569"
+            />
+          </div>
+          <div className="col-span-2">
+            <DirectorInput
+              label="กรรมการผู้มีอำนาจ (ผู้เช่าซื้อ)"
+              value={data.lesseeSignatories}
+              onChange={(val) => handleChange('lesseeSignatories', val)}
+              placeholder="ชื่อ-นามสกุล กรรมการ"
             />
           </div>
           <div className="col-span-2">

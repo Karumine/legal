@@ -94,12 +94,23 @@ export interface HirePurchaseData {
   installationLocation: string;
 }
 
+export interface BuybackTableEntry {
+  year: number;
+  newRate: string;
+  usedRate: string;
+}
+
 export interface BuybackData {
   contractNo: string;
   contractDate: string;
   buybackPrice: string;
   buybackDate: string;
   conditions: string;
+  vendorName: string;
+  vendorDirectors: string;
+  vendorAddress: string;
+  vendorTaxId: string;
+  buybackTable: BuybackTableEntry[];
 }
 
 export interface JointVentureData {
@@ -275,10 +286,21 @@ export const initialAppData: AppData = {
   buybackData: [
     {
       contractNo: '',
-      contractDate: '',
+      contractDate: '24 มีนาคม 2569',
       buybackPrice: '',
       buybackDate: '',
       conditions: '',
+      vendorName: '',
+      vendorDirectors: '',
+      vendorAddress: '',
+      vendorTaxId: '',
+      buybackTable: [
+        { year: 1, newRate: '50%', usedRate: '50%' },
+        { year: 2, newRate: '45%', usedRate: '40%' },
+        { year: 3, newRate: '40%', usedRate: '30%' },
+        { year: 4, newRate: '30%', usedRate: '20%' },
+        { year: 5, newRate: '20%', usedRate: 'น้อยกว่า 20%' },
+      ]
     }
   ],
 

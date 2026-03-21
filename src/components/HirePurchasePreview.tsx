@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-yellow-200 print:bg-transparent px-1 rounded inline break-words">
+  <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
     {children || '\u00A0'}
   </span>
 );
@@ -140,9 +140,9 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
   );
 
   return (
-    <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line">
+    <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
@@ -153,23 +153,30 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
         </div>
 
         <div className="indent-10 mb-6 font-bold">
-          สัญญาเช่าซื้อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{data.madeAt}</Highlight> เมื่อวันที่ <Highlight>{data.contractDate}</Highlight>
+          สัญญาเช่าซื้อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{data.madeAt}</Highlight> เมื่อวันที่ <Highlight>{data.contractDate}</Highlight> โดยและระหว่าง:
         </div>
 
-        <div className="mb-4">โดยและระหว่าง:</div>
-
         <div className="space-y-4 mb-6">
-          <div className="pl-6 -indent-6">
-            1. <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor1.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{data.lessor1.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
+          <div className="flex gap-2 text-justify pr-2">
+            <span className="shrink-0 w-4">1.</span>
+            <div className="flex-1">
+              <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor1.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{data.lessor1.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
+            </div>
           </div>
-          <div className="pl-6 -indent-6">
-            2. <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor2.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{data.lessor2.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
+          <div className="flex gap-2 text-justify pr-2">
+            <span className="shrink-0 w-4">2.</span>
+            <div className="flex-1">
+              <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor2.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{data.lessor2.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
+            </div>
           </div>
           <div className="pl-6">
             (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
           </div>
-          <div className="pl-6 -indent-6">
-            3. <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{customerInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
+          <div className="flex gap-2 text-justify pr-2">
+            <span className="shrink-0 w-4">3.</span>
+            <div className="flex-1">
+              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{customerInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
+            </div>
           </div>
         </div>
 
@@ -189,7 +196,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Page 2 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
 
         <div className="space-y-4 mb-6 mt-4">
@@ -290,7 +297,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       })}
 
       {/* Contract Sections Page 1 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="indent-10">
@@ -325,7 +332,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 2 (3.2 and 3.3) */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
@@ -374,7 +381,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 3 (3.4 to 3.7) */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
@@ -415,7 +422,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 4 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="font-bold mb-4">4. วิธีการชำระเงิน</div>
@@ -457,7 +464,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 5 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="font-bold mb-4">5. หน้าที่และความรับผิดชอบของผู้เช่าซื้อ</div>
@@ -501,7 +508,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 6 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
@@ -538,7 +545,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 7 - Section 6 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4 font-bold">
@@ -580,7 +587,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
 
       {/* Contract Sections Page 8 - Continued Section 6.3 */}
       {collateralOverflow && (
-        <div className="print-page relative min-h-[1050px] p-24">
+        <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
           <PageHeader />
           <div className="mt-8 space-y-6">
             <div className="flex gap-4">
@@ -595,7 +602,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       )}
 
       {/* Contract Sections Page 9 - Sections 6.4-6.7 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="mb-4 text-justify">
@@ -639,7 +646,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 10 - Sections 6.8-6.12 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
@@ -681,7 +688,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 11 - Sections 7, 8, 9 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-8">
           <div className="space-y-4">
@@ -712,7 +719,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 12 - Sections 9.2, 10 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
@@ -760,7 +767,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 13 - Sections 11, 12, 13, 14 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-8">
           <div className="space-y-4">
@@ -795,7 +802,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Contract Sections Page 14 - Sections 15, 16 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-8">
           <div className="space-y-4">
@@ -820,7 +827,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Signature Page 1 - Lessor 1 & Purchaser */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 text-justify leading-relaxed">
           สัญญาฉบับนี้ทำขึ้นมา 3 (สาม) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
@@ -906,7 +913,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Signature Page 2 - Lessor 2 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
 
         <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px] font-bold">
@@ -984,7 +991,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
       </div>
 
       {/* Annex Page 4 - Image 14 */}
-      <div className="print-page relative min-h-[1050px] p-24">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-4 flex flex-col items-center justify-center space-y-1 mb-4">
           <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 4</div>
@@ -1236,11 +1243,17 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
         <div className="mt-10 grid grid-cols-2 gap-x-12 gap-y-12 px-4">
           {/* Lessor 1 */}
           <div className="flex items-start">
-            <div className="flex flex-col items-center w-[280px]">
-              <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
-              <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
-                ( {data.lessor1Signatories} )<br />
-                กรรมการผู้มีอำนาจกระทำการ<br />
+            <div className="flex flex-col items-center w-[280px] space-y-8">
+              {(data.lessor1Signatories || '').split(/\s*และ\s*/).map((sig, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
+                  <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
+                    ( {sig} )<br />
+                    กรรมการผู้มีอำนาจกระทำการ
+                  </div>
+                </div>
+              ))}
+              <div className="text-center text-[11px] font-bold">
                 {data.lessor1.name}
               </div>
             </div>
@@ -1249,11 +1262,17 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
 
           {/* Lessee */}
           <div className="flex items-start">
-            <div className="flex flex-col items-center w-[280px]">
-              <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
-              <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
-                ( {customerInfo.directors} )<br />
-                กรรมการผู้มีอำนาจกระทำการ<br />
+            <div className="flex flex-col items-center w-[280px] space-y-8">
+              {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
+                  <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
+                    ( {sig} )<br />
+                    กรรมการผู้มีอำนาจกระทำการ
+                  </div>
+                </div>
+              ))}
+              <div className="text-center text-[11px] font-bold">
                 {customerInfo.companyName}
               </div>
             </div>
@@ -1262,11 +1281,17 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
 
           {/* Lessor 2 */}
           <div className="flex items-start">
-            <div className="flex flex-col items-center w-[280px]">
-              <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
-              <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
-                ( {data.lessor2Signatories} )<br />
-                กรรมการผู้มีอำนาจกระทำการ<br />
+            <div className="flex flex-col items-center w-[280px] space-y-8">
+              {(data.lessor2Signatories || '').split(/\s*และ\s*/).map((sig, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
+                  <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
+                    ( {sig} )<br />
+                    กรรมการผู้มีอำนาจกระทำการ
+                  </div>
+                </div>
+              ))}
+              <div className="text-center text-[11px] font-bold">
                 {data.lessor2.name}
               </div>
             </div>

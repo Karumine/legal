@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Search, Loader2, Plus, Trash2 } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
+import DirectorInput from './DirectorInput';
 import type { CompanyInfo } from '../types/app';
 import { searchCompanyByTaxId } from '../services/dbdService';
 
@@ -25,23 +26,7 @@ function InfoFields({ label, info, onChange, showSearch }: {
     onChange({ ...info, [field]: value });
   };
 
-  const directorNames = info.directors ? info.directors.split(/\s*และ\s*/) : [''];
-  
-  const handleDirectorChange = (index: number, newName: string) => {
-    const newNames = [...directorNames];
-    newNames[index] = newName;
-    handleChange('directors', newNames.join(' และ '));
-  };
-  
-  const addDirector = () => {
-    handleChange('directors', [...directorNames, ''].join(' และ '));
-  };
-  
-  const removeDirector = (index: number) => {
-    if (directorNames.length > 1) {
-      handleChange('directors', directorNames.filter((_, i) => i !== index).join(' และ '));
-    }
-  };
+
 
   const handleSearch = async () => {
     if (!info.taxId.trim()) {
@@ -105,37 +90,12 @@ function InfoFields({ label, info, onChange, showSearch }: {
         />
       </div>
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อกรรมการ</label>
-        <div className="space-y-2">
-          {directorNames.map((name, idx) => (
-            <div key={idx} className="flex gap-2 relative">
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => handleDirectorChange(idx, e.target.value)}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
-                placeholder={directorNames.length > 1 ? `กรรมการคนที่ ${idx + 1}` : 'นาย/นาง/นางสาว...'}
-              />
-              {directorNames.length > 1 && (
-                <button
-                  onClick={() => removeDirector(idx)}
-                  className="px-2 py-1 text-red-500 hover:text-red-700 bg-red-50 rounded border border-red-200 transition-colors"
-                  title="ลบกรรมการ"
-                >
-                  <Trash2 size={16} />
-                </button>
-              )}
-            </div>
-          ))}
-          <div className="flex justify-end">
-            <button
-              onClick={addDirector}
-              className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors border border-transparent"
-            >
-              <Plus size={14} /> เพิ่มกรรมการอีกท่าน
-            </button>
-          </div>
-        </div>
+        <DirectorInput
+          label="ชื่อกรรมการ"
+          value={info.directors}
+          onChange={(val) => handleChange('directors', val)}
+          placeholder="นาย/นาง/นางสาว..."
+        />
       </div>
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่</label>
