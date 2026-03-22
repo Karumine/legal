@@ -3,12 +3,8 @@
 export type CompanyMode = 'agileOnly' | 'agileTK';
 export type ContractType = 'hirePurchase' | 'hirePurchaseBack' | 'loan' | 'od';
 
-// สมมติว่าไฟล์ contract.ts มีการ export ContractItem
-export interface ContractItem {
-  id: string;
-  name: string;
-  amount: number;
-}
+import type { ContractItem } from './contract';
+
 
 export interface CompanyInfo {
   companyName: string;
