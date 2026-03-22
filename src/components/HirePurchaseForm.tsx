@@ -524,86 +524,86 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
                   </div>
 
                   {asset.type === 'land' && asset.landDetails && (
-                    <div className="grid grid-cols-3 gap-2 mt-2">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-3 mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm">
                       <div>
-                        <label className="block text-[10px] text-gray-500">โฉนดเลขที่</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1 caps">โฉนดเลขที่</label>
                         <input type="text" value={asset.landDetails.deedNo} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, deedNo: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-gray-500">เล่ม</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">เล่ม</label>
                         <input type="text" value={asset.landDetails.volume} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, volume: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-gray-500">หน้า</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">หน้า</label>
                         <input type="text" value={asset.landDetails.page} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, page: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-gray-500">ระวาง</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">ระวาง</label>
                         <input type="text" value={asset.landDetails.mapSheet} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, mapSheet: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-gray-500">เลขที่ดิน</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">เลขที่ดิน</label>
                         <input type="text" value={asset.landDetails.landNo} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, landNo: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-gray-500">หน้าสำรวจ</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">หน้าสำรวจ</label>
                         <input type="text" value={asset.landDetails.surveyNo} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, surveyNo: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-gray-500">ตำบล</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">ตำบล</label>
                         <input type="text" value={asset.landDetails.subDistrict} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, subDistrict: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-gray-500">อำเภอ</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">อำเภอ</label>
                         <input type="text" value={asset.landDetails.district} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, district: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-gray-500">จังหวัด</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">จังหวัด</label>
                         <input type="text" value={asset.landDetails.province} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, province: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
-                      <div className="col-span-3">
-                        <label className="block text-[10px] text-gray-500">ชื่อเจ้าของ</label>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเจ้าของ</label>
                         <input type="text" value={asset.landDetails.owner} onChange={(e) => {
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, owner: e.target.value };
                           handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-[10px] p-1 border" />
+                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
                     </div>
                   )}

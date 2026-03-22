@@ -150,17 +150,22 @@ function App() {
       agreements: [...prev.agreements, newAgreement],
       activeAgreementId: id
     }));
+    setActivePreview(`agreement-${id}`);
   };
 
   const removeAgreement = (id: string) => {
-    setData(prev => {
-      const newAgreements = prev.agreements.filter(a => a.id !== id);
-      return {
-        ...prev,
-        agreements: newAgreements,
-        activeAgreementId: prev.activeAgreementId === id ? (newAgreements[0]?.id || null) : prev.activeAgreementId
-      };
-    });
+    const newAgreements = data.agreements.filter(a => a.id !== id);
+    const nextId = newAgreements[0]?.id || null;
+    
+    if (activePreview === `agreement-${id}`) {
+      setActivePreview(nextId ? `agreement-${nextId}` : 'agreement-initial-hp');
+    }
+
+    setData(prev => ({
+      ...prev,
+      agreements: newAgreements,
+      activeAgreementId: prev.activeAgreementId === id ? nextId : prev.activeAgreementId
+    }));
   };
 
   const updateAgileInfo = (info: CompanyInfo) => {
