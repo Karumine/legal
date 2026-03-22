@@ -1,10 +1,9 @@
 import { useState, useRef } from 'react';
 import { Printer, FileText, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS } from './types/app';
-import type { AppData, CompanyInfo, HirePurchaseData, BuybackData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData } from './types/app';
+import type { AppData, CompanyInfo, HirePurchaseData, BuybackData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
 import CompanyInfoForm from './components/CompanyInfoForm';
-import ContractTypeSelector from './components/ContractTypeSelector';
 import HirePurchaseForm from './components/HirePurchaseForm';
 import HirePurchasePreview from './components/HirePurchasePreview';
 import BuybackForm from './components/BuybackForm';
@@ -17,12 +16,13 @@ import FeePaymentForm from './components/FeePaymentForm';
 import ContractPreview from './components/ContractPreview';
 import type { GuaranteeData } from './types/guarantee';
 import type { ContractData } from './types/contract';
+import { thaiBahtText } from './utils/thaiBahtText';
 
 type PreviewTab = string;
 
 function App() {
   const [data, setData] = useState<AppData>(initialAppData);
-  const [activePreview, setActivePreview] = useState<PreviewTab>('contract');
+  const [activePreview, setActivePreview] = useState<PreviewTab>('agreement-initial-hp');
   const tabsRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const startXRef = useRef(0);
@@ -131,20 +131,47 @@ function App() {
     setData(prev => ({ ...prev, [field]: value }));
   };
 
+  const updateAgreementData = (id: string, newData: any) => {
+    setData(prev => ({
+      ...prev,
+      agreements: prev.agreements.map(a => a.id === id ? { ...a, data: newData } : a)
+    }));
+  };
+
+  const addAgreement = (type: ContractType) => {
+    const id = Date.now().toString();
+    const newAgreement: Agreement = {
+      id,
+      type,
+      data: type === 'hirePurchase' ? { ...initialAppData.agreements[0].data, contractNo: '' } : {}
+    };
+    setData(prev => ({
+      ...prev,
+      agreements: [...prev.agreements, newAgreement],
+      activeAgreementId: id
+    }));
+  };
+
+  const removeAgreement = (id: string) => {
+    setData(prev => {
+      const newAgreements = prev.agreements.filter(a => a.id !== id);
+      return {
+        ...prev,
+        agreements: newAgreements,
+        activeAgreementId: prev.activeAgreementId === id ? (newAgreements[0]?.id || null) : prev.activeAgreementId
+      };
+    });
+  };
+
   const updateAgileInfo = (info: CompanyInfo) => {
     setData(prev => ({
       ...prev,
       agileInfo: info,
-      hirePurchaseData: {
-        ...prev.hirePurchaseData,
-        lessor1: {
-          ...prev.hirePurchaseData.lessor1,
-          name: info.companyName,
-          taxId: info.taxId,
-          address: info.address,
-        },
-        lessor1Signatories: info.directors
-      }
+      agreements: prev.agreements.map(a => 
+        a.type === 'hirePurchase' 
+          ? { ...a, data: { ...a.data, lessor1: { ...a.data.lessor1, name: info.companyName, taxId: info.taxId, address: info.address }, lessor1Signatories: info.directors } }
+          : a
+      )
     }));
   };
 
@@ -152,49 +179,60 @@ function App() {
     setData(prev => ({
       ...prev,
       tkInfo: info,
-      hirePurchaseData: {
-        ...prev.hirePurchaseData,
-        lessor2: {
-          ...prev.hirePurchaseData.lessor2,
-          name: info.companyName,
-          taxId: info.taxId,
-          address: info.address,
-        },
-        lessor2Signatories: info.directors
-      }
+      agreements: prev.agreements.map(a => 
+        a.type === 'hirePurchase' 
+          ? { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address }, lessor2Signatories: info.directors } }
+          : a
+      )
     }));
   };
 
+  const activeAgreement = data.agreements.find(a => a.id === data.activeAgreementId) || data.agreements[0];
+  const hpData = activeAgreement?.type === 'hirePurchase' ? activeAgreement.data : data.agreements.find(a => a.type === 'hirePurchase')?.data;
+
   // Build GuaranteeData from AppData and a specific GuarantorData
   const buildGuaranteeData = (guarantor: GuarantorData): GuaranteeData => ({
-    contractNo: data.hirePurchaseData.contractNo ? `AGA/XX-SUR` : '',
-    effectiveDate: data.hirePurchaseData.contractDate,
+    contractNo: guarantor.contractNo || (hpData?.contractNo ? `AGA/XX-SUR` : ''),
+    effectiveDate: guarantor.contractDate || hpData?.contractDate || '',
     lenderCompany: data.agileInfo.companyName,
     lenderDirectors: data.agileInfo.directors,
     lenderAddress: data.agileInfo.address,
     lenderTaxId: data.agileInfo.taxId,
+    lenderPhone: data.agileInfo.phone,
+
+    // Party 2 (Borrower)
     borrowerCompany: data.companyMode === 'agileTK' ? data.tkInfo.companyName : '',
     borrowerDirectors: data.companyMode === 'agileTK' ? data.tkInfo.directors : '',
     borrowerAddress: data.companyMode === 'agileTK' ? data.tkInfo.address : '',
     borrowerTaxId: data.companyMode === 'agileTK' ? data.tkInfo.taxId : '',
+    borrowerPhone: data.companyMode === 'agileTK' ? data.tkInfo.phone : '',
+
+    // Party 3 (Guarantor)
     guarantorName: guarantor.guarantorName,
     guarantorIdCard: guarantor.guarantorIdCard,
     guarantorAddress: guarantor.guarantorAddress,
+    guarantorPhone: guarantor.phone || '',
     isMarried: guarantor.isMarried,
     spouseName: guarantor.spouseName,
     spouseIdCard: guarantor.spouseIdCard,
     spouseAddress: guarantor.spouseAddress,
     refContractCompany: data.customerInfo.companyName,
-    refContractNo: data.hirePurchaseData.contractNo,
-    refContractDate: data.hirePurchaseData.contractDate,
-    guaranteeAmountText: '',
-    guaranteeAmountNumber: data.hirePurchaseData.totalAmount,
+    refContractNo: hpData?.contractNo || '',
+    refContractDate: hpData?.contractDate || '',
+    guaranteeAmountText: hpData ? thaiBahtText(hpData.totalAmount) : '',
+    guaranteeAmountNumber: hpData?.totalAmount || '0',
   });
 
-  // Build preview tabs: main contract → buyback → guarantee → additional contracts
-  const previewTabs: { key: PreviewTab; label: string }[] = [
-    { key: 'contract', label: CONTRACT_TYPE_LABELS[data.contractType] },
-  ];
+  // Build preview tabs: agreements → buyback → guarantee → additional contracts
+  const previewTabs: { key: PreviewTab; label: string }[] = [];
+  
+  data.agreements.forEach((agreement, idx) => {
+    previewTabs.push({ 
+      key: `agreement-${agreement.id}`, 
+      label: `${CONTRACT_TYPE_LABELS[agreement.type]} ${data.agreements.filter(a => a.type === agreement.type).length > 1 ? `(${idx + 1})` : ''}`.trim()
+    });
+  });
+
   if (data.hasBuyback) {
     (data.buybackData || []).forEach((_, idx) => {
       previewTabs.push({ key: `buyback-${idx}`, label: `สัญญารับซื้อคืน (${idx + 1})` });
@@ -207,11 +245,11 @@ function App() {
   previewTabs.push({ key: 'serviceAgreement', label: 'สัญญาจ้างบริการ' });
   previewTabs.push({ key: 'feePayment', label: 'สัญญาชำระค่าธรรมเนียม' });
 
-  const renderContractPreview = () => {
-    if (data.contractType === 'hirePurchase') {
+  const renderContractPreview = (agreement: Agreement) => {
+    if (agreement.type === 'hirePurchase') {
       return (
         <HirePurchasePreview
-          data={data.hirePurchaseData}
+          data={agreement.data}
           customerInfo={data.customerInfo}
           guarantors={data.guarantors}
         />
@@ -222,7 +260,7 @@ function App() {
       <div className="print-page relative flex items-center justify-center">
         <div className="text-center text-slate-400">
           <FileText size={48} className="mx-auto mb-4 opacity-50" />
-          <h3 className="text-lg font-semibold">{CONTRACT_TYPE_LABELS[data.contractType]}</h3>
+          <h3 className="text-lg font-semibold">{CONTRACT_TYPE_LABELS[agreement.type]}</h3>
           <p className="text-sm mt-2">Preview จะเพิ่มในภายหลัง</p>
         </div>
       </div>
@@ -285,84 +323,108 @@ function App() {
             onCustomerChange={(info: CompanyInfo) => updateField('customerInfo', info)}
           />
 
-          {/* Step 3: Contract Type (4 main types) */}
-          <ContractTypeSelector
-            value={data.contractType}
-            onChange={(type: ContractType) => updateField('contractType', type)}
-          />
-
-          {/* Step 4: Main Contract Form */}
-          {data.contractType === 'hirePurchase' && (
-            <>
-              <HirePurchaseForm
-                data={data.hirePurchaseData}
-                onChange={(hp: HirePurchaseData) => {
-                  setData(prev => {
-                    const newData = { ...prev, hirePurchaseData: hp };
-                    if (prev.hirePurchaseData.contractDate !== hp.contractDate && newData.buybackData.length > 0) {
-                      const newBuyback = [...newData.buybackData];
-                      newBuyback[0] = { ...newBuyback[0], contractDate: hp.contractDate };
-                      newData.buybackData = newBuyback;
-                    }
-                    return newData;
-                  });
-                }}
-              />
-              <GuarantorForm
-                data={data.guarantors}
-                onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
-              />
-            </>
-          )}
-          {data.contractType !== 'hirePurchase' && (
-            <>
-              <section className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                <div className="text-center py-8 text-slate-400">
-                  <FileText size={32} className="mx-auto mb-2 opacity-50" />
-                  <p className="text-sm font-medium">{CONTRACT_TYPE_LABELS[data.contractType]}</p>
-                  <p className="text-xs mt-1">ฟอร์มจะเพิ่มในภายหลัง</p>
-                </div>
-              </section>
-              <GuarantorForm
-                data={data.guarantors}
-                onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
-              />
-            </>
-          )}
-
-          {/* Step 5: Buyback Toggle */}
-          <section className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={data.hasBuyback}
-                onChange={(e) => {
-                  const checked = e.target.checked;
-                  setData(prev => {
-                    const newData = { ...prev, hasBuyback: checked };
-                    if (checked && newData.buybackData.length > 0 && !newData.buybackData[0].contractDate) {
-                      const newBb = [...newData.buybackData];
-                      newBb[0] = { ...newBb[0], contractDate: prev.hirePurchaseData.contractDate };
-                      newData.buybackData = newBb;
-                    }
-                    return newData;
-                  });
-                }}
-                className="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-              />
-              <div>
-                <span className="font-semibold text-slate-700">รับซื้อคืน</span>
-                <p className="text-xs text-slate-500">ติ๊กเลือกถ้าต้องการเพิ่มสัญญารับซื้อคืน</p>
+          {/* Step 3: Agreement Manager */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+            <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">สัญญาในเคสนี้</h3>
+            <div className="space-y-3">
+              <div className="flex flex-wrap gap-2">
+                {data.agreements.map((agreement, idx) => (
+                  <div 
+                    key={agreement.id}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md border transition-all cursor-pointer ${
+                      data.activeAgreementId === agreement.id 
+                        ? 'bg-slate-800 text-white border-slate-800' 
+                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-400'
+                    }`}
+                    onClick={() => updateField('activeAgreementId', agreement.id)}
+                  >
+                    <FileText size={14} />
+                    <span className="text-sm font-medium">
+                      {CONTRACT_TYPE_LABELS[agreement.type]} {data.agreements.filter(a => a.type === agreement.type).length > 1 ? `(${idx + 1})` : ''}
+                    </span>
+                    {data.agreements.length > 1 && (
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); removeAgreement(agreement.id); }}
+                        className="ml-1 hover:text-red-400 transition-colors"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                ))}
               </div>
-            </label>
-          </section>
+              
+              <div className="pt-3 border-t border-slate-100">
+                <p className="text-[11px] font-bold text-slate-400 uppercase mb-2">เพิ่มสัญญาใหม่</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {(Object.keys(CONTRACT_TYPE_LABELS) as ContractType[]).map(type => (
+                    <button
+                      key={type}
+                      onClick={() => addAgreement(type)}
+                      className="px-2 py-2 rounded border border-dashed border-slate-300 hover:border-slate-800 hover:bg-slate-50 text-[11px] font-medium text-slate-600 transition-all"
+                    >
+                      + {CONTRACT_TYPE_LABELS[type]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 4: Active Agreement Form */}
+          {activeAgreement && (
+            <div className="space-y-5">
+              {activeAgreement.type === 'hirePurchase' && (
+                <HirePurchaseForm
+                  data={activeAgreement.data}
+                  onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
+                />
+              )}
+              {activeAgreement.type !== 'hirePurchase' && (
+                <section className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                  <div className="text-center py-8 text-slate-400">
+                    <FileText size={32} className="mx-auto mb-2 opacity-50" />
+                    <p className="text-sm font-medium">{CONTRACT_TYPE_LABELS[activeAgreement.type]}</p>
+                    <p className="text-xs mt-1">ฟอร์มสำหรับ {CONTRACT_TYPE_LABELS[activeAgreement.type]} จะเพิ่มในภายหลัง</p>
+                  </div>
+                </section>
+              )}
+            </div>
+          )}
+
+          {/* Step 5: Global Layout (Guarantors, Buyback, etc.) */}
+          <div className="space-y-5 border-t-2 border-slate-100 pt-5 mt-5">
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest px-1">ข้อมูลประกอบและสัญญาพ่วง</h3>
+            
+            <GuarantorForm
+              data={data.guarantors}
+              onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
+              hpDate={hpData?.contractDate || ''}
+              hpNo={hpData?.contractNo || ''}
+            />
+
+            <section className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={data.hasBuyback}
+                  onChange={(e) => updateField('hasBuyback', e.target.checked)}
+                  className="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                />
+                <div>
+                  <span className="font-semibold text-slate-700">รับซื้อคืน</span>
+                  <p className="text-xs text-slate-500">สำหรับเคสที่มีเงื่อนไขการรับซื้อคืน</p>
+                </div>
+              </label>
+            </section>
+          </div>
 
           {/* Step 5.1: Buyback Form (conditional) */}
           {data.hasBuyback && (
             <BuybackForm
               data={data.buybackData || []}
               onChange={(bb: BuybackData[]) => updateField('buybackData', bb)}
-              hpDate={data.hirePurchaseData.contractDate}
+              hpDate={hpData?.contractDate || ''}
             />
           )}
 
@@ -452,13 +514,17 @@ function App() {
         {/* Preview Content */}
         <div className="flex-1 p-6 print:p-0 flex flex-col items-center">
           <div className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0">
-            {activePreview === 'contract' && renderContractPreview()}
+            {activePreview.startsWith('agreement-') && (
+              data.agreements.find(a => `agreement-${a.id}` === activePreview) && 
+              renderContractPreview(data.agreements.find(a => `agreement-${a.id}` === activePreview)!)
+            )}
+            
             {activePreview.startsWith('buyback-') && data.hasBuyback && (
               <BuybackPreview
                 data={data.buybackData[parseInt(activePreview.split('-')[1]) || 0]}
                 agileInfo={data.agileInfo}
                 tkInfo={data.tkInfo}
-                hpData={data.hirePurchaseData}
+                hpData={hpData}
                 customerInfo={data.customerInfo}
               />
             )}

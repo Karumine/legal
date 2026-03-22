@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import DirectorInput from './DirectorInput';
 import type { HirePurchaseData, LessorInfo, AssetDetail } from '../types/app';
+import { thaiBahtText } from '../utils/thaiBahtText';
 
 interface Props {
   data: HirePurchaseData;
@@ -25,10 +26,14 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
 
     const formattedDownPayment = calculatedDownPayment.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
     const formattedRemaining = calculatedRemaining.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    const formattedTotal = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
     let updates: Partial<HirePurchaseData> = {};
 
     if (totalPrice > 0) {
+      if (formattedTotal !== data.totalAmount) {
+        updates.totalAmount = formattedTotal;
+      }
       if (formattedDownPayment !== data.downPayment) {
         updates.downPayment = formattedDownPayment;
       }
@@ -327,6 +332,19 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
         <h3 className="font-semibold text-lg text-blue-700 mb-3">เงื่อนไขการเงินและข้อสัญญา (ข้อ 3.2 - 4.4)</h3>
 
         <div className="space-y-6">
+          {/* Section 3.1 */}
+          <div className="p-3 border border-blue-100 rounded-md bg-blue-50/30">
+            <h4 className="text-sm font-bold text-blue-800 mb-2">3.1 ราคาทรัพย์สินที่เช่าซื้อ (ราคารวม)</h4>
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">ราคารวม (บาท) [คำนวณจากรายการทรัพย์สินรวมกัน]</label>
+                <div className="flex gap-4 items-center">
+                  <input type="text" value={data.totalAmount} readOnly className="block w-48 rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-blue-700 font-bold" />
+                  <div className="text-blue-600 text-xs font-medium">({thaiBahtText(data.totalAmount)})</div>
+                </div>
+              </div>
+            </div>
+          </div>
           {/* Section 3.2 (ก) */}
           <div className="p-3 border border-blue-100 rounded-md bg-blue-50/30">
             <h4 className="text-sm font-bold text-blue-800 mb-2">3.2 (ก) เงินดาวน์</h4>

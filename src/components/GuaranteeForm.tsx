@@ -1,3 +1,4 @@
+import { Copy } from 'lucide-react';
 import type { GuaranteeData } from '../types/guarantee';
 
 interface Props {
@@ -51,6 +52,10 @@ export default function GuaranteeForm({ data, onChange }: Props) {
               <label className="block text-sm font-medium text-gray-700">Tax ID</label>
               <input type="text" name="lenderTaxId" value={data.lenderTaxId} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Phone</label>
+              <input type="text" name="lenderPhone" value={data.lenderPhone} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
+            </div>
           </div>
         </section>
 
@@ -74,6 +79,10 @@ export default function GuaranteeForm({ data, onChange }: Props) {
               <label className="block text-sm font-medium text-gray-700">Tax ID</label>
               <input type="text" name="borrowerTaxId" value={data.borrowerTaxId} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Phone</label>
+              <input type="text" name="borrowerPhone" value={data.borrowerPhone} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
+            </div>
           </div>
         </section>
 
@@ -92,6 +101,10 @@ export default function GuaranteeForm({ data, onChange }: Props) {
             <div>
               <label className="block text-sm font-medium text-gray-700">Address</label>
               <input type="text" name="guarantorAddress" value={data.guarantorAddress} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Phone</label>
+              <input type="text" name="guarantorPhone" value={data.guarantorPhone} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
             </div>
           </div>
         </section>
@@ -125,7 +138,17 @@ export default function GuaranteeForm({ data, onChange }: Props) {
                   <input type="text" name="spouseIdCard" value={data.spouseIdCard} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Spouse Address (ที่อยู่คู่สมรส)</label>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-sm font-medium text-gray-700">Spouse Address (ที่อยู่คู่สมรส)</label>
+                    <button 
+                      type="button" 
+                      onClick={() => onChange({ ...data, spouseAddress: data.guarantorAddress })}
+                      className="flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded border border-blue-200 text-[10px] font-medium hover:bg-blue-100 active:scale-95 transition-all shadow-sm"
+                    >
+                      <Copy size={12} />
+                      ใช้ที่อยู่เดียวกับผู้ค้ำประกัน
+                    </button>
+                  </div>
                   <input type="text" name="spouseAddress" value={data.spouseAddress} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
                 </div>
               </div>

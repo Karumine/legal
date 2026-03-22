@@ -1,12 +1,14 @@
-import { Plus, Trash2, UserPlus } from 'lucide-react';
+import { Copy, Plus, Trash2, UserPlus } from 'lucide-react';
 import type { GuarantorData } from '../types/app';
 
 interface Props {
   data: GuarantorData[];
   onChange: (data: GuarantorData[]) => void;
+  hpDate: string;
+  hpNo: string;
 }
 
-export default function GuarantorForm({ data, onChange }: Props) {
+export default function GuarantorForm({ data, onChange, hpDate, hpNo }: Props) {
   const updateGuarantor = (id: string, field: keyof GuarantorData, value: string | boolean) => {
     onChange(
       data.map((g) => (g.id === id ? { ...g, [field]: value } : g))
@@ -16,6 +18,8 @@ export default function GuarantorForm({ data, onChange }: Props) {
   const addGuarantor = () => {
     const newGuarantor: GuarantorData = {
       id: Date.now().toString(),
+      contractNo: hpNo ? `AGA/XX-SUR` : '',
+      contractDate: hpDate,
       guarantorName: '',
       guarantorIdCard: '',
       guarantorAddress: '',
@@ -69,6 +73,29 @@ export default function GuarantorForm({ data, onChange }: Props) {
             </div>
 
             <div className="space-y-4">
+              {/* Contract Info */}
+              <div className="grid grid-cols-2 gap-4 pb-4 border-b border-emerald-100/50">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญา</label>
+                  <input
+                    type="text"
+                    value={guarantor.contractNo}
+                    onChange={(e) => updateGuarantor(guarantor.id, 'contractNo', e.target.value)}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
+                    placeholder="AGA/XX-SUR"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา (ดึงจากสัญญาเช่าซื้อ)</label>
+                  <input
+                    type="text"
+                    value={guarantor.contractDate}
+                    onChange={(e) => updateGuarantor(guarantor.id, 'contractDate', e.target.value)}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อผู้ค้ำประกัน</label>
                 <input
@@ -82,13 +109,23 @@ export default function GuarantorForm({ data, onChange }: Props) {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">เลขบัตรประชาชน</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">เลขบัตรประจำตัวประชาชน</label>
                   <input
                     type="text"
                     value={guarantor.guarantorIdCard}
                     onChange={(e) => updateGuarantor(guarantor.id, 'guarantorIdCard', e.target.value)}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
                     placeholder="X XXXX XXXXX XX X"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">เบอร์โทรศัพท์</label>
+                  <input
+                    type="text"
+                    value={guarantor.phone || ''}
+                    onChange={(e) => updateGuarantor(guarantor.id, 'phone', e.target.value)}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+                    placeholder="08X-XXXXXXX"
                   />
                 </div>
               </div>
@@ -152,7 +189,17 @@ export default function GuarantorForm({ data, onChange }: Props) {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่คู่สมรส</label>
+                    <div className="flex justify-between items-center mb-1">
+                      <label className="block text-xs font-medium text-gray-600">ที่อยู่คู่สมรส</label>
+                      <button 
+                        type="button" 
+                        onClick={() => updateGuarantor(guarantor.id, 'spouseAddress', guarantor.guarantorAddress)}
+                        className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
+                      >
+                        <Copy size={12} />
+                        ใช้ที่อยู่เดียวกับผู้ค้ำประกัน
+                      </button>
+                    </div>
                     <input
                       type="text"
                       value={guarantor.spouseAddress}

@@ -16,7 +16,7 @@ export default function ContractPreview({ data }: Props) {
   };
 
   const Highlight = ({ children }: { children: React.ReactNode }) => (
-    <span className="bg-yellow-200 print:bg-transparent px-1 rounded inline break-words">
+    <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
       {children || '\u00A0'}
     </span>
   );
@@ -26,7 +26,7 @@ export default function ContractPreview({ data }: Props) {
   const PageFooter = ({ pageNum }: { pageNum: number }) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
       <div>
-        สัญญาชำระค่าธรรมเนียม เลขที่ <span className="bg-yellow-200 print:bg-transparent px-1 rounded">{data.contractNo || '\u00A0'}</span>
+        สัญญาชำระค่าธรรมเนียม เลขที่ <Highlight>{data.contractNo}</Highlight>
       </div>
       <div>
         page {pageNum} of {totalPages}

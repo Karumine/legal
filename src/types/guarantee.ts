@@ -7,17 +7,20 @@ export interface GuaranteeData {
   lenderDirectors: string; // นายพรรษา เริงพิทยา และ นายกอบพงษ์ ตรีสุขี
   lenderAddress: string; // ที่ตั้ง ...
   lenderTaxId: string; // 0115558012195
+  lenderPhone: string;
 
   // Party 2 (Borrower)
   borrowerCompany: string; // บริษัท ฐิติกร จำกัด (มหาชน)
   borrowerDirectors: string; // นางสาวปฐมา พรประภา และนายประพล พรประภา
   borrowerAddress: string;
   borrowerTaxId: string;
+  borrowerPhone: string;
 
   // Party 3 (Guarantor)
   guarantorName: string; // นายวชิระ ตาแหวน
   guarantorIdCard: string; // 3 4004 00412 18 8
   guarantorAddress: string;
+  guarantorPhone: string;
 
   // Marital Status
   isMarried: boolean;
@@ -41,15 +44,18 @@ export const initialGuaranteeData: GuaranteeData = {
   lenderDirectors: 'นายพรรษา เริงพิทยา และ นายกอบพงษ์ ตรีสุขี',
   lenderAddress: 'เลขที่ 20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ',
   lenderTaxId: '0115558012195',
+  lenderPhone: '098-283-7700',
 
   borrowerCompany: 'บริษัท ฐิติกร จำกัด (มหาชน)',
   borrowerDirectors: 'นางสาวปฐมา พรประภา และนายประพล พรประภา',
   borrowerAddress: 'เลขที่ 69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
   borrowerTaxId: '0107546000130',
+  borrowerPhone: '02-310-7000',
 
   guarantorName: 'นายวชิระ ตาแหวน',
   guarantorIdCard: '3 4004 00412 18 8',
   guarantorAddress: 'เลขที่ 98/109 หมู่ที่ 6 ตำบลคลองสาม อำเภอคลองหลวง จังหวัดปทุมธานี',
+  guarantorPhone: '',
 
   isMarried: false,
   spouseName: 'นางสาวนงคราญ สายโอราช',

@@ -605,11 +605,11 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none break-before-page">
         <PageHeader />
 
-        <div className="mt-8 text-center pb-8 border-b border-white">
+        <div className="mt-8 indent-10 pb-8 border-b border-white">
           เพื่อเป็นหลักฐานในการนี้ คู่สัญญาทุกฝ่ายได้ลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
         </div>
 
-        <div className="mt-8 border border-black flex min-h-[600px] text-[13px]">
+        <div className=" border border-black flex min-h-[600px] text-[13px]">
           {/* Column 1: Agile */}
           <div className="w-1/2 border-r border-black p-8 flex flex-col">
             <div className="space-y-6">
@@ -677,10 +677,6 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
       {/* Page 11 (Signatures - Party 2) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none break-before-page">
         <PageHeader />
-
-        <div className="mt-8 text-center pb-8">
-        </div>
-
         <div className="mt-8 border border-black flex min-h-[600px] text-[13px]">
           {/* Column 1: TK (Thitikorn) */}
           <div className="w-1/2 border-r border-black p-8 flex flex-col">
