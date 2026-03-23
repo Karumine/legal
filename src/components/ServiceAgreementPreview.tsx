@@ -34,17 +34,6 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     return rate.split('').map(char => digits[char] || char).join('');
   }
 
-  const translateNumberToThai = (num: number) => {
-    const words = ['', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า', 'สิบ',
-      'สิบเอ็ด', 'สิบสอง', 'สิบสาม', 'สิบสี่', 'สิบห้า', 'สิบหก', 'สิบเจ็ด', 'สิบแปด', 'สิบเก้า', 'ยี่สิบ',
-      'ยี่สิบเอ็ด', 'ยี่สิบสอง', 'ยี่สิบสาม', 'ยี่สิบสี่', 'ยี่สิบห้า', 'ยี่สิบหก', 'ยี่สิบเจ็ด', 'ยี่สิบแปด', 'ยี่สิบเก้า', 'สามสิบ',
-      'สามสิบเอ็ด', 'สามสิบสอง', 'สามสิบสาม', 'สามสิบสี่', 'สามสิบห้า', 'สามสิบหก', 'สามสิบเจ็ด', 'สามสิบแปด', 'สามสิบเก้า', 'สี่สิบ',
-      'สี่สิบเอ็ด', 'สี่สิบสอง', 'สี่สิบสาม', 'สี่สิบสี่', 'สี่สิบห้า', 'สี่สิบหก', 'สี่สิบเจ็ด', 'สี่สิบแปด', 'สี่สิบเก้า', 'ห้าสิบ',
-      'ห้าสิบเอ็ด', 'ห้าสิบสอง', 'ห้าสิบสาม', 'ห้าสิบสี่', 'ห้าสิบห้า', 'ห้าสิบหก', 'ห้าสิบเจ็ด', 'ห้าสิบแปด', 'ห้าสิบเก้า', 'หกสิบ',
-    ];
-    if (num <= 60) return words[num] || num.toString();
-    return num.toString();
-  };
 
   const getPriceAndVat = (totalStr: string) => {
     const total = parseFloat(totalStr.replace(/,/g, '')) || 0;
@@ -72,7 +61,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     const p = data.agreementServiceFeePeriods?.[a.id] || 0;
     return acc + (p > 48 ? 1 : 0);
   }, 0);
-  const totalPages = (selectedAgreements.length > 1 ? 8 : 7) + selectedAgreements.length + serviceFeeAdditionalPages;
+  const totalPages = 6 + 2 * selectedAgreements.length + serviceFeeAdditionalPages;
 
   const renderServiceFeeTable = (agreement: any, agreeIdx: number) => {
     const label = CONTRACT_TYPE_LABELS[agreement.type as ContractType] || agreement.type;
@@ -536,69 +525,47 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
         </div>
       </div>
 
-      {/* Page 6: Annex No. 2 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-        <PageHeader />
-
-        <div className="text-center font-bold mb-8">
-          <div>เอกสารแนบท้ายหมายเลข 2</div>
-          <div>ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ</div>
-        </div>
-
-        <div className="space-y-6 font-normal">
-          <div className="grid grid-cols-[30px_1fr] gap-2">
-            <span className="font-bold underline">1.</span>
-            <div className="space-y-4">
-              <span className="font-bold underline">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
-
-              <div className="text-justify leading-loose">
-                เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ<u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง
-                <span className="bg-[#ccffcc] print:bg-transparent px-1"> ในอัตราร้อยละ {data.originationFeeRate} ({translateRateToThai(data.originationFeeRate)})</span> ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน
-                <span className="bg-[#ccffcc] print:bg-transparent px-1"> โดยแบ่งชำระเป็น {data.agreementOriginationFeePeriods?.[selectedAgreements[0]?.id] || 0} ({translateNumberToThai(data.agreementOriginationFeePeriods?.[selectedAgreements[0]?.id] || 0)}) งวด</span> โดย {selectedAgreements.map((a, idx) => {
-                  const label = CONTRACT_TYPE_LABELS[a.type as ContractType] || a.type;
-                  const date = data.agreementFirstDates?.[a.id] || '';
-                  return (
-                    <span key={a.id}>
-                      {idx + 1}. {label} เลขที่ {a.data.contractNo}
-                      <span className="bg-yellow-200 print:bg-transparent px-1 mx-1 flex-inline"> เริ่มต้นงวดแรกในวันที่ {formatThaiDate(date)}</span>
-                      {idx < selectedAgreements.length - 1 ? ' ' : ''}
-                    </span>
-                  );
-                })} รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
-              </div>
-
-              {/* Only Table 1.1 on this page */}
-              {selectedAgreements.length > 0 && renderAgreementTable(selectedAgreements[0], 0)}
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
-          <div>สัญญาจ้างบริการ</div>
-          <div>หน้า 6 จาก {totalPages}</div>
-        </div>
-      </div>
-
-      {/* Page 7: Remaining Tables */}
-      {selectedAgreements.length > 1 && (
-        <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      {/* Annex No. 2: Fee Details - Item 1 (Origination Fee) */}
+      {selectedAgreements.map((agreement, idx) => (
+        <div key={`orig-fee-${agreement.id}`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
           <PageHeader />
-          <div className="space-y-6 font-normal pt-8">
-            <div className="grid grid-cols-[30px_1fr] gap-2">
-              <div />
-              <div className="space-y-6">
-                {selectedAgreements.slice(1).map((agreement, idx) =>
-                  renderAgreementTable(agreement, idx + 1)
-                )}
+          {idx === 0 && (
+            <div className="text-center font-bold mb-8">
+              <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 2</div>
+              <div className="text-[14px]">ประเภทและอัตราค่าตอบแทน (Fees)</div>
+            </div>
+          )}
+
+          <div className="space-y-6 font-normal">
+            {idx === 0 ? (
+              <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
+                <span className="font-bold underline text-[13px]">1.</span>
+                <div className="space-y-4">
+                  <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
+                  <div className="text-justify leading-loose text-[12px]">
+                    เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง ในอัตราร้อยละ {data.originationFeeRate} ({translateRateToThai(data.originationFeeRate)}) ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน โดยมีรายละเอียดการชำระเงินของแต่ละสัญญาทางการเงิน ดังนี้
+                  </div>
+                </div>
               </div>
+            ) : (
+              <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
+                <div />
+                <div className="text-justify">
+                  <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee) - (ต่อ)</span>
+                </div>
+              </div>
+            )}
+
+            <div className="pl-4 mt-4">
+              {renderAgreementTable(agreement, idx)}
             </div>
           </div>
           <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
             <div>สัญญาจ้างบริการ</div>
-            <div>หน้า 7 จาก {totalPages}</div>
+            <div>หน้า {6 + idx} จาก {totalPages}</div>
           </div>
         </div>
-      )}
+      ))}
 
       {/* Page 8: Annex No. 2 Item 2 (Service Fee) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
@@ -625,10 +592,10 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
           </div>
         </div>
 
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
-          <div>สัญญาจ้างบริการ</div>
-          <div>หน้า {selectedAgreements.length > 1 ? 8 : 7} จาก {totalPages}</div>
-        </div>
+          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
+            <div>สัญญาจ้างบริการ</div>
+            <div>หน้า {6 + selectedAgreements.length} จาก {totalPages}</div>
+          </div>
       </div>
 
       {/* Pages 9+: Service Fee Schedules per contract */}
@@ -648,7 +615,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
 
         return selectedAgreements.map((agreement, idx) => {
           const { part1, part2 } = renderServiceFeeTable(agreement, idx);
-          const basePageNum = (selectedAgreements.length > 1 ? 9 : 8) + idx + currentPageOffset;
+            const basePageNum = 6 + selectedAgreements.length + 1 + idx + currentPageOffset;
           const isLastAgreement = idx === selectedAgreements.length - 1;
           
           const pages = [];

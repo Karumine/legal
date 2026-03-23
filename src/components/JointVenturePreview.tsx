@@ -28,17 +28,6 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
     return rate.split('').map(char => digits[char] || char).join('');
   }
 
-  const translateNumberToThai = (num: number) => {
-    const words = ['', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า', 'สิบ',
-      'สิบเอ็ด', 'สิบสอง', 'สิบสาม', 'สิบสี่', 'สิบห้า', 'สิบหก', 'สิบเจ็ด', 'สิบแปด', 'สิบเก้า', 'ยี่สิบ',
-      'ยี่สิบเอ็ด', 'ยี่สิบสอง', 'ยี่สิบสาม', 'ยี่สิบสี่', 'ยี่สิบห้า', 'ยี่สิบหก', 'ยี่สิบเจ็ด', 'ยี่สิบแปด', 'ยี่สิบเก้า', 'สามสิบ',
-      'สามสิบเอ็ด', 'สามสิบสอง', 'สามสิบสาม', 'สามสิบสี่', 'สามสิบห้า', 'สามสิบหก', 'สามสิบเจ็ด', 'สามสิบแปด', 'สามสิบเก้า', 'สี่สิบ',
-      'สี่สิบเอ็ด', 'สี่สิบสอง', 'สี่สิบสาม', 'สี่สิบสี่', 'สี่สิบห้า', 'สี่สิบหก', 'สี่สิบเจ็ด', 'สี่สิบแปด', 'สี่สิบเก้า', 'ห้าสิบ',
-      'ห้าสิบเอ็ด', 'ห้าสิบสอง', 'ห้าสิบสาม', 'ห้าสิบสี่', 'ห้าสิบห้า', 'ห้าสิบหก', 'ห้าสิบเจ็ด', 'ห้าสิบแปด', 'ห้าสิบเก้า', 'หกสิบ',
-    ];
-    if (num <= 60) return words[num] || num.toString();
-    return num.toString();
-  };
 
   const saData = appData.serviceAgreementData;
   const selectedAgreements = agreements.filter(a => (data.selectedAgreementIds || []).includes(a.id));
@@ -190,7 +179,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
     return acc + (p > 48 ? 1 : 0);
   }, 0);
 
-  const totalPagesCount = (selectedAgreements.length > 1 ? 25 : 24) + serviceFeeAdditionalPages;
+  const totalPagesCount = 13 + 3 + selectedAgreements.length + 1 + selectedAgreements.length + serviceFeeAdditionalPages + 1;
 
   // Create the referenced agreements string
   const agreementRefs = selectedAgreements.map((a, idx) => {
@@ -391,7 +380,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <div className="space-y-6 mt-8">
           <div>
             <div className="font-bold">5. สิทธิ หน้าที่ และความรับผิดชอบระหว่างคู่สัญญา</div>
-            
+
             <div className="flex gap-2 mb-4">
               <span className="shrink-0 w-6">5.1</span>
               <div className="flex-1 space-y-4">
@@ -693,143 +682,74 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
       <div className="hidden print:block page-break"></div>
 
       {/* Page 10 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-         {(() => {
-        let currentPageOffset = 0;
-        
-        const renderClosingText = () => (
-          <div className="mt-8 space-y-4 font-normal text-[12px]">
-            <div className="text-justify">
-              ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันทำการ ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
-            </div>
-            <div className="text-justify">
-              อนึ่ง ตลอดระยะเวลาของสัญญานี้ คู่สัญญาฝ่ายที่ 2 ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
-            </div>
-          </div>
-        );
-
-        return selectedAgreements.map((agreement, idx) => {
-          const { part1, part2 } = renderServiceFeeTable(agreement, idx);
-          const basePageNum = (selectedAgreements.length > 1 ? 20 : 19) + idx + currentPageOffset;
-          const isLastAgreement = idx === selectedAgreements.length - 1;
-          
-          const pages = [];
-          
-          // Page 1 for this agreement
-          pages.push(
-            <div key={`sf-schedule-${agreement.id}-p1`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-              <PageHeader />
-              {part1}
-              {isLastAgreement && !part2 && renderClosingText()}
-              <PageFooter pageNum={basePageNum} />
-            </div>
-          );
-
-          // Page 2 for this agreement (if periods > 48)
-          if (part2) {
-            currentPageOffset += 1;
-            pages.push(
-              <div key={`sf-schedule-${agreement.id}-p2`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-                <PageHeader />
-                {part2}
-                {isLastAgreement && renderClosingText()}
-                <PageFooter pageNum={basePageNum + 1} />
-              </div>
-            );
-          }
-
-          return pages;
-        });
-      })()}
-
-      {/* Annex 3: Representations and Warranties */}
+      {/* Page 10: Clauses 8, 9, 10 */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
+        <div className="space-y-6 mt-8">
+          {/* 8. */}
+          <div className="flex gap-4">
+            <span className="shrink-0 w-6 font-bold text-[13px]">8.</span>
+            <div className="flex-1">
+              <span className="font-bold underline text-[13px]">การบอกเลิกสัญญา</span>
+              <div className="text-justify leading-relaxed mt-4 text-[12px]">
+                หากเกิดเหตุแห่งการผิดสัญญาตามข้อ 7. ของสัญญาฉบับนี้ คู่สัญญาทั้งสองฝ่ายตกลงให้คู่สัญญาฝ่ายที่ไม่ได้ก่อให้เกิดเหตุแห่งการผิดสัญญาตามข้อ 7. ของสัญญาฉบับนี้ มีสิทธิฟ้องร้องให้คู่สัญญาอีกฝ่ายปฏิบัติตามสัญญานี้ หรือ บอกเลิกสัญญาและเรียกค่าเสียหายกับคู่สัญญาอีกฝ่ายได้
+              </div>
+            </div>
+          </div>
 
-        <div className="text-center font-bold mb-8">
-          <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 3</div>
-          <div className="text-[14px]">คำรับรองและยืนยัน</div>
-        </div>
+          {/* 9. */}
+          <div className="flex gap-4">
+            <span className="shrink-0 w-6 font-bold text-[13px]">9.</span>
+            <div className="flex-1">
+              <span className="font-bold underline text-[13px]">การโอนสิทธิและหน้าที่</span>
+              <div className="text-justify leading-relaxed mt-4 text-[12px]">
+                ตลอดอายุของสัญญาฉบับนี้ คู่สัญญาไม่สามารถโอนสิทธิและหน้าที่ ไม่ว่าจะทั้งหมดหรือบางส่วนภายใต้สัญญาฉบับนี้ให้แก่บุคคลอื่นได้ เว้นแต่ได้รับความยินยอมเป็นลายลักษณ์อักษรจากคู่สัญญาอีกฝ่าย
+              </div>
+            </div>
+          </div>
 
-        <div className="space-y-6 font-normal text-[12px] pt-4">
-          <div className="grid grid-cols-[30px_1fr] gap-2">
-            <span className="font-bold underline">1.</span>
-            <div className="space-y-6">
-              <span className="font-bold underline">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 1</span>
-              <div>ณ วันที่ตามสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ คู่สัญญาฝ่ายที่ 1 ให้คำรับรองและยืนยันว่า</div>
-              
-              <div className="space-y-6 ml-4">
-                <div className="grid grid-cols-[40px_1fr] gap-2">
+          {/* 10. */}
+          <div className="flex gap-4">
+            <span className="shrink-0 w-6 font-bold text-[13px]">10.</span>
+            <div className="flex-1">
+              <span className="font-bold underline text-[13px]">คำบอกกล่าว</span>
+              <div className="text-justify leading-relaxed mt-4 text-[12px]">
+                เว้นแต่สัญญาฉบับนี้จะระบุเป็นอย่างอื่น คำบอกกล่าวใด ๆ ที่ต้องส่งให้คู่สัญญาอีกฝ่าย จะต้องส่ง ณ สถานที่อยู่ดังที่ระบุไว้ข้างล่าง หรือสถานที่อื่นตามที่คู่สัญญาจะได้แจ้งให้ทราบเป็นลายลักษณ์อักษร คำบอกกล่าวนั้นอาจส่งด้วยตนเอง พนักงานส่งเอกสาร ไปรษณีย์ลงทะเบียน หรือจดหมายอิเล็กทรอนิกส์ โดยการส่งคำบอกกล่าวให้ถือว่ามีผล ดังนี้
+              </div>
+
+              <div className="mt-4 space-y-4 text-[12px]">
+                <div className="flex gap-4">
                   <span className="shrink-0">(ก)</span>
-                  <div className="text-justify">คู่สัญญาฝ่ายที่ 1 เป็นบริษัทจำกัดที่จัดตั้งขึ้นและดำรงอยู่อย่างถูกต้องตามกฎหมายไทย</div>
+                  <div className="flex-1 text-justify leading-relaxed">
+                    นับแต่เวลาที่ไปถึง หากส่งด้วยตนเอง หรือพนักงานส่งเอกสาร
+                  </div>
                 </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
+
+                <div className="flex gap-4">
                   <span className="shrink-0">(ข)</span>
-                  <div className="text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 มีอำนาจในการเข้าทำสัญญา การปฏิบัติตามสัญญา การจัดทำเอกสาร และการดำเนินการอื่นใดตามที่ระบุไว้ในสัญญาฉบับนี้ ตลอดจนการกระทำต่าง ๆ ที่เกี่ยวเนื่องกับสัญญาฉบับนี้ และการกระทำดังกล่าวไม่ขัดต่อวัตถุประสงค์และข้อบังคับของคู่สัญญาฝ่ายที่ 1</div>
+                  <div className="flex-1 text-justify leading-relaxed">
+                    ภายในวันที่กำหนดในใบตอบรับทางไปรษณีย์หรือใบรับที่เป็นลายลักษณ์อักษรอื่นในกรณีที่มีการส่งทางไปรษณีย์ หรือ
+                  </div>
                 </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
+
+                <div className="flex gap-4">
                   <span className="shrink-0">(ค)</span>
-                  <div className="text-justify leading-relaxed">การที่คู่สัญญาฝ่ายที่ 1 เข้าทำสัญญาฉบับนี้หรือปฏิบัติตามความผูกพันใด ๆ ในสัญญาฉบับนี้ ไม่เป็นการขัดแย้งหรือฝ่าฝืนข้อกำหนด เงื่อนไข หรือคำรับรองใด ๆ ในส่วนที่เป็นสาระสำคัญภายใต้สัญญาที่มีนัยสำคัญที่คู่สัญญาฝ่ายที่ 1 ได้ทำหรือให้กับบุคคลอื่น หรือข้อกำหนดหรือเงื่อนไขตามที่ระบุไว้ในการอนุญาต ใบอนุญาต ความเห็นชอบ หรือสิทธิหรือประโยชน์อื่นใดที่คู่สัญญาฝ่ายที่ 1 ได้รับ</div>
-                </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
-                  <span className="shrink-0">(ง)</span>
-                  <div className="text-justify">คู่สัญญาฝ่ายที่ 1 ไม่อยู่ในระหว่างการเลิกบริษัทหรือขั้นตอนการฟ้องหรือการดำเนินกระบวนการล้มละลาย</div>
-                </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
-                  <span className="shrink-0">(จ)</span>
-                  <div className="text-justify leading-relaxed">เท่าที่คู่สัญญาฝ่ายที่ 1 ทราบ ไม่มีข้อพิพาททางกฎหมายกับบุคคลใด ๆ และ ทั้งในและนอกศาล ที่มีผลกระทบในทางลบอย่างมีนัยสำคัญต่อการเข้าและปฏิบัติตามสัญญาฉบับนี้หรือส่งผลกระทบในทางลบอย่างมีนัยสำคัญกับการให้บริการแก่คู่สัญญาฝ่ายที่ 2 และเท่าที่คู่สัญญาฝ่ายที่ 1 ทราบ ไม่มีเหตุ หรือข้อขัดแย้ง การถูกฟ้องร้องและการเรียกร้องค่าเสียหายเป็นลายลักษณ์อักษรจากหรือกับบุคคลอื่น ที่ส่งผลกระทบในทางลบอย่างมีนัยสำคัญต่อความสามารถของคู่สัญญาฝ่ายที่ 1 ในการปฏิบัติตามสัญญาฉบับนี้ได้อย่างสมบูรณ์ หรืออาจส่งผลกระทบในทางลบอย่างมีนัยสำคัญกับการให้บริการแก่คู่สัญญาฝ่ายที่ 2</div>
-                </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
-                  <span className="shrink-0">(ฉ)</span>
-                  <div className="text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 มีความรู้ความสามารถและประสบการณ์ให้การจัดหาและบริหารจัดการลูกค้าและมีบุคลากรที่เพียงพอและเหมาะสมต่อการให้บริการที่เกี่ยวข้องกับสัญญาทางการเงินตามที่กำหนดในสัญญาฉบับนี้แก่คู่สัญญาฝ่ายที่ 2</div>
+                  <div className="flex-1 text-justify leading-relaxed">
+                    ภายในวันที่จดหมายอิเล็กทรอนิกส์ส่งไปยังคู่สัญญาฝ่ายผู้รับตามรายละเอียดที่คู่สัญญาฝ่ายผู้รับได้แจ้งไว้ด้านล่าง
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <div className="flex gap-4 mt-8">
-          <span className="shrink-0 w-6">8.</span>
-          <div className="flex-1">
-            <span className="font-bold underline">คำบอกกล่าว</span>
-            <div className="text-justify leading-relaxed mt-4">
-              คำบอกกล่าวใด ๆ ที่ต้องส่งให้คู่สัญญาอีกฝ่าย จะต้องส่ง ณ สถานที่อยู่ดังที่ระบุไว้ข้างล่าง หรือสถานที่อื่นตามที่คู่สัญญาจะได้แจ้งให้ทราบเป็นลายลักษณ์อักษร คำบอกกล่าวนั้นอาจส่งด้วยตนเอง พนักงานส่งเอกสาร ไปรษณีย์ลงทะเบียน หรือจดหมายอิเล็กทรอนิกส์ โดยการส่งคำบอกกล่าวให้ถือว่ามีผล ดังนี้
-            </div>
-            
-            <div className="mt-4 space-y-4">
-              <div className="flex gap-4">
-                <span className="shrink-0">(ก)</span>
-                <div className="flex-1 text-justify leading-relaxed">
-                  นับแต่เวลาที่ไปถึง หากส่งด้วยตนเอง หรือพนักงานส่งเอกสาร
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <span className="shrink-0">(ข)</span>
-                <div className="flex-1 text-justify leading-relaxed">
-                  ภายในวันที่กำหนดในใบตอบรับทางไปรษณีย์หรือใบรับที่เป็นลายลักษณ์อักษรอื่นในกรณีที่มีการส่งทางไปรษณีย์ หรือ
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <span className="shrink-0">(ค)</span>
-                <div className="flex-1 text-justify leading-relaxed">
-                  ภายในวันที่จดหมายอิเล็กทรอนิกส์ส่งไปยังคู่สัญญาฝ่ายผู้รับตามรายละเอียดที่คู่สัญญาฝ่ายผู้รับได้แจ้งไว้ด้านล่าง
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-
-      <PageFooter pageNum={10} />
+        <PageFooter pageNum={10} />
       </div>
 
-    {/* Page Break for Print */ }
-    <div className = "hidden print:block page-break"></div>
+      {/* Page Break for Print */}
+      <div className="hidden print:block page-break"></div>
 
-      {/* Page 11 */ }
-      <div className = "print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      {/* Page 11 */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="space-y-6 mt-8">
@@ -876,11 +796,11 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageFooter pageNum={11} />
       </div>
 
-    {/* Page Break for Print */ }
-    <div className = "hidden print:block page-break"></div>
+      {/* Page Break for Print */}
+      <div className="hidden print:block page-break"></div>
 
-      {/* Page 12 */ }
-      <div className = "print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      {/* Page 12 */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="space-y-6 mt-8">
@@ -927,11 +847,11 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageFooter pageNum={12} />
       </div>
 
-    {/* Page Break for Print */ }
-    <div className = "hidden print:block page-break"></div>
+      {/* Page Break for Print */}
+      <div className="hidden print:block page-break"></div>
 
-      {/* Page 13: Signatures */ }
-      <div className = "print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      {/* Page 13: Signatures */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="space-y-6 mt-8">
@@ -946,7 +866,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                 <span>คู่สัญญาฝ่ายที่ 1 :</span>
                 <span>{agileInfo.companyName}</span>
               </div>
-              
+
               <div className="space-y-16 mt-8">
                 <div className="flex flex-col items-center">
                   <div className="border-b border-black w-4/5 h-8 mb-2"></div>
@@ -982,7 +902,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                   <span>{tkInfo.companyName}</span>
                 </Highlight>
               </div>
-              
+
               <div className="space-y-16 mt-8">
                 <div className="flex flex-col items-center">
                   <div className="border-b border-black w-4/5 h-8 mb-2"></div>
@@ -1018,11 +938,11 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageFooter pageNum={13} />
       </div>
 
-    {/* Page Break for Print */ }
-    <div className = "hidden print:block page-break"></div>
+      {/* Page Break for Print */}
+      <div className="hidden print:block page-break"></div>
 
-      {/* Page 14: Annex 1 */ }
-      <div className = "print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      {/* Page 14: Annex 1 */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="flex flex-col items-center mb-12">
@@ -1032,9 +952,9 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
         <div className="space-y-6">
           <div className="font-bold">1. การจัดหาลูกค้าและจัดทำสัญญาทางการเงิน</div>
-          
+
           <div className="space-y-4">
-            {[ 
+            {[
               { id: '1.1.', text: 'จัดหาลูกค้าและให้คำปรึกษาแก่ลูกค้าในการออกแบบแผนธุรกิจ โครงสร้างการจัดหาเงินทุน เงื่อนไขทางการเงิน การประสานงานกับผู้ผลิตเครื่องจักร รายละเอียดของเครื่องจักร' },
               { id: '1.2.', text: 'ทำความรู้จักลูกค้า (Know Your Customer – KYC) และ ตรวจสอบเพื่อทราบข้อเท็จจริงเกี่ยวกับลูกค้า (Customer Due Diligence - CDD) และจัดทำสรุปการตรวจสอบอย่างย่อให้แก่คู่สัญญา' },
               { id: '1.3.', text: 'ดำเนินการจัดเตรียมเอกสารที่จำเป็นและประสานงานกับบุคคลภายนอก ซึ่งรวมถึงแต่ไม่จำกัดเพียง ผู้ผลิตเครื่องจักร เพื่อประโยชน์ของลูกค้าในการเข้าทำสัญญาทางการเงิน' },
@@ -1060,18 +980,18 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageFooter pageNum={14} />
       </div>
 
-    {/* Page Break for Print */ }
-    <div className = "hidden print:block page-break"></div>
+      {/* Page Break for Print */}
+      <div className="hidden print:block page-break"></div>
 
-      {/* Page 15: Annex 1 Cont. */ }
-      <div className = "print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      {/* Page 15: Annex 1 Cont. */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="space-y-6 mt-8">
           <div className="font-bold">2. การบริหารจัดการสัญญาทางการเงินให้แก่คู่สัญญา</div>
-          
+
           <div className="space-y-4">
-            {[ 
+            {[
               { id: '2.1.', text: 'แจ้งข่าวสาร และ/หรือ ข้อมููลที่ถูกต้อง จำเป็น และเกี่ยวข้องกับสัญญาทางการเงินให้แก่คู่สัญญาทราบอยู่เสมอ' },
               { id: '2.2.', text: 'ติดตาม ดูแล และประสานงานกับลูกค้าเพื่อให้ลูกค้าปฏิบัติให้เป็นไปตามสัญญาทางการเงิน' },
               { id: '2.3.', text: 'ดำเนินการเป็นตัวแทนสินเชื่อหรือตัวแทนเช่าซื้อเพื่อให้คู่สัญญาปฏิบัติให้เป็นไปตามสัญญาทางการเงิน' },
@@ -1097,16 +1017,16 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageFooter pageNum={15} />
       </div>
 
-    {/* Page Break for Print */ }
-    <div className = "hidden print:block page-break"></div>
+      {/* Page Break for Print */}
+      <div className="hidden print:block page-break"></div>
 
-      {/* Page 16: Annex 1 Cont. */ }
-      <div className = "print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      {/* Page 16: Annex 1 Cont. */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="space-y-6 mt-8">
           <div className="font-bold">3. ข้อตกลงกระทำการของผู้ให้บริการ</div>
-          
+
           <div className="space-y-6">
             <div className="flex gap-4">
               <span className="shrink-0 w-10">3.1.</span>
@@ -1141,147 +1061,177 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageFooter pageNum={16} />
       </div>
 
-    {/* Page Break for Print */ }
-    <div className = "hidden print:block page-break"></div>
+      {/* Page Break for Print */}
+      <div className="hidden print:block page-break"></div>
 
-      {/* Page 17: Annex No. 2 */ }
-      <div className = "print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      {/* Annex No. 2: Fee Details - Item 1 (Origination Fee) */}
+      {selectedAgreements.map((agreement, idx) => (
+        <div key={`orig-fee-${agreement.id}`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+          <PageHeader />
+          {idx === 0 && (
+            <div className="text-center font-bold mb-8">
+              <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 2</div>
+              <div className="text-[14px]">ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ (Fees)</div>
+            </div>
+          )}
+
+          <div className="space-y-6 font-normal">
+            {idx === 0 ? (
+              <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
+                <span className="font-bold underline text-[13px]">1.</span>
+                <div className="space-y-4">
+                  <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
+                  <div className="text-justify leading-loose text-[12px]">
+                    เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง ในอัตราร้อยละ {saData.originationFeeRate} ({translateRateToThai(saData.originationFeeRate)}) ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน โดยมีรายละเอียดการชำระเงินของแต่ละสัญญาทางการเงิน ดังนี้
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
+                <div />
+                <div className="text-justify">
+                  <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee) - (ต่อ)</span>
+                </div>
+              </div>
+            )}
+
+            <div className="pl-8 mt-4">
+              {renderAgreementTable(agreement, idx)}
+            </div>
+          </div>
+          <PageFooter pageNum={17 + idx} />
+        </div>
+      ))}
+
+      {/* Next Page: Annex No. 2 Item 2 (Service Fee) */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+        <PageHeader />
+
+        <div className="space-y-6 font-normal">
+          <div className="space-y-4 text-[12px] leading-relaxed mb-6">
+            <div className="text-justify">
+              ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันที่ธนาคารเปิดดำเนินการเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย ("วันทำการ") ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
+            </div>
+            <div className="text-justify">
+              อนึ่ง ตลอดระยะเวลาของสัญญานี้ คู่สัญญาฝ่ายที่ 2 ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
+            </div>
+          </div>
+
+          <div className="pl-8 flex gap-2 pt-4">
+            <span className="shrink-0 font-bold underline">2.</span>
+            <div className="text-justify">
+              <span className="font-bold underline">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
+              <div className="mt-4 leading-loose">
+                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent px-1">ในอัตราร้อยละ {saData.serviceFeeRate} ({translateRateToThai(saData.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent px-1">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบนมาด้วยนี้
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <PageFooter pageNum={17 + selectedAgreements.length} />
+      </div>
+
+      {/* Pages 19/20+: Service Fee Schedules per contract */}
+      {
+        (() => {
+          let currentPageOffset = 0;
+
+          const renderClosingText = () => (
+            <div className="mt-8 space-y-4 font-normal text-[12px]">
+              <div className="text-justify">
+                ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันทำการ ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
+              </div>
+              <div className="text-justify">
+                อนึ่ง ตลอดระยะเวลาของสัญญานี้ คู่สัญญาฝ่ายที่ 2 ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
+              </div>
+            </div>
+          );
+
+          return selectedAgreements.map((agreement, idx) => {
+            const { part1, part2 } = renderServiceFeeTable(agreement, idx);
+            const basePageNum = 17 + selectedAgreements.length + 1 + idx + currentPageOffset;
+            const isLastAgreement = idx === selectedAgreements.length - 1;
+
+            const pages = [];
+
+            // Page 1 for this agreement
+            pages.push(
+              <div key={`sf-schedule-${agreement.id}-p1`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+                <PageHeader />
+                {part1}
+                {isLastAgreement && !part2 && renderClosingText()}
+                <PageFooter pageNum={basePageNum} />
+              </div>
+            );
+
+            // Page 2 for this agreement (if periods > 48)
+            if (part2) {
+              currentPageOffset += 1;
+              pages.push(
+                <div key={`sf-schedule-${agreement.id}-p2`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+                  <PageHeader />
+                  {part2}
+                  {isLastAgreement && renderClosingText()}
+                  <PageFooter pageNum={basePageNum + 1} />
+                </div>
+              );
+            }
+
+            return pages;
+          });
+        })()
+      }
+
+      {/* Page Break for Print */}
+      <div className="hidden print:block page-break"></div>
+
+      {/* Annex 3: Representations and Warranties */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="text-center font-bold mb-8">
-          <div>เอกสารแนบท้ายหมายเลข 2</div>
-          <div>ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ</div>
+          <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 3</div>
+          <div className="text-[14px]">คำรับรองและยืนยัน (Representations and Warranties)</div>
         </div>
 
-        <div className="space-y-6 font-normal">
+        <div className="space-y-6 font-normal text-[12px] pt-4">
           <div className="grid grid-cols-[30px_1fr] gap-2">
             <span className="font-bold underline">1.</span>
-            <div className="space-y-4">
-              <span className="font-bold underline">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
-
-              <div className="text-justify leading-loose">
-                เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง
-                <span className="bg-[#ccffcc] print:bg-transparent px-1"> ในอัตราร้อยละ {saData.originationFeeRate} ({translateRateToThai(saData.originationFeeRate)})</span> ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน
-                <span className="bg-[#ccffcc] print:bg-transparent px-1"> โดยแบ่งชำระเป็น {saData.agreementOriginationFeePeriods?.[selectedAgreements[0]?.id] || 0} ({translateNumberToThai(saData.agreementOriginationFeePeriods?.[selectedAgreements[0]?.id] || 0)}) งวด</span> โดย {selectedAgreements.map((a, idx) => {
-                  const label = CONTRACT_TYPE_LABELS[a.type as ContractType] || a.type;
-                  const date = saData.agreementFirstDates?.[a.id] || '';
-                  return (
-                    <span key={a.id}>
-                      {idx + 1}. {label} เลขที่ {a.data.contractNo}
-                      <span className="bg-yellow-200 print:bg-transparent px-1 mx-1 flex-inline"> เริ่มต้นงวดแรกในวันที่ {formatThaiDate(date)}</span>
-                      {idx <selectedAgreements.length - 1 ? ' ' : ''}
-                    </span>
-                  );
-                })} รายละเอียดปรากฏตามตารางที่แนบนมาด้วยนี้
-              </div>
-
-              {/* Only Table 1.1 on this page */}
-              {selectedAgreements.length > 0 && renderAgreementTable(selectedAgreements[0], 0)}
-            </div>
-          </div>
-        </div>
-
-        <PageFooter pageNum={17} />
-      </div>
-
-    {/* Page 18: Remaining Tables (if multiple agreements) */ }
-  {
-    selectedAgreements.length > 1 && (
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-        <PageHeader />
-        <div className="space-y-6 font-normal pt-8">
-          <div className="grid grid-cols-[30px_1fr] gap-2">
-            <div />
             <div className="space-y-6">
-              {selectedAgreements.slice(1).map((agreement, idx) =>
-                renderAgreementTable(agreement, idx + 1)
-              )}
+              <span className="font-bold underline">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 1</span>
+              <div>ณ วันที่ตามสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ คู่สัญญาฝ่ายที่ 1 ให้คำรับรองและยืนยันว่า</div>
+
+              <div className="space-y-6 ml-4">
+                <div className="grid grid-cols-[40px_1fr] gap-2">
+                  <span className="shrink-0">(ก)</span>
+                  <div className="text-justify">คู่สัญญาฝ่ายที่ 1 เป็นบริษัทจำกัดที่จัดตั้งขึ้นและดำรงอยู่อย่างถูกต้องตามกฎหมายไทย</div>
+                </div>
+                <div className="grid grid-cols-[40px_1fr] gap-2">
+                  <span className="shrink-0">(ข)</span>
+                  <div className="text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 มีอำนาจในการเข้าทำสัญญา การปฏิบัติตามสัญญา การจัดทำเอกสาร และการดำเนินการอื่นใดตามที่ระบุไว้ในสัญญาฉบับนี้ ตลอดจนการกระทำต่าง ๆ ที่เกี่ยวเนื่องกับสัญญาฉบับนี้ และการกระทำดังกล่าวไม่ขัดต่อวัตถุประสงค์และข้อบังคับของคู่สัญญาฝ่ายที่ 1</div>
+                </div>
+                <div className="grid grid-cols-[40px_1fr] gap-2">
+                  <span className="shrink-0">(ค)</span>
+                  <div className="text-justify leading-relaxed">การที่คู่สัญญาฝ่ายที่ 1 เข้าทำสัญญาฉบับนี้หรือปฏิบัติตามความผูกพันใด ๆ ในสัญญาฉบับนี้ ไม่เป็นการขัดแย้งหรือฝ่าฝืนข้อกำหนด เงื่อนไข หรือคำรับรองใด ๆ ในส่วนที่เป็นสาระสำคัญภายใต้สัญญาที่มีนัยสำคัญที่คู่สัญญาฝ่ายที่ 1 ได้ทำหรือให้กับบุคคลอื่น หรือข้อกำหนดหรือเงื่อนไขตามที่ระบุไว้ในการอนุญาต ใบอนุญาต ความเห็นชอบ หรือสิทธิหรือประโยชน์อื่นใดที่คู่สัญญาฝ่ายที่ 1 ได้รับ</div>
+                </div>
+                <div className="grid grid-cols-[40px_1fr] gap-2">
+                  <span className="shrink-0">(ง)</span>
+                  <div className="text-justify">คู่สัญญาฝ่ายที่ 1 ไม่อยู่ในระหว่างการเลิกบริษัทหรือขั้นตอนการฟ้องหรือการดำเนินกระบวนการล้มละลาย</div>
+                </div>
+                <div className="grid grid-cols-[40px_1fr] gap-2">
+                  <span className="shrink-0">(จ)</span>
+                  <div className="text-justify leading-relaxed">เท่าที่คู่สัญญาฝ่ายที่ 1 ทราบ ไม่มีข้อพิพาททางกฎหมายกับบุคคลใด ๆ และ ทั้งในและนอกศาล ที่มีผลกระทบในทางลบอย่างมีนัยสำคัญต่อการเข้าและปฏิบัติตามสัญญาฉบับนี้หรือส่งผลกระทบในทางลบอย่างมีนัยสำคัญกับการให้บริการแก่คู่สัญญาฝ่ายที่ 2 และเท่าที่คู่สัญญาฝ่ายที่ 1 ทราบ ไม่มีเหตุ หรือข้อขัดแย้ง การถูกฟ้องร้องและการเรียกร้องค่าเสียหายเป็นลายลักษณ์อักษรจากหรือกับบุคคลอื่น ที่ส่งผลกระทบในทางลบอย่างมีนัยสำคัญต่อความสามารถของคู่สัญญาฝ่ายที่ 1 ในการปฏิบัติตามสัญญาฉบับนี้ได้อย่างสมบูรณ์ หรืออาจส่งผลกระทบในทางลบอย่างมีนัยสำคัญกับการให้บริการแก่คู่สัญญาฝ่ายที่ 2</div>
+                </div>
+                <div className="grid grid-cols-[40px_1fr] gap-2">
+                  <span className="shrink-0">(ฉ)</span>
+                  <div className="text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 มีความรู้ความสามารถและประสบการณ์ให้การจัดหาและบริหารจัดการลูกค้าและมีบุคลากรที่เพียงพอและเหมาะสมต่อการให้บริการที่เกี่ยวข้องกับสัญญาทางการเงินตามที่กำหนดในสัญญาฉบับนี้แก่คู่สัญญาฝ่ายที่ 2</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <PageFooter pageNum={18} />
+        <PageFooter pageNum={totalPagesCount} />
       </div>
-    )
-  }
-
-  {/* Next Page: Annex No. 2 Item 2 (Service Fee) */ }
-  <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-    <PageHeader />
-
-    <div className="space-y-6 font-normal">
-      <div className="space-y-4 text-[12px] leading-relaxed mb-6">
-        <div className="text-justify">
-          ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันที่ธนาคารเปิดดำเนินการเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย ("วันทำการ") ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
-        </div>
-        <div className="text-justify">
-          อนึ่ง ตลอดระยะเวลาของสัญญานี้ คู่สัญญาฝ่ายที่ 2 ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
-        </div>
-      </div>
-
-      <div className="pl-8 flex gap-2 pt-4">
-        <span className="shrink-0 font-bold underline">2.</span>
-        <div className="text-justify">
-          <span className="font-bold underline">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
-          <div className="mt-4 leading-loose">
-            เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent px-1">ในอัตราร้อยละ {saData.serviceFeeRate} ({translateRateToThai(saData.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent px-1">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบนมาด้วยนี้
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <PageFooter pageNum={selectedAgreements.length > 1 ? 19 : 18} />
-  </div>
-
-  {/* Pages 19/20+: Service Fee Schedules per contract */ }
-  {
-    (() => {
-      let currentPageOffset = 0;
-
-      const renderClosingText = () => (
-        <div className="mt-8 space-y-4 font-normal text-[12px]">
-          <div className="text-justify">
-            ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันทำการ ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
-          </div>
-          <div className="text-justify">
-            อนึ่ง ตลอดระยะเวลาของสัญญานี้ คู่สัญญาฝ่ายที่ 2 ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
-          </div>
-        </div>
-      );
-
-      return selectedAgreements.map((agreement, idx) => {
-        const { part1, part2 } = renderServiceFeeTable(agreement, idx);
-        const basePageNum = (selectedAgreements.length > 1 ? 20 : 19) + idx + currentPageOffset;
-        const isLastAgreement = idx === selectedAgreements.length - 1;
-
-        const pages = [];
-
-        // Page 1 for this agreement
-        pages.push(
-          <div key={`sf-schedule-${agreement.id}-p1`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-            <PageHeader />
-            {part1}
-            {isLastAgreement && !part2 && renderClosingText()}
-            <PageFooter pageNum={basePageNum} />
-          </div>
-        );
-
-        // Page 2 for this agreement (if periods > 48)
-        if (part2) {
-          currentPageOffset += 1;
-          pages.push(
-            <div key={`sf-schedule-${agreement.id}-p2`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-              <PageHeader />
-              {part2}
-              {isLastAgreement && renderClosingText()}
-              <PageFooter pageNum={basePageNum + 1} />
-            </div>
-          );
-        }
-
-        return pages;
-      });
-    })()
-  }
     </div>
   );
 }

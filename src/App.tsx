@@ -343,8 +343,8 @@ function App() {
                   <div
                     key={agreement.id}
                     className={`flex items-center gap-2 px-3 py-2 rounded-md border transition-all cursor-pointer ${data.activeAgreementId === agreement.id
-                        ? 'bg-slate-800 text-white border-slate-800'
-                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-400'
+                      ? 'bg-slate-800 text-white border-slate-800'
+                      : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-400'
                       }`}
                     onClick={() => updateField('activeAgreementId', agreement.id)}
                   >
@@ -543,7 +543,7 @@ function App() {
               <GuaranteePreview data={buildGuaranteeData(data.guarantors[parseInt(activePreview.split('-')[1]) || 0])} />
             )}
             {activePreview === 'jointVenture' && (
-              <JointVenturePreview 
+              <JointVenturePreview
                 data={data.jointVentureData}
                 agileInfo={data.agileInfo}
                 tkInfo={data.tkInfo}
@@ -552,9 +552,9 @@ function App() {
               />
             )}
             {activePreview === 'serviceAgreement' && (
-              <ServiceAgreementPreview 
-                data={data.serviceAgreementData} 
-                appData={data} 
+              <ServiceAgreementPreview
+                data={data.serviceAgreementData}
+                appData={data}
               />
             )}
             {activePreview === 'feePayment' && (
