@@ -30,10 +30,13 @@ export interface GuaranteeData {
 
   // Reference Contract Details
   refContractCompany: string; // บริษัท น้ำดื่มขอนแก่น จำกัด
-  refContractNo: string; // AGA/73-LA2025
-  refContractDate: string; // 20 สิงหาคม 2568
-  guaranteeAmountText: string; // ยี่สิบสองล้านหกแสนสองหมื่นหกร้อยห้าสิบหกบาทถ้วน
-  guaranteeAmountNumber: string; // 22,620,656
+  refContracts: {
+    no: string;
+    date: string;
+    amount: number;
+  }[];
+  guaranteeAmountText: string;
+  guaranteeAmountNumber: string;
 }
 
 export const initialGuaranteeData: GuaranteeData = {
@@ -63,8 +66,9 @@ export const initialGuaranteeData: GuaranteeData = {
   spouseAddress: 'เลขที่ 18/40 หมู่ที่ 5 ตำบลคลองสาม อำเภอคลองหลวง จังหวัดปทุมธานี',
 
   refContractCompany: 'บริษัท น้ำดื่มขอนแก่น จำกัด',
-  refContractNo: 'AGA/73-LA2025',
-  refContractDate: '20 สิงหาคม 2568',
+  refContracts: [
+    { no: 'AGA/73-LA2025', date: '20 สิงหาคม 2568', amount: 22620656 }
+  ],
   guaranteeAmountText: 'ยี่สิบสองล้านหกแสนสองหมื่นหกร้อยห้าสิบหกบาทถ้วน',
   guaranteeAmountNumber: '22,620,656',
 };

@@ -1,6 +1,7 @@
 import PageHeader from './PageHeader';
 import type { BuybackData, CompanyInfo, HirePurchaseData } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
+import { formatThaiDate } from '../utils/thaiDate';
 
 interface Props {
   data: BuybackData;
@@ -71,7 +72,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         </div>
 
         <div className="indent-10 mb-6 font-bold">
-          สัญญารับซื้อคืนฉบับนี้ ("<b>สัญญา</b>") ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{data.contractDate}</Highlight> ("<b>วันที่สัญญามีผลใช้บังคับ</b>") โดยและระหว่าง:
+          สัญญารับซื้อคืนฉบับนี้ ("<b>สัญญา</b>") ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> ("<b>วันที่สัญญามีผลใช้บังคับ</b>") โดยและระหว่าง:
         </div>
 
         <div className="space-y-4 mb-6">
@@ -151,7 +152,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             <div className="flex gap-2 ml-4">
               <span className="shrink-0">1.2.</span>
               <div className="flex-1">
-                คู่สัญญาตกลงกันซื้อขายเครื่องจักรนี้ โดยมีวัตถุประสงค์เพื่อให้บริษัทฯ ให้บริการเช่าซื้อแก่ <Highlight>{customerInfo.companyName}</Highlight> (<b>“ผู้เช่าซื้อ”</b>) ตามสัญญาเช่าซื้อเลขที่ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{hpData.contractDate}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ
+                คู่สัญญาตกลงกันซื้อขายเครื่องจักรนี้ โดยมีวัตถุประสงค์เพื่อให้บริษัทฯ ให้บริการเช่าซื้อแก่ <Highlight>{customerInfo.companyName}</Highlight> (<b>“ผู้เช่าซื้อ”</b>) ตามสัญญาเช่าซื้อเลขที่ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ
               </div>
             </div>
           )}
@@ -195,7 +196,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
                   <div className="mt-6 flex gap-2">
                     <span className="shrink-0">1.2.</span>
                     <div className="flex-1">
-                      คู่สัญญาตกลงกันซื้อขายเครื่องจักรนี้ โดยมีวัตถุประสงค์เพื่อให้บริษัทฯ ให้บริการเช่าซื้อแก่ <Highlight>{customerInfo.companyName}</Highlight> (<b>“ผู้เช่าซื้อ”</b>) ตามสัญญาเช่าซื้อเลขที่ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{hpData.contractDate}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ
+                      คู่สัญญาตกลงกันซื้อขายเครื่องจักรนี้ โดยมีวัตถุประสงค์เพื่อให้บริษัทฯ ให้บริการเช่าซื้อแก่ <Highlight>{customerInfo.companyName}</Highlight> (<b>“ผู้เช่าซื้อ”</b>) ตามสัญญาเช่าซื้อเลขที่ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ
                     </div>
                   </div>
                 </div>
@@ -214,14 +215,14 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">1.3.</span>
             <div className="flex-1">
-              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {downPaymentRate} ({thaiBahtText(downPaymentRate).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText(totalAssetValue * 0.2)})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จากบริษัท <Highlight>{customerInfo.companyName}</Highlight> (“ผู้เช่าซื้อ”) ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{hpData.contractDate}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระ และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทุกฝ่ายตกลงให้เงินค่าชำระราคาครั้งดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
+              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {downPaymentRate} ({thaiBahtText(downPaymentRate.toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText((totalAssetValue * 0.2).toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จากบริษัท <Highlight>{customerInfo.companyName}</Highlight> (“ผู้เช่าซื้อ”) ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระ และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทุกฝ่ายตกลงให้เงินค่าชำระราคาครั้งดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
             </div>
           </div>
 
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">1.4.</span>
             <div className="flex-1">
-              ณ วันที่ทำสัญญาฉบับนี้ คู่สัญญากตกลงว่าเมื่อบริษัทฯ <Highlight>ชำระเงินค่าเครื่องจักรส่วนที่เหลือเป็นจำนวนทั้งสิ้น {formattedAmount(remainingAmount)} บาท ({thaiBahtText(remainingAmount)})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> ให้แก่ตัวแทนจำหน่ายและตัวแทนจำหน่ายได้รับเงินค่าเครื่องจักรส่วนที่เหลือครบถ้วนเรียบร้อยแล้ว กรรมสิทธิ์ในเครื่องจักรตกเป็นของบริษัทฯ <Highlight>ตามสัดส่วนในสัญญาเช่าซื้อ {hpData.contractNo} ฉบับลงวันที่ {hpData.contractDate}</Highlight>
+              ณ วันที่ทำสัญญาฉบับนี้ คู่สัญญากตกลงว่าเมื่อบริษัทฯ <Highlight>ชำระเงินค่าเครื่องจักรส่วนที่เหลือเป็นจำนวนทั้งสิ้น {formattedAmount(remainingAmount)} บาท ({thaiBahtText(remainingAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> ให้แก่ตัวแทนจำหน่ายและตัวแทนจำหน่ายได้รับเงินค่าเครื่องจักรส่วนที่เหลือครบถ้วนเรียบร้อยแล้ว กรรมสิทธิ์ในเครื่องจักรตกเป็นของบริษัทฯ <Highlight>ตามสัดส่วนในสัญญาเช่าซื้อ {hpData.contractNo} ฉบับลงวันที่ {formatThaiDate(hpData.contractDate)}</Highlight>
             </div>
           </div>
 

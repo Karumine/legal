@@ -27,7 +27,7 @@ export default function GuaranteeForm({ data, onChange }: Props) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Effective Date</label>
-              <input type="text" name="effectiveDate" value={data.effectiveDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
+              <input type="date" name="effectiveDate" value={data.effectiveDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
             </div>
           </div>
         </section>
@@ -164,17 +164,8 @@ export default function GuaranteeForm({ data, onChange }: Props) {
               <label className="block text-sm font-medium text-gray-700">Company Name (ผู้เช่าซื้อ)</label>
               <input type="text" name="refContractCompany" value={data.refContractCompany} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
             </div>
-            <div>
-               <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Ref Contract No.</label>
-                    <input type="text" name="refContractNo" value={data.refContractNo} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Ref Date</label>
-                    <input type="text" name="refContractDate" value={data.refContractDate} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border sm:text-sm" />
-                  </div>
-               </div>
+            <div className="p-3 bg-slate-50 rounded border border-slate-100 italic text-slate-500 text-xs">
+              หมายเหตุ: สัญญาหลักที่ค้ำประกัน ({data.refContracts.length} ฉบับ) กำหนดโดยการเลือกในส่วน "สัญญาค้ำประกัน (ผู้ค้ำ)"
             </div>
             <div>
                <div className="grid grid-cols-2 gap-4">

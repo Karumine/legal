@@ -1,5 +1,6 @@
 import PageHeader from './PageHeader';
 import type { GuaranteeData } from '../types/guarantee';
+import { formatThaiDate } from '../utils/thaiDate';
 
 interface Props {
   data: GuaranteeData;
@@ -17,10 +18,10 @@ export default function GuaranteePreview({ data }: Props) {
   const PageFooter = ({ pageNum }: { pageNum: number }) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
       <div>
-        สัญญาค้ำประกัน เลขที่ <Highlight>{data.contractNo}</Highlight>
+        สัญญาค้ำประกัน เลขที่ {data.contractNo}
       </div>
       <div>
-        page {pageNum} of {totalPages}
+        หน้า {pageNum} จาก {totalPages}
       </div>
     </div>
   );
@@ -44,7 +45,7 @@ export default function GuaranteePreview({ data }: Props) {
         </div>
 
         <div className="indent-10 mb-6">
-          สัญญาค้ำประกัน ("สัญญา") ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{data.effectiveDate}</Highlight> (<b>"วันที่สัญญาค้ำประกันมีผลบังคับ"</b>) โดยและระหว่าง
+          สัญญาค้ำประกัน ("สัญญา") ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> (<b>"วันที่สัญญาค้ำประกันมีผลบังคับ"</b>) โดยและระหว่าง
         </div>
 
         <div className="space-y-4 mb-6">
@@ -81,7 +82,11 @@ export default function GuaranteePreview({ data }: Props) {
         <div className="flex gap-2 text-justify pr-2 mb-4">
           <span className="shrink-0 w-6">1.</span>
           <div className="flex-1">
-            ตามที่ผู้ให้เช่าซื้อและ<b>บริษัท <Highlight>{data.refContractCompany}</Highlight> (“ผู้เช่าซื้อ”)</b> ได้เข้าทำสัญญาเช่าซื้อเลขที่ <Highlight>{data.refContractNo}</Highlight> ลงวันที่ <Highlight>{data.refContractDate}</Highlight> ผู้ค้ำประกันยินยอมเข้าค้ำประกันการชำระหนี้อันครบถ้วนสมบูรณ์ ตรงต่อเวลาและเป็นไปตามข้อกำหนดและเงื่อนไขภายใต้สัญญาเช่าซื้อ โดยมีวงเงินค้ำประกันหนี้ตามสัญญาฉบับนี้รวมกันทั้งสิ้น<b>ไม่เกินจำนวน <Highlight>{data.guaranteeAmountNumber}</Highlight> บาท (<Highlight>{data.guaranteeAmountText}</Highlight>)</b> บวกด้วยดอกเบี้ย ดอกเบี้ยผิดนัด ค่าธรรมเนียม ค่าสินไหมทดแทนซึ่งผู้เช่าซื้อค้างชำระ ค่าเบี้ยประกันภัย ค่าปรับ ค่าใช้จ่ายในการติดตามทวงถาม บังคับชำระหนี้ ตลอดจนค่าภาระติดพันอันเป็นอุปกรณ์แห่งหนี้ของผู้เช่าซื้อและค่าใช้จ่ายอื่นใดตามสัญญาเช่าซื้อให้แก่ผู้ให้เช่าซื้อจนกว่าผู้ให้เช่าซื้อจะได้รับชำระหนี้ภายใต้สัญญาเช่าซื้อจนครบถ้วน
+            ตามที่ผู้ให้เช่าซื้อและ<b>บริษัท <Highlight>{data.refContractCompany}</Highlight> (“ผู้เช่าซื้อ”)</b> ได้เข้าทำ{data.refContracts.map((ref, idx) => (
+              <span key={idx}>
+                {idx > 0 && (idx === data.refContracts.length - 1 ? ' และ' : ', ')} สัญญาเช่าซื้อเลขที่ <Highlight>{ref.no}</Highlight> ลงวันที่ <Highlight>{formatThaiDate(ref.date)}</Highlight>
+              </span>
+            ))} ผู้ค้ำประกันยินยอมเข้าค้ำประกันการชำระหนี้อันครบถ้วนสมบูรณ์ ตรงต่อเวลาและเป็นไปตามข้อกำหนดและเงื่อนไขภายใต้สัญญาเช่าซื้อ โดยมีวงเงินค้ำประกันหนี้ตามสัญญาฉบับนี้รวมกันทั้งสิ้น<b>ไม่เกินจำนวน <Highlight>{data.guaranteeAmountNumber}</Highlight> บาท (<Highlight>{data.guaranteeAmountText}</Highlight>)</b> บวกด้วยดอกเบี้ย ดอกเบี้ยผิดนัด ค่าธรรมเนียม ค่าสินไหมทดแทนซึ่งผู้เช่าซื้อค้างชำระ ค่าเบี้ยประกันภัย ค่าปรับ ค่าใช้จ่ายในการติดตามทวงถาม บังคับชำระหนี้ ตลอดจนค่าภาระติดพันอันเป็นอุปกรณ์แห่งหนี้ของผู้เช่าซื้อและค่าใช้จ่ายอื่นใดตามสัญญาเช่าซื้อให้แก่ผู้ให้เช่าซื้อจนกว่าผู้ให้เช่าซื้อจะได้รับชำระหนี้ภายใต้สัญญาเช่าซื้อจนครบถ้วน
           </div>
         </div>
 
