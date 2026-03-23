@@ -1,15 +1,16 @@
-import { Copy, Plus, Trash2, UserPlus } from 'lucide-react';
-import type { GuarantorData } from '../types/app';
+import { Copy, Plus, Trash2, UserPlus, CheckSquare } from 'lucide-react';
+import type { GuarantorData, Agreement, HirePurchaseData } from '../types/app';
 
 interface Props {
   data: GuarantorData[];
   onChange: (data: GuarantorData[]) => void;
-  hpDate: string;
-  hpNo: string;
+  agreements: Agreement[];
 }
 
-export default function GuarantorForm({ data, onChange, hpDate, hpNo }: Props) {
-  const updateGuarantor = (id: string, field: keyof GuarantorData, value: string | boolean) => {
+export default function GuarantorForm({ data, onChange, agreements }: Props) {
+  const hpAgreements = agreements.filter(a => a.type === 'hirePurchase');
+
+  const updateGuarantor = (id: string, field: keyof GuarantorData, value: any) => {
     onChange(
       data.map((g) => (g.id === id ? { ...g, [field]: value } : g))
     );
@@ -18,8 +19,8 @@ export default function GuarantorForm({ data, onChange, hpDate, hpNo }: Props) {
   const addGuarantor = () => {
     const newGuarantor: GuarantorData = {
       id: Date.now().toString(),
-      contractNo: hpNo ? `AGA/XX-SUR` : '',
-      contractDate: hpDate,
+      contractNo: `AGA/XX-SUR`,
+      contractDate: hpAgreements[0]?.data.contractDate || '',
       guarantorName: '',
       guarantorIdCard: '',
       guarantorAddress: '',
@@ -27,6 +28,7 @@ export default function GuarantorForm({ data, onChange, hpDate, hpNo }: Props) {
       spouseName: '',
       spouseIdCard: '',
       spouseAddress: '',
+      selectedAgreementIds: hpAgreements.map(a => a.id), // Default to all
     };
     onChange([...data, newGuarantor]);
   };
@@ -35,6 +37,18 @@ export default function GuarantorForm({ data, onChange, hpDate, hpNo }: Props) {
     if (data.length > 1) {
       onChange(data.filter((g) => g.id !== id));
     }
+  };
+
+  const toggleAgreement = (guarantorId: string, agreementId: string) => {
+    const guarantor = data.find(g => g.id === guarantorId);
+    if (!guarantor) return;
+
+    const currentIds = guarantor.selectedAgreementIds || [];
+    const newIds = currentIds.includes(agreementId)
+      ? currentIds.filter(id => id !== agreementId)
+      : [...currentIds, agreementId];
+    
+    updateGuarantor(guarantorId, 'selectedAgreementIds', newIds);
   };
 
   return (
@@ -73,10 +87,37 @@ export default function GuarantorForm({ data, onChange, hpDate, hpNo }: Props) {
             </div>
 
             <div className="space-y-4">
-              {/* Contract Info */}
-              <div className="grid grid-cols-2 gap-4 pb-4 border-b border-emerald-100/50">
+              {/* Contract Selection */}
+              <div className="pb-4 border-b border-emerald-100/50">
+                <label className="block text-xs font-bold text-emerald-700 mb-2 flex items-center gap-1">
+                  <CheckSquare size={14} /> เลือกสัญญาหลักที่ค้ำประกัน
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {hpAgreements.map(agreement => {
+                    const hp = agreement.data as HirePurchaseData;
+                    const isSelected = (guarantor.selectedAgreementIds || []).includes(agreement.id);
+                    return (
+                      <label key={agreement.id} className={`flex items-center gap-2 p-2 rounded border cursor-pointer transition-all ${isSelected ? 'bg-emerald-100 border-emerald-300' : 'bg-white border-gray-400 hover:border-emerald-200'}`}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleAgreement(guarantor.id, agreement.id)}
+                          className="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-[11px] font-bold text-gray-700">{hp.contractNo || 'ยังไม่มีเลขที่'}</span>
+                          <span className="text-[10px] text-gray-500">{hp.totalAmount} บาท</span>
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Internal Guarantee Info */}
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญา</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญาค้ำ</label>
                   <input
                     type="text"
                     value={guarantor.contractNo}
@@ -86,9 +127,9 @@ export default function GuarantorForm({ data, onChange, hpDate, hpNo }: Props) {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา (ดึงจากสัญญาเช่าซื้อ)</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญาค้ำ</label>
                   <input
-                    type="text"
+                    type="date"
                     value={guarantor.contractDate}
                     onChange={(e) => updateGuarantor(guarantor.id, 'contractDate', e.target.value)}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"

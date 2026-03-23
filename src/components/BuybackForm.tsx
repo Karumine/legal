@@ -29,8 +29,6 @@ export default function BuybackForm({ data, onChange, hpDate }: Props) {
       {
         contractNo: '',
         contractDate: hpDate,
-        buybackPrice: '',
-        buybackDate: '',
         conditions: '',
         vendorName: '',
         vendorDirectors: '',
@@ -103,76 +101,13 @@ export default function BuybackForm({ data, onChange, hpDate }: Props) {
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
                   <input
-                    type="text"
+                    type="date"
                     value={buyback.contractDate}
                     onChange={(e) => updateBuyback(index, 'contractDate', e.target.value)}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border"
-                    placeholder="1 มกราคม 2569"
                   />
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">ราคารับซื้อคืน (บาท)</label>
-                  <input
-                    type="text"
-                    value={buyback.buybackPrice}
-                    onChange={(e) => updateBuyback(index, 'buybackPrice', e.target.value)}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border"
-                    placeholder="500,000"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">วันที่รับซื้อคืน</label>
-                  <input
-                    type="text"
-                    value={buyback.buybackDate}
-                    onChange={(e) => updateBuyback(index, 'buybackDate', e.target.value)}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border"
-                    placeholder="1 มกราคม 2572"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-orange-100">
-                <h5 className="text-xs font-bold text-orange-700 mb-3">เกณฑ์ราคาการรับซื้อคืน (ตามปี)</h5>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-[11px] text-left border-collapse">
-                    <thead>
-                      <tr className="border-b border-orange-200 bg-orange-100/50">
-                        <th className="py-1.5 px-2 font-bold text-orange-800">ปีที่</th>
-                        <th className="py-1.5 px-2 font-bold text-orange-800">มือ 1 (%)</th>
-                        <th className="py-1.5 px-2 font-bold text-orange-800">มือ 2 (%)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {(buyback.buybackTable || []).map((row, rowIdx) => (
-                        <tr key={rowIdx} className="border-b border-orange-100/50 hover:bg-white/50">
-                          <td className="py-1.5 px-2 font-medium text-gray-700">ปีที่ {row.year}</td>
-                          <td className="py-1 px-2">
-                            <input
-                              type="text"
-                              value={row.newRate}
-                              onChange={(e) => updateTable(index, rowIdx, 'newRate', e.target.value)}
-                              className="w-full p-1 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none"
-                            />
-                          </td>
-                          <td className="py-1 px-2">
-                            <input
-                              type="text"
-                              value={row.usedRate}
-                              onChange={(e) => updateTable(index, rowIdx, 'usedRate', e.target.value)}
-                              className="w-full p-1 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
               <div className="pt-4 border-t border-orange-100">
                 <h5 className="text-xs font-bold text-orange-700 mb-3">ข้อมูลผู้ขาย / ตัวแทนจำหน่าย (คู่สัญญาฝ่ายที่ 3)</h5>
                 <div className="grid grid-cols-2 gap-4">
@@ -213,6 +148,44 @@ export default function BuybackForm({ data, onChange, hpDate }: Props) {
                       placeholder="เช่น 555 หมู่ 10 ตำบลอู่ทอง อำเภออู่ทอง จังหวัดสุพรรณบุรี"
                     />
                   </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-orange-100">
+                <h5 className="text-xs font-bold text-orange-700 mb-3">เกณฑ์ราคาการรับซื้อคืน (ตามปี)</h5>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-[11px] text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-orange-200 bg-orange-100/50">
+                        <th className="py-1.5 px-2 font-bold text-orange-800">ปีที่</th>
+                        <th className="py-1.5 px-2 font-bold text-orange-800">มือ 1 (%)</th>
+                        <th className="py-1.5 px-2 font-bold text-orange-800">มือ 2 (%)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(buyback.buybackTable || []).map((row, rowIdx) => (
+                        <tr key={rowIdx} className="border-b border-orange-100/50 hover:bg-white/50">
+                          <td className="py-1.5 px-2 font-medium text-gray-700">ปีที่ {row.year}</td>
+                          <td className="py-1 px-2">
+                            <input
+                              type="text"
+                              value={row.newRate}
+                              onChange={(e) => updateTable(index, rowIdx, 'newRate', e.target.value)}
+                              className="w-full p-1 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none"
+                            />
+                          </td>
+                          <td className="py-1 px-2">
+                            <input
+                              type="text"
+                              value={row.usedRate}
+                              onChange={(e) => updateTable(index, rowIdx, 'usedRate', e.target.value)}
+                              className="w-full p-1 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
 

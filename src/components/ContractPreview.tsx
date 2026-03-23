@@ -3,6 +3,7 @@ import SignatureSection from './SignatureSection';
 import type { ContractData } from '../types/contract';
 import { CONTRACT_TYPE_LABELS } from '../types/contract';
 import { thaiBahtText } from '../utils/thaiBahtText';
+import { formatThaiDate } from '../utils/thaiDate';
 
 interface Props {
   data: ContractData;
@@ -58,7 +59,7 @@ export default function ContractPreview({ data }: Props) {
         </div>
 
         <div className="indent-10 mb-6">
-          สัญญาชำระค่าธรรมเนียม ("สัญญา") ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{data.effectiveDate}</Highlight> ("วันที่สัญญามีผลใช้บังคับ") ระหว่าง
+          สัญญาชำระค่าธรรมเนียม ("สัญญา") ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> ("วันที่สัญญามีผลใช้บังคับ") ระหว่าง
         </div>
 
         <div className="mb-4 pl-8 -indent-8">

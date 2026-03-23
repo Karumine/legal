@@ -11,7 +11,9 @@ import BuybackPreview from './components/BuybackPreview';
 import GuarantorForm from './components/GuarantorForm';
 import GuaranteePreview from './components/GuaranteePreview';
 import JointVentureForm from './components/JointVentureForm';
+import JointVenturePreview from './components/JointVenturePreview';
 import ServiceAgreementForm from './components/ServiceAgreementForm';
+import ServiceAgreementPreview from './components/ServiceAgreementPreview';
 import FeePaymentForm from './components/FeePaymentForm';
 import ContractPreview from './components/ContractPreview';
 import type { GuaranteeData } from './types/guarantee';
@@ -28,7 +30,7 @@ function App() {
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
   const [hasMoved, setHasMoved] = useState(false);
-  
+
   // Momentum refs
   const velocityRef = useRef(0);
   const lastXRef = useRef(0);
@@ -37,7 +39,7 @@ function App() {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!tabsRef.current) return;
-    
+
     // Stop any existing momentum animation
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
@@ -48,7 +50,7 @@ function App() {
     setHasMoved(false);
     startXRef.current = e.pageX - tabsRef.current.offsetLeft;
     scrollLeftRef.current = tabsRef.current.scrollLeft;
-    
+
     lastXRef.current = e.pageX;
     lastTimeRef.current = Date.now();
     velocityRef.current = 0;
@@ -59,7 +61,7 @@ function App() {
 
     const step = () => {
       if (!tabsRef.current || isDragging) return;
-      
+
       tabsRef.current.scrollLeft -= velocityRef.current * 10;
       velocityRef.current *= 0.95; // Decay factor
 
@@ -89,10 +91,10 @@ function App() {
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !tabsRef.current) return;
-    
+
     const currentTime = Date.now();
     const timeElapsed = currentTime - lastTimeRef.current;
-    
+
     if (timeElapsed > 0) {
       const deltaX = e.pageX - lastXRef.current;
       velocityRef.current = deltaX / timeElapsed;
@@ -102,7 +104,7 @@ function App() {
 
     const x = e.pageX - tabsRef.current.offsetLeft;
     const walk = (x - startXRef.current) * 1.5;
-    
+
     if (Math.abs(walk) > 5) {
       setHasMoved(true);
       tabsRef.current.scrollLeft = scrollLeftRef.current - walk;
@@ -112,7 +114,7 @@ function App() {
   const handlePrint = () => {
     const rightPanel = document.getElementById('preview-panel');
     const scrollPos = rightPanel ? rightPanel.scrollTop : 0;
-    
+
     window.print();
 
     // Force repaint after print dialog closes to fix browser bug where 
@@ -156,7 +158,7 @@ function App() {
   const removeAgreement = (id: string) => {
     const newAgreements = data.agreements.filter(a => a.id !== id);
     const nextId = newAgreements[0]?.id || null;
-    
+
     if (activePreview === `agreement-${id}`) {
       setActivePreview(nextId ? `agreement-${nextId}` : 'agreement-initial-hp');
     }
@@ -172,8 +174,8 @@ function App() {
     setData(prev => ({
       ...prev,
       agileInfo: info,
-      agreements: prev.agreements.map(a => 
-        a.type === 'hirePurchase' 
+      agreements: prev.agreements.map(a =>
+        a.type === 'hirePurchase'
           ? { ...a, data: { ...a.data, lessor1: { ...a.data.lessor1, name: info.companyName, taxId: info.taxId, address: info.address }, lessor1Signatories: info.directors } }
           : a
       )
@@ -184,8 +186,8 @@ function App() {
     setData(prev => ({
       ...prev,
       tkInfo: info,
-      agreements: prev.agreements.map(a => 
-        a.type === 'hirePurchase' 
+      agreements: prev.agreements.map(a =>
+        a.type === 'hirePurchase'
           ? { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address }, lessor2Signatories: info.directors } }
           : a
       )
@@ -196,44 +198,57 @@ function App() {
   const hpData = activeAgreement?.type === 'hirePurchase' ? activeAgreement.data : data.agreements.find(a => a.type === 'hirePurchase')?.data;
 
   // Build GuaranteeData from AppData and a specific GuarantorData
-  const buildGuaranteeData = (guarantor: GuarantorData): GuaranteeData => ({
-    contractNo: guarantor.contractNo || (hpData?.contractNo ? `AGA/XX-SUR` : ''),
-    effectiveDate: guarantor.contractDate || hpData?.contractDate || '',
-    lenderCompany: data.agileInfo.companyName,
-    lenderDirectors: data.agileInfo.directors,
-    lenderAddress: data.agileInfo.address,
-    lenderTaxId: data.agileInfo.taxId,
-    lenderPhone: data.agileInfo.phone,
+  const buildGuaranteeData = (guarantor: GuarantorData): GuaranteeData => {
+    // Get all selected HP agreements
+    const selectedHps = (guarantor.selectedAgreementIds || [])
+      .map(id => data.agreements.find(a => a.id === id))
+      .filter(a => a?.type === 'hirePurchase')
+      .map(a => a!.data as HirePurchaseData);
 
-    // Party 2 (Borrower)
-    borrowerCompany: data.companyMode === 'agileTK' ? data.tkInfo.companyName : '',
-    borrowerDirectors: data.companyMode === 'agileTK' ? data.tkInfo.directors : '',
-    borrowerAddress: data.companyMode === 'agileTK' ? data.tkInfo.address : '',
-    borrowerTaxId: data.companyMode === 'agileTK' ? data.tkInfo.taxId : '',
-    borrowerPhone: data.companyMode === 'agileTK' ? data.tkInfo.phone : '',
+    const totalAmount = selectedHps.reduce((sum, hp) => sum + (parseFloat(hp.totalAmount.toString().replace(/,/g, '')) || 0), 0);
 
-    // Party 3 (Guarantor)
-    guarantorName: guarantor.guarantorName,
-    guarantorIdCard: guarantor.guarantorIdCard,
-    guarantorAddress: guarantor.guarantorAddress,
-    guarantorPhone: guarantor.phone || '',
-    isMarried: guarantor.isMarried,
-    spouseName: guarantor.spouseName,
-    spouseIdCard: guarantor.spouseIdCard,
-    spouseAddress: guarantor.spouseAddress,
-    refContractCompany: data.customerInfo.companyName,
-    refContractNo: hpData?.contractNo || '',
-    refContractDate: hpData?.contractDate || '',
-    guaranteeAmountText: hpData ? thaiBahtText(hpData.totalAmount) : '',
-    guaranteeAmountNumber: hpData?.totalAmount || '0',
-  });
+    return {
+      contractNo: guarantor.contractNo || (hpData?.contractNo ? `AGA/XX-SUR` : ''),
+      effectiveDate: guarantor.contractDate || hpData?.contractDate || '',
+      lenderCompany: data.agileInfo.companyName,
+      lenderDirectors: data.agileInfo.directors,
+      lenderAddress: data.agileInfo.address,
+      lenderTaxId: data.agileInfo.taxId,
+      lenderPhone: data.agileInfo.phone,
+
+      // Party 2 (Borrower)
+      borrowerCompany: data.companyMode === 'agileTK' ? data.tkInfo.companyName : '',
+      borrowerDirectors: data.companyMode === 'agileTK' ? data.tkInfo.directors : '',
+      borrowerAddress: data.companyMode === 'agileTK' ? data.tkInfo.address : '',
+      borrowerTaxId: data.companyMode === 'agileTK' ? data.tkInfo.taxId : '',
+      borrowerPhone: data.companyMode === 'agileTK' ? data.tkInfo.phone : '',
+
+      // Party 3 (Guarantor)
+      guarantorName: guarantor.guarantorName,
+      guarantorIdCard: guarantor.guarantorIdCard,
+      guarantorAddress: guarantor.guarantorAddress,
+      guarantorPhone: guarantor.phone || '',
+      isMarried: guarantor.isMarried,
+      spouseName: guarantor.spouseName,
+      spouseIdCard: guarantor.spouseIdCard,
+      spouseAddress: guarantor.spouseAddress,
+      refContractCompany: data.customerInfo.companyName,
+      refContracts: selectedHps.map(hp => ({
+        no: hp.contractNo,
+        date: hp.contractDate,
+        amount: parseFloat(hp.totalAmount.toString().replace(/,/g, '')) || 0
+      })),
+      guaranteeAmountText: thaiBahtText(totalAmount.toString()),
+      guaranteeAmountNumber: totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+    };
+  };
 
   // Build preview tabs: agreements → buyback → guarantee → additional contracts
   const previewTabs: { key: PreviewTab; label: string }[] = [];
-  
+
   data.agreements.forEach((agreement, idx) => {
-    previewTabs.push({ 
-      key: `agreement-${agreement.id}`, 
+    previewTabs.push({
+      key: `agreement-${agreement.id}`,
       label: `${CONTRACT_TYPE_LABELS[agreement.type]} ${data.agreements.filter(a => a.type === agreement.type).length > 1 ? `(${idx + 1})` : ''}`.trim()
     });
   });
@@ -272,15 +287,6 @@ function App() {
     );
   };
 
-  const renderPlaceholderPreview = (title: string) => (
-    <div className="print-page relative flex items-center justify-center">
-      <div className="text-center text-slate-400">
-        <FileText size={48} className="mx-auto mb-4 opacity-50" />
-        <h3 className="text-lg font-semibold">{title}</h3>
-        <p className="text-sm mt-2">Preview จะเพิ่มในภายหลัง</p>
-      </div>
-    </div>
-  );
 
   // Build ContractData for the fee payment preview
   const buildFeeContractData = (): ContractData => ({
@@ -334,13 +340,12 @@ function App() {
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2">
                 {data.agreements.map((agreement, idx) => (
-                  <div 
+                  <div
                     key={agreement.id}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md border transition-all cursor-pointer ${
-                      data.activeAgreementId === agreement.id 
-                        ? 'bg-slate-800 text-white border-slate-800' 
-                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-400'
-                    }`}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md border transition-all cursor-pointer ${data.activeAgreementId === agreement.id
+                      ? 'bg-slate-800 text-white border-slate-800'
+                      : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-400'
+                      }`}
                     onClick={() => updateField('activeAgreementId', agreement.id)}
                   >
                     <FileText size={14} />
@@ -348,7 +353,7 @@ function App() {
                       {CONTRACT_TYPE_LABELS[agreement.type]} {data.agreements.filter(a => a.type === agreement.type).length > 1 ? `(${idx + 1})` : ''}
                     </span>
                     {data.agreements.length > 1 && (
-                      <button 
+                      <button
                         onClick={(e) => { e.stopPropagation(); removeAgreement(agreement.id); }}
                         className="ml-1 hover:text-red-400 transition-colors"
                       >
@@ -358,7 +363,7 @@ function App() {
                   </div>
                 ))}
               </div>
-              
+
               <div className="pt-3 border-t border-slate-100">
                 <p className="text-[11px] font-bold text-slate-400 uppercase mb-2">เพิ่มสัญญาใหม่</p>
                 <div className="grid grid-cols-4 gap-2">
@@ -400,12 +405,11 @@ function App() {
           {/* Step 5: Global Layout (Guarantors, Buyback, etc.) */}
           <div className="space-y-5 border-t-2 border-slate-100 pt-5 mt-5">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest px-1">ข้อมูลประกอบและสัญญาพ่วง</h3>
-            
+
             <GuarantorForm
               data={data.guarantors}
               onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
-              hpDate={hpData?.contractDate || ''}
-              hpNo={hpData?.contractNo || ''}
+              agreements={data.agreements}
             />
 
             <section className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
@@ -441,12 +445,14 @@ function App() {
             <div className="space-y-5">
               <JointVentureForm
                 data={data.jointVentureData}
+                agreements={data.agreements}
                 onChange={(jv: JointVentureData) => updateField('jointVentureData', jv)}
               />
 
               {/* Contract 5: สัญญาจ้างบริการ */}
               <ServiceAgreementForm
                 data={data.serviceAgreementData}
+                appData={data}
                 onChange={(sa: ServiceAgreementData) => updateField('serviceAgreementData', sa)}
               />
 
@@ -476,7 +482,7 @@ function App() {
             </button>
 
             {/* Tabs Container */}
-            <div 
+            <div
               ref={tabsRef}
               onMouseDown={handleMouseDown}
               onMouseLeave={handleMouseLeave}
@@ -520,10 +526,10 @@ function App() {
         <div className="flex-1 p-6 print:p-0 flex flex-col items-center">
           <div className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0">
             {activePreview.startsWith('agreement-') && (
-              data.agreements.find(a => `agreement-${a.id}` === activePreview) && 
+              data.agreements.find(a => `agreement-${a.id}` === activePreview) &&
               renderContractPreview(data.agreements.find(a => `agreement-${a.id}` === activePreview)!)
             )}
-            
+
             {activePreview.startsWith('buyback-') && data.hasBuyback && (
               <BuybackPreview
                 data={data.buybackData[parseInt(activePreview.split('-')[1]) || 0]}
@@ -536,8 +542,21 @@ function App() {
             {activePreview.startsWith('guarantee-') && (
               <GuaranteePreview data={buildGuaranteeData(data.guarantors[parseInt(activePreview.split('-')[1]) || 0])} />
             )}
-            {activePreview === 'jointVenture' && renderPlaceholderPreview('สัญญาค้าร่วม')}
-            {activePreview === 'serviceAgreement' && renderPlaceholderPreview('สัญญาจ้างบริการ')}
+            {activePreview === 'jointVenture' && (
+              <JointVenturePreview
+                data={data.jointVentureData}
+                agileInfo={data.agileInfo}
+                tkInfo={data.tkInfo}
+                agreements={data.agreements}
+                appData={data}
+              />
+            )}
+            {activePreview === 'serviceAgreement' && (
+              <ServiceAgreementPreview
+                data={data.serviceAgreementData}
+                appData={data}
+              />
+            )}
             {activePreview === 'feePayment' && (
               <ContractPreview data={buildFeeContractData()} />
             )}

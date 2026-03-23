@@ -105,12 +105,32 @@ function InfoFields({ label, info, onChange, showSearch }: {
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white h-20"
         />
       </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">เบอร์โทรศัพท์</label>
+          <input
+            type="text"
+            value={info.phone}
+            onChange={(e) => handleChange('phone', e.target.value)}
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">จดหมายอิเล็กทรอนิกส์ (E-mail)</label>
+          <input
+            type="text"
+            value={info.email || ''}
+            onChange={(e) => handleChange('email', e.target.value)}
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+          />
+        </div>
+      </div>
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">เบอร์โทรศัพท์</label>
+        <label className="block text-xs font-medium text-gray-600 mb-1">ผู้ติดต่อ</label>
         <input
           type="text"
-          value={info.phone}
-          onChange={(e) => handleChange('phone', e.target.value)}
+          value={info.contactPerson || ''}
+          onChange={(e) => handleChange('contactPerson', e.target.value)}
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
         />
       </div>

@@ -138,11 +138,10 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
             <input
-              type="text"
+              type="date"
               value={data.contractDate}
               onChange={(e) => handleChange('contractDate', e.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-              placeholder="24 มีนาคม 2569"
             />
           </div>
           <div className="col-span-2">

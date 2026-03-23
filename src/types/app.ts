@@ -12,6 +12,8 @@ export interface CompanyInfo {
   address: string;
   taxId: string;
   phone: string;
+  email?: string;
+  contactPerson?: string;
 }
 
 export interface AssetDetail {
@@ -103,8 +105,6 @@ export interface BuybackTableEntry {
 export interface BuybackData {
   contractNo: string;
   contractDate: string;
-  buybackPrice: string;
-  buybackDate: string;
   conditions: string;
   vendorName: string;
   vendorDirectors: string;
@@ -116,11 +116,27 @@ export interface BuybackData {
 export interface JointVentureData {
   contractNo: string;
   contractDate: string;
+  selectedAgreementIds: string[];
+  proportion1: number;
+  proportion2: number;
 }
 
 export interface ServiceAgreementData {
   contractNo: string;
   contractDate: string;
+  selectedAgreementIds: string[];
+  originationFeeTotal: string;
+  serviceFeeTotal: string;
+  firstInstallmentDate: string;
+  lastInstallmentDate: string;
+  agreementFirstDates?: Record<string, string>;
+  agreementInstallmentAmounts?: Record<string, string>;
+  agreementOriginationFeePeriods?: Record<string, number>;
+  agreementServiceFeeFirstDates?: Record<string, string>;
+  agreementServiceFeeAmounts?: Record<string, string>;
+  agreementServiceFeePeriods?: Record<string, number>;
+  serviceFeeRate: string;
+  originationFeeRate: string;
 }
 
 export interface FeePaymentData {
@@ -141,6 +157,7 @@ export interface GuarantorData {
   spouseIdCard: string;
   spouseAddress: string;
   phone?: string;
+  selectedAgreementIds?: string[];
 }
 
 export interface Agreement {
@@ -165,6 +182,8 @@ export interface AppData {
 }
 
 // --- Constants & Initial Data ---
+
+const TODAY = new Date().toISOString().split('T')[0];
 
 export const CONTRACT_TYPE_LABELS: Record<ContractType, string> = {
   hirePurchase: 'สัญญาเช่าซื้อ',
@@ -206,7 +225,7 @@ export const initialAppData: AppData = {
       type: 'hirePurchase',
       data: {
         contractNo: 'AGA/81-LA2026',
-        contractDate: '24 มีนาคม 2569',
+        contractDate: TODAY,
         madeAt: 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด',
         lessor1: {
           name: 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด',
@@ -276,9 +295,7 @@ export const initialAppData: AppData = {
   buybackData: [
     {
       contractNo: '',
-      contractDate: '24 มีนาคม 2569',
-      buybackPrice: '',
-      buybackDate: '',
+      contractDate: TODAY,
       conditions: '',
       vendorName: '',
       vendorDirectors: '',
@@ -298,7 +315,7 @@ export const initialAppData: AppData = {
     {
       id: '1',
       contractNo: 'AGA/81-LA2026-G1',
-      contractDate: '24 มีนาคม 2569',
+      contractDate: TODAY,
       guarantorName: 'นายทวีป คล้ายสุบรรณ์',
       guarantorIdCard: 'x-xxxx-xxxxx-xx-x',
       guarantorAddress: '...',
@@ -307,10 +324,33 @@ export const initialAppData: AppData = {
       spouseIdCard: '',
       spouseAddress: '',
       phone: '',
+      selectedAgreementIds: ['initial-hp'],
     },
   ],
 
-  jointVentureData: { contractNo: '', contractDate: '' },
-  serviceAgreementData: { contractNo: '', contractDate: '' },
-  feePaymentData: { contractNo: '', effectiveDate: '', items: [] },
+  jointVentureData: { 
+    contractNo: 'AGA/08-CON032026', 
+    contractDate: '2026-03-20',
+    selectedAgreementIds: ['initial-hp'],
+    proportion1: 20,
+    proportion2: 80,
+  },
+  serviceAgreementData: {
+    contractNo: '',
+    contractDate: TODAY,
+    selectedAgreementIds: ['initial-hp'],
+    originationFeeTotal: '0',
+    serviceFeeTotal: '0',
+    firstInstallmentDate: '2026-04-28',
+    lastInstallmentDate: '2030-06-28',
+    agreementFirstDates: { 'initial-hp': '2026-07-28' },
+    agreementInstallmentAmounts: { 'initial-hp': '70,480.04' },
+    agreementOriginationFeePeriods: { 'initial-hp': 0 },
+    agreementServiceFeeFirstDates: { 'initial-hp': '2026-07-28' },
+    agreementServiceFeeAmounts: { 'initial-hp': '14,096.01' },
+    agreementServiceFeePeriods: { 'initial-hp': 0 },
+    serviceFeeRate: '0.90',
+    originationFeeRate: '2.25'
+  },
+  feePaymentData: { contractNo: '', effectiveDate: TODAY, items: [] },
 };

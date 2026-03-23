@@ -2,6 +2,7 @@ import PageHeader from './PageHeader';
 import type { HirePurchaseData, CompanyInfo, CollateralAsset, GuarantorData } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { thaiNumberText } from '../utils/thaiNumberText';
+import { formatThaiDate } from '../utils/thaiDate';
 
 interface Props {
   data: HirePurchaseData;
@@ -47,27 +48,6 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
   const totalAmountFormatted = totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   const totalAmountThai = thaiBahtText(totalAmountFormatted);
 
-  const formatThaiDate = (dateString: string) => {
-    if (!dateString) return '';
-
-    let date = new Date(dateString);
-    if (dateString.includes('/')) {
-      const parts = dateString.split('/');
-      if (parts.length === 3) {
-        let year = parseInt(parts[2]);
-        if (year > 2500) year -= 543;
-        date = new Date(year, parseInt(parts[1]) - 1, parseInt(parts[0]));
-      }
-    }
-
-    if (isNaN(date.getTime())) return dateString;
-
-    const days = date.getDate();
-    const months = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
-    const month = months[date.getMonth()];
-    const year = date.getFullYear() + 543;
-    return `${days} ${month} ${year}`;
-  };
 
   const formatCurrency = (value: string | number) => {
     if (!value) return '';
@@ -153,7 +133,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
         </div>
 
         <div className="indent-10 mb-6 font-bold">
-          สัญญาเช่าซื้อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{data.madeAt}</Highlight> เมื่อวันที่ <Highlight>{data.contractDate}</Highlight> โดยและระหว่าง:
+          สัญญาเช่าซื้อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{data.madeAt}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง:
         </div>
 
         <div className="space-y-4 mb-6">
@@ -999,7 +979,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
         </div>
 
         <div className="mb-4 text-justify">
-          เอกสารฉบับนี้เป็นส่วนหนึ่งของสัญญาเช่าซื้อเลขที่ <Highlight>{data.contractNo} ลงวันที่ {data.contractDate}</Highlight> โดยคู่สัญญาทุกฝ่ายตกลงและยืนยัน ดังนี้
+          เอกสารฉบับนี้เป็นส่วนหนึ่งของสัญญาเช่าซื้อเลขที่ <Highlight>{data.contractNo} ลงวันที่ {formatThaiDate(data.contractDate)}</Highlight> โดยคู่สัญญาทุกฝ่ายตกลงและยืนยัน ดังนี้
         </div>
 
         <div className="space-y-2 mb-6 text-justify">
