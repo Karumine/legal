@@ -139,7 +139,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         </div>
 
         <div className="indent-10 mb-6 font-bold">
-          สัญญาเช่าซื้อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{data.madeAt}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง:
+          สัญญาเช่าซื้อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง:
         </div>
 
         <div className="space-y-4 mb-6">

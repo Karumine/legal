@@ -23,7 +23,7 @@ const contractTypes: { key: ContractType; label: string; icon: React.ReactNode; 
   },
   {
     key: 'loan',
-    label: 'สัญญากู้ยืม',
+    label: 'สัญญาให้สินเชื่อ',
     icon: <Landmark size={20} />,
     color: 'border-slate-200 hover:border-purple-300',
     activeColor: 'border-purple-500 bg-purple-50',
