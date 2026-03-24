@@ -1,3 +1,14 @@
+export interface GuarantorInfo {
+  name: string;
+  idCard: string;
+  address: string;
+  phone: string;
+  isMarried: boolean;
+  spouseName: string;
+  spouseIdCard: string;
+  spouseAddress: string;
+}
+
 export interface GuaranteeData {
   contractNo: string;
   effectiveDate: string;
@@ -16,21 +27,13 @@ export interface GuaranteeData {
   borrowerTaxId: string;
   borrowerPhone: string;
 
-  // Party 3 (Guarantor)
-  guarantorName: string; // นายวชิระ ตาแหวน
-  guarantorIdCard: string; // 3 4004 00412 18 8
-  guarantorAddress: string;
-  guarantorPhone: string;
-
-  // Marital Status
-  isMarried: boolean;
-  spouseName: string;
-  spouseIdCard: string;
-  spouseAddress: string;
+  // Party 3 (Guarantors)
+  guarantors: GuarantorInfo[];
 
   // Reference Contract Details
   refContractCompany: string; // บริษัท น้ำดื่มขอนแก่น จำกัด
   refContracts: {
+    type: string;
     no: string;
     date: string;
     amount: number;
@@ -55,19 +58,23 @@ export const initialGuaranteeData: GuaranteeData = {
   borrowerTaxId: '0107546000130',
   borrowerPhone: '02-310-7000',
 
-  guarantorName: 'นายวชิระ ตาแหวน',
-  guarantorIdCard: '3 4004 00412 18 8',
-  guarantorAddress: 'เลขที่ 98/109 หมู่ที่ 6 ตำบลคลองสาม อำเภอคลองหลวง จังหวัดปทุมธานี',
-  guarantorPhone: '',
-
-  isMarried: false,
-  spouseName: 'นางสาวนงคราญ สายโอราช',
-  spouseIdCard: '1 2345 67890 12 3',
-  spouseAddress: 'เลขที่ 18/40 หมู่ที่ 5 ตำบลคลองสาม อำเภอคลองหลวง จังหวัดปทุมธานี',
+  // Party 3 (Guarantors)
+  guarantors: [
+    {
+      name: 'นายวชิระ ตาแหวน',
+      idCard: '3 4004 00412 18 8',
+      address: 'เลขที่ 98/109 หมู่ที่ 6 ตำบลคลองสาม อำเภอคลองหลวง จังหวัดปทุมธานี',
+      phone: '',
+      isMarried: false,
+      spouseName: 'นางสาวนงคราญ สายโอราช',
+      spouseIdCard: '1 2345 67890 12 3',
+      spouseAddress: 'เลขที่ 18/40 หมู่ที่ 5 ตำบลคลองสาม อำเภอคลองหลวง จังหวัดปทุมธานี',
+    }
+  ],
 
   refContractCompany: 'บริษัท น้ำดื่มขอนแก่น จำกัด',
   refContracts: [
-    { no: 'AGA/73-LA2025', date: '20 สิงหาคม 2568', amount: 22620656 }
+    { type: 'hirePurchase', no: 'AGA/73-LA2025', date: '20 สิงหาคม 2568', amount: 22620656 }
   ],
   guaranteeAmountText: 'ยี่สิบสองล้านหกแสนสองหมื่นหกร้อยห้าสิบหกบาทถ้วน',
   guaranteeAmountNumber: '22,620,656',

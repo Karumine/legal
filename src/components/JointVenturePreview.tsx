@@ -182,7 +182,14 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
     return acc + (hasPart2 ? 1 : 0) + (needsExtraPageForText ? 1 : 0);
   }, 0);
 
-  const totalPagesCount = 13 + 3 + selectedAgreements.length + 1 + selectedAgreements.length + serviceFeeAdditionalPages + 1 + 1;
+  const p12 = saData.agreementOriginationFeePeriods?.[selectedAgreements[1]?.id] || 0;
+  const p13 = saData.agreementOriginationFeePeriods?.[selectedAgreements[2]?.id] || 0;
+  const origFeePagesCount = selectedAgreements.length === 0 ? 0 :
+                            selectedAgreements.length === 1 ? 1 :
+                            selectedAgreements.length === 2 ? 2 :
+                            (p12 > 6 || p13 > 6 ? 3 : 2);
+
+  const totalPagesCount = 13 + 3 + origFeePagesCount + 1 + selectedAgreements.length + serviceFeeAdditionalPages + 1 + 1;
 
   // Create the referenced agreements string
   const agreementRefs = selectedAgreements.map((a, idx) => {
@@ -1064,47 +1071,73 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageFooter pageNum={16} />
       </div>
 
-      {/* Page Break for Print */}
-      <div className="hidden print:block page-break"></div>
+      {/* Annex No. 2: Origination Fee (Consolidated/Split) */}
+      {(() => {
+        const p12_val = saData.agreementOriginationFeePeriods?.[selectedAgreements[1]?.id] || 0;
+        const p13_val = saData.agreementOriginationFeePeriods?.[selectedAgreements[2]?.id] || 0;
+        const split_13 = selectedAgreements.length >= 3 && (p12_val > 6 || p13_val > 6);
 
-      {/* Annex No. 2: Fee Details - Item 1 (Origination Fee) */}
-      {selectedAgreements.map((agreement, idx) => (
-        <div key={`orig-fee-${agreement.id}`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-          <PageHeader />
-          {idx === 0 && (
-            <div className="text-center font-bold mb-8">
-              <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 2</div>
-              <div className="text-[14px]">ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ (Fees)</div>
-            </div>
-          )}
+        const pagesData: any[][] = [[selectedAgreements[0]]]; // Page 1: 1.1
+        if (selectedAgreements.length >= 2) {
+          pagesData.push([selectedAgreements[1]]); // Page 2: 1.2
+          if (selectedAgreements.length >= 3) {
+            if (split_13) {
+              pagesData.push([selectedAgreements[2]]); // Page 3: 1.3
+            } else {
+              pagesData[1].push(selectedAgreements[2]); // Page 2: 1.2 + 1.3
+            }
+          }
+        }
 
-          <div className="space-y-6 font-normal">
-            {idx === 0 ? (
-              <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
-                <span className="font-bold underline text-[13px]">1.</span>
-                <div className="space-y-4">
-                  <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
-                  <div className="text-justify leading-loose text-[12px]">
-                    เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง ในอัตราร้อยละ {saData.originationFeeRate} ({translateRateToThai(saData.originationFeeRate)}) ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน โดยมีรายละเอียดการชำระเงินของแต่ละสัญญาทางการเงิน ดังนี้
-                  </div>
-                </div>
+        return pagesData.map((agreementsInPage, pageIdx) => {
+          const basePageNum = 17 + pageIdx;
+          return (
+            <div key={`orig-fee-page-${pageIdx}`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+              <PageHeader />
+              <div className="space-y-6 font-normal">
+                {agreementsInPage.map((agreement, groupIdx) => {
+                  const itemsInDocIdx = selectedAgreements.findIndex(a => a.id === agreement.id);
+                  const isFirstOfAll = itemsInDocIdx === 0;
+
+                  return (
+                    <div key={`orig-fee-content-${agreement.id}`} className="space-y-4">
+                      {isFirstOfAll ? (
+                        <div className="text-center font-bold mb-8">
+                          <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 2</div>
+                          <div className="text-[14px]">ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ (Fees)</div>
+                          <div className="grid grid-cols-[30px_1fr] gap-2 pt-4 text-left font-normal">
+                            <span className="font-bold underline text-[13px]">1.</span>
+                            <div className="space-y-4">
+                              <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
+                              <div className="text-justify leading-loose text-[12px]">
+                                เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง ในอัตราร้อยละ {saData.originationFeeRate} ({translateRateToThai(saData.originationFeeRate)}) ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน โดยมีรายละเอียดการชำระเงินของแต่ละสัญญาทางการเงิน ดังนี้
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        groupIdx === 0 && (
+                          <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
+                            <div />
+                            <div className="text-justify">
+                              <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee) - (ต่อ)</span>
+                            </div>
+                          </div>
+                        )
+                      )}
+
+                      <div className="pl-8 mt-4">
+                        {renderAgreementTable(agreement, itemsInDocIdx)}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            ) : (
-              <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
-                <div />
-                <div className="text-justify">
-                  <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee) - (ต่อ)</span>
-                </div>
-              </div>
-            )}
-
-            <div className="pl-8 mt-4">
-              {renderAgreementTable(agreement, idx)}
+              <PageFooter pageNum={basePageNum} />
             </div>
-          </div>
-          <PageFooter pageNum={17 + idx} />
-        </div>
-      ))}
+          );
+        });
+      })()}
 
       {/* Next Page: Annex No. 2 Item 2 (Service Fee) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
@@ -1131,7 +1164,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           </div>
         </div>
 
-        <PageFooter pageNum={17 + selectedAgreements.length} />
+        <PageFooter pageNum={17 + origFeePagesCount} />
       </div>
 
       {/* Pages 19/20+: Service Fee Schedules per contract */}
@@ -1156,7 +1189,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             const periods = saData.agreementServiceFeePeriods?.[agreement.id] || 0;
             const needsExtraPageForText = isLastAgreement && periods > 48 && !part2;
 
-            const basePageNum = 17 + selectedAgreements.length + 1 + idx + currentPageOffset;
+            const basePageNum = 17 + origFeePagesCount + 1 + idx + currentPageOffset;
             const pages = [];
 
             // Page 1 for this agreement
