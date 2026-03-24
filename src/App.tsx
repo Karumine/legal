@@ -145,7 +145,7 @@ function App() {
     const newAgreement: Agreement = {
       id,
       type,
-      data: type === 'hirePurchase' ? { ...initialAppData.agreements[0].data, contractNo: '' } : {}
+      data: (type === 'hirePurchase' || type === 'hirePurchaseBack') ? { ...initialAppData.agreements[0].data, contractNo: '' } : {}
     };
     setData(prev => ({
       ...prev,
@@ -175,7 +175,7 @@ function App() {
       ...prev,
       agileInfo: info,
       agreements: prev.agreements.map(a =>
-        a.type === 'hirePurchase'
+        a.type === 'hirePurchase' || a.type === 'hirePurchaseBack'
           ? { ...a, data: { ...a.data, lessor1: { ...a.data.lessor1, name: info.companyName, taxId: info.taxId, address: info.address }, lessor1Signatories: info.directors } }
           : a
       )
@@ -187,7 +187,7 @@ function App() {
       ...prev,
       tkInfo: info,
       agreements: prev.agreements.map(a =>
-        a.type === 'hirePurchase'
+        a.type === 'hirePurchase' || a.type === 'hirePurchaseBack'
           ? { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address }, lessor2Signatories: info.directors } }
           : a
       )
@@ -195,7 +195,7 @@ function App() {
   };
 
   const activeAgreement = data.agreements.find(a => a.id === data.activeAgreementId) || data.agreements[0];
-  const hpData = activeAgreement?.type === 'hirePurchase' ? activeAgreement.data : data.agreements.find(a => a.type === 'hirePurchase')?.data;
+  const hpData = (activeAgreement?.type === 'hirePurchase' || activeAgreement?.type === 'hirePurchaseBack') ? activeAgreement.data : data.agreements.find(a => a.type === 'hirePurchase' || a.type === 'hirePurchaseBack')?.data;
 
   // Build GuaranteeData from AppData and multiple GuarantorData
   const buildGuaranteeData = (guarantors: GuarantorData[]): GuaranteeData => {
@@ -273,12 +273,13 @@ function App() {
   previewTabs.push({ key: 'feePayment', label: 'สัญญาชำระค่าธรรมเนียม' });
 
   const renderContractPreview = (agreement: Agreement) => {
-    if (agreement.type === 'hirePurchase') {
+    if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
       return (
         <HirePurchasePreview
           data={agreement.data}
           customerInfo={data.customerInfo}
           guarantors={data.guarantors}
+          type={agreement.type}
         />
       );
     }
@@ -391,13 +392,13 @@ function App() {
           {/* Step 4: Active Agreement Form */}
           {activeAgreement && (
             <div className="space-y-5">
-              {activeAgreement.type === 'hirePurchase' && (
+              {(activeAgreement.type === 'hirePurchase' || activeAgreement.type === 'hirePurchaseBack') && (
                 <HirePurchaseForm
                   data={activeAgreement.data}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
                 />
               )}
-              {activeAgreement.type !== 'hirePurchase' && (
+              {activeAgreement.type !== 'hirePurchase' && activeAgreement.type !== 'hirePurchaseBack' && (
                 <section className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
                   <div className="text-center py-8 text-slate-400">
                     <FileText size={32} className="mx-auto mb-2 opacity-50" />
