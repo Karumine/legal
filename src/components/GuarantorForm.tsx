@@ -1,5 +1,7 @@
+import { useEffect, useRef } from 'react';
 import { Copy, Plus, Trash2, UserPlus, CheckSquare } from 'lucide-react';
-import type { GuarantorData, Agreement, HirePurchaseData } from '../types/app';
+import type { GuarantorData, Agreement } from '../types/app';
+import { CONTRACT_TYPE_LABELS } from '../types/app';
 
 interface Props {
   data: GuarantorData[];
@@ -8,7 +10,33 @@ interface Props {
 }
 
 export default function GuarantorForm({ data, onChange, agreements }: Props) {
-  const hpAgreements = agreements.filter(a => a.type === 'hirePurchase');
+  const prevAgreementsRef = useRef<string[]>([]);
+  const mainAgreements = agreements; // Show all main contracts as requested
+
+  // Auto-select ONLY newly added agreements for ALL guarantors
+  useEffect(() => {
+    const currentIds = mainAgreements.map(a => a.id);
+    const newIds = currentIds.filter(id => !prevAgreementsRef.current.includes(id));
+
+    if (newIds.length > 0) {
+      const newData = data.map(guarantor => {
+        const toSelect = newIds.filter(id => !(guarantor.selectedAgreementIds || []).includes(id));
+        if (toSelect.length > 0) {
+          return {
+            ...guarantor,
+            selectedAgreementIds: [...(guarantor.selectedAgreementIds || []), ...toSelect]
+          };
+        }
+        return guarantor;
+      });
+      
+      const hasChanged = newData.some((g, i) => g !== data[i]);
+      if (hasChanged) {
+        onChange(newData);
+      }
+    }
+    prevAgreementsRef.current = currentIds;
+  }, [mainAgreements, data, onChange]);
 
   const updateGuarantor = (id: string, field: keyof GuarantorData, value: any) => {
     onChange(
@@ -20,7 +48,7 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
     const newGuarantor: GuarantorData = {
       id: Date.now().toString(),
       contractNo: `AGA/XX-SUR`,
-      contractDate: hpAgreements[0]?.data.contractDate || '',
+      contractDate: mainAgreements[0]?.data.contractDate || '',
       guarantorName: '',
       guarantorIdCard: '',
       guarantorAddress: '',
@@ -28,7 +56,7 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
       spouseName: '',
       spouseIdCard: '',
       spouseAddress: '',
-      selectedAgreementIds: hpAgreements.map(a => a.id), // Default to all
+      selectedAgreementIds: mainAgreements.map(a => a.id), // Default to all
     };
     onChange([...data, newGuarantor]);
   };
@@ -89,26 +117,26 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
             <div className="space-y-4">
               {/* Contract Selection */}
               <div className="pb-4 border-b border-emerald-100/50">
-                <label className="block text-xs font-bold text-emerald-700 mb-2 flex items-center gap-1">
-                  <CheckSquare size={14} /> เลือกสัญญาหลักที่ค้ำประกัน
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {hpAgreements.map(agreement => {
-                    const hp = agreement.data as HirePurchaseData;
+                <label className="block text-xs font-medium text-gray-600 mb-2">เลือกสัญญาหลักที่ค้ำประกัน</label>
+                <div className="space-y-1 border border-gray-300 rounded-md p-2 bg-slate-50/50 mt-1.5">
+                  {mainAgreements.map(agreement => {
+                    const hp = agreement.data as any; // Can be any main contract data
                     const isSelected = (guarantor.selectedAgreementIds || []).includes(agreement.id);
                     return (
-                      <label key={agreement.id} className={`flex items-center gap-2 p-2 rounded border cursor-pointer transition-all ${isSelected ? 'bg-emerald-100 border-emerald-300' : 'bg-white border-gray-400 hover:border-emerald-200'}`}>
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => toggleAgreement(guarantor.id, agreement.id)}
-                          className="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
-                        />
-                        <div className="flex flex-col">
-                          <span className="text-[11px] font-bold text-gray-700">{hp.contractNo || 'ยังไม่มีเลขที่'}</span>
-                          <span className="text-[10px] text-gray-500">{hp.totalAmount} บาท</span>
-                        </div>
-                      </label>
+                      <div key={agreement.id} className="flex items-center gap-2 py-1 px-1.5 rounded hover:bg-white transition-colors">
+                        <label className="flex items-center gap-2 text-sm cursor-pointer flex-1">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => toggleAgreement(guarantor.id, agreement.id)}
+                            className="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4"
+                          />
+                          <div className="flex items-center gap-1.5 leading-none">
+                            <span className="font-medium text-gray-700">{CONTRACT_TYPE_LABELS[agreement.type]}</span>
+                            <span className="text-gray-400 text-xs">({hp.contractNo || 'ยังไม่มีเลขที่'})</span>
+                          </div>
+                        </label>
+                      </div>
                     );
                   })}
                 </div>

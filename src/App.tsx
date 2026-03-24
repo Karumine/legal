@@ -197,19 +197,22 @@ function App() {
   const activeAgreement = data.agreements.find(a => a.id === data.activeAgreementId) || data.agreements[0];
   const hpData = activeAgreement?.type === 'hirePurchase' ? activeAgreement.data : data.agreements.find(a => a.type === 'hirePurchase')?.data;
 
-  // Build GuaranteeData from AppData and a specific GuarantorData
-  const buildGuaranteeData = (guarantor: GuarantorData): GuaranteeData => {
-    // Get all selected HP agreements
-    const selectedHps = (guarantor.selectedAgreementIds || [])
+  // Build GuaranteeData from AppData and multiple GuarantorData
+  const buildGuaranteeData = (guarantors: GuarantorData[]): GuaranteeData => {
+    // Get all unique selected agreements across all guarantors
+    const allSelectedIds = Array.from(new Set(guarantors.flatMap(g => g.selectedAgreementIds || [])));
+    const selectedAgreements = allSelectedIds
       .map(id => data.agreements.find(a => a.id === id))
-      .filter(a => a?.type === 'hirePurchase')
-      .map(a => a!.data as HirePurchaseData);
+      .filter((a): a is Agreement => !!a);
 
-    const totalAmount = selectedHps.reduce((sum, hp) => sum + (parseFloat(hp.totalAmount.toString().replace(/,/g, '')) || 0), 0);
+    const totalAmount = selectedAgreements.reduce((sum, a) => {
+      const amountStr = (a.data as any).totalAmount?.toString() || '0';
+      return sum + (parseFloat(amountStr.replace(/,/g, '')) || 0);
+    }, 0);
 
     return {
-      contractNo: guarantor.contractNo || (hpData?.contractNo ? `AGA/XX-SUR` : ''),
-      effectiveDate: guarantor.contractDate || hpData?.contractDate || '',
+      contractNo: guarantors[0]?.contractNo || (hpData?.contractNo ? `AGA/XX-SUR` : ''),
+      effectiveDate: guarantors[0]?.contractDate || hpData?.contractDate || '',
       lenderCompany: data.agileInfo.companyName,
       lenderDirectors: data.agileInfo.directors,
       lenderAddress: data.agileInfo.address,
@@ -223,20 +226,24 @@ function App() {
       borrowerTaxId: data.companyMode === 'agileTK' ? data.tkInfo.taxId : '',
       borrowerPhone: data.companyMode === 'agileTK' ? data.tkInfo.phone : '',
 
-      // Party 3 (Guarantor)
-      guarantorName: guarantor.guarantorName,
-      guarantorIdCard: guarantor.guarantorIdCard,
-      guarantorAddress: guarantor.guarantorAddress,
-      guarantorPhone: guarantor.phone || '',
-      isMarried: guarantor.isMarried,
-      spouseName: guarantor.spouseName,
-      spouseIdCard: guarantor.spouseIdCard,
-      spouseAddress: guarantor.spouseAddress,
+      // Party 3 (Guarantors)
+      guarantors: guarantors.map(g => ({
+        name: g.guarantorName,
+        idCard: g.guarantorIdCard,
+        address: g.guarantorAddress,
+        phone: g.phone || '',
+        isMarried: g.isMarried,
+        spouseName: g.spouseName,
+        spouseIdCard: g.spouseIdCard,
+        spouseAddress: g.spouseAddress,
+      })),
+
       refContractCompany: data.customerInfo.companyName,
-      refContracts: selectedHps.map(hp => ({
-        no: hp.contractNo,
-        date: hp.contractDate,
-        amount: parseFloat(hp.totalAmount.toString().replace(/,/g, '')) || 0
+      refContracts: selectedAgreements.map(a => ({
+        type: a.type,
+        no: (a.data as any).contractNo || '',
+        date: (a.data as any).contractDate || '',
+        amount: parseFloat(((a.data as any).totalAmount || '0').toString().replace(/,/g, '')) || 0
       })),
       guaranteeAmountText: thaiBahtText(totalAmount.toString()),
       guaranteeAmountNumber: totalAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
@@ -258,9 +265,9 @@ function App() {
       previewTabs.push({ key: `buyback-${idx}`, label: `สัญญารับซื้อคืน (${idx + 1})` });
     });
   }
-  (data.guarantors || []).forEach((_, idx) => {
-    previewTabs.push({ key: `guarantee-${idx}`, label: `สัญญาค้ำประกัน (${idx + 1})` });
-  });
+  if (data.guarantors && data.guarantors.length > 0) {
+    previewTabs.push({ key: 'guarantee', label: 'สัญญาค้ำประกัน' });
+  }
   previewTabs.push({ key: 'jointVenture', label: 'สัญญาค้าร่วม' });
   previewTabs.push({ key: 'serviceAgreement', label: 'สัญญาจ้างบริการ' });
   previewTabs.push({ key: 'feePayment', label: 'สัญญาชำระค่าธรรมเนียม' });
@@ -445,7 +452,6 @@ function App() {
             <div className="space-y-5">
               <JointVentureForm
                 data={data.jointVentureData}
-                agreements={data.agreements}
                 onChange={(jv: JointVentureData) => updateField('jointVentureData', jv)}
               />
 
@@ -459,6 +465,7 @@ function App() {
               {/* Contract 6: สัญญาชำระค่าธรรมเนียม */}
               <FeePaymentForm
                 data={data.feePaymentData}
+                agreements={data.agreements}
                 onChange={(fp: FeePaymentData) => updateField('feePaymentData', fp)}
               />
             </div>
@@ -539,8 +546,8 @@ function App() {
                 customerInfo={data.customerInfo}
               />
             )}
-            {activePreview.startsWith('guarantee-') && (
-              <GuaranteePreview data={buildGuaranteeData(data.guarantors[parseInt(activePreview.split('-')[1]) || 0])} />
+            {activePreview === 'guarantee' && data.guarantors.length > 0 && (
+              <GuaranteePreview data={buildGuaranteeData(data.guarantors)} />
             )}
             {activePreview === 'jointVenture' && (
               <JointVenturePreview

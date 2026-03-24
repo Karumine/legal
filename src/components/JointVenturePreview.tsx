@@ -30,7 +30,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
 
   const saData = appData.serviceAgreementData;
-  const selectedAgreements = agreements.filter(a => (data.selectedAgreementIds || []).includes(a.id));
+  const selectedAgreements = agreements.filter(a => (saData.selectedAgreementIds || []).includes(a.id));
 
   const renderServiceFeeTable = (agreement: any, agreeIdx: number) => {
     const label = CONTRACT_TYPE_LABELS[agreement.type as ContractType] || agreement.type;
@@ -88,7 +88,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
       </table>
     );
 
-    const rowsPage1Column1 = periods > 48 ? 24 : Math.ceil(periods / 2);
+    const rowsPage1Column1 = periods > 60 ? 24 : Math.ceil(periods / 2);
 
     const part1 = (
       <div className="space-y-3">
@@ -97,18 +97,18 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         </div>
         <div className={periods > 1 ? "grid grid-cols-2 gap-4" : "w-1/2"}>
           <div>{renderColumn(1, rowsPage1Column1)}</div>
-          {periods > 1 && <div>{renderColumn(rowsPage1Column1 + 1, Math.min(periods, 48))}</div>}
+          {periods > 1 && <div>{renderColumn(rowsPage1Column1 + 1, Math.min(periods, periods > 60 ? 48 : 60))}</div>}
         </div>
       </div>
     );
 
-    const part2 = periods > 48 ? (
+    const part2 = periods > 60 ? (
       <div className="space-y-3">
         <div className="font-normal text-justify opacity-50">
           (ต่อ) 2.{agreeIdx + 1} {label} เลขที่ {agreement.data.contractNo}
         </div>
         <div className="w-1/2">
-          {renderColumn(49, 72)}
+          {renderColumn(49, periods)}
         </div>
       </div>
     ) : null;
@@ -174,12 +174,22 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
     );
   };
 
-  const serviceFeeAdditionalPages = selectedAgreements.reduce((acc, a) => {
+  const serviceFeeAdditionalPages = selectedAgreements.reduce((acc, a, idx) => {
     const p = saData.agreementServiceFeePeriods?.[a.id] || 0;
-    return acc + (p > 48 ? 1 : 0);
+    const isLast = idx === selectedAgreements.length - 1;
+    const hasPart2 = p > 60;
+    const needsExtraPageForText = isLast && p > 48 && !hasPart2;
+    return acc + (hasPart2 ? 1 : 0) + (needsExtraPageForText ? 1 : 0);
   }, 0);
 
-  const totalPagesCount = 13 + 3 + selectedAgreements.length + 1 + selectedAgreements.length + serviceFeeAdditionalPages + 1;
+  const p12 = saData.agreementOriginationFeePeriods?.[selectedAgreements[1]?.id] || 0;
+  const p13 = saData.agreementOriginationFeePeriods?.[selectedAgreements[2]?.id] || 0;
+  const origFeePagesCount = selectedAgreements.length === 0 ? 0 :
+                            selectedAgreements.length === 1 ? 1 :
+                            selectedAgreements.length === 2 ? 2 :
+                            (p12 > 6 || p13 > 6 ? 3 : 2);
+
+  const totalPagesCount = 13 + 3 + origFeePagesCount + 1 + selectedAgreements.length + serviceFeeAdditionalPages + 1 + 1;
 
   // Create the referenced agreements string
   const agreementRefs = selectedAgreements.map((a, idx) => {
@@ -1061,47 +1071,73 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageFooter pageNum={16} />
       </div>
 
-      {/* Page Break for Print */}
-      <div className="hidden print:block page-break"></div>
+      {/* Annex No. 2: Origination Fee (Consolidated/Split) */}
+      {(() => {
+        const p12_val = saData.agreementOriginationFeePeriods?.[selectedAgreements[1]?.id] || 0;
+        const p13_val = saData.agreementOriginationFeePeriods?.[selectedAgreements[2]?.id] || 0;
+        const split_13 = selectedAgreements.length >= 3 && (p12_val > 6 || p13_val > 6);
 
-      {/* Annex No. 2: Fee Details - Item 1 (Origination Fee) */}
-      {selectedAgreements.map((agreement, idx) => (
-        <div key={`orig-fee-${agreement.id}`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
-          <PageHeader />
-          {idx === 0 && (
-            <div className="text-center font-bold mb-8">
-              <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 2</div>
-              <div className="text-[14px]">ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ (Fees)</div>
-            </div>
-          )}
+        const pagesData: any[][] = [[selectedAgreements[0]]]; // Page 1: 1.1
+        if (selectedAgreements.length >= 2) {
+          pagesData.push([selectedAgreements[1]]); // Page 2: 1.2
+          if (selectedAgreements.length >= 3) {
+            if (split_13) {
+              pagesData.push([selectedAgreements[2]]); // Page 3: 1.3
+            } else {
+              pagesData[1].push(selectedAgreements[2]); // Page 2: 1.2 + 1.3
+            }
+          }
+        }
 
-          <div className="space-y-6 font-normal">
-            {idx === 0 ? (
-              <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
-                <span className="font-bold underline text-[13px]">1.</span>
-                <div className="space-y-4">
-                  <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
-                  <div className="text-justify leading-loose text-[12px]">
-                    เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง ในอัตราร้อยละ {saData.originationFeeRate} ({translateRateToThai(saData.originationFeeRate)}) ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน โดยมีรายละเอียดการชำระเงินของแต่ละสัญญาทางการเงิน ดังนี้
-                  </div>
-                </div>
+        return pagesData.map((agreementsInPage, pageIdx) => {
+          const basePageNum = 17 + pageIdx;
+          return (
+            <div key={`orig-fee-page-${pageIdx}`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+              <PageHeader />
+              <div className="space-y-6 font-normal">
+                {agreementsInPage.map((agreement, groupIdx) => {
+                  const itemsInDocIdx = selectedAgreements.findIndex(a => a.id === agreement.id);
+                  const isFirstOfAll = itemsInDocIdx === 0;
+
+                  return (
+                    <div key={`orig-fee-content-${agreement.id}`} className="space-y-4">
+                      {isFirstOfAll ? (
+                        <div className="text-center font-bold mb-8">
+                          <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 2</div>
+                          <div className="text-[14px]">ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ (Fees)</div>
+                          <div className="grid grid-cols-[30px_1fr] gap-2 pt-4 text-left font-normal">
+                            <span className="font-bold underline text-[13px]">1.</span>
+                            <div className="space-y-4">
+                              <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
+                              <div className="text-justify leading-loose text-[12px]">
+                                เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง ในอัตราร้อยละ {saData.originationFeeRate} ({translateRateToThai(saData.originationFeeRate)}) ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน โดยมีรายละเอียดการชำระเงินของแต่ละสัญญาทางการเงิน ดังนี้
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        groupIdx === 0 && (
+                          <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
+                            <div />
+                            <div className="text-justify">
+                              <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee) - (ต่อ)</span>
+                            </div>
+                          </div>
+                        )
+                      )}
+
+                      <div className="pl-8 mt-4">
+                        {renderAgreementTable(agreement, itemsInDocIdx)}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            ) : (
-              <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
-                <div />
-                <div className="text-justify">
-                  <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee) - (ต่อ)</span>
-                </div>
-              </div>
-            )}
-
-            <div className="pl-8 mt-4">
-              {renderAgreementTable(agreement, idx)}
+              <PageFooter pageNum={basePageNum} />
             </div>
-          </div>
-          <PageFooter pageNum={17 + idx} />
-        </div>
-      ))}
+          );
+        });
+      })()}
 
       {/* Next Page: Annex No. 2 Item 2 (Service Fee) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
@@ -1122,13 +1158,13 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             <div className="text-justify">
               <span className="font-bold underline">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
               <div className="mt-4 leading-loose">
-                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent px-1">ในอัตราร้อยละ {saData.serviceFeeRate} ({translateRateToThai(saData.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent px-1">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบนมาด้วยนี้
+                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent px-1">ในอัตราร้อยละ {saData.serviceFeeRate} ({translateRateToThai(saData.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent px-1">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
               </div>
             </div>
           </div>
         </div>
 
-        <PageFooter pageNum={17 + selectedAgreements.length} />
+        <PageFooter pageNum={17 + origFeePagesCount} />
       </div>
 
       {/* Pages 19/20+: Service Fee Schedules per contract */}
@@ -1147,11 +1183,13 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             </div>
           );
 
-          return selectedAgreements.map((agreement, idx) => {
+          return selectedAgreements.flatMap((agreement, idx) => {
             const { part1, part2 } = renderServiceFeeTable(agreement, idx);
-            const basePageNum = 17 + selectedAgreements.length + 1 + idx + currentPageOffset;
             const isLastAgreement = idx === selectedAgreements.length - 1;
+            const periods = saData.agreementServiceFeePeriods?.[agreement.id] || 0;
+            const needsExtraPageForText = isLastAgreement && periods > 48 && !part2;
 
+            const basePageNum = 17 + origFeePagesCount + 1 + idx + currentPageOffset;
             const pages = [];
 
             // Page 1 for this agreement
@@ -1159,13 +1197,13 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               <div key={`sf-schedule-${agreement.id}-p1`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
                 <PageHeader />
                 {part1}
-                {isLastAgreement && !part2 && renderClosingText()}
+                {isLastAgreement && !part2 && !needsExtraPageForText && renderClosingText()}
                 <PageFooter pageNum={basePageNum} />
               </div>
             );
 
-            // Page 2 for this agreement (if periods > 48)
-            if (part2) {
+            // Page 2 for this agreement (if periods > 60 or if it's the last agreement and needs extra page for text)
+            if (part2 || needsExtraPageForText) {
               currentPageOffset += 1;
               pages.push(
                 <div key={`sf-schedule-${agreement.id}-p2`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
@@ -1230,6 +1268,56 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             </div>
           </div>
         </div>
+        <PageFooter pageNum={totalPagesCount} />
+      </div>
+      {/* Next Page: Annex No. 3 Item 2 (Warranties) */}
+      <div className="hidden print:block page-break"></div>
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+        <PageHeader />
+
+        <div className="pl-8 flex gap-2 pt-4">
+          <span className="shrink-0 font-bold">2.</span>
+          <div className="text-justify">
+            <span className="font-bold underline">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 2</span>
+            <div className="mt-4 leading-loose">
+              ณ วันที่ตามสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ คู่สัญญาฝ่ายที่ 2 ให้คำรับรองและยืนยันว่า
+            </div>
+
+            <div className="mt-4 space-y-4">
+              <div className="flex gap-4">
+                <span className="shrink-0">(ก)</span>
+                <div>
+                  คู่สัญญาฝ่ายที่ 2 เป็นบริษัท[มหาชน]จำกัดที่จัดตั้งขึ้นและดำรงอยู่อย่างถูกต้องตามกฎหมายไทย
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="shrink-0">(ข)</span>
+                <div>
+                  คู่สัญญาฝ่ายที่ 2 มีอำนาจในการเข้าทำสัญญาการปฏิบัติตามสัญญา การจัดทำเอกสาร และการดำเนินการอื่นใดตามที่ระบุไว้ในสัญญาฉบับนี้ ตลอดจนการกระทำต่าง ๆ ที่เกี่ยวเนื่องกับสัญญาฉบับนี้ และการกระทำดังกล่าวไม่ขัดต่อวัตถุประสงค์และข้อบังคับของคู่สัญญาฝ่ายที่ 2
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="shrink-0">(ค)</span>
+                <div>
+                  การที่ผู้ให้บริการเข้าทำสัญญาฉบับนี้หรือปฏิบัติตามความผูกพันใด ๆ ในสัญญาฉบับนี้ ไม่เป็นการขัดแย้งหรือฝ่าฝืนข้อกำหนด เงื่อนไข หรือคำรับรองใด ๆ ในส่วนที่เป็นสาระสำคัญภายใต้สัญญาที่มีนัยสำคัญที่คู่สัญญาฝ่ายที่ 2 ได้ทำหรือให้กับบุคคลอื่น หรือข้อกำหนดหรือเงื่อนไขตามที่ระบุไว้ในการอนุญาต ใบอนุญาต ความเห็นชอบ หรือสิทธิหรือประโยชน์อื่นใดที่คู่สัญญาฝ่ายที่ 2 ได้รับ
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="shrink-0">(ง)</span>
+                <div>
+                  คู่สัญญาฝ่ายที่ 2 ไม่อยู่ในระหว่างการเลิกบริษัทหรือขั้นตอนการฟ้องหรือการดำเนินขบวนการล้มละลาย
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="shrink-0">(จ)</span>
+                <div>
+                  เท่าที่คู่สัญญาฝ่ายที่ 2 ทราบ ไม่มีข้อพิพาททางกฎหมายกับบุคคลใด ๆ และ ทั้งในและนอกศาล ที่มีผลกระทบในทางลบอย่างมีนัยสำคัญต่อการเข้าทำและปฏิบัติตามสัญญาฉบับนี้ และเท่าที่คู่สัญญาฝ่ายที่ 2 ทราบ ไม่มีเหตุ หรือ ข้อขัดแย้ง การถูกฟ้องร้องและการเรียกร้องค่าเสียหายเป็นลายลักษณ์อักษรจากหรือกับบุคคลอื่น ที่ส่งผลกระทบในทางลบอย่างมีนัยสำคัญต่อความสามารถของคู่สัญญาฝ่ายที่ 2 ในการปฏิบัติตามสัญญาฉบับนี้ได้อย่างสมบูรณ์
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <PageFooter pageNum={totalPagesCount} />
       </div>
     </div>

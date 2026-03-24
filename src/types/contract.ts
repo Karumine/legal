@@ -2,6 +2,7 @@ export type ContractItemType = 'hirePurchase' | 'hirePurchaseBack' | 'loanCredit
 
 export interface ContractItem {
   id: string;
+  agreementId?: string;
   type: ContractItemType;
   contractNo: string;
   amount: string;
