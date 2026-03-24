@@ -1,24 +1,15 @@
-import type { JointVentureData, Agreement } from '../types/app';
-import { CONTRACT_TYPE_LABELS } from '../types/app';
+import type { JointVentureData } from '../types/app';
 
 interface Props {
   data: JointVentureData;
-  agreements: Agreement[];
   onChange: (data: JointVentureData) => void;
 }
 
-export default function JointVentureForm({ data, agreements, onChange }: Props) {
+export default function JointVentureForm({ data, onChange }: Props) {
   const handleChange = (field: keyof JointVentureData, value: any) => {
     onChange({ ...data, [field]: value });
   };
 
-  const toggleAgreement = (id: string) => {
-    const selected = data.selectedAgreementIds || [];
-    const nextSelected = selected.includes(id)
-      ? selected.filter(sid => sid !== id)
-      : [...selected, id];
-    handleChange('selectedAgreementIds', nextSelected);
-  };
 
   return (
     <section className="bg-white p-4 rounded-lg shadow-sm border border-amber-200">
@@ -72,31 +63,8 @@ export default function JointVentureForm({ data, agreements, onChange }: Props) 
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-medium text-gray-600 mb-2">เลือกสัญญาที่เกี่ยวข้อง</label>
-          <div className="space-y-2 border border-gray-400 rounded-md p-3 bg-gray-50 max-h-48 overflow-y-auto">
-            {agreements.map((agreement) => (
-              <label key={agreement.id} className="flex items-center gap-3 cursor-pointer hover:bg-white p-1 rounded transition-colors">
-                <input
-                  type="checkbox"
-                  checked={(data.selectedAgreementIds || []).includes(agreement.id)}
-                  onChange={() => toggleAgreement(agreement.id)}
-                  className="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500"
-                />
-                <div className="text-sm">
-                  <span className="font-medium text-gray-700">{agreement.data.contractNo}</span>
-                  <span className="text-gray-400 mx-2">|</span>
-                  <span className="text-gray-500">{CONTRACT_TYPE_LABELS[agreement.type as keyof typeof CONTRACT_TYPE_LABELS] || agreement.type}</span>
-                </div>
-              </label>
-            ))}
-            {agreements.length === 0 && (
-              <p className="text-xs text-gray-400 italic text-center py-2">ยังไม่มีรายการสัญญาในระบบ</p>
-            )}
-          </div>
         </div>
-      </div>
-    </section>
+      </section>
   );
 }
 

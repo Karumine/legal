@@ -57,9 +57,12 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     return `${label} เลขที่ ${a.data.contractNo}`;
   }).join(' , ');
 
-  const serviceFeeAdditionalPages = selectedAgreements.reduce((acc, a) => {
+  const serviceFeeAdditionalPages = selectedAgreements.reduce((acc, a, idx) => {
     const p = data.agreementServiceFeePeriods?.[a.id] || 0;
-    return acc + (p > 48 ? 1 : 0);
+    const isLast = idx === selectedAgreements.length - 1;
+    const hasPart2 = p > 60;
+    const needsExtraPageForText = isLast && p > 48 && !hasPart2;
+    return acc + (hasPart2 ? 1 : 0) + (needsExtraPageForText ? 1 : 0);
   }, 0);
   const totalPages = 6 + 2 * selectedAgreements.length + serviceFeeAdditionalPages;
 
@@ -119,7 +122,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
       </table>
     );
 
-    const rowsPage1Column1 = periods > 48 ? 24 : Math.ceil(periods / 2);
+    const rowsPage1Column1 = periods > 60 ? 24 : Math.ceil(periods / 2);
 
     const part1 = (
       <div className="space-y-3">
@@ -128,18 +131,18 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
         </div>
         <div className={periods > 1 ? "grid grid-cols-2 gap-4" : "w-1/2"}>
           <div>{renderColumn(1, rowsPage1Column1)}</div>
-          {periods > 1 && <div>{renderColumn(rowsPage1Column1 + 1, Math.min(periods, 48))}</div>}
+          {periods > 1 && <div>{renderColumn(rowsPage1Column1 + 1, Math.min(periods, periods > 60 ? 48 : 60))}</div>}
         </div>
       </div>
     );
 
-    const part2 = periods > 48 ? (
+    const part2 = periods > 60 ? (
       <div className="space-y-3">
         <div className="font-normal text-justify opacity-50">
           (ต่อ) 2.{agreeIdx + 1} {label} เลขที่ {agreement.data.contractNo}
         </div>
         <div className="w-1/2">
-          {renderColumn(49, 72)}
+          {renderColumn(49, periods)}
         </div>
       </div>
     ) : null;
@@ -586,7 +589,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
             <div className="text-justify">
               <span className="font-bold underline">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
               <div className="mt-4 leading-loose">
-                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent px-1">ในอัตราร้อยละ {data.serviceFeeRate} ({translateRateToThai(data.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent px-1">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบนมาด้วยนี้
+                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent px-1">ในอัตราร้อยละ {data.serviceFeeRate} ({translateRateToThai(data.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent px-1">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
               </div>
             </div>
           </div>
@@ -613,11 +616,13 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
           </div>
         );
 
-        return selectedAgreements.map((agreement, idx) => {
+        return selectedAgreements.flatMap((agreement, idx) => {
           const { part1, part2 } = renderServiceFeeTable(agreement, idx);
-            const basePageNum = 6 + selectedAgreements.length + 1 + idx + currentPageOffset;
           const isLastAgreement = idx === selectedAgreements.length - 1;
-          
+          const periods = data.agreementServiceFeePeriods?.[agreement.id] || 0;
+          const needsExtraPageForText = isLastAgreement && periods > 48 && !part2;
+
+          const basePageNum = 6 + selectedAgreements.length + 1 + idx + currentPageOffset;
           const pages = [];
           
           // Page 1 for this agreement
@@ -625,7 +630,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
             <div key={`sf-schedule-${agreement.id}-p1`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
               <PageHeader />
               {part1}
-              {isLastAgreement && !part2 && renderClosingText()}
+              {isLastAgreement && !part2 && !needsExtraPageForText && renderClosingText()}
               <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
                 <div>สัญญาจ้างบริการ</div>
                 <div>หน้า {basePageNum} จาก {totalPages}</div>
@@ -633,8 +638,8 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
             </div>
           );
 
-          // Page 2 for this agreement (if periods > 48)
-          if (part2) {
+          // Page 2 for this agreement (if periods > 60 or if it's the last agreement and needs extra page for text)
+          if (part2 || needsExtraPageForText) {
             currentPageOffset += 1;
             pages.push(
               <div key={`sf-schedule-${agreement.id}-p2`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">

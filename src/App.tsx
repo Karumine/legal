@@ -446,6 +446,7 @@ function App() {
               <JointVentureForm
                 data={data.jointVentureData}
                 agreements={data.agreements}
+                appData={data}
                 onChange={(jv: JointVentureData) => updateField('jointVentureData', jv)}
               />
 
