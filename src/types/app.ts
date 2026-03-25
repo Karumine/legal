@@ -121,6 +121,40 @@ export interface JointVentureData {
   proportion2: number;
 }
 
+export interface CreditFacilityData {
+  contractNo: string;
+  contractDate: string;
+  madeAt: string;
+  effectiveDate: string;
+
+  // Lenders (Credit Providers)
+  lender1: LessorInfo;
+  lender2: LessorInfo;
+
+  // Borrower is customerInfo from AppData
+
+  // Terms
+  loanAmount: string;
+  installments: string;
+  installmentAmount: string;
+  interestRate: string;
+  businessPurpose: string;
+  firstInstallmentDate: string;
+  paymentDay: string;
+  lastInstallmentDate: string;
+  
+  // Collateral
+  collateralAssets: CollateralAsset[];
+  collateralValue: string;
+  
+  stampDuty: string;
+
+  // Signatories
+  lender1Signatories: string;
+  lender2Signatories: string;
+  borrowerSignatories: string;
+}
+
 export interface ServiceAgreementData {
   contractNo: string;
   contractDate: string;
@@ -183,12 +217,12 @@ export interface AppData {
 
 // --- Constants & Initial Data ---
 
-const TODAY = new Date().toISOString().split('T')[0];
+export const TODAY = new Date().toISOString().split('T')[0];
 
 export const CONTRACT_TYPE_LABELS: Record<ContractType, string> = {
   hirePurchase: 'สัญญาเช่าซื้อ',
   hirePurchaseBack: 'สัญญาเช่าซื้อกลับ',
-  loan: 'สัญญากู้ยืม',
+  loan: 'สัญญาให้สินเชื่อ',
   od: 'OD',
 };
 

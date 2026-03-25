@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Printer, FileText, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
-import { initialAppData, CONTRACT_TYPE_LABELS } from './types/app';
+import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, BuybackData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
 import CompanyInfoForm from './components/CompanyInfoForm';
@@ -16,6 +16,8 @@ import ServiceAgreementForm from './components/ServiceAgreementForm';
 import ServiceAgreementPreview from './components/ServiceAgreementPreview';
 import FeePaymentForm from './components/FeePaymentForm';
 import ContractPreview from './components/ContractPreview';
+import CreditFacilityForm from './components/CreditFacilityForm';
+import CreditFacilityPreview from './components/CreditFacilityPreview';
 import type { GuaranteeData } from './types/guarantee';
 import type { ContractData } from './types/contract';
 import { thaiBahtText } from './utils/thaiBahtText';
@@ -145,7 +147,27 @@ function App() {
     const newAgreement: Agreement = {
       id,
       type,
-      data: type === 'hirePurchase' ? { ...initialAppData.agreements[0].data, contractNo: '' } : {}
+      data: (type === 'hirePurchase' || type === 'hirePurchaseBack')
+        ? { ...initialAppData.agreements[0].data, contractNo: '' }
+        : (type === 'loan')
+          ? {
+            contractNo: '',
+            contractDate: TODAY,
+            madeAt: data.agileInfo.companyName,
+            effectiveDate: TODAY,
+            lender1: { name: data.agileInfo.companyName, taxId: data.agileInfo.taxId, address: data.agileInfo.address, proportion: '20' },
+            lender2: { name: data.tkInfo.companyName, taxId: data.tkInfo.taxId, address: data.tkInfo.address, proportion: '80' },
+            loanAmount: '0',
+            installments: '48',
+            interestRate: '9',
+            businessPurpose: '',
+            collateralValue: '0',
+            collateralAssets: [],
+            lender1Signatories: data.agileInfo.directors,
+            lender2Signatories: data.tkInfo.directors,
+            borrowerSignatories: data.customerInfo.directors
+          }
+          : {}
     };
     setData(prev => ({
       ...prev,
@@ -174,11 +196,15 @@ function App() {
     setData(prev => ({
       ...prev,
       agileInfo: info,
-      agreements: prev.agreements.map(a =>
-        a.type === 'hirePurchase'
-          ? { ...a, data: { ...a.data, lessor1: { ...a.data.lessor1, name: info.companyName, taxId: info.taxId, address: info.address }, lessor1Signatories: info.directors } }
-          : a
-      )
+      agreements: prev.agreements.map(a => {
+        if (a.type === 'hirePurchase' || a.type === 'hirePurchaseBack') {
+          return { ...a, data: { ...a.data, lessor1: { ...a.data.lessor1, name: info.companyName, taxId: info.taxId, address: info.address }, lessor1Signatories: info.directors } };
+        }
+        if (a.type === 'loan') {
+          return { ...a, data: { ...a.data, lender1: { ...a.data.lender1, name: info.companyName, taxId: info.taxId, address: info.address }, lender1Signatories: info.directors } };
+        }
+        return a;
+      })
     }));
   };
 
@@ -186,16 +212,20 @@ function App() {
     setData(prev => ({
       ...prev,
       tkInfo: info,
-      agreements: prev.agreements.map(a =>
-        a.type === 'hirePurchase'
-          ? { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address }, lessor2Signatories: info.directors } }
-          : a
-      )
+      agreements: prev.agreements.map(a => {
+        if (a.type === 'hirePurchase' || a.type === 'hirePurchaseBack') {
+          return { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address }, lessor2Signatories: info.directors } };
+        }
+        if (a.type === 'loan') {
+          return { ...a, data: { ...a.data, lender2: { ...a.data.lender2, name: info.companyName, taxId: info.taxId, address: info.address }, lender2Signatories: info.directors } };
+        }
+        return a;
+      })
     }));
   };
 
   const activeAgreement = data.agreements.find(a => a.id === data.activeAgreementId) || data.agreements[0];
-  const hpData = activeAgreement?.type === 'hirePurchase' ? activeAgreement.data : data.agreements.find(a => a.type === 'hirePurchase')?.data;
+  const hpData = (activeAgreement?.type === 'hirePurchase' || activeAgreement?.type === 'hirePurchaseBack') ? activeAgreement.data : data.agreements.find(a => a.type === 'hirePurchase' || a.type === 'hirePurchaseBack')?.data;
 
   // Build GuaranteeData from AppData and multiple GuarantorData
   const buildGuaranteeData = (guarantors: GuarantorData[]): GuaranteeData => {
@@ -273,11 +303,23 @@ function App() {
   previewTabs.push({ key: 'feePayment', label: 'สัญญาชำระค่าธรรมเนียม' });
 
   const renderContractPreview = (agreement: Agreement) => {
-    if (agreement.type === 'hirePurchase') {
+    if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
       return (
         <HirePurchasePreview
           data={agreement.data}
           customerInfo={data.customerInfo}
+          guarantors={data.guarantors}
+          type={agreement.type}
+        />
+      );
+    }
+    if (agreement.type === 'loan') {
+      return (
+        <CreditFacilityPreview
+          data={agreement.data}
+          customerInfo={data.customerInfo}
+          agileInfo={data.agileInfo}
+          tkInfo={data.tkInfo}
           guarantors={data.guarantors}
         />
       );
@@ -391,13 +433,19 @@ function App() {
           {/* Step 4: Active Agreement Form */}
           {activeAgreement && (
             <div className="space-y-5">
-              {activeAgreement.type === 'hirePurchase' && (
+              {(activeAgreement.type === 'hirePurchase' || activeAgreement.type === 'hirePurchaseBack') && (
                 <HirePurchaseForm
                   data={activeAgreement.data}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
                 />
               )}
-              {activeAgreement.type !== 'hirePurchase' && (
+              {activeAgreement.type === 'loan' && (
+                <CreditFacilityForm
+                  data={activeAgreement.data}
+                  onChange={(cf: any) => updateAgreementData(activeAgreement.id, cf)}
+                />
+              )}
+              {activeAgreement.type !== 'hirePurchase' && activeAgreement.type !== 'hirePurchaseBack' && activeAgreement.type !== 'loan' && (
                 <section className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
                   <div className="text-center py-8 text-slate-400">
                     <FileText size={32} className="mx-auto mb-2 opacity-50" />

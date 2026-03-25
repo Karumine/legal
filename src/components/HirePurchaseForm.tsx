@@ -66,7 +66,7 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
         if (numMonths > 0) {
           const lastDate = new Date(firstDate);
           lastDate.setMonth(lastDate.getMonth() + (numMonths - 1));
-          
+
           let lastFormattedStr = '';
           if (data.firstInstallmentDate.includes('/')) {
             const y = lastDate.getFullYear() + 543;
@@ -88,9 +88,9 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
       onChange({ ...data, ...updates });
     }
   }, [
-    data.assets, 
-    data.downPaymentPercentage, 
-    data.firstInstallmentDate, 
+    data.assets,
+    data.downPaymentPercentage,
+    data.firstInstallmentDate,
     data.installments,
     // dependencies to prevent infinite loops but respond to key inputs
   ]);
@@ -152,15 +152,7 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
               placeholder="ชื่อ-นามสกุล กรรมการ"
             />
           </div>
-          <div className="col-span-2">
-            <label className="block text-xs font-medium text-gray-600 mb-1">ทำที่</label>
-            <input
-              type="text"
-              value={data.madeAt}
-              onChange={(e) => handleChange('madeAt', e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-            />
-          </div>
+
         </div>
       </section>
 
@@ -369,8 +361,8 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">ประเภทดอกเบี้ย</label>
-                <select 
-                  value={data.interestType} 
+                <select
+                  value={data.interestType}
                   onChange={(e) => handleChange('interestType', e.target.value)}
                   className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border"
                 >
@@ -478,8 +470,8 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
           <div className="border-t pt-4">
             <div className="flex justify-between items-center mb-2">
               <label className="block text-xs font-medium text-gray-600">ทรัพย์สินหลักประกัน (6.3)</label>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => handleChange('collateralAssets', [...(data.collateralAssets || []), { type: 'land', landDetails: { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: '' } }])}
                 className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-200 hover:bg-blue-100"
               >
@@ -489,8 +481,8 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
             <div className="space-y-4">
               {(data.collateralAssets || []).map((asset, idx) => (
                 <div key={idx} className="p-3 border rounded-md bg-gray-50 space-y-3 relative">
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => {
                       const newAssets = data.collateralAssets.filter((_, i) => i !== idx);
                       handleChange('collateralAssets', newAssets);
@@ -502,8 +494,8 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
                   <div className="grid grid-cols-2 gap-4 mr-6">
                     <div>
                       <label className="block text-[10px] font-medium text-gray-500 mb-1">ประเภท</label>
-                      <select 
-                        value={asset.type} 
+                      <select
+                        value={asset.type}
                         onChange={(e) => {
                           const newType = e.target.value as any;
                           const newAssets = [...data.collateralAssets];

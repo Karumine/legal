@@ -1,5 +1,6 @@
 import PageHeader from './PageHeader';
-import type { HirePurchaseData, CompanyInfo, CollateralAsset, GuarantorData } from '../types/app';
+import type { HirePurchaseData, CompanyInfo, CollateralAsset, GuarantorData, ContractType } from '../types/app';
+import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { thaiNumberText } from '../utils/thaiNumberText';
 import { formatThaiDate } from '../utils/thaiDate';
@@ -8,6 +9,7 @@ interface Props {
   data: HirePurchaseData;
   customerInfo: CompanyInfo;
   guarantors?: GuarantorData[];
+  type?: ContractType;
 }
 
 const Highlight = ({ children }: { children: React.ReactNode }) => (
@@ -22,7 +24,7 @@ const GreenHighlight = ({ children }: { children: React.ReactNode }) => (
   </span>
 );
 
-export default function HirePurchasePreview({ data, customerInfo, guarantors }: Props) {
+export default function HirePurchasePreview({ data, customerInfo, guarantors = [], type = 'hirePurchase' }: Props) {
 
   const firstPageMax = 3;
   const subsequentPageMax = 6;
@@ -36,7 +38,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
   const renderPageFooter = (pageNum: number) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
       <div>
-        สัญญาเช่าซื้อ เลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+        {CONTRACT_TYPE_LABELS[type]} เลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
       </div>
       <div>
         หน้า {pageNum} จาก {totalPages}
@@ -126,14 +128,18 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors }: 
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
-          <h2 className="text-xl">สัญญาเช่าซื้อ (Hire Purchase Agreement)</h2>
+          <h2 className="text-xl">
+            {type === 'hirePurchase' && "สัญญาเช่าซื้อ (Hire Purchase Agreement)"}
+            {type === 'hirePurchaseBack' && "สัญญาเช่าซื้อกลับ (Hire Purchase Back Agreement)"}
+            {type !== 'hirePurchase' && type !== 'hirePurchaseBack' && CONTRACT_TYPE_LABELS[type]}
+          </h2>
           <div className="mt-2 text-[14px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
         </div>
 
         <div className="indent-10 mb-6 font-bold">
-          สัญญาเช่าซื้อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{data.madeAt}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง:
+          สัญญาเช่าซื้อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง:
         </div>
 
         <div className="space-y-4 mb-6">
