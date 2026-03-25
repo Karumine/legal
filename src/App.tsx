@@ -436,6 +436,7 @@ function App() {
               {(activeAgreement.type === 'hirePurchase' || activeAgreement.type === 'hirePurchaseBack') && (
                 <HirePurchaseForm
                   data={activeAgreement.data}
+                  type={activeAgreement.type}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
                 />
               )}

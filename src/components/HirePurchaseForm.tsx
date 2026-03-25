@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import DirectorInput from './DirectorInput';
-import type { HirePurchaseData, LessorInfo, AssetDetail } from '../types/app';
+import type { HirePurchaseData, LessorInfo, AssetDetail, ContractType } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 
 interface Props {
   data: HirePurchaseData;
   onChange: (data: HirePurchaseData) => void;
+  type?: ContractType;
 }
 
-export default function HirePurchaseForm({ data, onChange }: Props) {
+export default function HirePurchaseForm({ data, onChange, type = 'hirePurchase' }: Props) {
   const handleChange = (field: keyof HirePurchaseData, value: any) => {
     onChange({ ...data, [field]: value });
   };
@@ -338,16 +339,20 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
           </div>
           {/* Section 3.2 (ก) */}
           <div className="p-3 border border-blue-100 rounded-md bg-blue-50/30">
-            <h4 className="text-sm font-bold text-blue-800 mb-2">3.2 (ก) เงินดาวน์</h4>
+            <h4 className="text-sm font-bold text-blue-800 mb-2">
+              {type === 'hirePurchaseBack' ? '3.2 % ที่หักจากยอดจัดเช่าซื้อ' : '3.2 (ก) เงินดาวน์'}
+            </h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">เงินดาวน์ (%)</label>
                 <input type="text" value={data.downPaymentPercentage || ''} onChange={(e) => handleChange('downPaymentPercentage', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
               </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">เงินดาวน์ (บาท) [คำนวณจาก 3.1 x %]</label>
-                <input type="text" value={data.downPayment} readOnly className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500" />
-              </div>
+              {type !== 'hirePurchaseBack' && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">เงินดาวน์ (บาท) [คำนวณจาก 3.1 x %]</label>
+                  <input type="text" value={data.downPayment} readOnly className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500" />
+                </div>
+              )}
             </div>
           </div>
 
@@ -420,39 +425,41 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
             </div>
           </div>
 
-          <div className="space-y-3 mt-4 border-t pt-4">
-            <div className="flex items-center gap-4 mb-2">
-              <h4 className="font-semibold text-sm text-gray-700">ข้อความไฮไลท์เขียว</h4>
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-1 text-sm font-medium">
-                  <input
-                    type="radio"
-                    name="hasCustomGreenText"
-                    checked={data.hasCustomGreenText !== false}
-                    onChange={() => handleChange('hasCustomGreenText', true)}
-                  />
-                  มี
-                </label>
-                <label className="flex items-center gap-1 text-sm font-medium">
-                  <input
-                    type="radio"
-                    name="hasCustomGreenText"
-                    checked={data.hasCustomGreenText === false}
-                    onChange={() => {
-                      handleChange('hasCustomGreenText', false);
-                    }}
-                  />
-                  ไม่มี
-                </label>
-              </div>
-            </div>
-            {data.hasCustomGreenText !== false && (
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">ข้อความเพิ่มเติมการจ่ายเงิน (ไฮไลท์สีเขียว)</label>
-                <textarea value={data.customGreenText || ''} onChange={(e) => handleChange('customGreenText', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border h-20" />
+            {type !== 'hirePurchaseBack' && (
+              <div className="space-y-3 mt-4 border-t pt-4">
+                <div className="flex items-center gap-4 mb-2">
+                  <h4 className="font-semibold text-sm text-gray-700">ข้อความไฮไลท์เขียว</h4>
+                  <div className="flex items-center gap-4">
+                    <label className="flex items-center gap-1 text-sm font-medium">
+                      <input
+                        type="radio"
+                        name="hasCustomGreenText"
+                        checked={data.hasCustomGreenText !== false}
+                        onChange={() => handleChange('hasCustomGreenText', true)}
+                      />
+                      มี
+                    </label>
+                    <label className="flex items-center gap-1 text-sm font-medium">
+                      <input
+                        type="radio"
+                        name="hasCustomGreenText"
+                        checked={data.hasCustomGreenText === false}
+                        onChange={() => {
+                          handleChange('hasCustomGreenText', false);
+                        }}
+                      />
+                      ไม่มี
+                    </label>
+                  </div>
+                </div>
+                {data.hasCustomGreenText !== false && (
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">ข้อความเพิ่มเติมการจ่ายเงิน (ไฮไลท์สีเขียว)</label>
+                    <textarea value={data.customGreenText || ''} onChange={(e) => handleChange('customGreenText', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border h-20" />
+                  </div>
+                )}
               </div>
             )}
-          </div>
         </div>
       </section>
 
@@ -611,13 +618,32 @@ export default function HirePurchaseForm({ data, onChange }: Props) {
                   )}
 
                   {asset.type === 'machinery' && (
-                    <div>
-                      <label className="block text-[10px] text-gray-500">รายละเอียดเครื่องจักร</label>
-                      <textarea value={asset.machineryDetails || ''} onChange={(e) => {
-                        const newAssets = [...data.collateralAssets];
-                        newAssets[idx].machineryDetails = e.target.value;
-                        handleChange('collateralAssets', newAssets);
-                      }} className="block w-full rounded border-gray-300 text-xs p-1 border h-16" />
+                    <div className="grid grid-cols-1 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเครื่องจักร</label>
+                        <input
+                          type="text"
+                          value={asset.machineName || ''}
+                          onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx] = { ...newAssets[idx], machineName: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }}
+                          className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">รายละเอียด/รุ่น</label>
+                        <textarea
+                          value={asset.machineModel || ''}
+                          onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx] = { ...newAssets[idx], machineModel: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }}
+                          className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-16"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>

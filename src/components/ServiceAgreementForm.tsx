@@ -219,6 +219,16 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                 <span className="font-bold">{originationFees.vat}</span>
               </div>
             </div>
+            <div className="pt-2 border-t border-teal-100">
+              <label className="block text-[10px] font-bold text-teal-600 uppercase mb-1">อัตราค่าตอบแทน (Rate) %</label>
+              <input
+                type="text"
+                value={data.originationFeeRate}
+                onChange={(e) => handleChange('originationFeeRate', e.target.value)}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-1.5 border border-gray-200 bg-white/50"
+                placeholder="2.25"
+              />
+            </div>
           </div>
 
           {/* 2.2 Service Fee */}
@@ -243,6 +253,16 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                 <span className="text-gray-500 block">ภาษีมูลค่าเพิ่ม:</span>
                 <span className="font-bold">{serviceFees.vat}</span>
               </div>
+            </div>
+            <div className="pt-2 border-t border-blue-100">
+              <label className="block text-[10px] font-bold text-blue-600 uppercase mb-1">อัตราค่าตอบแทน (Rate) %</label>
+              <input
+                type="text"
+                value={data.serviceFeeRate}
+                onChange={(e) => handleChange('serviceFeeRate', e.target.value)}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-1.5 border border-gray-200 bg-white/50"
+                placeholder="0.90"
+              />
             </div>
           </div>
         </div>
@@ -272,29 +292,6 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
           </div>
         </div>
 
-        {/* 2.3 อัตราค่าตอบแทน */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">อัตราค่าตอบแทนการจัดหาลูกค้า (Origination Fee Rate) %</label>
-            <input
-              type="text"
-              value={data.originationFeeRate}
-              onChange={(e) => handleChange('originationFeeRate', e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border border-gray-200"
-              placeholder="2.25"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">อัตราค่าตอบแทนการบริหารจัดการ (Service Fee Rate) %</label>
-            <input
-              type="text"
-              value={data.serviceFeeRate}
-              onChange={(e) => handleChange('serviceFeeRate', e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border border-gray-200"
-              placeholder="0.90"
-            />
-          </div>
-        </div>
       </div>
     </section>
   );

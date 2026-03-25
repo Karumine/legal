@@ -108,7 +108,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         )}
         {asset.type === 'machinery' && (
           <div>
-            <span className="font-bold">เครื่องจักร :</span> <Highlight>{asset.machineryDetails}</Highlight>
+            <span className="font-bold">เครื่องจักร :</span> <Highlight>{asset.machineName}</Highlight> {asset.machineModel && <>(รุ่น/รายละเอียด <Highlight>{asset.machineModel}</Highlight>)</>}
           </div>
         )}
       </div>
@@ -325,17 +325,19 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <span className="">3.2</span>
             <div className="flex-1 space-y-4">
               <div className="underline">การชำระค่าเช่าซื้อ</div>
-              <div className="flex gap-4">
-                <span className="">(ก)</span>
-                <div className="flex-1">
-                  ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก (Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
-                  {data.hasCustomGreenText !== false && data.customGreenText && (
-                    <div className="mt-4">
-                      <GreenHighlight>{data.customGreenText}</GreenHighlight>
-                    </div>
-                  )}
+              {type !== 'hirePurchaseBack' && (
+                <div className="flex gap-4">
+                  <span className="">(ก)</span>
+                  <div className="flex-1">
+                    ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก (Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
+                    {data.hasCustomGreenText !== false && data.customGreenText && (
+                      <div className="mt-4">
+                        <GreenHighlight>{data.customGreenText}</GreenHighlight>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="flex gap-4">
                 <span className="">(ข)</span>
                 <div className="flex-1">

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Trash2, FileText } from 'lucide-react';
 import type { FeePaymentData, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
@@ -13,47 +13,65 @@ interface Props {
 
 
 export default function FeePaymentForm({ data, onChange, agreements }: Props) {
-  const prevAgreementsRef = useRef<string[]>([]);
-  const mainAgreements = agreements;
-
-  // Auto-select ONLY newly added agreements
+  // Synchronize items with main agreements in real-time
   useEffect(() => {
-    const currentIds = mainAgreements.map(a => a.id);
-    const newIds = currentIds.filter(id => !prevAgreementsRef.current.includes(id));
+    const agreementMap = new Map(agreements.map(a => [a.id, a]));
+    const agreementIds = agreements.map(a => a.id);
+    
+    let hasChanges = false;
+    
+    // 1. Remove orphaned items (where agreementId exists but is no longer in agreements)
+    let updatedItems = data.items.filter(item => {
+      if (!item.agreementId) return true; // Keep manually added items
+      if (agreementIds.includes(item.agreementId)) return true;
+      hasChanges = true;
+      return false;
+    });
 
-    if (newIds.length > 0) {
-      const existingAgreementIds = data.items.map(i => i.agreementId).filter(Boolean);
-      const newItems: ContractItem[] = [];
+    // 2. Add missing agreements
+    const currentItemMap = new Map(updatedItems.filter(i => i.agreementId).map(i => [i.agreementId!, i]));
+    agreements.forEach(agreement => {
+      if (!currentItemMap.has(agreement.id)) {
+        const agreementData = agreement.data as any;
+        const typeMap: Record<string, ContractItemType> = {
+          'hirePurchase': 'hirePurchase',
+          'hirePurchaseBack': 'hirePurchaseBack',
+          'loan': 'loanCredit',
+          'od': 'loanCredit'
+        };
 
-      newIds.forEach(id => {
-        const agreement = mainAgreements.find(a => a.id === id);
-        if (agreement && !existingAgreementIds.includes(agreement.id)) {
-          const typeMap: Record<string, ContractItemType> = {
-            'hirePurchase': 'hirePurchase',
-            'hirePurchaseBack': 'hirePurchaseBack',
-            'loan': 'loanCredit',
-            'od': 'loanCredit'
-          };
-
-          newItems.push({
-            id: Date.now().toString() + id,
-            agreementId: agreement.id,
-            type: typeMap[agreement.type] || 'hirePurchase',
-            contractNo: (agreement.data as any).contractNo || '',
-            amount: ((agreement.data as any).totalAmount || '').toString().replace(/,/g, ''),
-          });
-        }
-      });
-
-      if (newItems.length > 0) {
-        onChange({
-          ...data,
-          items: [...data.items, ...newItems]
+        updatedItems.push({
+          id: agreement.id,
+          agreementId: agreement.id,
+          type: typeMap[agreement.type] || 'hirePurchase',
+          contractNo: agreementData.contractNo || '',
+          amount: (agreementData.totalAmount || agreementData.loanAmount || '').toString().replace(/,/g, ''),
         });
+        hasChanges = true;
       }
+    });
+
+    // 3. Sync metadata
+    updatedItems = updatedItems.map(item => {
+      if (!item.agreementId) return item;
+      const agreement = agreementMap.get(item.agreementId);
+      if (!agreement) return item;
+      
+      const agreementData = agreement.data as any;
+      const targetContractNo = agreementData.contractNo || '';
+      const targetAmount = (agreementData.totalAmount || agreementData.loanAmount || '').toString().replace(/,/g, '');
+
+      if (item.contractNo !== targetContractNo || item.amount !== targetAmount) {
+        hasChanges = true;
+        return { ...item, contractNo: targetContractNo, amount: targetAmount };
+      }
+      return item;
+    });
+
+    if (hasChanges) {
+      onChange({ ...data, items: updatedItems });
     }
-    prevAgreementsRef.current = currentIds;
-  }, [mainAgreements, data, onChange]);
+  }, [agreements, data.items.length]); // Trigger on system-wide agreement changes or manual list removals
 
   const handleChange = (field: keyof FeePaymentData, value: string) => {
     onChange({ ...data, [field]: value });
@@ -76,11 +94,11 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
       };
 
       const newItem: ContractItem = {
-        id: Date.now().toString(),
+        id: agreement.id,
         agreementId: agreement.id,
         type: typeMap[agreement.type] || 'hirePurchase',
         contractNo: (agreement.data as any).contractNo || '',
-        amount: ((agreement.data as any).totalAmount || '').toString().replace(/,/g, ''),
+        amount: ((agreement.data as any).totalAmount || (agreement.data as any).loanAmount || '').toString().replace(/,/g, ''),
       };
       onChange({ ...data, items: [...data.items, newItem] });
     }
@@ -133,12 +151,12 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
         <div className="pt-2">
           <label className="block text-xs font-medium text-gray-600 mb-2">เลือกสัญญาหลักอ้างอิง</label>
           <div className="space-y-1 border border-gray-300 rounded-md p-2 bg-slate-50/50">
-            {mainAgreements.length === 0 ? (
+            {agreements.length === 0 ? (
               <div className="py-4 text-center text-gray-400 text-xs italic">
                 ยังไม่มีการสร้างสัญญาหลักในระบบ
               </div>
             ) : (
-              mainAgreements.map(agreement => {
+              agreements.map((agreement: Agreement) => {
                 const isSelected = data.items.some(item => item.agreementId === agreement.id);
                 return (
                   <div key={agreement.id} className="flex items-center gap-2 py-1 px-1.5 rounded hover:bg-white transition-colors">
@@ -150,7 +168,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
                         className="rounded text-rose-600 focus:ring-rose-500 w-4 h-4 shadow-sm"
                       />
                       <div className="flex items-center gap-1.5 leading-none">
-                        <span className="font-semibold text-rose-800">{CONTRACT_TYPE_LABELS[agreement.type]}</span>
+                        <span className="font-semibold text-rose-800">{CONTRACT_TYPE_LABELS[agreement.type as keyof typeof CONTRACT_TYPE_LABELS]}</span>
                         <span className="text-gray-400 text-xs">({(agreement.data as any).contractNo || 'ยังไม่มีเลขที่'})</span>
                       </div>
                     </label>

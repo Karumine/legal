@@ -50,6 +50,8 @@ export interface CollateralAsset {
   landDetails?: LandCollateral;
   cashAmount?: string;
   machineryDetails?: string;
+  machineName?: string;
+  machineModel?: string;
 }
 
 export interface HirePurchaseData {

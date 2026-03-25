@@ -354,17 +354,32 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                   )}
 
                   {asset.type === 'machinery' && (
-                    <div>
-                      <label className="block text-[10px] text-gray-500">รายละเอียดเครื่องจักร</label>
-                      <textarea
-                        value={asset.machineryDetails || ''}
-                        onChange={(e) => {
-                          const newAssets = [...data.collateralAssets];
-                          newAssets[idx].machineryDetails = e.target.value;
-                          onChange({ ...data, collateralAssets: newAssets });
-                        }}
-                        className="block w-full rounded border-gray-300 text-xs p-1 border h-16"
-                      />
+                    <div className="grid grid-cols-1 gap-3 mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเครื่องจักร</label>
+                        <input
+                          type="text"
+                          value={asset.machineName || ''}
+                          onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx] = { ...newAssets[idx], machineName: e.target.value };
+                            onChange({ ...data, collateralAssets: newAssets });
+                          }}
+                          className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">รายละเอียด/รุ่น</label>
+                        <textarea
+                          value={asset.machineModel || ''}
+                          onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx] = { ...newAssets[idx], machineModel: e.target.value };
+                            onChange({ ...data, collateralAssets: newAssets });
+                          }}
+                          className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-16"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>

@@ -551,7 +551,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                       )}
                       {asset.type === 'machinery' && (
                         <div>
-                          <span className="font-bold border-b border-black text-black">เครื่องจักร</span> : <Highlight>{asset.machineryDetails}</Highlight>
+                          <span className="font-bold border-b border-black text-black">เครื่องจักร</span> : <Highlight>{asset.machineName}</Highlight> {asset.machineModel && <>(รุ่น/รายละเอียด <Highlight>{asset.machineModel}</Highlight>)</>}
                         </div>
                       )}
                     </div>
@@ -590,7 +590,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   )}
                   {asset.type === 'machinery' && (
                     <div>
-                      <span className="font-bold border-b border-black text-black">เครื่องจักร</span> : <Highlight>{asset.machineryDetails}</Highlight>
+                      <span className="font-bold border-b border-black text-black">เครื่องจักร</span> : <Highlight>{asset.machineName}</Highlight> {asset.machineModel && <>(รุ่น/รายละเอียด <Highlight>{asset.machineModel}</Highlight>)</>}
                     </div>
                   )}
                 </div>
