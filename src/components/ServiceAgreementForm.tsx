@@ -29,6 +29,105 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
     prevAgreementsRef.current = currentIds;
   }, [appData.agreements, data.selectedAgreementIds, onChange, data]);
 
+  // Reactive Calculation for Fees
+  const proportion2 = appData.jointVentureData?.proportion2 || 0;
+  const origRate = parseFloat(data.originationFeeRate) || 0;
+  const svcRate = parseFloat(data.serviceFeeRate) || 0;
+
+  useEffect(() => {
+    let hasChanged = false;
+    const newOrigAmounts = { ...data.agreementInstallmentAmounts };
+    const newSvcAmounts = { ...data.agreementServiceFeeAmounts };
+
+    // 1. Calculate Individual Installments
+    data.selectedAgreementIds.forEach(id => {
+      const agreement = appData.agreements.find(a => a.id === id);
+      if (!agreement) return;
+
+      let principal = 0;
+      if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
+        principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
+      } else if (agreement.type === 'loan' || agreement.type === 'od') {
+        principal = parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0;
+      }
+
+      const origPeriods = data.agreementOriginationFeePeriods?.[id] || 0;
+      const svcPeriods = data.agreementServiceFeePeriods?.[id] || 0;
+
+      const basetotalOrig = principal * (proportion2 / 100) * (origRate / 100);
+      const exactTotalSvc = principal * (proportion2 / 100) * (svcRate / 100) * (svcPeriods / 12);
+
+      const calculatedOrig = origPeriods > 0 ? (basetotalOrig / origPeriods).toFixed(2) : '0.00';
+      const calculatedSvc = svcPeriods > 0 ? (exactTotalSvc / svcPeriods).toFixed(2) : '0.00';
+
+      const currentOrig = parseFloat((newOrigAmounts[id] || '0').replace(/,/g, '')) || 0;
+      const currentSvc = parseFloat((newSvcAmounts[id] || '0').replace(/,/g, '')) || 0;
+
+      if (Math.abs(currentOrig - parseFloat(calculatedOrig)) > 0.001) {
+        newOrigAmounts[id] = parseFloat(calculatedOrig).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        hasChanged = true;
+      }
+      if (Math.abs(currentSvc - parseFloat(calculatedSvc)) > 0.001) {
+        newSvcAmounts[id] = parseFloat(calculatedSvc).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        hasChanged = true;
+      }
+    });
+
+    // 2. Calculate Totals
+    let origTotal = 0;
+    let svcTotal = 0;
+    data.selectedAgreementIds.forEach(id => {
+      const agreement = appData.agreements.find(a => a.id === id);
+      if (!agreement) return;
+
+      let principal = 0;
+      if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
+        principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
+      } else if (agreement.type === 'loan' || agreement.type === 'od') {
+        principal = parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0;
+      }
+
+      const svcPeriods = data.agreementServiceFeePeriods?.[id] || 0;
+
+      // Exact total for THIS agreement
+      const basetotalOrig = principal * (proportion2 / 100) * (origRate / 100);
+      const exactTotalSvc = principal * (proportion2 / 100) * (svcRate / 100) * (svcPeriods / 12);
+
+      // Round to 2 decimal places (standard rounding)
+      origTotal += Math.round(basetotalOrig * 100) / 100;
+      svcTotal += Math.round(exactTotalSvc * 100) / 100;
+    });
+
+    const origTotalStr = origTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const svcTotalStr = svcTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    const currentTotalOrig = parseFloat((data.originationFeeTotal || '0').replace(/,/g, '')) || 0;
+    const currentTotalSvc = parseFloat((data.serviceFeeTotal || '0').replace(/,/g, '')) || 0;
+
+    if (Math.abs(currentTotalOrig - origTotal) > 0.01 || Math.abs(currentTotalSvc - svcTotal) > 0.01) {
+      hasChanged = true;
+    }
+
+    if (hasChanged) {
+      onChange({
+        ...data,
+        agreementInstallmentAmounts: newOrigAmounts,
+        agreementServiceFeeAmounts: newSvcAmounts,
+        originationFeeTotal: origTotalStr,
+        serviceFeeTotal: svcTotalStr
+      });
+    }
+  }, [
+    data.selectedAgreementIds,
+    data.originationFeeRate,
+    data.serviceFeeRate,
+    data.agreementOriginationFeePeriods,
+    data.agreementServiceFeePeriods,
+    appData.agreements,
+    proportion2,
+    onChange
+  ]);
+
   const handleChange = (field: keyof ServiceAgreementData, value: any) => {
     onChange({ ...data, [field]: value });
   };
