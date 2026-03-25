@@ -196,11 +196,15 @@ function App() {
     setData(prev => ({
       ...prev,
       agileInfo: info,
-      agreements: prev.agreements.map(a =>
-        a.type === 'hirePurchase' || a.type === 'hirePurchaseBack'
-          ? { ...a, data: { ...a.data, lessor1: { ...a.data.lessor1, name: info.companyName, taxId: info.taxId, address: info.address }, lessor1Signatories: info.directors } }
-          : a
-      )
+      agreements: prev.agreements.map(a => {
+        if (a.type === 'hirePurchase' || a.type === 'hirePurchaseBack') {
+          return { ...a, data: { ...a.data, lessor1: { ...a.data.lessor1, name: info.companyName, taxId: info.taxId, address: info.address }, lessor1Signatories: info.directors } };
+        }
+        if (a.type === 'loan') {
+          return { ...a, data: { ...a.data, lender1: { ...a.data.lender1, name: info.companyName, taxId: info.taxId, address: info.address }, lender1Signatories: info.directors } };
+        }
+        return a;
+      })
     }));
   };
 
@@ -208,11 +212,15 @@ function App() {
     setData(prev => ({
       ...prev,
       tkInfo: info,
-      agreements: prev.agreements.map(a =>
-        a.type === 'hirePurchase' || a.type === 'hirePurchaseBack'
-          ? { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address }, lessor2Signatories: info.directors } }
-          : a
-      )
+      agreements: prev.agreements.map(a => {
+        if (a.type === 'hirePurchase' || a.type === 'hirePurchaseBack') {
+          return { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address }, lessor2Signatories: info.directors } };
+        }
+        if (a.type === 'loan') {
+          return { ...a, data: { ...a.data, lender2: { ...a.data.lender2, name: info.companyName, taxId: info.taxId, address: info.address }, lender2Signatories: info.directors } };
+        }
+        return a;
+      })
     }));
   };
 
@@ -312,6 +320,7 @@ function App() {
           customerInfo={data.customerInfo}
           agileInfo={data.agileInfo}
           tkInfo={data.tkInfo}
+          guarantors={data.guarantors}
         />
       );
     }
