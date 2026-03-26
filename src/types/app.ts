@@ -46,6 +46,13 @@ export interface LandCollateral {
   owner: string;
 }
 
+export interface MachineDetail {
+  id: string;
+  name: string;
+  quantity: string;
+  price: string;
+}
+
 export interface CollateralAsset {
   type: 'land' | 'cash' | 'machinery';
   landDetails?: LandCollateral;
@@ -53,6 +60,8 @@ export interface CollateralAsset {
   machineryDetails?: string;
   machineName?: string;
   machineModel?: string;
+  machines?: MachineDetail[];
+  machineOwner?: string;
 }
 
 export interface HirePurchaseData {

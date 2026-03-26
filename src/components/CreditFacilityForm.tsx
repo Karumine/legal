@@ -122,7 +122,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                 placeholder="ระบุวัตถุประสงค์การกู้..."
               />
             </div>
-            
+
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">อัตราดอกเบี้ยร้อยละต่อปี (4.2)</label>
@@ -301,7 +301,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                       >
                         <option value="land">จำนองที่ดิน</option>
                         <option value="cash">เงินสด</option>
-                        <option value="machinery">เครื่องจักร</option>
+                        <option value="machinery">จำนองเครื่องจักร</option>
                       </select>
                     </div>
                   </div>
@@ -338,8 +338,8 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                   )}
 
                   {asset.type === 'cash' && (
-                    <div>
-                      <label className="block text-[10px] text-gray-500">จำนวนเงิน (บาท)</label>
+                    <div className="mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm">
+                      <label className="block text-xs font-semibold text-gray-500 mb-1">จำนวนเงิน (บาท)</label>
                       <input
                         type="text"
                         value={asset.cashAmount || ''}
@@ -348,37 +348,120 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                           newAssets[idx].cashAmount = e.target.value;
                           onChange({ ...data, collateralAssets: newAssets });
                         }}
-                        className="block w-full rounded border-gray-300 text-xs p-1 border"
+                        className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
                       />
                     </div>
                   )}
 
                   {asset.type === 'machinery' && (
-                    <div className="grid grid-cols-1 gap-3 mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm">
+                    <div className="mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm space-y-4">
                       <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเครื่องจักร</label>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเจ้าของเครื่องจักร (Owner)</label>
                         <input
                           type="text"
-                          value={asset.machineName || ''}
+                          value={asset.machineOwner || ''}
                           onChange={(e) => {
                             const newAssets = [...data.collateralAssets];
-                            newAssets[idx] = { ...newAssets[idx], machineName: e.target.value };
+                            newAssets[idx] = { ...newAssets[idx], machineOwner: e.target.value };
                             onChange({ ...data, collateralAssets: newAssets });
                           }}
                           className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
+                          placeholder="เช่น ห้างหุ้นส่วนจำกัด พี.เอ็น.พี.เมดิซัพพลาย"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">รายละเอียด/รุ่น</label>
-                        <textarea
-                          value={asset.machineModel || ''}
-                          onChange={(e) => {
-                            const newAssets = [...data.collateralAssets];
-                            newAssets[idx] = { ...newAssets[idx], machineModel: e.target.value };
-                            onChange({ ...data, collateralAssets: newAssets });
-                          }}
-                          className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all h-16"
-                        />
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <label className="block text-xs font-semibold text-gray-500">รายการเครื่องจักร (Machines)</label>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newAssets = [...data.collateralAssets];
+                              const machines = [...(newAssets[idx].machines || [])];
+                              machines.push({ id: Date.now().toString(), name: '', quantity: '1', price: '' });
+                              newAssets[idx] = { ...newAssets[idx], machines };
+                              onChange({ ...data, collateralAssets: newAssets });
+                            }}
+                            className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded border border-blue-100 hover:bg-blue-100"
+                          >
+                            + เพิ่มเครื่องจักร
+                          </button>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          {(asset.machines || []).length === 0 && (
+                            <p className="text-[10px] text-gray-400 italic text-center py-2">ยังไม่มีรายการเครื่องจักร</p>
+                          )}
+                          {(asset.machines || []).map((machine, mIdx) => (
+                            <div key={machine.id} className="grid grid-cols-12 gap-2 items-end pt-2 border-t border-gray-50 first:border-0 first:pt-0">
+                              <div className="col-span-6">
+                                <label className="block text-[10px] text-gray-400">ชื่อเครื่องจักร</label>
+                                <input
+                                  type="text"
+                                  value={machine.name}
+                                  onChange={(e) => {
+                                    const newAssets = [...data.collateralAssets];
+                                    const machines = [...(newAssets[idx].machines || [])];
+                                    machines[mIdx] = { ...machines[mIdx], name: e.target.value };
+                                    newAssets[idx] = { ...newAssets[idx], machines };
+                                    onChange({ ...data, collateralAssets: newAssets });
+                                  }}
+                                  className="block w-full rounded border-gray-200 text-xs p-1.5 border"
+                                  placeholder="เครื่องเป่าขวด..."
+                                />
+                              </div>
+                              <div className="col-span-2">
+                                <label className="block text-[10px] text-gray-400">จำนวน</label>
+                                <input
+                                  type="text"
+                                  value={machine.quantity}
+                                  onChange={(e) => {
+                                    const newAssets = [...data.collateralAssets];
+                                    const machines = [...(newAssets[idx].machines || [])];
+                                    machines[mIdx] = { ...machines[mIdx], quantity: e.target.value };
+                                    newAssets[idx] = { ...newAssets[idx], machines };
+                                    onChange({ ...data, collateralAssets: newAssets });
+                                  }}
+                                  className="block w-full rounded border-gray-200 text-xs p-1.5 border text-center"
+                                />
+                              </div>
+                              <div className="col-span-3">
+                                <label className="block text-[10px] text-gray-400">ราคา (บาท)</label>
+                                <input
+                                  type="text"
+                                  value={machine.price}
+                                  onChange={(e) => {
+                                    const val = e.target.value.replace(/,/g, '');
+                                    if (!isNaN(Number(val)) || val === '') {
+                                      const formatted = val ? Number(val).toLocaleString('en-US') : '';
+                                      const newAssets = [...data.collateralAssets];
+                                      const machines = [...(newAssets[idx].machines || [])];
+                                      machines[mIdx] = { ...machines[mIdx], price: formatted };
+                                      newAssets[idx] = { ...newAssets[idx], machines };
+                                      onChange({ ...data, collateralAssets: newAssets });
+                                    }
+                                  }}
+                                  className="block w-full rounded border-gray-200 text-xs p-1.5 border text-right font-medium"
+                                  placeholder="0"
+                                />
+                              </div>
+                              <div className="col-span-1 flex justify-center pb-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newAssets = [...data.collateralAssets];
+                                    const machines = (newAssets[idx].machines || []).filter((_, i) => i !== mIdx);
+                                    newAssets[idx] = { ...newAssets[idx], machines };
+                                    onChange({ ...data, collateralAssets: newAssets });
+                                  }}
+                                  className="text-red-300 hover:text-red-500"
+                                >
+                                  ✕
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}
