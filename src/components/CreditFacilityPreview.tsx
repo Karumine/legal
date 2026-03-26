@@ -45,12 +45,10 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
   const limit1 = Math.floor(loanAmt * (p1 / 100));
   const limit2 = Math.floor(loanAmt * (p2 / 100));
 
-  // Logic to detect if we need a page break for large machinery tables
-  const hasLargeMachinery = (data.collateralAssets || []).some(
-    asset => asset.type === 'machinery' && (asset.machines || []).length > 2
-  );
-  const collateralOverflow = (data.collateralAssets || []).length > 2 || hasLargeMachinery;
-  const machineryOffset = hasLargeMachinery ? 1 : 0;
+  // No longer needed as machinery is now flat
+  const hasLargeMachinery = false;
+  const collateralOverflow = (data.collateralAssets || []).length > 2;
+  const machineryOffset = collateralOverflow ? 1 : 0;
   
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
@@ -561,45 +559,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                         )}
                         {asset.type === 'machinery' && (
                           <div className="mt-2 text-justify">
-                            <div className="mb-2">
-                              <span className="font-bold border-b border-black text-black italic">เครื่องจักร</span> :{' '}
-                              {asset.machineOwner && (
-                                <span className="bg-yellow-50 px-1 border-b border-gray-400 text-black italic">
-                                   ของ {asset.machineOwner}
-                                </span>
-                              )}
-                            </div>
-                            
-                            <div className="overflow-x-auto">
-                              <table className="w-full border-collapse border border-gray-400 text-[11px] mt-1">
-                                <thead>
-                                  <tr className="bg-gray-50 font-bold">
-                                    <th className="border border-gray-400 px-2 py-1 text-center w-12 font-bold">ลำดับ</th>
-                                    <th className="border border-gray-400 px-2 py-1 text-left font-bold">รายการเครื่องจักร</th>
-                                    <th className="border border-gray-400 px-2 py-1 text-center w-16 font-bold">จำนวน</th>
-                                    <th className="border border-gray-400 px-2 py-1 text-right w-32 font-bold">ราคา (บาท)</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {asset.machines && asset.machines.length > 0 ? (
-                                    asset.machines.map((machine, mIdx) => (
-                                      <tr key={machine.id}>
-                                        <td className="border border-gray-400 px-2 py-1 text-center">{mIdx + 1}</td>
-                                        <td className="border border-gray-400 px-2 py-1">{machine.name || '-'}</td>
-                                        <td className="border border-gray-400 px-2 py-1 text-center">{machine.quantity || '-'}</td>
-                                        <td className="border border-gray-400 px-2 py-1 text-right font-mono">{machine.price || '0'}</td>
-                                      </tr>
-                                    ))
-                                  ) : (
-                                    <tr>
-                                      <td colSpan={4} className="border border-gray-400 px-2 py-2 text-center text-gray-400 italic">
-                                        ไม่มีข้อมูล
-                                      </td>
-                                    </tr>
-                                  )}
-                                </tbody>
-                              </table>
-                            </div>
+                            <span className="font-bold border-b border-black text-black italic">เครื่องจักร</span> :{' '}
+                            <Highlight>{asset.machineName}</Highlight>{' '}
+                            จำนวน <Highlight>{asset.machineQuantity}</Highlight>{' '}
+                            ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
+                            อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
                           </div>
                         )}
                       </div>
@@ -640,45 +604,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   )}
                   {asset.type === 'machinery' && (
                     <div className="mt-2">
-                      <div className="mb-2">
-                        <span className="font-bold border-b border-black text-black">เครื่องจักร</span> :{' '}
-                        {asset.machineOwner && (
-                          <span className="bg-yellow-50 px-1 border-b border-black text-black italic">
-                             ของ {asset.machineOwner}
-                          </span>
-                        )}
-                      </div>
-                      
-                      <div className="overflow-x-auto">
-                        <table className="w-full border-collapse border border-black text-[11px] mt-1">
-                          <thead>
-                            <tr className="bg-gray-50 font-bold">
-                              <th className="border border-black px-2 py-1 text-center w-12 font-bold">ลำดับ</th>
-                              <th className="border border-black px-2 py-1 text-left font-bold">รายการเครื่องจักร</th>
-                              <th className="border border-black px-2 py-1 text-center w-16 font-bold">จำนวน</th>
-                              <th className="border border-black px-2 py-1 text-right w-32 font-bold">ราคา (บาท)</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {asset.machines && asset.machines.length > 0 ? (
-                              asset.machines.map((machine, mIdx) => (
-                                <tr key={machine.id}>
-                                  <td className="border border-black px-2 py-1 text-center">{mIdx + 1}</td>
-                                  <td className="border border-black px-2 py-1">{machine.name || '-'}</td>
-                                  <td className="border border-black px-2 py-1 text-center">{machine.quantity || '-'}</td>
-                                  <td className="border border-black px-2 py-1 text-right font-mono">{machine.price || '0'}</td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td colSpan={4} className="border border-black px-2 py-2 text-center text-gray-400 italic">
-                                  ไม่มีข้อมูล
-                                </td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
+                      <span className="font-bold border-b border-black text-black">เครื่องจักร</span> :{' '}
+                      <Highlight>{asset.machineName}</Highlight>{' '}
+                      จำนวน <Highlight>{asset.machineQuantity}</Highlight>{' '}
+                      ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
+                      อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
                     </div>
                   )}
                 </div>

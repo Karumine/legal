@@ -370,97 +370,52 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                         />
                       </div>
                       
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <label className="block text-xs font-semibold text-gray-500">รายการเครื่องจักร (Machines)</label>
-                          <button
-                            type="button"
-                            onClick={() => {
+                      <div className="grid grid-cols-12 gap-4">
+                        <div className="col-span-12">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">รายละเอียดเครื่องจักร</label>
+                          <input
+                            type="text"
+                            value={asset.machineName || ''}
+                            onChange={(e) => {
                               const newAssets = [...data.collateralAssets];
-                              const machines = [...(newAssets[idx].machines || [])];
-                              machines.push({ id: Date.now().toString(), name: '', quantity: '1', price: '' });
-                              newAssets[idx] = { ...newAssets[idx], machines };
+                              newAssets[idx] = { ...newAssets[idx], machineName: e.target.value };
                               onChange({ ...data, collateralAssets: newAssets });
                             }}
-                            className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded border border-blue-100 hover:bg-blue-100"
-                          >
-                            + เพิ่มเครื่องจักร
-                          </button>
+                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
+                            placeholder="เช่น เครื่องเป่าขวดพลาสติก PET กึ่งอัตโนมัติ"
+                          />
                         </div>
-                        
-                        <div className="space-y-2">
-                          {(asset.machines || []).length === 0 && (
-                            <p className="text-[10px] text-gray-400 italic text-center py-2">ยังไม่มีรายการเครื่องจักร</p>
-                          )}
-                          {(asset.machines || []).map((machine, mIdx) => (
-                            <div key={machine.id} className="grid grid-cols-12 gap-2 items-end pt-2 border-t border-gray-50 first:border-0 first:pt-0">
-                              <div className="col-span-6">
-                                <label className="block text-[10px] text-gray-400">ชื่อเครื่องจักร</label>
-                                <input
-                                  type="text"
-                                  value={machine.name}
-                                  onChange={(e) => {
-                                    const newAssets = [...data.collateralAssets];
-                                    const machines = [...(newAssets[idx].machines || [])];
-                                    machines[mIdx] = { ...machines[mIdx], name: e.target.value };
-                                    newAssets[idx] = { ...newAssets[idx], machines };
-                                    onChange({ ...data, collateralAssets: newAssets });
-                                  }}
-                                  className="block w-full rounded border-gray-200 text-xs p-1.5 border"
-                                  placeholder="เครื่องเป่าขวด..."
-                                />
-                              </div>
-                              <div className="col-span-2">
-                                <label className="block text-[10px] text-gray-400">จำนวน</label>
-                                <input
-                                  type="text"
-                                  value={machine.quantity}
-                                  onChange={(e) => {
-                                    const newAssets = [...data.collateralAssets];
-                                    const machines = [...(newAssets[idx].machines || [])];
-                                    machines[mIdx] = { ...machines[mIdx], quantity: e.target.value };
-                                    newAssets[idx] = { ...newAssets[idx], machines };
-                                    onChange({ ...data, collateralAssets: newAssets });
-                                  }}
-                                  className="block w-full rounded border-gray-200 text-xs p-1.5 border text-center"
-                                />
-                              </div>
-                              <div className="col-span-3">
-                                <label className="block text-[10px] text-gray-400">ราคา (บาท)</label>
-                                <input
-                                  type="text"
-                                  value={machine.price}
-                                  onChange={(e) => {
-                                    const val = e.target.value.replace(/,/g, '');
-                                    if (!isNaN(Number(val)) || val === '') {
-                                      const formatted = val ? Number(val).toLocaleString('en-US') : '';
-                                      const newAssets = [...data.collateralAssets];
-                                      const machines = [...(newAssets[idx].machines || [])];
-                                      machines[mIdx] = { ...machines[mIdx], price: formatted };
-                                      newAssets[idx] = { ...newAssets[idx], machines };
-                                      onChange({ ...data, collateralAssets: newAssets });
-                                    }
-                                  }}
-                                  className="block w-full rounded border-gray-200 text-xs p-1.5 border text-right font-medium"
-                                  placeholder="0"
-                                />
-                              </div>
-                              <div className="col-span-1 flex justify-center pb-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const newAssets = [...data.collateralAssets];
-                                    const machines = (newAssets[idx].machines || []).filter((_, i) => i !== mIdx);
-                                    newAssets[idx] = { ...newAssets[idx], machines };
-                                    onChange({ ...data, collateralAssets: newAssets });
-                                  }}
-                                  className="text-red-300 hover:text-red-500"
-                                >
-                                  ✕
-                                </button>
-                              </div>
-                            </div>
-                          ))}
+                        <div className="col-span-4">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">จำนวน</label>
+                          <input
+                            type="text"
+                            value={asset.machineQuantity || ''}
+                            onChange={(e) => {
+                              const newAssets = [...data.collateralAssets];
+                              newAssets[idx] = { ...newAssets[idx], machineQuantity: e.target.value };
+                              onChange({ ...data, collateralAssets: newAssets });
+                            }}
+                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-center"
+                            placeholder="1"
+                          />
+                        </div>
+                        <div className="col-span-8">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">ราคา (บาท)</label>
+                          <input
+                            type="text"
+                            value={asset.machinePrice || ''}
+                            onChange={(e) => {
+                              const val = e.target.value.replace(/,/g, '');
+                              if (!isNaN(Number(val)) || val === '') {
+                                const formatted = val ? Number(val).toLocaleString('en-US') : '';
+                                const newAssets = [...data.collateralAssets];
+                                newAssets[idx] = { ...newAssets[idx], machinePrice: formatted };
+                                onChange({ ...data, collateralAssets: newAssets });
+                              }
+                            }}
+                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-right font-medium"
+                            placeholder="0"
+                          />
                         </div>
                       </div>
                     </div>

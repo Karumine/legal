@@ -43,12 +43,10 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
   
   const overflowPagesCount = Math.ceil(dedicatedOverflowAssets.length / subsequentPageMax);
   
-  // Logic to detect if we need a page break for large machinery tables
-  const hasLargeMachinery = (data.collateralAssets || []).some(
-    asset => asset.type === 'machinery' && (asset.machines || []).length > 3
-  );
-  // collateralOffset triggers a new page (page 10) if more than 3 assets OR large machinery
-  const collateralOffset = ((data.collateralAssets || []).length > 3 || hasLargeMachinery) ? 1 : 0;
+  // No longer needed as machinery is now flat
+  const hasLargeMachinery = false;
+  // collateralOffset triggers a new page (page 10) if more than 3 assets
+  const collateralOffset = (data.collateralAssets || []).length > 3 ? 1 : 0;
   const totalPages = 24 + overflowPagesCount + collateralOffset;
 
   const renderPageFooter = (pageNum: number) => (
@@ -124,45 +122,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         )}
         {asset.type === 'machinery' && (
           <div className="mt-2">
-            <div className="mb-2">
-              <span className="font-bold">เครื่องจักร :</span>{' '}
-              {asset.machineOwner && (
-                <span className="bg-yellow-50 px-1 border-b border-black">
-                   ของ {asset.machineOwner}
-                </span>
-              )}
-            </div>
-            
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border border-black text-[12px]">
-                <thead>
-                  <tr className="bg-gray-50">
-                    <th className="border border-black px-2 py-1 text-center w-12 font-bold">ลำดับที่</th>
-                    <th className="border border-black px-2 py-1 text-left font-bold">รายการเครื่องจักร</th>
-                    <th className="border border-black px-2 py-1 text-center w-16 font-bold">จำนวน</th>
-                    <th className="border border-black px-2 py-1 text-right w-32 font-bold">ราคา (บาท)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {asset.machines && asset.machines.length > 0 ? (
-                    asset.machines.map((machine, mIdx) => (
-                      <tr key={machine.id}>
-                        <td className="border border-black px-2 py-1 text-center">{mIdx + 1}</td>
-                        <td className="border border-black px-2 py-1">{machine.name || '-'}</td>
-                        <td className="border border-black px-2 py-1 text-center">{machine.quantity || '-'}</td>
-                        <td className="border border-black px-2 py-1 text-right">{machine.price || '0'}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={4} className="border border-black px-2 py-2 text-center text-gray-400 italic">
-                        ไม่มีข้อมูลเครื่องจักร
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <span className="font-bold">เครื่องจักร :</span>{' '}
+            <Highlight>{asset.machineName}</Highlight>{' '}
+            จำนวน <Highlight>{asset.machineQuantity}</Highlight>{' '}
+            ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
+            อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
           </div>
         )}
       </div>
@@ -644,6 +608,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               {(data.collateralAssets || [])
                 .slice(0, hasLargeMachinery ? 1 : 3)
                 .map((asset, idx) => renderCollateralAsset(asset, idx))}
+
+              {!hasLargeMachinery && (data.collateralAssets || []).length > 0 && (data.collateralAssets || []).length <= 3 && (
+                <div className="mt-4 text-justify italic">
+                  นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -661,6 +631,10 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 {(data.collateralAssets || [])
                   .slice(hasLargeMachinery ? 1 : 3)
                   .map((asset, idx) => renderCollateralAsset(asset, idx + (hasLargeMachinery ? 1 : 3)))}
+                
+                <div className="mt-4 text-justify italic">
+                  นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
+                </div>
               </div>
             </div>
           </div>
@@ -672,9 +646,6 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
-          <div className="mb-4 text-justify">
-            นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
-          </div>
 
           <div className="flex gap-4">
             <span className="">6.4</span>

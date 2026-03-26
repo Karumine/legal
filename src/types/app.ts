@@ -60,6 +60,8 @@ export interface CollateralAsset {
   machineryDetails?: string;
   machineName?: string;
   machineModel?: string;
+  machineQuantity?: string;
+  machinePrice?: string;
   machines?: MachineDetail[];
   machineOwner?: string;
 }
