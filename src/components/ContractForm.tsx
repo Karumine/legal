@@ -37,6 +37,7 @@ export default function ContractForm({ data, onChange }: Props) {
       type,
       contractNo: '',
       amount: '',
+      rate: '3.00',
     };
     onChange({ ...data, items: [...data.items, newItem] });
   };
@@ -62,6 +63,7 @@ export default function ContractForm({ data, onChange }: Props) {
           customerCompany: result.companyName,
           customerAddress: result.address,
           customerTaxId: result.taxId,
+          // Preserve existing director or other fields if any
         });
         setSearchError('');
       } else {
@@ -162,7 +164,7 @@ export default function ContractForm({ data, onChange }: Props) {
                     <Trash2 size={16} />
                   </button>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-xs text-gray-500">Contract No.</label>
                     <input
@@ -173,7 +175,16 @@ export default function ContractForm({ data, onChange }: Props) {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500">Amount</label>
+                    <label className="block text-xs text-gray-500">Rate (%)</label>
+                    <input
+                      type="text"
+                      value={item.rate}
+                      onChange={(e) => handleItemChange(item.id, 'rate', e.target.value)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500">Amount (Baht)</label>
                     <input
                       type="text"
                       value={item.amount}
