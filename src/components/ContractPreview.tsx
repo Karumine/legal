@@ -4,6 +4,7 @@ import type { ContractData } from '../types/contract';
 import { CONTRACT_TYPE_LABELS } from '../types/contract';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatThaiDate } from '../utils/thaiDate';
+import { formatThaiId } from '../utils/formatters';
 
 interface Props {
   data: ContractData;
@@ -63,11 +64,11 @@ export default function ContractPreview({ data }: Props) {
         </div>
 
         <div className="mb-4 pl-8 -indent-8">
-          (1) <b>บริษัท อาไจล์ แอสเซ็ทส์ จำกัด</b> ซึ่งเป็นบริษัทจำกัด จดทะเบียนจัดตั้งในประเทศไทย โดยมีสำนักงานใหญ่ตั้งอยู่เลขที่ 20 หมู่ที่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ เลขประจำตัวผู้เสียภาษี 0115558012195 (ซึ่งต่อไปในสัญญานี้จะเรียกว่า "ผู้รับค่าธรรมเนียม") และ
+          (1) <b>บริษัท อาไจล์ แอสเซ็ทส์ จำกัด</b> ซึ่งเป็นบริษัทจำกัด จดทะเบียนจัดตั้งในประเทศไทย โดยมีสำนักงานใหญ่ตั้งอยู่เลขที่ 20 หมู่ที่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ เลขประจำตัวผู้เสียภาษี {formatThaiId('0115558012195')} (ซึ่งต่อไปในสัญญานี้จะเรียกว่า "ผู้รับค่าธรรมเนียม") และ
         </div>
 
         <div className="mb-6 pl-8 -indent-8">
-          (2) <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานจดทะเบียนตั้งอยู่ <Highlight>{data.customerAddress}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{data.customerTaxId}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า "ผู้ชำระค่าธรรมเนียม")
+          (2) <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานจดทะเบียนตั้งอยู่ <Highlight>{data.customerAddress}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า "ผู้ชำระค่าธรรมเนียม")
         </div>
 
         <div className="indent-10 mb-6 font-bold">
@@ -75,7 +76,7 @@ export default function ContractPreview({ data }: Props) {
         </div>
 
         <div className="mb-4 pl-8 -indent-8">
-          1. ผู้รับค่าธรรมเนียม รับหน้าที่ในการจัดหาสินเชื่อตาม{itemSummaryText} ผ่านวิธีการคัดกรองความสามารถของผู้ชำระค่าธรรมเนียม ประเมินความเสี่ยง และจัดทำสัญญาต่างๆ ผู้ชำระค่าธรรมเนียมจึงตกลงและยินยอมชำระค่า Origination Fee (ค่าธรรมเนียม) เพื่อการทำสัญญาในอัตราร้อยละ 3 ของวงเงินสินเชื่อ
+          1. ผู้รับค่าธรรมเนียม รับหน้าที่ในการจัดหาสินเชื่อตาม{itemSummaryText} ผ่านวิธีการคัดกรองความสามารถของผู้ชำระค่าธรรมเนียม ประเมินความเสี่ยง และจัดทำสัญญาต่างๆ ผู้ชำระค่าธรรมเนียมจึงตกลงและยินยอมชำระค่า Origination Fee (ค่าธรรมเนียม) เพื่อการทำสัญญาในอัตราร้อยละ <Highlight>{data.items[0]?.rate || '3'}</Highlight> ของวงเงินสินเชื่อ
         </div>
 
         {data.items.map((item, index) => {

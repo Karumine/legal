@@ -29,6 +29,162 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
     prevAgreementsRef.current = currentIds;
   }, [appData.agreements, data.selectedAgreementIds, onChange, data]);
 
+  // Reactive Calculation for Fees
+  const proportion2 = appData.jointVentureData?.proportion2 || 0;
+  const origRate = parseFloat(data.originationFeeRate) || 0;
+  const svcRate = parseFloat(data.serviceFeeRate) || 0;
+
+  useEffect(() => {
+    let hasChanged = false;
+    const newOrigAmounts = { ...data.agreementInstallmentAmounts };
+    const newSvcAmounts = { ...data.agreementServiceFeeAmounts };
+
+    // 1. Calculate Individual Installments
+    data.selectedAgreementIds.forEach(id => {
+      const agreement = appData.agreements.find(a => a.id === id);
+      if (!agreement) return;
+
+      let principal = 0;
+      if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
+        principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
+      } else if (agreement.type === 'loan' || agreement.type === 'od') {
+        principal = (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
+      }
+
+      const origPeriods = data.agreementOriginationFeePeriods?.[id] || 0;
+      const svcPeriods = data.agreementServiceFeePeriods?.[id] || 0;
+
+      const basetotalOrig = principal * (proportion2 / 100) * (origRate / 100);
+      const exactTotalSvc = principal * (proportion2 / 100) * (svcRate / 100) * (svcPeriods / 12);
+
+      const calculatedOrig = origPeriods > 0 ? (basetotalOrig / origPeriods).toFixed(2) : '0.00';
+      const calculatedSvc = svcPeriods > 0 ? (exactTotalSvc / svcPeriods).toFixed(2) : '0.00';
+
+      const currentOrig = parseFloat((newOrigAmounts[id] || '0').replace(/,/g, '')) || 0;
+      const currentSvc = parseFloat((newSvcAmounts[id] || '0').replace(/,/g, '')) || 0;
+
+      if (Math.abs(currentOrig - parseFloat(calculatedOrig)) > 0.001) {
+        newOrigAmounts[id] = parseFloat(calculatedOrig).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        hasChanged = true;
+      }
+      if (Math.abs(currentSvc - parseFloat(calculatedSvc)) > 0.001) {
+        newSvcAmounts[id] = parseFloat(calculatedSvc).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        hasChanged = true;
+      }
+    });
+
+    // 2. Calculate Totals
+    let origTotal = 0;
+    let svcTotal = 0;
+    data.selectedAgreementIds.forEach(id => {
+      const agreement = appData.agreements.find(a => a.id === id);
+      if (!agreement) return;
+
+      let principal = 0;
+      if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
+        principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
+      } else if (agreement.type === 'loan' || agreement.type === 'od') {
+        principal = (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
+      }
+
+      const svcPeriods = data.agreementServiceFeePeriods?.[id] || 0;
+
+      // Exact total for THIS agreement
+      const basetotalOrig = principal * (proportion2 / 100) * (origRate / 100);
+      const exactTotalSvc = principal * (proportion2 / 100) * (svcRate / 100) * (svcPeriods / 12);
+
+      // Round to 2 decimal places (standard rounding)
+      origTotal += Math.round(basetotalOrig * 100) / 100;
+      svcTotal += Math.round(exactTotalSvc * 100) / 100;
+    });
+
+    const origTotalStr = origTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const svcTotalStr = svcTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    const currentTotalOrig = parseFloat((data.originationFeeTotal || '0').replace(/,/g, '')) || 0;
+    const currentTotalSvc = parseFloat((data.serviceFeeTotal || '0').replace(/,/g, '')) || 0;
+
+    if (Math.abs(currentTotalOrig - origTotal) > 0.01 || Math.abs(currentTotalSvc - svcTotal) > 0.01) {
+      hasChanged = true;
+    }
+
+    // 3. Calculate Global Dates
+    const allFirstDates = [
+      ...Object.values(data.agreementFirstDates || {}),
+      ...Object.values(data.agreementServiceFeeFirstDates || {})
+    ].filter(Boolean);
+
+    let calculatedFirstDate = data.firstInstallmentDate;
+    if (allFirstDates.length > 0) {
+      calculatedFirstDate = allFirstDates.reduce((min, d) => d < min ? d : min);
+    }
+
+    const addMonths = (dateStr: string, months: number) => {
+      if (!dateStr || months <= 0) return null;
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return null;
+      // If we want Last Date = First Date + (N-1) months, we use months-1
+      // But user said "งวดแรก + จำนวนงวด", so we follow that literally or adjust if needed.
+      // Usually, if there are 6 installments starting 2026-04-28:
+      // 1: 04-28, 2: 05-28, 3: 06-28, 4: 07-28, 5: 08-28, 6: 09-28
+      // That is First Date + 5 months.
+      // Let's use months - 1 to be more standard for "Last Installment Date".
+      date.setMonth(date.getMonth() + (months - 1));
+      return date.toISOString().split('T')[0];
+    };
+
+    const allLastDates: string[] = [];
+    data.selectedAgreementIds.forEach(id => {
+      const oriDate = data.agreementFirstDates?.[id];
+      const oriPeriods = data.agreementOriginationFeePeriods?.[id] || 0;
+      if (oriDate && oriPeriods > 0) {
+        const last = addMonths(oriDate, oriPeriods);
+        if (last) allLastDates.push(last);
+      }
+
+      const svcDate = data.agreementServiceFeeFirstDates?.[id];
+      const svcPeriods = data.agreementServiceFeePeriods?.[id] || 0;
+      if (svcDate && svcPeriods > 0) {
+        const last = addMonths(svcDate, svcPeriods);
+        if (last) allLastDates.push(last);
+      }
+    });
+
+    let calculatedLastDate = data.lastInstallmentDate;
+    if (allLastDates.length > 0) {
+      calculatedLastDate = allLastDates.reduce((max, d) => d > max ? d : max);
+    }
+
+    if (calculatedFirstDate !== data.firstInstallmentDate || calculatedLastDate !== data.lastInstallmentDate) {
+      hasChanged = true;
+    }
+
+    if (hasChanged) {
+      onChange({
+        ...data,
+        agreementInstallmentAmounts: newOrigAmounts,
+        agreementServiceFeeAmounts: newSvcAmounts,
+        originationFeeTotal: origTotalStr,
+        serviceFeeTotal: svcTotalStr,
+        firstInstallmentDate: calculatedFirstDate,
+        lastInstallmentDate: calculatedLastDate
+      });
+    }
+  }, [
+    data.selectedAgreementIds,
+    data.originationFeeRate,
+    data.serviceFeeRate,
+    data.agreementOriginationFeePeriods,
+    data.agreementServiceFeePeriods,
+    data.agreementFirstDates,
+    data.agreementServiceFeeFirstDates,
+    data.firstInstallmentDate,
+    data.lastInstallmentDate,
+    appData.agreements,
+    proportion2,
+    onChange
+  ]);
+
   const handleChange = (field: keyof ServiceAgreementData, value: any) => {
     onChange({ ...data, [field]: value });
   };
@@ -62,29 +218,29 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
       <div className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญา</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">เลขที่สัญญา</label>
             <input
               type="text"
               value={data.contractNo}
               onChange={(e) => handleChange('contractNo', e.target.value)}
-              className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border"
+              className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border h-[38px]"
               placeholder="AGA/XX-SVC2025"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
             <input
               type="date"
               value={data.contractDate}
               onChange={(e) => handleChange('contractDate', e.target.value)}
-              className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border"
+              className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border h-[38px]"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-2">เลือกสัญญาที่เกี่ยวข้อง และระบุวันชำระงวดแรก</label>
-          <div className="space-y-3 border border-gray-400 rounded-md p-3 bg-gray-50 font-sans">
+          <label className="block text-sm font-medium text-gray-600 mb-2">เลือกสัญญาที่เกี่ยวข้อง และระบุวันชำระงวดแรก</label>
+          <div className="space-y-4 border border-gray-200 rounded-lg p-6 bg-gray-50/50 font-sans">
             {appData.agreements.map((agreement) => {
               const isSelected = data.selectedAgreementIds.includes(agreement.id);
               return (
@@ -101,12 +257,41 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                   </label>
 
                   {isSelected && (
-                    <div className="pl-6 grid grid-cols-2 gap-x-8 gap-y-4 pt-1">
+                    <div className="pl-8 grid grid-cols-2 gap-x-12 gap-y-8 pt-4 pb-4">
                       {/* Column 1: Origination Fee */}
-                      <div className="space-y-2">
-                        <div className="text-[11px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-sm">1. Origination Fee</div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-xs font-medium text-gray-500 whitespace-nowrap w-24">วันที่งวดแรก:</label>
+                      <div className="space-y-4">
+                        <div className="text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1 rounded-sm border border-teal-100">1. Origination Fee</div>
+
+                        {/* Rate % */}
+                        <div className="flex items-center gap-3">
+                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap">อัตราค่าตอบแทน (Rate) %:</label>
+                          <input
+                            type="text"
+                            value={data.originationFeeRate}
+                            onChange={(e) => handleChange('originationFeeRate', e.target.value)}
+                            className="block w-32 rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border bg-white"
+                          />
+                        </div>
+
+                        {/* Periods */}
+                        <div className="flex items-center gap-3">
+                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">จำนวนงวด:</label>
+                          <input
+                            type="text"
+                            value={data.agreementOriginationFeePeriods?.[agreement.id] || ''}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, ''); // Allow only digits
+                              const newPeriods = { ...data.agreementOriginationFeePeriods, [agreement.id]: parseInt(value) || 0 };
+                              handleChange('agreementOriginationFeePeriods', newPeriods);
+                            }}
+                            placeholder="0"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border bg-white"
+                          />
+                        </div>
+
+                        {/* First Date */}
+                        <div className="flex items-center gap-3">
+                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">วันที่งวดแรก:</label>
                           <input
                             type="date"
                             value={data.agreementFirstDates?.[agreement.id] || ''}
@@ -114,42 +299,90 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                               const newDates = { ...data.agreementFirstDates, [agreement.id]: e.target.value };
                               handleChange('agreementFirstDates', newDates);
                             }}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-xs p-1 border border-gray-200"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border"
                           />
                         </div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-xs font-medium text-gray-500 whitespace-nowrap w-24">ชำระงวดละ:</label>
+
+                        {/* Installment Amount Cal */}
+                        <div className="flex items-center gap-3">
+                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">ชำระงวดละ (คำนวณ):</label>
                           <input
                             type="text"
                             value={data.agreementInstallmentAmounts?.[agreement.id] || ''}
-                            onChange={(e) => {
-                              const newAmounts = { ...data.agreementInstallmentAmounts, [agreement.id]: e.target.value };
-                              handleChange('agreementInstallmentAmounts', newAmounts);
-                            }}
-                            placeholder="0.00"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-xs p-1 border border-gray-200"
+                            readOnly
+                            className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-100 text-gray-400 cursor-not-allowed"
                           />
                         </div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-xs font-medium text-gray-500 whitespace-nowrap w-24">จำนวนงวด:</label>
-                          <input
-                            type="number"
-                            value={data.agreementOriginationFeePeriods?.[agreement.id] || ''}
-                            onChange={(e) => {
-                              const newPeriods = { ...data.agreementOriginationFeePeriods, [agreement.id]: parseInt(e.target.value) || 0 };
-                              handleChange('agreementOriginationFeePeriods', newPeriods);
-                            }}
-                            placeholder="0"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-xs p-1 border border-gray-200"
-                          />
+
+                        {/* Sub-totals breakdown */}
+                        <div className="mt-4 text-xs space-y-2 bg-white p-4 rounded-lg border border-teal-50 shadow-sm">
+                          <div className="flex justify-between pb-1.5 font-bold text-teal-800">
+                            <span>ราคารวมทั้งหมด (รวม VAT)</span>
+                            <span>{(() => {
+                              const principal = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+                                ? parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0
+                                : (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
+                              const total = principal * (proportion2 / 100) * (parseFloat(data.originationFeeRate) / 100);
+                              return total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            })()}</span>
+                          </div>
+                          <div className="flex justify-between text-gray-400 text-[11px] pt-1 border-t border-teal-50">
+                            <span>ราคาบริการ</span>
+                            <span>{(() => {
+                              const principal = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+                                ? parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0
+                                : (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
+                              const total = principal * (proportion2 / 100) * (parseFloat(data.originationFeeRate) / 100);
+                              return (total / 1.07).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            })()}</span>
+                          </div>
+                          <div className="flex justify-between text-gray-400 text-[11px]">
+                            <span>ภาษีมูลค่าเพิ่ม</span>
+                            <span>{(() => {
+                              const principal = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+                                ? parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0
+                                : (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
+                              const total = principal * (proportion2 / 100) * (parseFloat(data.originationFeeRate) / 100);
+                              return (total - total / 1.07).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            })()}</span>
+                          </div>
                         </div>
                       </div>
 
                       {/* Column 2: Service Fee */}
-                      <div className="space-y-2">
-                        <div className="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-sm">2. Service Fee</div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-xs font-medium text-gray-500 whitespace-nowrap w-24">วันที่งวดแรก:</label>
+                      <div className="space-y-4">
+                        <div className="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-sm border border-amber-100">2. Service Fee</div>
+
+                        {/* Rate % */}
+                        <div className="flex items-center gap-3">
+                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap">อัตราค่าตอบแทน (Rate) %:</label>
+                          <input
+                            type="text"
+                            value={data.serviceFeeRate}
+                            onChange={(e) => handleChange('serviceFeeRate', e.target.value)}
+                            className="block w-32 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                          />
+                        </div>
+
+                        {/* Periods */}
+                        <div className="flex items-center gap-3">
+                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">จำนวนงวด:</label>
+                          <input
+                            type="text"
+                            value={data.agreementServiceFeePeriods?.[agreement.id] || ''}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, ''); // Allow only digits
+                              const newPeriods = { ...data.agreementServiceFeePeriods, [agreement.id]: parseInt(value) || 0 };
+                              handleChange('agreementServiceFeePeriods', newPeriods);
+                            }}
+                            placeholder="0"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                          />
+                        </div>
+
+                        {/* First Date */}
+                        <div className="flex items-center gap-3">
+                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">วันที่งวดแรก:</label>
                           <input
                             type="date"
                             value={data.agreementServiceFeeFirstDates?.[agreement.id] || ''}
@@ -157,34 +390,56 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                               const newDates = { ...data.agreementServiceFeeFirstDates, [agreement.id]: e.target.value };
                               handleChange('agreementServiceFeeFirstDates', newDates);
                             }}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-xs p-1 border border-gray-200"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
                           />
                         </div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-xs font-medium text-gray-500 whitespace-nowrap w-24">ค่างวด:</label>
+
+                        {/* Installment Amount Cal */}
+                        <div className="flex items-center gap-3">
+                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">ค่างวด (คำนวณ):</label>
                           <input
                             type="text"
                             value={data.agreementServiceFeeAmounts?.[agreement.id] || ''}
-                            onChange={(e) => {
-                              const newAmounts = { ...data.agreementServiceFeeAmounts, [agreement.id]: e.target.value };
-                              handleChange('agreementServiceFeeAmounts', newAmounts);
-                            }}
-                            placeholder="0.00"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-xs p-1 border border-gray-200"
+                            readOnly
+                            className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-100 text-gray-400 cursor-not-allowed"
                           />
                         </div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-xs font-medium text-gray-500 whitespace-nowrap w-24">จำนวนงวด:</label>
-                          <input
-                            type="number"
-                            value={data.agreementServiceFeePeriods?.[agreement.id] || ''}
-                            onChange={(e) => {
-                              const newPeriods = { ...data.agreementServiceFeePeriods, [agreement.id]: parseInt(e.target.value) || 0 };
-                              handleChange('agreementServiceFeePeriods', newPeriods);
-                            }}
-                            placeholder="0"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-xs p-1 border border-gray-200"
-                          />
+
+                        {/* Sub-totals breakdown */}
+                        <div className="mt-4 text-xs space-y-2 bg-white p-4 rounded-lg border border-amber-50 shadow-sm">
+                          <div className="flex justify-between pb-1.5 font-bold text-amber-800">
+                            <span>ราคารวมทั้งหมด (รวม VAT)</span>
+                            <span>{(() => {
+                              const principal = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+                                ? parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0
+                                : (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
+                              const periods = data.agreementServiceFeePeriods?.[agreement.id] || 0;
+                              const total = principal * (proportion2 / 100) * (parseFloat(data.serviceFeeRate) / 100) * (periods / 12);
+                              return total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            })()}</span>
+                          </div>
+                          <div className="flex justify-between text-gray-400 text-[11px] pt-1 border-t border-amber-50">
+                            <span>ราคาบริการ</span>
+                            <span>{(() => {
+                              const principal = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+                                ? parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0
+                                : (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
+                              const periods = data.agreementServiceFeePeriods?.[agreement.id] || 0;
+                              const total = principal * (proportion2 / 100) * (parseFloat(data.serviceFeeRate) / 100) * (periods / 12);
+                              return (total / 1.07).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            })()}</span>
+                          </div>
+                          <div className="flex justify-between text-gray-400 text-[11px]">
+                            <span>ภาษีมูลค่าเพิ่ม</span>
+                            <span>{(() => {
+                              const principal = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+                                ? parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0
+                                : (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
+                              const periods = data.agreementServiceFeePeriods?.[agreement.id] || 0;
+                              const total = principal * (proportion2 / 100) * (parseFloat(data.serviceFeeRate) / 100) * (periods / 12);
+                              return (total - total / 1.07).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            })()}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -195,54 +450,28 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-gray-100">
-          {/* 2.1 Origination Fee */}
-          <div className="space-y-3 p-3 bg-teal-50/50 rounded-lg border border-teal-100">
-            <h4 className="text-sm font-bold text-teal-800">2.1 ค่า Origination Fee</h4>
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">ราคารวมทั้งหมด (รวม VAT)</label>
-              <input
-                type="text"
-                value={data.originationFeeTotal}
-                onChange={(e) => handleChange('originationFeeTotal', e.target.value)}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border border-gray-200"
-                placeholder="0.00"
-              />
+        {/* 2.4 Grand Summary (Read Only) */}
+        <div className="grid grid-cols-2 gap-6 pt-2 border-t border-gray-100">
+          <div className="bg-teal-50 p-3 rounded-lg border border-teal-100">
+            <span className="text-xs font-bold text-teal-800 uppercase block mb-2 underline">สรุปค่า Origination Fee รวม</span>
+            <div className="flex justify-between text-sm font-bold">
+              <span>ราคารวมทั้งหมด:</span>
+              <span className="text-teal-700">{data.originationFeeTotal}</span>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="bg-white p-2 rounded border border-gray-200">
-                <span className="text-gray-500 block">ราคาบริการ:</span>
-                <span className="font-bold">{originationFees.price}</span>
-              </div>
-              <div className="bg-white p-2 rounded border border-gray-200">
-                <span className="text-gray-500 block">ภาษีมูลค่าเพิ่ม:</span>
-                <span className="font-bold">{originationFees.vat}</span>
-              </div>
+            <div className="flex justify-between text-[11px] text-gray-500 mt-1">
+              <span>ราคาบริการ: {originationFees.price}</span>
+              <span>VAT: {originationFees.vat}</span>
             </div>
           </div>
-
-          {/* 2.2 Service Fee */}
-          <div className="space-y-3 p-3 bg-blue-50/50 rounded-lg border border-blue-100">
-            <h4 className="text-sm font-bold text-blue-800">2.2 ค่า Service Fee</h4>
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">ราคารวมทั้งหมด (รวม VAT)</label>
-              <input
-                type="text"
-                value={data.serviceFeeTotal}
-                onChange={(e) => handleChange('serviceFeeTotal', e.target.value)}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border border-gray-200"
-                placeholder="0.00"
-              />
+          <div className="bg-amber-50 p-3 rounded-lg border border-amber-100">
+            <span className="text-xs font-bold text-amber-800 uppercase block mb-2 underline">สรุปค่า Service Fee รวม</span>
+            <div className="flex justify-between text-sm font-bold">
+              <span>ราคารวมทั้งหมด:</span>
+              <span className="text-amber-700">{data.serviceFeeTotal}</span>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="bg-white p-2 rounded border border-gray-200">
-                <span className="text-gray-500 block">ราคาบริการ:</span>
-                <span className="font-bold">{serviceFees.price}</span>
-              </div>
-              <div className="bg-white p-2 rounded border border-gray-200">
-                <span className="text-gray-500 block">ภาษีมูลค่าเพิ่ม:</span>
-                <span className="font-bold">{serviceFees.vat}</span>
-              </div>
+            <div className="flex justify-between text-[11px] text-gray-500 mt-1">
+              <span>ราคาบริการ: {serviceFees.price}</span>
+              <span>VAT: {serviceFees.vat}</span>
             </div>
           </div>
         </div>
@@ -256,8 +485,8 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
               <input
                 type="date"
                 value={data.firstInstallmentDate}
-                onChange={(e) => handleChange('firstInstallmentDate', e.target.value)}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border border-gray-200"
+                readOnly
+                className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed"
               />
             </div>
             <div>
@@ -265,36 +494,13 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
               <input
                 type="date"
                 value={data.lastInstallmentDate}
-                onChange={(e) => handleChange('lastInstallmentDate', e.target.value)}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border border-gray-200"
+                readOnly
+                className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed"
               />
             </div>
           </div>
         </div>
 
-        {/* 2.3 อัตราค่าตอบแทน */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">อัตราค่าตอบแทนการจัดหาลูกค้า (Origination Fee Rate) %</label>
-            <input
-              type="text"
-              value={data.originationFeeRate}
-              onChange={(e) => handleChange('originationFeeRate', e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border border-gray-200"
-              placeholder="2.25"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">อัตราค่าตอบแทนการบริหารจัดการ (Service Fee Rate) %</label>
-            <input
-              type="text"
-              value={data.serviceFeeRate}
-              onChange={(e) => handleChange('serviceFeeRate', e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border border-gray-200"
-              placeholder="0.90"
-            />
-          </div>
-        </div>
       </div>
     </section>
   );

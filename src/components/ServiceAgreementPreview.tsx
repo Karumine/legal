@@ -68,20 +68,35 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
 
   const renderServiceFeeTable = (agreement: any, agreeIdx: number) => {
     const label = CONTRACT_TYPE_LABELS[agreement.type as ContractType] || agreement.type;
-    const firstDate = data.agreementServiceFeeFirstDates?.[agreement.id] || '';
     const installmentAmountStr = data.agreementServiceFeeAmounts?.[agreement.id] || '0';
+    const totalAmount = parseFloat(installmentAmountStr.replace(/,/g, '')) || '0';
+    const firstDate = data.agreementServiceFeeFirstDates?.[agreement.id] || '';
     const periods = data.agreementServiceFeePeriods?.[agreement.id] || 0;
-    const totalAmount = parseFloat(installmentAmountStr.replace(/,/g, '')) || 0;
+    const formatNum = (num: number | string) => {
+      const n = typeof num === 'string' ? parseFloat(num.replace(/,/g, '')) : num;
+      return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
 
-    // Calculations
-    const feePerInstallment = Number((totalAmount / 1.07).toFixed(2));
-    const vatPerInstallment = Number((totalAmount - feePerInstallment).toFixed(2));
+    // Row calculations
+    const feePerInstallment = Number((parseFloat(totalAmount.toString().replace(/,/g, '')) / 1.07).toFixed(2));
+    const vatPerInstallment = Number((parseFloat(totalAmount.toString().replace(/,/g, '')) - feePerInstallment).toFixed(2));
 
-    const grandTotal = totalAmount * periods;
+    // New Formula logic for exact total
+    let principal = 0;
+    if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
+      principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
+    } else if (agreement.type === 'loan' || agreement.type === 'od') {
+      principal = parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0;
+    }
+    const proportion2 = appData.jointVentureData?.proportion2 || 0;
+    const svcRate = parseFloat(data.serviceFeeRate) || 0;
+
+    const exactTotal = principal * (proportion2 / 100) * (svcRate / 100) * (periods / 12);
+    const grandTotal = Math.round(exactTotal * 100) / 100;
+    
+    // Derived tax components from exact total
     const totalFee = Number((grandTotal / 1.07).toFixed(2));
     const totalVat = Number((grandTotal - totalFee).toFixed(2));
-
-    const formatNum = (num: number) => num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     // Helper to render a table column
     const renderColumn = (startIdx: number, endIdx: number) => (
@@ -158,12 +173,23 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     const totalAmount = parseFloat(installmentAmountStr.replace(/,/g, '')) || 0;
 
     // Calculations
-    const vatPerInstallment = totalAmount * 7 / 107;
-    const feePerInstallment = totalAmount - vatPerInstallment;
+    const vatPerInstallment = Math.round(totalAmount * 7 / 107 * 100) / 100;
+    const feePerInstallment = Math.round((totalAmount - vatPerInstallment) * 100) / 100;
     
-    const totalFee = feePerInstallment * periods;
-    const totalVat = vatPerInstallment * periods;
-    const grandTotal = totalAmount * periods;
+    let principal = 0;
+    if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
+      principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
+    } else if (agreement.type === 'loan' || agreement.type === 'od') {
+      principal = parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0;
+    }
+    const proportion2 = appData.jointVentureData?.proportion2 || 0;
+    const origRate = parseFloat(data.originationFeeRate) || 0;
+
+    const exactTotal = principal * (proportion2 / 100) * (origRate / 100);
+    const grandTotal = Math.round(exactTotal * 100) / 100;
+
+    const totalVat = Math.round(grandTotal * 7 / 107 * 100) / 100;
+    const totalFee = Math.round((grandTotal - totalVat) * 100) / 100;
 
     const formatNum = (num: number) => num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 

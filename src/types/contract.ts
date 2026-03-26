@@ -6,6 +6,7 @@ export interface ContractItem {
   type: ContractItemType;
   contractNo: string;
   amount: string;
+  rate: string;
 }
 
 export interface ContractData {

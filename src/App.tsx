@@ -1,12 +1,11 @@
 import { useState, useRef } from 'react';
 import { Printer, FileText, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
-import type { AppData, CompanyInfo, HirePurchaseData, BuybackData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
+import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
 import CompanyInfoForm from './components/CompanyInfoForm';
 import HirePurchaseForm from './components/HirePurchaseForm';
 import HirePurchasePreview from './components/HirePurchasePreview';
-import BuybackForm from './components/BuybackForm';
 import BuybackPreview from './components/BuybackPreview';
 import GuarantorForm from './components/GuarantorForm';
 import GuaranteePreview from './components/GuaranteePreview';
@@ -290,11 +289,19 @@ function App() {
     });
   });
 
-  if (data.hasBuyback) {
-    (data.buybackData || []).forEach((_, idx) => {
-      previewTabs.push({ key: `buyback-${idx}`, label: `สัญญารับซื้อคืน (${idx + 1})` });
-    });
-  }
+  data.agreements.forEach((agreement) => {
+    if ((agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')) {
+      const hp = agreement.data as HirePurchaseData;
+      if (hp.hasBuyback && hp.buybacks) {
+        hp.buybacks.forEach((bb, index) => {
+          previewTabs.push({ 
+            key: `buyback:${agreement.id}:${bb.id}`, 
+            label: `สัญญารับซื้อคืน(${index + 1}) (${hp.contractNo || 'รอดำเนินการ'})` 
+          });
+        });
+      }
+    }
+  });
   if (data.guarantors && data.guarantors.length > 0) {
     previewTabs.push({ key: 'guarantee', label: 'สัญญาค้ำประกัน' });
   }
@@ -436,6 +443,8 @@ function App() {
               {(activeAgreement.type === 'hirePurchase' || activeAgreement.type === 'hirePurchaseBack') && (
                 <HirePurchaseForm
                   data={activeAgreement.data}
+                  type={activeAgreement.type}
+                  customerInfo={data.customerInfo}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
                 />
               )}
@@ -456,8 +465,7 @@ function App() {
               )}
             </div>
           )}
-
-          {/* Step 5: Global Layout (Guarantors, Buyback, etc.) */}
+          {/* Step 5: Global Layout (Guarantors, etc.) */}
           <div className="space-y-5 border-t-2 border-slate-100 pt-5 mt-5">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest px-1">ข้อมูลประกอบและสัญญาพ่วง</h3>
 
@@ -466,31 +474,8 @@ function App() {
               onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
               agreements={data.agreements}
             />
-
-            <section className="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={data.hasBuyback}
-                  onChange={(e) => updateField('hasBuyback', e.target.checked)}
-                  className="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-                />
-                <div>
-                  <span className="font-semibold text-slate-700">รับซื้อคืน</span>
-                  <p className="text-xs text-slate-500">สำหรับเคสที่มีเงื่อนไขการรับซื้อคืน</p>
-                </div>
-              </label>
-            </section>
           </div>
 
-          {/* Step 5.1: Buyback Form (conditional) */}
-          {data.hasBuyback && (
-            <BuybackForm
-              data={data.buybackData || []}
-              onChange={(bb: BuybackData[]) => updateField('buybackData', bb)}
-              hpDate={hpData?.contractDate || ''}
-            />
-          )}
 
           {/* ── Additional Contracts (after guarantor) ── */}
           <div className="border-t-2 border-slate-300 pt-5 mt-2">
@@ -585,14 +570,30 @@ function App() {
               renderContractPreview(data.agreements.find(a => `agreement-${a.id}` === activePreview)!)
             )}
 
-            {activePreview.startsWith('buyback-') && data.hasBuyback && (
-              <BuybackPreview
-                data={data.buybackData[parseInt(activePreview.split('-')[1]) || 0]}
-                agileInfo={data.agileInfo}
-                tkInfo={data.tkInfo}
-                hpData={hpData}
-                customerInfo={data.customerInfo}
-              />
+            {activePreview.startsWith('buyback:') && (
+              (() => {
+                const parts = activePreview.split(':');
+                const agreementId = parts[1];
+                const buybackId = parts[2];
+                const agreement = data.agreements.find(a => a.id === agreementId);
+                if (agreement && (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')) {
+                  const hp = agreement.data as HirePurchaseData;
+                  const buyback = hp.buybacks?.find(b => b.id === buybackId);
+                  if (hp.hasBuyback && buyback) {
+                    return (
+                      <BuybackPreview
+                        data={buyback}
+                        agileInfo={data.agileInfo}
+                        tkInfo={data.tkInfo}
+                        hpData={hp}
+                        customerInfo={data.customerInfo}
+                        mainContractType={agreement.type}
+                      />
+                    );
+                  }
+                }
+                return null;
+              })()
             )}
             {activePreview === 'guarantee' && data.guarantors.length > 0 && (
               <GuaranteePreview data={buildGuaranteeData(data.guarantors)} />

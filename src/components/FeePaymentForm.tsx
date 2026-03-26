@@ -14,46 +14,84 @@ interface Props {
 
 export default function FeePaymentForm({ data, onChange, agreements }: Props) {
   const prevAgreementsRef = useRef<string[]>([]);
-  const mainAgreements = agreements;
 
-  // Auto-select ONLY newly added agreements
+  // Synchronize items with main agreements in real-time
   useEffect(() => {
-    const currentIds = mainAgreements.map(a => a.id);
-    const newIds = currentIds.filter(id => !prevAgreementsRef.current.includes(id));
+    const agreementMap = new Map(agreements.map(a => [a.id, a]));
+    const agreementIds = agreements.map(a => a.id);
+    
+    // Track new agreements to auto-select them once
+    const newIds = agreementIds.filter(id => !prevAgreementsRef.current.includes(id));
+    prevAgreementsRef.current = agreementIds;
 
-    if (newIds.length > 0) {
-      const existingAgreementIds = data.items.map(i => i.agreementId).filter(Boolean);
-      const newItems: ContractItem[] = [];
+    let hasChanges = false;
+    
+    // 1. Remove orphaned items (where agreementId exists but is no longer in agreements)
+    let updatedItems = data.items.filter(item => {
+      if (!item.agreementId) return true; // Keep manually added items
+      if (agreementIds.includes(item.agreementId)) return true;
+      hasChanges = true;
+      return false;
+    });
 
-      newIds.forEach(id => {
-        const agreement = mainAgreements.find(a => a.id === id);
-        if (agreement && !existingAgreementIds.includes(agreement.id)) {
-          const typeMap: Record<string, ContractItemType> = {
-            'hirePurchase': 'hirePurchase',
-            'hirePurchaseBack': 'hirePurchaseBack',
-            'loan': 'loanCredit',
-            'od': 'loanCredit'
-          };
+    // 2. Add ONLY newly created agreements (not manual unchecks)
+    newIds.forEach(id => {
+      const agreement = agreementMap.get(id);
+      if (agreement && !updatedItems.some(i => i.agreementId === id)) {
+        const agreementData = agreement.data as any;
+        const typeMap: Record<string, ContractItemType> = {
+          'hirePurchase': 'hirePurchase',
+          'hirePurchaseBack': 'hirePurchaseBack',
+          'loan': 'loanCredit',
+          'od': 'loanCredit'
+        };
 
-          newItems.push({
-            id: Date.now().toString() + id,
-            agreementId: agreement.id,
-            type: typeMap[agreement.type] || 'hirePurchase',
-            contractNo: (agreement.data as any).contractNo || '',
-            amount: ((agreement.data as any).totalAmount || '').toString().replace(/,/g, ''),
-          });
-        }
-      });
+        const netAmount = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+          ? parseFloat(agreementData.remainingAmount?.toString().replace(/,/g, '') || '0')
+          : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
+        
+        const rate = 3.0; // Default 3%
+        const calculatedAmount = (netAmount * rate / 100).toFixed(2);
 
-      if (newItems.length > 0) {
-        onChange({
-          ...data,
-          items: [...data.items, ...newItems]
+        updatedItems.push({
+          id: agreement.id,
+          agreementId: agreement.id,
+          type: typeMap[agreement.type] || 'hirePurchase',
+          contractNo: agreementData.contractNo || '',
+          amount: calculatedAmount,
+          rate: rate.toFixed(2),
         });
+        hasChanges = true;
       }
+    });
+
+    // 3. Sync metadata for ALREADY selected items
+    updatedItems = updatedItems.map(item => {
+      if (!item.agreementId) return item;
+      const agreement = agreementMap.get(item.agreementId);
+      if (!agreement) return item;
+      
+      const agreementData = agreement.data as any;
+      const targetContractNo = agreementData.contractNo || '';
+      
+      const netAmount = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+        ? parseFloat(agreementData.remainingAmount?.toString().replace(/,/g, '') || '0')
+        : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
+      
+      const rateNum = parseFloat(item.rate) || 0;
+      const targetAmount = (netAmount * rateNum / 100).toFixed(2);
+
+      if (item.contractNo !== targetContractNo || Math.abs(parseFloat(item.amount) - parseFloat(targetAmount)) > 0.01) {
+        hasChanges = true;
+        return { ...item, contractNo: targetContractNo, amount: targetAmount };
+      }
+      return item;
+    });
+
+    if (hasChanges) {
+      onChange({ ...data, items: updatedItems });
     }
-    prevAgreementsRef.current = currentIds;
-  }, [mainAgreements, data, onChange]);
+  }, [agreements, data.items.length]); // Trigger on system-wide agreement changes or manual list removals
 
   const handleChange = (field: keyof FeePaymentData, value: string) => {
     onChange({ ...data, [field]: value });
@@ -75,24 +113,50 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
         'od': 'loanCredit'
       };
 
+      const agreementData = agreement.data as any;
+      const netAmount = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+        ? parseFloat(agreementData.remainingAmount?.toString().replace(/,/g, '') || '0')
+        : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
+      
+      const rate = 3.0; // Default 3%
+      const calculatedAmount = (netAmount * rate / 100).toFixed(2);
+
       const newItem: ContractItem = {
-        id: Date.now().toString(),
+        id: agreement.id,
         agreementId: agreement.id,
         type: typeMap[agreement.type] || 'hirePurchase',
-        contractNo: (agreement.data as any).contractNo || '',
-        amount: ((agreement.data as any).totalAmount || '').toString().replace(/,/g, ''),
+        contractNo: agreementData.contractNo || '',
+        amount: calculatedAmount,
+        rate: rate.toFixed(2),
       };
       onChange({ ...data, items: [...data.items, newItem] });
     }
   };
 
   const handleItemChange = (id: string, field: keyof ContractItem, value: string) => {
-    onChange({
-      ...data,
-      items: data.items.map(item =>
-        item.id === id ? { ...item, [field]: value } : item
-      ),
+    const updatedItems = data.items.map(item => {
+      if (item.id === id) {
+        const updatedItem = { ...item, [field]: value };
+        
+        // Recalculate amount if rate changes
+        if (field === 'rate' && item.agreementId) {
+          const agreement = agreements.find(a => a.id === item.agreementId);
+          if (agreement) {
+            const agreementData = agreement.data as any;
+            const netAmount = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
+              ? parseFloat(agreementData.remainingAmount?.toString().replace(/,/g, '') || '0')
+              : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
+            
+            const rateNum = parseFloat(value) || 0;
+            updatedItem.amount = (netAmount * rateNum / 100).toFixed(2);
+          }
+        }
+        return updatedItem;
+      }
+      return item;
     });
+    
+    onChange({ ...data, items: updatedItems });
   };
 
   const removeItem = (id: string) => {
@@ -133,12 +197,12 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
         <div className="pt-2">
           <label className="block text-xs font-medium text-gray-600 mb-2">เลือกสัญญาหลักอ้างอิง</label>
           <div className="space-y-1 border border-gray-300 rounded-md p-2 bg-slate-50/50">
-            {mainAgreements.length === 0 ? (
+            {agreements.length === 0 ? (
               <div className="py-4 text-center text-gray-400 text-xs italic">
                 ยังไม่มีการสร้างสัญญาหลักในระบบ
               </div>
             ) : (
-              mainAgreements.map(agreement => {
+              agreements.map((agreement: Agreement) => {
                 const isSelected = data.items.some(item => item.agreementId === agreement.id);
                 return (
                   <div key={agreement.id} className="flex items-center gap-2 py-1 px-1.5 rounded hover:bg-white transition-colors">
@@ -150,7 +214,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
                         className="rounded text-rose-600 focus:ring-rose-500 w-4 h-4 shadow-sm"
                       />
                       <div className="flex items-center gap-1.5 leading-none">
-                        <span className="font-semibold text-rose-800">{CONTRACT_TYPE_LABELS[agreement.type]}</span>
+                        <span className="font-semibold text-rose-800">{CONTRACT_TYPE_LABELS[agreement.type as keyof typeof CONTRACT_TYPE_LABELS]}</span>
                         <span className="text-gray-400 text-xs">({(agreement.data as any).contractNo || 'ยังไม่มีเลขที่'})</span>
                       </div>
                     </label>
@@ -192,7 +256,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] uppercase tracking-wider font-bold text-gray-400 mb-1">เลขที่สัญญา</label>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญาอ้างอิง</label>
                     <input
                       type="text"
                       value={item.contractNo}
@@ -200,14 +264,26 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
                       className="block w-full rounded-md border-gray-200 shadow-sm p-2 border text-sm focus:border-rose-400 focus:ring-rose-400"
                     />
                   </div>
-                  <div>
-                    <label className="block text-[10px] uppercase tracking-wider font-bold text-gray-400 mb-1">ยอดจัดค้ำประกัน (บาท)</label>
-                    <input
-                      type="text"
-                      value={item.amount}
-                      onChange={(e) => handleItemChange(item.id, 'amount', e.target.value)}
-                      className="block w-full rounded-md border-gray-200 shadow-sm p-2 border text-sm focus:border-rose-400 focus:ring-rose-400"
-                    />
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-xs font-medium text-rose-600 mb-1">ร้อยละ (%)</label>
+                      <input
+                        type="text"
+                        value={item.rate}
+                        onChange={(e) => handleItemChange(item.id, 'rate', e.target.value)}
+                        className="block w-full rounded-md border-gray-200 shadow-sm p-2 border text-sm focus:border-rose-400 focus:ring-rose-400 font-medium"
+                        placeholder="3.00"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">ค่าธรรมเนียม (บาท)</label>
+                      <input
+                        type="text"
+                        value={item.amount}
+                        readOnly
+                        className="block w-full rounded-md border-gray-200 shadow-sm p-2 border text-sm font-bold bg-gray-100 text-gray-500 cursor-not-allowed"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

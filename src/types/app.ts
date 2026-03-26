@@ -17,6 +17,7 @@ export interface CompanyInfo {
 }
 
 export interface AssetDetail {
+  id: string;
   name: string;
   description: string;
   quantity: string;
@@ -45,11 +46,24 @@ export interface LandCollateral {
   owner: string;
 }
 
+export interface MachineDetail {
+  id: string;
+  name: string;
+  quantity: string;
+  price: string;
+}
+
 export interface CollateralAsset {
   type: 'land' | 'cash' | 'machinery';
   landDetails?: LandCollateral;
   cashAmount?: string;
   machineryDetails?: string;
+  machineName?: string;
+  machineModel?: string;
+  machineQuantity?: string;
+  machinePrice?: string;
+  machines?: MachineDetail[];
+  machineOwner?: string;
 }
 
 export interface HirePurchaseData {
@@ -92,8 +106,10 @@ export interface HirePurchaseData {
   lessor2Signatories: string;
   lesseeSignatories: string;
   witnesses: string;
-  businessPurpose: string;
   installationLocation: string;
+  businessPurpose: string;
+  hasBuyback?: boolean;
+  buybacks?: BuybackData[];
 }
 
 export interface BuybackTableEntry {
@@ -103,6 +119,7 @@ export interface BuybackTableEntry {
 }
 
 export interface BuybackData {
+  id: string;
   contractNo: string;
   contractDate: string;
   conditions: string;
@@ -110,6 +127,8 @@ export interface BuybackData {
   vendorDirectors: string;
   vendorAddress: string;
   vendorTaxId: string;
+  selectedAssetIds: string[];
+  downPercentage: string;
   buybackTable: BuybackTableEntry[];
 }
 
@@ -142,11 +161,11 @@ export interface CreditFacilityData {
   firstInstallmentDate: string;
   paymentDay: string;
   lastInstallmentDate: string;
-  
+
   // Collateral
   collateralAssets: CollateralAsset[];
   collateralValue: string;
-  
+
   stampDuty: string;
 
   // Signatories
@@ -208,8 +227,6 @@ export interface AppData {
   agreements: Agreement[];
   activeAgreementId: string | null;
   guarantors: GuarantorData[];
-  hasBuyback: boolean;
-  buybackData: BuybackData[];
   jointVentureData: JointVentureData;
   serviceAgreementData: ServiceAgreementData;
   feePaymentData: FeePaymentData;
@@ -246,7 +263,7 @@ export const initialAppData: AppData = {
   },
 
   customerInfo: {
-    companyName: 'บริษัท นันทะวรรณ กรีนดริ้งค์ จำกัด',
+    companyName: 'บริษัท นันทวรรณ กรีนดริ้งค์ จำกัด',
     directors: 'นางสาวรัตนา หมู่ทอง',
     address: 'เลขที่ 39 หมู่ที่ 4 ตำบลวังจุฬา อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา',
     taxId: '0145561001530',
@@ -274,8 +291,8 @@ export const initialAppData: AppData = {
           proportion: '80',
         },
         assets: [
-          { name: 'เครื่องเป่าขวดพลาสติก PET Auto 6 cav.', description: '"F6MV" พร้อมแม่พิมพ์ 1 ชุด', quantity: '1', unit: 'ชุด', unitPrice: '4,119,500', totalAmount: '4,119,500' },
-          { name: 'เครื่องบรรจุน้ำ XGF 40-40-12', description: '(Air conveyor, Outlet conveyor, Online cap sterilization, Lamp Checker, Cap loader) พร้อมอุปกรณ์ครบชุด', quantity: '1', unit: 'ชุด', unitPrice: '3,905,500', totalAmount: '3,905,500' }
+          { id: 'asset-1', name: 'เครื่องเป่าขวดพลาสติก PET Auto 6 cav.', description: '"F6MV" พร้อมแม่พิมพ์ 1 ชุด', quantity: '1', unit: 'ชุด', unitPrice: '4,119,500', totalAmount: '4,119,500' },
+          { id: 'asset-2', name: 'เครื่องบรรจุน้ำ XGF 40-40-12', description: '(Air conveyor, Outlet conveyor, Online cap sterilization, Lamp Checker, Cap loader) พร้อมอุปกรณ์ครบชุด', quantity: '1', unit: 'ชุด', unitPrice: '3,905,500', totalAmount: '3,905,500' }
         ],
         totalAmount: '8,025,000',
         downPaymentPercentage: '20',
@@ -325,26 +342,6 @@ export const initialAppData: AppData = {
   ],
   activeAgreementId: 'initial-hp',
 
-  hasBuyback: false,
-  buybackData: [
-    {
-      contractNo: '',
-      contractDate: TODAY,
-      conditions: '',
-      vendorName: '',
-      vendorDirectors: '',
-      vendorAddress: '',
-      vendorTaxId: '',
-      buybackTable: [
-        { year: 1, newRate: '50%', usedRate: '50%' },
-        { year: 2, newRate: '45%', usedRate: '40%' },
-        { year: 3, newRate: '40%', usedRate: '30%' },
-        { year: 4, newRate: '30%', usedRate: '20%' },
-        { year: 5, newRate: '20%', usedRate: 'น้อยกว่า 20%' },
-      ]
-    }
-  ],
-
   guarantors: [
     {
       id: '1',
@@ -362,8 +359,8 @@ export const initialAppData: AppData = {
     },
   ],
 
-  jointVentureData: { 
-    contractNo: 'AGA/08-CON032026', 
+  jointVentureData: {
+    contractNo: 'AGA/08-CON032026',
     contractDate: '2026-03-20',
     selectedAgreementIds: ['initial-hp'],
     proportion1: 20,

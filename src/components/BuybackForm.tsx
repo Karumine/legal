@@ -1,219 +1,272 @@
-import { Plus, Trash2, FilePlus } from 'lucide-react';
+import { useState } from 'react';
 import DirectorInput from './DirectorInput';
-import type { BuybackData } from '../types/app';
+import type { BuybackData, AssetDetail } from '../types/app';
+import { ShieldAlert, CheckCircle2, Search, Loader2 } from 'lucide-react';
+import { searchCompanyByTaxId } from '../services/dbdService';
+import { formatThaiId } from '../utils/formatters';
 
 interface Props {
-  data: BuybackData[];
-  onChange: (data: BuybackData[]) => void;
-  hpDate: string;
+  data: BuybackData;
+  parentAssets?: AssetDetail[];
+  otherBuybacksSelectedAssetIds?: string[];
+  onChange: (data: BuybackData) => void;
 }
 
-export default function BuybackForm({ data, onChange, hpDate }: Props) {
-  const updateBuyback = (index: number, field: keyof BuybackData, value: string) => {
-    const newData = [...data];
-    newData[index] = { ...newData[index], [field]: value };
-    onChange(newData);
+export default function BuybackForm({ data, parentAssets = [], otherBuybacksSelectedAssetIds = [], onChange }: Props) {
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState('');
+
+  const updateBuyback = (field: keyof BuybackData, value: any) => {
+    onChange({ ...data, [field]: value });
   };
 
-  const updateTable = (index: number, rowIdx: number, field: 'newRate' | 'usedRate', value: string) => {
-    const newData = [...data];
-    const newTable = [...newData[index].buybackTable];
-    newTable[rowIdx] = { ...newTable[rowIdx], [field]: value };
-    newData[index] = { ...newData[index], buybackTable: newTable };
-    onChange(newData);
-  };
-
-  const addBuyback = () => {
-    onChange([
-      ...(data || []),
-      {
-        contractNo: '',
-        contractDate: hpDate,
-        conditions: '',
-        vendorName: '',
-        vendorDirectors: '',
-        vendorAddress: '',
-        vendorTaxId: '',
-        buybackTable: [
-          { year: 1, newRate: '50%', usedRate: '50%' },
-          { year: 2, newRate: '45%', usedRate: '40%' },
-          { year: 3, newRate: '40%', usedRate: '30%' },
-          { year: 4, newRate: '30%', usedRate: '20%' },
-          { year: 5, newRate: '20%', usedRate: 'น้อยกว่า 20%' },
-        ]
+  const handleSearch = async () => {
+    if (!data.vendorTaxId?.trim()) {
+      setSearchError('กรุณาใส่เลข Tax ID ก่อน');
+      return;
+    }
+    setIsSearching(true);
+    setSearchError('');
+    try {
+      const result = await searchCompanyByTaxId(data.vendorTaxId.trim());
+      if (result) {
+        onChange({
+          ...data,
+          vendorName: result.companyName,
+          vendorAddress: result.address,
+          vendorTaxId: formatThaiId(result.taxId),
+        });
+      } else {
+        setSearchError('ไม่พบข้อมูลบริษัท');
       }
-    ]);
-  };
-
-  const removeBuyback = (index: number) => {
-    if ((data || []).length > 1) {
-      onChange((data || []).filter((_, i) => i !== index));
+    } catch {
+      setSearchError('เกิดข้อผิดพลาด');
+    } finally {
+      setIsSearching(false);
     }
   };
 
+  const updateTable = (rowIdx: number, field: 'newRate' | 'usedRate', value: string) => {
+    const newTable = [...data.buybackTable];
+    newTable[rowIdx] = { ...newTable[rowIdx], [field]: value };
+    onChange({ ...data, buybackTable: newTable });
+  };
+
+  const toggleAsset = (assetId: string) => {
+    const current = data.selectedAssetIds || [];
+    if (current.includes(assetId)) {
+      updateBuyback('selectedAssetIds', current.filter(id => id !== assetId));
+    } else {
+      updateBuyback('selectedAssetIds', [...current, assetId]);
+    }
+  };
+
+  const selectedAssets = parentAssets.filter(a => data.selectedAssetIds?.includes(a.id));
+  const subtotalSelected = selectedAssets.reduce((sum, a) => sum + (parseFloat(a.totalAmount.replace(/,/g, '')) || 0), 0);
+  const downPercentageNum = parseFloat(data.downPercentage.replace(/,/g, '')) || 0;
+  const downAmountNum = subtotalSelected * (downPercentageNum / 100);
+  const netValue = subtotalSelected - downAmountNum;
+
   return (
-    <section className="bg-white p-4 rounded-lg shadow-sm border border-orange-200">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-          <h3 className="font-semibold text-lg text-orange-700">สัญญารับซื้อคืน</h3>
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญารับซื้อคืน</label>
+          <input
+            type="text"
+            value={data.contractNo}
+            onChange={(e) => updateBuyback('contractNo', e.target.value)}
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
+            placeholder="AGA/XX-BB2025"
+          />
         </div>
-        <button
-          onClick={addBuyback}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 text-orange-700 rounded-md text-xs font-medium hover:bg-orange-100 border border-orange-200 transition-colors"
-        >
-          <FilePlus size={14} /> เพิ่มสัญญารับซื้อคืน
-        </button>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
+          <input
+            type="date"
+            value={data.contractDate}
+            onChange={(e) => updateBuyback('contractDate', e.target.value)}
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
+          />
+        </div>
       </div>
 
-      <div className="space-y-6">
-        {(data || []).map((buyback, index) => (
-          <div key={index} className="relative p-4 border border-orange-100 rounded-lg bg-orange-50/30">
-            {(data || []).length > 1 && (
-              <button
-                onClick={() => removeBuyback(index)}
-                className="absolute top-3 right-3 text-red-400 hover:text-red-600 p-1"
-                title="ลบสัญญานี้"
+      <div className="p-4 border border-blue-100 rounded-lg bg-blue-50/30">
+        <h5 className="text-xs font-bold text-blue-700 mb-3 flex items-center gap-2">
+          <CheckCircle2 size={14} /> เลือกเครื่องจักรในสัญญานี้
+        </h5>
+        <div className="space-y-2">
+          {parentAssets.map((asset) => {
+            const isSelectedHere = data.selectedAssetIds?.includes(asset.id);
+            const isSelectedElsewhere = otherBuybacksSelectedAssetIds.includes(asset.id);
+            
+            return (
+              <div 
+                key={asset.id} 
+                className={`flex items-center justify-between p-2 rounded border transition-colors ${
+                  isSelectedElsewhere ? 'bg-gray-100 border-gray-200 opacity-60' : 
+                  isSelectedHere ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-200 hover:border-blue-300'
+                }`}
               >
-                <Trash2 size={16} />
-              </button>
-            )}
-
-            <div className="flex items-center gap-2 mb-4">
-              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-600 text-white text-[10px] font-bold">
-                {index + 1}
-              </span>
-              <h4 className="font-medium text-orange-800 text-sm">สัญญารับซื้อคืนฉบับที่ {index + 1}</h4>
-            </div>
-
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญา</label>
+                <div className="flex items-center gap-3">
                   <input
-                    type="text"
-                    value={buyback.contractNo}
-                    onChange={(e) => updateBuyback(index, 'contractNo', e.target.value)}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border"
-                    placeholder="AGA/XX-BB2025"
+                    type="checkbox"
+                    checked={isSelectedHere}
+                    disabled={isSelectedElsewhere}
+                    onChange={() => toggleAsset(asset.id)}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer disabled:cursor-not-allowed"
                   />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
-                  <input
-                    type="date"
-                    value={buyback.contractDate}
-                    onChange={(e) => updateBuyback(index, 'contractDate', e.target.value)}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border"
-                  />
-                </div>
-              </div>
-              <div className="pt-4 border-t border-orange-100">
-                <h5 className="text-xs font-bold text-orange-700 mb-3">ข้อมูลผู้ขาย / ตัวแทนจำหน่าย (คู่สัญญาฝ่ายที่ 3)</h5>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="col-span-2">
-                    <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อบริษัทผู้ขาย / ตัวแทนจำหน่าย</label>
-                    <input
-                      type="text"
-                      value={buyback.vendorName}
-                      onChange={(e) => updateBuyback(index, 'vendorName', e.target.value)}
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border"
-                      placeholder="เช่น ห้างหุ้นส่วนจำกัด ท่าพระจันทร์ 2007"
-                    />
-                  </div>
                   <div>
-                    <DirectorInput
-                      label="กรรมการผู้มีอำนาจ"
-                      value={buyback.vendorDirectors}
-                      onChange={(val) => updateBuyback(index, 'vendorDirectors', val)}
-                      placeholder="เช่น นายดุษฎี จันทร์สคราญ"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">เลขประจำตัวผู้เสียภาษี</label>
-                    <input
-                      type="text"
-                      value={buyback.vendorTaxId}
-                      onChange={(e) => updateBuyback(index, 'vendorTaxId', e.target.value)}
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border"
-                      placeholder="0723550000557"
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่จดทะเบียน</label>
-                    <textarea
-                      value={buyback.vendorAddress}
-                      onChange={(e) => updateBuyback(index, 'vendorAddress', e.target.value)}
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border h-16"
-                      placeholder="เช่น 555 หมู่ 10 ตำบลอู่ทอง อำเภออู่ทอง จังหวัดสุพรรณบุรี"
-                    />
+                    <div className="text-sm font-medium text-gray-800">{asset.name}</div>
+                    <div className="text-[10px] text-gray-500">{asset.description}</div>
                   </div>
                 </div>
-              </div>
-
-              <div className="pt-4 border-t border-orange-100">
-                <h5 className="text-xs font-bold text-orange-700 mb-3">เกณฑ์ราคาการรับซื้อคืน (ตามปี)</h5>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-[11px] text-left border-collapse">
-                    <thead>
-                      <tr className="border-b border-orange-200 bg-orange-100/50">
-                        <th className="py-1.5 px-2 font-bold text-orange-800">ปีที่</th>
-                        <th className="py-1.5 px-2 font-bold text-orange-800">มือ 1 (%)</th>
-                        <th className="py-1.5 px-2 font-bold text-orange-800">มือ 2 (%)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {(buyback.buybackTable || []).map((row, rowIdx) => (
-                        <tr key={rowIdx} className="border-b border-orange-100/50 hover:bg-white/50">
-                          <td className="py-1.5 px-2 font-medium text-gray-700">ปีที่ {row.year}</td>
-                          <td className="py-1 px-2">
-                            <input
-                              type="text"
-                              value={row.newRate}
-                              onChange={(e) => updateTable(index, rowIdx, 'newRate', e.target.value)}
-                              className="w-full p-1 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none"
-                            />
-                          </td>
-                          <td className="py-1 px-2">
-                            <input
-                              type="text"
-                              value={row.usedRate}
-                              onChange={(e) => updateTable(index, rowIdx, 'usedRate', e.target.value)}
-                              className="w-full p-1 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="text-right">
+                  <div className="text-xs font-bold text-gray-700">{asset.totalAmount} บาท</div>
+                  {isSelectedElsewhere && (
+                    <div className="text-[10px] text-orange-600 flex items-center gap-1">
+                      <ShieldAlert size={10} /> เลือกไปแล้วในชุดอื่น
+                    </div>
+                  )}
                 </div>
               </div>
-
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">เงื่อนไขเพิ่มเติม</label>
-                <input
-                  type="text"
-                  value={buyback.conditions}
-                  onChange={(e) => updateBuyback(index, 'conditions', e.target.value)}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border"
-                  placeholder="เงื่อนไขเพิ่มเติม (ถ้ามี)"
-                />
+            );
+          })}
+        </div>
+        
+        <div className="mt-4 grid grid-cols-2 gap-4 border-t border-blue-100 pt-4">
+          <div>
+             <label className="block text-xs font-medium text-gray-600 mb-1">ราคารวมเครื่องจักรที่เลือก (บาท)</label>
+             <div className="text-lg font-bold text-blue-700">{subtotalSelected.toLocaleString()} บาท</div>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">เงินดาวน์ในส่วนสัญญานี้ (%)</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={data.downPercentage}
+                onChange={(e) => updateBuyback('downPercentage', e.target.value)}
+                className="block w-20 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white font-bold text-orange-600 text-center"
+                placeholder="20"
+              />
+              <span className="text-sm font-bold text-gray-500">%</span>
+              <div className="text-xs text-orange-700 font-bold ml-auto">
+                = {downAmountNum.toLocaleString()} บาท
               </div>
             </div>
           </div>
-        ))}
+          <div className="col-span-2 bg-blue-600 text-white p-3 rounded-lg flex justify-between items-center shadow-sm mt-2">
+            <span className="text-sm font-medium">มูลค่าหลังหักเงินดาวน์ สำหรับคำนวณรับซื้อคืน ({subtotalSelected.toLocaleString()} - {downAmountNum.toLocaleString()}):</span>
+            <span className="text-xl font-black">{netValue.toLocaleString()} บาท</span>
+          </div>
+        </div>
       </div>
       
-      {(data || []).length > 2 && (
-        <div className="mt-4 flex justify-center">
-          <button
-            onClick={addBuyback}
-            className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-md text-sm font-bold hover:bg-orange-700 shadow-sm transition-colors"
-          >
-            <Plus size={18} /> เพิ่มสัญญารับซื้อคืนอีกฉบับ
-          </button>
+      <div className="pt-2">
+        <h5 className="text-xs font-bold text-orange-700 mb-3 uppercase tracking-wider">ข้อมูลผู้ขาย / ตัวแทนจำหน่าย (คู่สัญญาฝ่ายที่ 3)</h5>
+        <div className="space-y-3 bg-orange-50/30 p-4 rounded-lg border border-orange-100">
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">เลข Tax ID</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={data.vendorTaxId}
+                onChange={(e) => updateBuyback('vendorTaxId', formatThaiId(e.target.value))}
+                className="block flex-1 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
+                placeholder="X-XXXX-XXXXX-XX-X"
+              />
+              <button
+                onClick={handleSearch}
+                disabled={isSearching}
+                className="flex items-center gap-1 px-3 py-2 bg-blue-600 text-white rounded-md text-xs hover:bg-blue-700 disabled:opacity-50 whitespace-nowrap"
+              >
+                {isSearching ? <Loader2 size={12} className="animate-spin" /> : <Search size={12} />}
+                {isSearching ? 'ค้นหา...' : 'ค้นหา'}
+              </button>
+            </div>
+            {searchError && <p className="mt-1 text-xs text-red-500">{searchError}</p>}
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อบริษัท</label>
+            <input
+              type="text"
+              value={data.vendorName}
+              onChange={(e) => updateBuyback('vendorName', e.target.value)}
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
+              placeholder="ชื่อบริษัทผู้ขาย / ตัวแทนจำหน่าย"
+            />
+          </div>
+
+          <div>
+            <DirectorInput
+              label="ชื่อกรรมการ"
+              value={data.vendorDirectors}
+              onChange={(val) => updateBuyback('vendorDirectors', val)}
+              placeholder="นาย/นาง/นางสาว..."
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่จดทะเบียน</label>
+            <textarea
+              value={data.vendorAddress}
+              onChange={(e) => updateBuyback('vendorAddress', e.target.value)}
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white h-20"
+              placeholder="ที่อยู่ตามหนังสือรับรอง"
+            />
+          </div>
         </div>
-      )}
-    </section>
+      </div>
+
+      <div className="pt-4 border-t border-orange-100">
+        <h5 className="text-xs font-bold text-orange-700 mb-3 uppercase tracking-wider">เกณฑ์ราคาการรับซื้อคืน (ตามปี)</h5>
+        <div className="overflow-x-auto bg-white rounded-md border border-orange-100">
+          <table className="min-w-full text-[11px] text-left border-collapse">
+            <thead>
+              <tr className="border-b border-orange-200 bg-orange-50/50">
+                <th className="py-2 px-3 font-bold text-orange-800">ปีที่</th>
+                <th className="py-2 px-3 font-bold text-orange-800 text-center">มือ 1 (%)</th>
+                <th className="py-2 px-3 font-bold text-orange-800 text-center">มือ 2 (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(data.buybackTable || []).map((row, rowIdx) => (
+                <tr key={rowIdx} className="border-b border-orange-50/50 hover:bg-orange-50/20">
+                  <td className="py-2 px-3 font-medium text-gray-700">ปีที่ {row.year}</td>
+                  <td className="py-1.5 px-3">
+                    <input
+                      type="text"
+                      value={row.newRate}
+                      onChange={(e) => updateTable(rowIdx, 'newRate', e.target.value)}
+                      className="w-full p-1.5 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none text-center"
+                    />
+                  </td>
+                  <td className="py-1.5 px-3">
+                    <input
+                      type="text"
+                      value={row.usedRate}
+                      onChange={(e) => updateTable(rowIdx, 'usedRate', e.target.value)}
+                      className="w-full p-1.5 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none text-center"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">เงื่อนไขเพิ่มเติม</label>
+        <input
+          type="text"
+          value={data.conditions}
+          onChange={(e) => updateBuyback('conditions', e.target.value)}
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
+          placeholder="เงื่อนไขเพิ่มเติม (ถ้ามี)"
+        />
+      </div>
+    </div>
   );
 }

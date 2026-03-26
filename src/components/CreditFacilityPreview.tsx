@@ -1,6 +1,7 @@
 import PageHeader from './PageHeader';
 import type { CreditFacilityData, CompanyInfo, GuarantorData } from '../types/app';
 import { formatThaiDate } from '../utils/thaiDate';
+import { formatThaiId } from '../utils/formatters';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { thaiNumberText } from '../utils/thaiNumberText';
 
@@ -44,6 +45,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
   const limit1 = Math.floor(loanAmt * (p1 / 100));
   const limit2 = Math.floor(loanAmt * (p2 / 100));
 
+  // No longer needed as machinery is now flat
+  const hasLargeMachinery = false;
+  const collateralOverflow = (data.collateralAssets || []).length > 2;
+  const machineryOffset = collateralOverflow ? 1 : 0;
+  
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
@@ -67,14 +73,14 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">1)</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{agileInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{agileInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 1”</b>)
+              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{agileInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 1”</b>)
             </div>
           </div>
 
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">2)</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย <Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{tkInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{tkInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 2”</b>)
+              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย <Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{tkInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 2”</b>)
             </div>
           </div>
 
@@ -85,7 +91,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">3)</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย <Highlight>{customerInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{customerInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
+              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย <Highlight>{customerInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
             </div>
           </div>
         </div>
@@ -535,29 +541,35 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
 
             {data.collateralAssets && data.collateralAssets.length > 0 ? (
               <>
-                {data.collateralAssets.slice(0, 2).map((asset, idx) => (
-                  <div key={idx} className="flex gap-2 ml-16 italic">
-                    <span>({getThaiIndex(idx)})</span>
-                    <div className="flex-1 text-justify">
-                      {asset.type === 'land' && asset.landDetails && (
-                        <div>
-                          <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> ตำบล <Highlight>{asset.landDetails.subDistrict}</Highlight> อำเภอ <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
-                        </div>
-                      )}
-                      {asset.type === 'cash' && (
-                        <div>
-                          <span className="font-bold border-b border-black text-black">เงินสด</span> : จำนวนเงิน <Highlight>{asset.cashAmount}</Highlight> บาท
-                        </div>
-                      )}
-                      {asset.type === 'machinery' && (
-                        <div>
-                          <span className="font-bold border-b border-black text-black">เครื่องจักร</span> : <Highlight>{asset.machineryDetails}</Highlight>
-                        </div>
-                      )}
+                {(data.collateralAssets || [])
+                  .slice(0, hasLargeMachinery ? 0 : 2)
+                  .map((asset, idx) => (
+                    <div key={idx} className="flex gap-2 ml-16 italic">
+                      <span>({getThaiIndex(idx)})</span>
+                      <div className="flex-1 text-justify">
+                        {asset.type === 'land' && asset.landDetails && (
+                          <div>
+                            <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> ตำบล <Highlight>{asset.landDetails.subDistrict}</Highlight> อำเภอ <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
+                          </div>
+                        )}
+                        {asset.type === 'cash' && (
+                          <div>
+                            <span className="font-bold border-b border-black text-black">เงินสด</span> : จำนวนเงิน <Highlight>{asset.cashAmount}</Highlight> บาท
+                          </div>
+                        )}
+                        {asset.type === 'machinery' && (
+                          <div className="mt-2 text-justify">
+                            <span className="font-bold border-b border-black text-black italic">เครื่องจักร</span> :{' '}
+                            <Highlight>{asset.machineName}</Highlight>{' '}
+                            จำนวน <Highlight>{asset.machineQuantity}</Highlight>{' '}
+                            ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
+                            อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
-                {data.collateralAssets.length <= 2 && (
+                  ))}
+                {(data.collateralAssets.length <= 2 && !hasLargeMachinery) && (
                   <div className="ml-16 mt-4 text-justify">
                     นอกจากนี้ ผู้ให้สินเชื่อมีสิทธิกำหนดให้ผู้กู้จัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้สินเชื่อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้กู้ที่มีต่อผู้ให้สินเชื่อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
                   </div>
@@ -569,14 +581,16 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         {renderPageFooter(9)}
       </div>
 
-      {/* Page 10 (Conditional Collateral Overflow) */}
-      {data.collateralAssets && data.collateralAssets.length > 2 && (
-        <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 italic">
+      {/* Page 10 (Conditional Collateral Overflow or Machinery) */}
+      {collateralOverflow && (
+        <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
           <PageHeader />
           <div className="space-y-4 pt-4">
-            {data.collateralAssets.slice(2).map((asset, idx) => (
-              <div key={idx + 2} className="flex gap-2 ml-16 italic">
-                <span>({getThaiIndex(idx + 2)})</span>
+            {(data.collateralAssets || [])
+              .slice(hasLargeMachinery ? 0 : 2)
+              .map((asset, idx) => (
+              <div key={idx + (hasLargeMachinery ? 0 : 2)} className="flex gap-2 ml-16 italic">
+                <span>({getThaiIndex(idx + (hasLargeMachinery ? 0 : 2))})</span>
                 <div className="flex-1 text-justify">
                   {asset.type === 'land' && asset.landDetails && (
                     <div>
@@ -589,8 +603,12 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                     </div>
                   )}
                   {asset.type === 'machinery' && (
-                    <div>
-                      <span className="font-bold border-b border-black text-black">เครื่องจักร</span> : <Highlight>{asset.machineryDetails}</Highlight>
+                    <div className="mt-2">
+                      <span className="font-bold border-b border-black text-black">เครื่องจักร</span> :{' '}
+                      <Highlight>{asset.machineName}</Highlight>{' '}
+                      จำนวน <Highlight>{asset.machineQuantity}</Highlight>{' '}
+                      ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
+                      อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
                     </div>
                   )}
                 </div>
@@ -606,7 +624,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
 
       {/* Page 11 (Clauses 7.4 - 7.7) */}
       {(() => {
-        const pageNum = data.collateralAssets && data.collateralAssets.length > 2 ? 11 : 10;
+        const pageNum = 10 + machineryOffset;
         return (
           <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
             <PageHeader />

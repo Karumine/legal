@@ -4,6 +4,7 @@ import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { thaiNumberText } from '../utils/thaiNumberText';
 import { formatThaiDate } from '../utils/thaiDate';
+import { formatThaiId } from '../utils/formatters';
 
 interface Props {
   data: HirePurchaseData;
@@ -27,12 +28,25 @@ const GreenHighlight = ({ children }: { children: React.ReactNode }) => (
 export default function HirePurchasePreview({ data, customerInfo, guarantors = [], type = 'hirePurchase' }: Props) {
 
   const firstPageMax = 3;
+  const integratedPageMax = 3;
   const subsequentPageMax = 6;
   const assetCount = data.assets?.length || 0;
-  const overflowAssets = assetCount > firstPageMax ? data.assets!.slice(firstPageMax) : [];
-  const overflowPagesCount = Math.ceil(overflowAssets.length / subsequentPageMax);
-  const collateralOverflow = (data.collateralAssets || []).length > 3;
-  const collateralOffset = collateralOverflow ? 1 : 0;
+  
+  const isLargeList = assetCount >= 7;
+  const integratedAssetsCount = (!isLargeList && assetCount > firstPageMax) 
+    ? Math.min(assetCount - firstPageMax, integratedPageMax) 
+    : 0;
+  const dedicatedOverflowAssetsCount = assetCount > firstPageMax ? assetCount - firstPageMax - integratedAssetsCount : 0;
+  
+  const dedicatedOverflowAssets = dedicatedOverflowAssetsCount > 0 ? data.assets!.slice(firstPageMax, firstPageMax + dedicatedOverflowAssetsCount) : [];
+  const integratedAssets = integratedAssetsCount > 0 ? data.assets!.slice(assetCount - integratedAssetsCount) : [];
+  
+  const overflowPagesCount = Math.ceil(dedicatedOverflowAssets.length / subsequentPageMax);
+  
+  // No longer needed as machinery is now flat
+  const hasLargeMachinery = false;
+  // collateralOffset triggers a new page (page 10) if more than 3 assets
+  const collateralOffset = (data.collateralAssets || []).length > 3 ? 1 : 0;
   const totalPages = 24 + overflowPagesCount + collateralOffset;
 
   const renderPageFooter = (pageNum: number) => (
@@ -107,8 +121,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
         )}
         {asset.type === 'machinery' && (
-          <div>
-            <span className="font-bold">เครื่องจักร :</span> <Highlight>{asset.machineryDetails}</Highlight>
+          <div className="mt-2">
+            <span className="font-bold">เครื่องจักร :</span>{' '}
+            <Highlight>{asset.machineName}</Highlight>{' '}
+            จำนวน <Highlight>{asset.machineQuantity}</Highlight>{' '}
+            ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
+            อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
           </div>
         )}
       </div>
@@ -146,13 +164,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor1.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{data.lessor1.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
+              <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor1.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor2.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{data.lessor2.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
+              <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor2.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
             </div>
           </div>
           <div className="pl-6">
@@ -161,7 +179,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">3.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{customerInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
+              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
             </div>
           </div>
         </div>
@@ -234,7 +252,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="flex-1">ผู้ให้เช่าซื้อตกลงให้เช่าซื้อ และผู้เช่าซื้อตกลงเช่าซื้อเครื่องจักรและอุปกรณ์ประกอบ ดังต่อไปนี้</div>
           </div>
           <div className="space-y-4 pl-8">
-            {data.assets?.slice(0, 3).map((asset, idx) => (
+            {data.assets?.slice(0, firstPageMax).map((asset, idx) => (
               <div key={idx} className="flex gap-2">
                 <span className="">(2.1.{idx + 1})</span>
                 <div className="flex-1">
@@ -245,7 +263,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               </div>
             ))}
           </div>
-          {(!data.assets || data.assets.length <= 3) && renderTotalSummary()}
+          {(!data.assets || data.assets.length <= firstPageMax) && renderTotalSummary()}
         </div>
 
         {renderPageFooter(2)}
@@ -255,7 +273,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       {overflowPagesCount > 0 && Array.from({ length: overflowPagesCount }).map((_, pageIndex) => {
         const startIndex = pageIndex * subsequentPageMax;
         const endIndex = startIndex + subsequentPageMax;
-        const pageAssets = overflowAssets.slice(startIndex, endIndex);
+        const pageAssets = dedicatedOverflowAssets.slice(startIndex, endIndex);
         const currentPageNum = 3 + pageIndex;
 
         return (
@@ -276,7 +294,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 );
               })}
             </div>
-            {pageIndex === overflowPagesCount - 1 && renderTotalSummary()}
+            {pageIndex === overflowPagesCount - 1 && integratedAssetsCount === 0 && renderTotalSummary()}
             {renderPageFooter(currentPageNum)}
           </div>
         );
@@ -285,6 +303,26 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       {/* Contract Sections Page 1 */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
+        
+        {integratedAssets.length > 0 && (
+          <div className="space-y-4 pl-8 mb-6 mt-6">
+            {integratedAssets.map((asset, idx) => {
+              const globalIdx = assetCount - integratedAssets.length + idx;
+              return (
+                <div key={globalIdx} className="flex gap-2">
+                  <span className="">(2.1.{globalIdx + 1})</span>
+                  <div className="flex-1">
+                    <span>
+                      <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight> จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+            {renderTotalSummary()}
+          </div>
+        )}
+
         <div className="mt-8 space-y-6">
           <div className="indent-10">
             ซึ่งเครื่องจักรและอุปกรณ์ประกอบในข้อ 2.1 ต่อไปนี้จะเรียกรวมว่า (<b>“ทรัพย์สินที่เช่าซื้อ”</b>) และผู้ให้เช่าซื้อตกลงให้เช่าซื้อทรัพย์สินที่เช่าซื้อตามสัดส่วนกรรมสิทธิ์รวมที่กำหนดไว้ในข้อ 1. ของสัญญาฉบับนี้
@@ -325,17 +363,19 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <span className="">3.2</span>
             <div className="flex-1 space-y-4">
               <div className="underline">การชำระค่าเช่าซื้อ</div>
-              <div className="flex gap-4">
-                <span className="">(ก)</span>
-                <div className="flex-1">
-                  ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก (Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
-                  {data.hasCustomGreenText !== false && data.customGreenText && (
-                    <div className="mt-4">
-                      <GreenHighlight>{data.customGreenText}</GreenHighlight>
-                    </div>
-                  )}
+              {type !== 'hirePurchaseBack' && (
+                <div className="flex gap-4">
+                  <span className="">(ก)</span>
+                  <div className="flex-1">
+                    ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก (Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
+                    {data.hasCustomGreenText !== false && data.customGreenText && (
+                      <div className="mt-4">
+                        <GreenHighlight>{data.customGreenText}</GreenHighlight>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="flex gap-4">
                 <span className="">(ข)</span>
                 <div className="flex-1">
@@ -564,22 +604,37 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="flex-1 space-y-4">
               <div>ผู้เช่าซื้อตกลงว่าบรรดาทรัพย์สินดังต่อไปนี้ (“ทรัพย์สินหลักประกัน”) เป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า</div>
 
-              {(data.collateralAssets || []).slice(0, 3).map((asset, idx) => renderCollateralAsset(asset, idx))}
+              {/* If we have large machinery, only show non-machinery on this page, or show machinery if it's small */}
+              {(data.collateralAssets || [])
+                .slice(0, hasLargeMachinery ? 1 : 3)
+                .map((asset, idx) => renderCollateralAsset(asset, idx))}
+
+              {!hasLargeMachinery && (data.collateralAssets || []).length > 0 && (data.collateralAssets || []).length <= 3 && (
+                <div className="mt-4 text-justify italic">
+                  นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
+                </div>
+              )}
             </div>
           </div>
         </div>
         {renderPageFooter(9 + overflowPagesCount)}
       </div>
 
-      {/* Contract Sections Page 8 - Continued Section 6.3 */}
-      {collateralOverflow && (
+      {/* Contract Sections Page 8 - Continued Section 6.3 (Machinery or Overflow) */}
+      {collateralOffset === 1 && (
         <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
           <PageHeader />
           <div className="mt-8 space-y-6">
             <div className="flex gap-4">
               <span className="opacity-0">6.3</span>
               <div className="flex-1 space-y-4">
-                {(data.collateralAssets || []).slice(3).map((asset, idx) => renderCollateralAsset(asset, idx + 3))}
+                {(data.collateralAssets || [])
+                  .slice(hasLargeMachinery ? 1 : 3)
+                  .map((asset, idx) => renderCollateralAsset(asset, idx + (hasLargeMachinery ? 1 : 3)))}
+                
+                <div className="mt-4 text-justify italic">
+                  นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
+                </div>
               </div>
             </div>
           </div>
@@ -591,9 +646,6 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
-          <div className="mb-4 text-justify">
-            นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
-          </div>
 
           <div className="flex gap-4">
             <span className="">6.4</span>
@@ -601,6 +653,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               คู่สัญญาทั้งสามฝ่ายตกลงว่าสิทธิของผู้ให้เช่าซื้อเหนือทรัพย์สินที่เป็นหลักประกันตามข้อ 6.3 ของสัญญาฉบับนี้ นั้น เป็นไปตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
             </div>
           </div>
+
 
           <div className="flex gap-4">
             <span className="">6.5</span>
@@ -641,6 +694,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               โดยไม่คำนึงถึงข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงว่าในกรณีที่ผู้ให้เช่าซื้อได้ร้องขอให้ผู้ให้เช่าซื้อจัดหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อตกลงจัดหาทรัพย์สินเพิ่มเติมแก่ผู้ให้เช่าซื้อภายใน 1 (หนึ่ง) เดือน นับจากวันที่ผู้ให้เช่าซื้อร้องขอ ทั้งนี้ ผู้ให้เช่าซื้อตกลงว่าจะไม่ใช้สิทธิในข้อนี้โดยไม่มีเหตุอันสมควร
             </div>
           </div>
+
 
           <div className="flex gap-4">
             <span className="">6.9</span>

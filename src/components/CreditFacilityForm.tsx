@@ -122,7 +122,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                 placeholder="ระบุวัตถุประสงค์การกู้..."
               />
             </div>
-            
+
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">อัตราดอกเบี้ยร้อยละต่อปี (4.2)</label>
@@ -141,7 +141,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                   type="text"
                   name="installments"
                   value={data.installments || ''}
-                  onChange={handleChange}
+                  onChange={(e) => onChange({ ...data, installments: e.target.value.replace(/\D/g, '') })}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
                   placeholder="เช่น 24"
                 />
@@ -301,7 +301,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                       >
                         <option value="land">จำนองที่ดิน</option>
                         <option value="cash">เงินสด</option>
-                        <option value="machinery">เครื่องจักร</option>
+                        <option value="machinery">จำนองเครื่องจักร</option>
                       </select>
                     </div>
                   </div>
@@ -338,8 +338,8 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                   )}
 
                   {asset.type === 'cash' && (
-                    <div>
-                      <label className="block text-[10px] text-gray-500">จำนวนเงิน (บาท)</label>
+                    <div className="mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm">
+                      <label className="block text-xs font-semibold text-gray-500 mb-1">จำนวนเงิน (บาท)</label>
                       <input
                         type="text"
                         value={asset.cashAmount || ''}
@@ -348,23 +348,76 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                           newAssets[idx].cashAmount = e.target.value;
                           onChange({ ...data, collateralAssets: newAssets });
                         }}
-                        className="block w-full rounded border-gray-300 text-xs p-1 border"
+                        className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
                       />
                     </div>
                   )}
 
                   {asset.type === 'machinery' && (
-                    <div>
-                      <label className="block text-[10px] text-gray-500">รายละเอียดเครื่องจักร</label>
-                      <textarea
-                        value={asset.machineryDetails || ''}
-                        onChange={(e) => {
-                          const newAssets = [...data.collateralAssets];
-                          newAssets[idx].machineryDetails = e.target.value;
-                          onChange({ ...data, collateralAssets: newAssets });
-                        }}
-                        className="block w-full rounded border-gray-300 text-xs p-1 border h-16"
-                      />
+                    <div className="mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm space-y-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเจ้าของเครื่องจักร (Owner)</label>
+                        <input
+                          type="text"
+                          value={asset.machineOwner || ''}
+                          onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx] = { ...newAssets[idx], machineOwner: e.target.value };
+                            onChange({ ...data, collateralAssets: newAssets });
+                          }}
+                          className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
+                          placeholder="เช่น ห้างหุ้นส่วนจำกัด พี.เอ็น.พี.เมดิซัพพลาย"
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-12 gap-4">
+                        <div className="col-span-12">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">รายละเอียดเครื่องจักร</label>
+                          <input
+                            type="text"
+                            value={asset.machineName || ''}
+                            onChange={(e) => {
+                              const newAssets = [...data.collateralAssets];
+                              newAssets[idx] = { ...newAssets[idx], machineName: e.target.value };
+                              onChange({ ...data, collateralAssets: newAssets });
+                            }}
+                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
+                            placeholder="เช่น เครื่องเป่าขวดพลาสติก PET กึ่งอัตโนมัติ"
+                          />
+                        </div>
+                        <div className="col-span-4">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">จำนวน</label>
+                          <input
+                            type="text"
+                            value={asset.machineQuantity || ''}
+                            onChange={(e) => {
+                              const newAssets = [...data.collateralAssets];
+                              newAssets[idx] = { ...newAssets[idx], machineQuantity: e.target.value };
+                              onChange({ ...data, collateralAssets: newAssets });
+                            }}
+                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-center"
+                            placeholder="1"
+                          />
+                        </div>
+                        <div className="col-span-8">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">ราคา (บาท)</label>
+                          <input
+                            type="text"
+                            value={asset.machinePrice || ''}
+                            onChange={(e) => {
+                              const val = e.target.value.replace(/,/g, '');
+                              if (!isNaN(Number(val)) || val === '') {
+                                const formatted = val ? Number(val).toLocaleString('en-US') : '';
+                                const newAssets = [...data.collateralAssets];
+                                newAssets[idx] = { ...newAssets[idx], machinePrice: formatted };
+                                onChange({ ...data, collateralAssets: newAssets });
+                              }
+                            }}
+                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-right font-medium"
+                            placeholder="0"
+                          />
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>

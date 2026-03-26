@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { Copy, Plus, Trash2, UserPlus, CheckSquare } from 'lucide-react';
+import { Copy, Plus, Trash2, UserPlus } from 'lucide-react';
 import type { GuarantorData, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
+import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 
 interface Props {
   data: GuarantorData[];
@@ -182,9 +183,9 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
                   <input
                     type="text"
                     value={guarantor.guarantorIdCard}
-                    onChange={(e) => updateGuarantor(guarantor.id, 'guarantorIdCard', e.target.value)}
+                    onChange={(e) => updateGuarantor(guarantor.id, 'guarantorIdCard', formatThaiId(e.target.value))}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-                    placeholder="X XXXX XXXXX XX X"
+                    placeholder="X-XXXX-XXXXX-XX-X"
                   />
                 </div>
                 <div>
@@ -192,9 +193,9 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
                   <input
                     type="text"
                     value={guarantor.phone || ''}
-                    onChange={(e) => updateGuarantor(guarantor.id, 'phone', e.target.value)}
+                    onChange={(e) => updateGuarantor(guarantor.id, 'phone', formatPhoneNumber(e.target.value))}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-                    placeholder="08X-XXXXXXX"
+                    placeholder="08X-XXX-XXXX"
                   />
                 </div>
               </div>
@@ -252,8 +253,9 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
                       <input
                         type="text"
                         value={guarantor.spouseIdCard}
-                        onChange={(e) => updateGuarantor(guarantor.id, 'spouseIdCard', e.target.value)}
+                        onChange={(e) => updateGuarantor(guarantor.id, 'spouseIdCard', formatThaiId(e.target.value))}
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
+                        placeholder="X-XXXX-XXXXX-XX-X"
                       />
                     </div>
                   </div>
