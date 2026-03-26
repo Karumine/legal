@@ -1,7 +1,9 @@
 import PageHeader from './PageHeader';
-import type { BuybackData, CompanyInfo, HirePurchaseData } from '../types/app';
+import type { BuybackData, CompanyInfo, HirePurchaseData, ContractType } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatThaiDate } from '../utils/thaiDate';
+import { formatThaiId } from '../utils/formatters';
+import { CONTRACT_TYPE_LABELS } from '../types/app';
 
 interface Props {
   data: BuybackData;
@@ -9,9 +11,11 @@ interface Props {
   tkInfo: CompanyInfo;
   hpData: HirePurchaseData;
   customerInfo: CompanyInfo;
+  mainContractType?: ContractType;
 }
 
-export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, customerInfo }: Props) {
+export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, customerInfo, mainContractType }: Props) {
+  const contractLabel = mainContractType ? CONTRACT_TYPE_LABELS[mainContractType] : 'สัญญาเช่าซื้อ';
   const Highlight = ({ children }: { children: React.ReactNode }) => (
     <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
       {children || '\u00A0'}
@@ -24,16 +28,30 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
     </span>
   );
 
-  const totalAssetValue = (hpData.assets || []).reduce((sum, asset) => {
+  const assets = (hpData.assets || []).filter(a => data.selectedAssetIds?.includes(a.id));
+  
+  const totalAssetValue = assets.reduce((sum, asset) => {
     const amt = parseFloat(asset.totalAmount.replace(/,/g, '')) || 0;
     return sum + amt;
   }, 0);
 
-  const downPaymentRate = 20; // Hardcoded per image
-  const downPaymentAmount = totalAssetValue * (downPaymentRate / 100);
+  const downPaymentPercentage = parseFloat(data.downPercentage || '0') || 0;
+  const downPaymentAmount = totalAssetValue * (downPaymentPercentage / 100);
   const remainingAmount = totalAssetValue - downPaymentAmount;
 
-  const assets = hpData.assets || [];
+  const formatRate = (rate: string) => {
+    if (!rate) return '';
+    // If it's just a number, append %
+    if (/^\d+(\.\d+)?$/.test(rate.trim())) {
+      return `${rate.trim()}%`;
+    }
+    // If it doesn't have %, append it
+    if (!rate.includes('%')) {
+      return `${rate}%`;
+    }
+    return rate;
+  };
+
   const PAGE2_MAX = 6;
   const SUBSEQUENT_MAX = 8;
 
@@ -65,7 +83,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
-          <h2 className="text-xl">สัญญารับซื้อคืน</h2>
+          <h2 className="text-xl text-balance px-12">สัญญารับซื้อคืน ({contractLabel})</h2>
           <div className="mt-2 text-[14px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
@@ -79,13 +97,13 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4 font-bold">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท ) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{agileInfo.address}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{agileInfo.taxId}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
+              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท ) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{agileInfo.address}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4 font-bold">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{tkInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{tkInfo.taxId}</Highlight> (<b>"บริษัทฝ่ายที่ 2"</b>)
+              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{tkInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 2"</b>)
             </div>
           </div>
           <div className="pl-6 italic text-gray-700">
@@ -94,7 +112,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4 font-bold">3.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย<Highlight>{data.vendorDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานใหญ่จดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.vendorAddress}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{data.vendorTaxId}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+              <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย<Highlight>{data.vendorDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานใหญ่จดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.vendorAddress}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
             </div>
           </div>
           <div className="pl-6 italic text-gray-700">
@@ -215,7 +233,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">1.3.</span>
             <div className="flex-1">
-              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {downPaymentRate} ({thaiBahtText(downPaymentRate.toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText((totalAssetValue * 0.2).toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จากบริษัท <Highlight>{customerInfo.companyName}</Highlight> (“ผู้เช่าซื้อ”) ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระ และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทุกฝ่ายตกลงให้เงินค่าชำระราคาครั้งดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
+              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {Math.round(downPaymentPercentage)} ({thaiBahtText(Math.round(downPaymentPercentage).toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText(downPaymentAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จากบริษัท <Highlight>{customerInfo.companyName}</Highlight> (“ผู้เช่าซื้อ”) ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระ และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทุกฝ่ายตกลงให้เงินค่าชำระราคาครั้งดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
             </div>
           </div>
 
@@ -302,8 +320,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
                 {data.buybackTable && data.buybackTable.map((row, idx) => (
                   <tr key={idx}>
                     <td className="border border-black px-4 py-1">{row.year}</td>
-                    <td className="border border-black px-4 py-1">{row.newRate}</td>
-                    <td className="border border-black px-4 py-1">{row.usedRate}</td>
+                    <td className="border border-black px-4 py-1">{formatRate(row.newRate)}</td>
+                    <td className="border border-black px-4 py-1">{formatRate(row.usedRate)}</td>
                   </tr>
                 ))}
               </tbody>

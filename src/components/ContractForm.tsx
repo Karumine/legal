@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, Trash2, Search, Loader2 } from 'lucide-react';
 import type { ContractData, ContractItem, ContractItemType } from '../types/contract';
 import { searchCompanyByTaxId } from '../services/dbdService';
+import { formatThaiId } from '../utils/formatters';
 
 interface Props {
   data: ContractData;
@@ -14,7 +15,11 @@ export default function ContractForm({ data, onChange }: Props) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    onChange({ ...data, [name]: value });
+    if (name === 'customerTaxId') {
+      onChange({ ...data, [name]: formatThaiId(value) });
+    } else {
+      onChange({ ...data, [name]: value });
+    }
   };
 
   const handleItemChange = (id: string, field: keyof ContractItem, value: string) => {

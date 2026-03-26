@@ -3,6 +3,7 @@ import PageHeader from './PageHeader';
 import type { GuaranteeData } from '../types/guarantee';
 import { formatThaiDate } from '../utils/thaiDate';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
+import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 
 interface Props {
   data: GuaranteeData;
@@ -54,14 +55,14 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-6">(1)</span>
             <div className="flex-1">
-              <b><Highlight>{data.lenderCompany}</Highlight></b> (โดย<Highlight>{data.lenderDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lenderAddress}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{data.lenderTaxId}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 1"</b>)
+              <b><Highlight>{data.lenderCompany}</Highlight></b> (โดย<Highlight>{data.lenderDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lenderAddress}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lenderTaxId)}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 1"</b>)
             </div>
           </div>
 
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-6">(2)</span>
             <div className="flex-1">
-              <b><Highlight>{data.borrowerCompany}</Highlight></b> (โดย<Highlight>{data.borrowerDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.borrowerAddress}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{data.borrowerTaxId}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 2"</b>)
+              <b><Highlight>{data.borrowerCompany}</Highlight></b> (โดย<Highlight>{data.borrowerDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.borrowerAddress}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.borrowerTaxId)}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 2"</b>)
             </div>
           </div>
 
@@ -73,7 +74,7 @@ export default function GuaranteePreview({ data }: Props) {
             <div key={idx} className="flex gap-2 text-justify pr-2">
               <span className="shrink-0 w-6">({idx + 3})</span>
               <div className="flex-1">
-                <b><Highlight>{guarantor.name}</Highlight></b> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{guarantor.idCard}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{guarantor.address}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                <b><Highlight>{guarantor.name}</Highlight></b> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{guarantor.address}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
               </div>
             </div>
           ))}
@@ -328,7 +329,7 @@ export default function GuaranteePreview({ data }: Props) {
                 <div className="font-bold text-slate-700 mb-1 leading-none">ในกรณีของผู้ค้ำประกันคนที่ {idx + 1}:</div>
                 <div>ชื่อ-นามสกุล: <Highlight>{guarantor.name}</Highlight></div>
                 <div>ที่อยู่: <Highlight>{guarantor.address}</Highlight></div>
-                <div>หมายเลขโทรศัพท์: <Highlight>{guarantor.phone}</Highlight></div>
+                <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(guarantor.phone)}</Highlight></div>
               </div>
             ))}
           </div>
@@ -337,14 +338,14 @@ export default function GuaranteePreview({ data }: Props) {
             <div className="font-bold text-slate-700 mb-1 leading-none">ในกรณีของผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
             <div><Highlight>{data.lenderCompany}</Highlight></div>
             <div>ที่อยู่: <Highlight>{data.lenderAddress}</Highlight> รหัสไปรษณีย์ 10270</div>
-            <div>หมายเลขโทรศัพท์: <Highlight>{data.lenderPhone}</Highlight></div>
+            <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.lenderPhone)}</Highlight></div>
           </div>
 
           <div className="mb-6">
             <div className="font-bold text-slate-700 mb-1 leading-none">ในกรณีของผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
             <div><Highlight>{data.borrowerCompany}</Highlight></div>
             <div>ที่อยู่: <Highlight>{data.borrowerAddress}</Highlight> รหัสไปรษณีย์ 10240</div>
-            <div>หมายเลขโทรศัพท์: <Highlight>{data.borrowerPhone}</Highlight></div>
+            <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.borrowerPhone)}</Highlight></div>
           </div>
 
           <div className="flex gap-2 text-justify pr-2 mb-4">
@@ -572,7 +573,7 @@ export default function GuaranteePreview({ data }: Props) {
               </div>
 
               <div className="indent-10 mb-8 leading-[1.8]">
-                ข้าพเจ้า <Highlight>{guarantor.name}</Highlight> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{guarantor.idCard}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{guarantor.address}</Highlight> ("ผู้ค้ำประกัน") ขอยืนยันว่าในขณะที่ข้าพเจ้าทำนิติกรรมใดๆ กับบริษัทฯ ข้าพเจ้าไม่เป็นบุคคลล้มละลาย หรือถูกศาลพิทักษ์ทรัพย์เด็ดขาด หรือพิทักษ์ทรัพย์ชั่วคราว และข้าพเจ้าขอรับรองว่าข้าพเจ้า <span className="font-bold underline">{guarantor.isMarried ? 'ได้' : 'มิได้'}</span> ทำการสมรสโดยจดทะเบียน
+                ข้าพเจ้า <Highlight>{guarantor.name}</Highlight> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{guarantor.address}</Highlight> ("ผู้ค้ำประกัน") ขอยืนยันว่าในขณะที่ข้าพเจ้าทำนิติกรรมใดๆ กับบริษัทฯ ข้าพเจ้าไม่เป็นบุคคลล้มละลาย หรือถูกศาลพิทักษ์ทรัพย์เด็ดขาด หรือพิทักษ์ทรัพย์ชั่วคราว และข้าพเจ้าขอรับรองว่าข้าพเจ้า <span className="font-bold underline">{guarantor.isMarried ? 'ได้' : 'มิได้'}</span> ทำการสมรสโดยจดทะเบียน
               </div>
 
               <div className="flex flex-col items-center gap-16 mt-32">

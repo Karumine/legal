@@ -141,7 +141,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                   type="text"
                   name="installments"
                   value={data.installments || ''}
-                  onChange={handleChange}
+                  onChange={(e) => onChange({ ...data, installments: e.target.value.replace(/\D/g, '') })}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
                   placeholder="เช่น 24"
                 />

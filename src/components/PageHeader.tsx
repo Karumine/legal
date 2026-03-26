@@ -1,4 +1,5 @@
 import { Phone, FileText, Globe, MapPin } from 'lucide-react';
+import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 
 export default function PageHeader() {
   return (
@@ -16,11 +17,11 @@ export default function PageHeader() {
 
       <div className="text-right text-xs text-gray-700 flex flex-col gap-1 items-end">
         <div className="flex items-center gap-2">
-          <span>0 2000 9392</span>
+          <span>{formatPhoneNumber('020009392')}</span>
           <div className="bg-slate-700 text-white p-1 rounded-sm"><Phone size={12} /></div>
         </div>
         <div className="flex items-center gap-2">
-          <span>0115558012195</span>
+          <span>{formatThaiId('0115558012195')}</span>
           <div className="bg-slate-700 text-white p-1 rounded-sm"><FileText size={12} /></div>
         </div>
         <div className="flex items-center gap-2">

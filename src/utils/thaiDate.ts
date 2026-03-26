@@ -28,10 +28,14 @@ export const formatThaiDateShort = (dateString: string) => {
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return dateString;
 
-  const d = date.getDate().toString().padStart(2, '0');
-  const m = (date.getMonth() + 1).toString().padStart(2, '0');
+  const d = date.getDate();
+  const months = [
+    'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+    'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+  ];
+  const m = months[date.getMonth()];
   const y = date.getFullYear() + 543;
-  return `${d}/${m}/${y}`;
+  return `${d} ${m} ${y}`;
 };
 
 export const addMonths = (dateString: string, monthsToAdd: number) => {

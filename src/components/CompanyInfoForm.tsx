@@ -3,6 +3,7 @@ import { Search, Loader2 } from 'lucide-react';
 import DirectorInput from './DirectorInput';
 import type { CompanyInfo } from '../types/app';
 import { searchCompanyByTaxId } from '../services/dbdService';
+import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 
 interface Props {
   agileInfo: CompanyInfo;
@@ -63,9 +64,9 @@ function InfoFields({ label, info, onChange, showSearch }: {
           <input
             type="text"
             value={info.taxId}
-            onChange={(e) => handleChange('taxId', e.target.value)}
+            onChange={(e) => handleChange('taxId', formatThaiId(e.target.value))}
             className="block flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-            placeholder="011XXXXXXXXXX"
+            placeholder="X-XXXX-XXXXX-XX-X"
           />
           {showSearch && (
             <button
@@ -111,8 +112,9 @@ function InfoFields({ label, info, onChange, showSearch }: {
           <input
             type="text"
             value={info.phone}
-            onChange={(e) => handleChange('phone', e.target.value)}
+            onChange={(e) => handleChange('phone', formatPhoneNumber(e.target.value))}
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+            placeholder="0X-XXX-XXXX"
           />
         </div>
         <div>

@@ -4,6 +4,7 @@ import { formatThaiDate, formatThaiDateShort, addMonths } from '../utils/thaiDat
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiNumberText } from '../utils/thaiNumberText';
+import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 
 interface Props {
   data: JointVentureData;
@@ -239,13 +240,13 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{agileInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{agileInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 1”</b>) และ
+              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{agileInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 1”</b>) และ
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{tkInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{tkInfo.taxId}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 2”</b>)
+              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{tkInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 2”</b>)
             </div>
           </div>
         </div>
@@ -773,7 +774,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               <div className="space-y-1">
                 <div className="font-bold">{agileInfo.companyName}</div>
                 <div>{agileInfo.address}</div>
-                <div>โทรศัพท์ : <Highlight>{agileInfo.phone}</Highlight></div>
+                <div>โทรศัพท์ : <Highlight>{formatPhoneNumber(agileInfo.phone)}</Highlight></div>
                 <div>จดหมายอิเล็กทรอนิกส์ (E-mail) : <Highlight>{agileInfo.email}</Highlight></div>
                 <div>ผู้ติดต่อ : <Highlight>{agileInfo.contactPerson}</Highlight></div>
               </div>
@@ -784,7 +785,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               <div className="space-y-1">
                 <div className="font-bold">{tkInfo.companyName}</div>
                 <div>เลขที่ {tkInfo.address}</div>
-                <div>โทรศัพท์ : <Highlight>{tkInfo.phone}</Highlight></div>
+                <div>โทรศัพท์ : <Highlight>{formatPhoneNumber(tkInfo.phone)}</Highlight></div>
                 <div>จดหมายอิเล็กทรอนิกส์ (E-mail) : <Highlight>{tkInfo.email}</Highlight></div>
                 <div>ผู้ติดต่อ : <Highlight>{tkInfo.contactPerson}</Highlight></div>
               </div>
