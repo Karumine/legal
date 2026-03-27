@@ -158,11 +158,11 @@ export default function CompanyInfoForm({
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-6">
-          <InfoFields label="🏢 Agile (ฝ่ายที่ 1)" info={agileInfo} onChange={onAgileChange} />
+          <InfoFields label="🏢 Agile (ฝ่ายที่ 1)" info={agileInfo} onChange={onAgileChange} showSearch />
           <InfoFields label="👤 ลูกค้า (ฝ่ายที่ 3)" info={customerInfo} onChange={onCustomerChange} showSearch />
         </div>
         <div className="space-y-6">
-          <InfoFields label="🏢 TK (ฝ่ายที่ 2)" info={tkInfo} onChange={onTkChange} />
+          <InfoFields label="🏢 TK (ฝ่ายที่ 2)" info={tkInfo} onChange={onTkChange} showSearch />
         </div>
       </div>
     </section>
