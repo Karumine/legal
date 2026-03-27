@@ -64,11 +64,13 @@ function dbdApiPlugin(): Plugin {
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
           );
 
-          // The DBD DataWarehouse URL takes a prefix digit + 13-digit Tax ID.
-          // The prefix digit is the 4th digit of the juristic ID (the entity type).
-          // 1 = Partnership, 3 = Ltd Partnership, 5 = Co., Ltd., 7 = Public Co.
-          const entityType = taxId.charAt(3); 
-          const profileUrl = `https://datawarehouse.dbd.go.th/company/profile/${entityType}${taxId}`;
+          let prefix = '7';
+          if (taxId.startsWith('01075') || taxId.charAt(3) === '7') {
+            prefix = '5'; // Public Company
+          } else {
+            prefix = '7'; // Private Company / Partnership
+          }
+          const profileUrl = `https://datawarehouse.dbd.go.th/company/profile/${prefix}/${taxId}`;
           console.log(`[DBD API] Navigating to: ${profileUrl}`);
           
           await page.goto(profileUrl, { waitUntil: 'networkidle2', timeout: 30000 });

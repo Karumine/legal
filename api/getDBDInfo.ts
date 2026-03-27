@@ -31,17 +31,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36');
 
-    const entityType = taxId.charAt(3);
-    const url = `https://datawarehouse.dbd.go.th/company/profile/${entityType}${taxId}`;
+    let prefix = '7';
+    if (taxId.startsWith('01075') || taxId.charAt(3) === '7') {
+      prefix = '5'; // Public Company
+    } else {
+      prefix = '7'; // Private Company / Partnership
+    }
+    
+    const url = `https://datawarehouse.dbd.go.th/company/profile/${prefix}/${taxId}`;
+    console.log(`[DBD Scraper] Navigating to: ${url}`);
+    
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
 
     const profileData = await page.evaluate(() => {
-      // @ts-ignore
       const store = (window as any).__NUXT__?.pinia?.companyProfileStore;
-      if (!store) return null;
+      if (!store) return { error: 'Pinia store not found', html: document.body.innerHTML.substring(0, 500) };
 
       const profile = store.profile?._value || store.profile;
-      if (!profile) return null;
+      if (!profile) return { error: 'Profile not found in store', storeState: JSON.stringify(Object.keys(store)) };
 
       const committees = store.committees?._value || [];
       const committeeSigns = store.signCommittees?._value || [];
@@ -60,9 +67,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       };
     });
 
-    if (!profileData) {
-      console.error('[DBD Scraper] result is null or empty');
-      return res.status(404).json({ error: 'Company not found/mapping failed' });
+    if (!profileData || (profileData as any).error) {
+      console.error('[DBD Scraper] result is null or has error:', profileData);
+      return res.status(404).json({ 
+        error: 'Company not found/mapping failed', 
+        diagnostics: profileData,
+        taxId,
+        url 
+      });
     }
 
     console.log('[DBD Scraper] Success! Returning data for:', profileData.companyName);
