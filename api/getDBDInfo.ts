@@ -33,15 +33,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const store = window.__NUXT__?.pinia?.companyProfileStore?.profile;
       if (!store) return null;
 
+      // Format date if it's an array [Y, M, D]
+      let regDate = '';
+      if (Array.isArray(store.regDate)) {
+        const [y, m, d] = store.regDate;
+        regDate = `${d}/${m}/${y}`;
+      } else {
+        regDate = store.regDate || '';
+      }
+
       return {
         companyName: store.jpName,
         taxId: store.jpNo,
-        type: store.jpTypeDesc,
-        status: store.jpStatusDesc,
-        registrationDate: store.registerDate,
+        type: store.jpTypeDesc || store.businessType?.businessTypeDesc || '',
+        status: store.jpStatus?.jpStatDesc || store.jpStatDesc || '',
+        registrationDate: regDate,
         capital: store.capAmt,
-        address: `${store.address} ${store.locationTumbon} ${store.locationAmpur} ${store.locationProvince} ${store.zipCode}`,
-        directors: store.committees?.map((c: any) => `${c.firstName} ${c.lastName}`) || [],
+        address: store.address || '',
+        directors: store.committees?.map((c: any) => 
+          `${c.title || ''}${c.firstName || ''} ${c.lastName || ''}`.trim()
+        ) || [],
         signingCondition: store.committeeSigns?.[0]?.detail || '',
         businessCategory: store.jpDescriptions?.map((d: any) => d.tsicDesc).join(', ') || '',
       };
