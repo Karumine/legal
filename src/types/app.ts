@@ -210,6 +210,7 @@ export interface GuarantorData {
   spouseIdCard: string;
   spouseAddress: string;
   phone?: string;
+  directors?: string;
   selectedAgreementIds?: string[];
 }
 
