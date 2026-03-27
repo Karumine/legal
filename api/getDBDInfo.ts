@@ -31,71 +31,38 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36');
 
-    const url = `https://datawarehouse.dbd.go.th/company/profile/7${taxId}`;
-    console.log(`[DBD Scraper] Navigating to: ${url}`);
-    
-    try {
-      await page.goto(url, { waitUntil: 'networkidle2', timeout: 25000 });
-    } catch (e) {
-      console.warn('[DBD Scraper] Navigation timeout or networkidle2 failed, proceeding anyway...');
-    }
-
-    // Wait for the Nuxt state to be potentially ready
-    await new Promise(r => setTimeout(r, 1000));
-
-    const diagnostics = await page.evaluate(() => {
-      return {
-        title: document.title,
-        hasNuxt: !!(window as any).__NUXT__,
-        bodyLength: document.body.innerText.length,
-        htmlSnippet: document.documentElement.innerHTML.substring(0, 500)
-      };
-    });
-    console.log('[DBD Scraper] Page Diagnostics:', JSON.stringify(diagnostics));
-
-    if (diagnostics.title.includes('Access Denied') || diagnostics.title.includes('Attention Required')) {
-      console.error('[DBD Scraper] BLOCK DETECTED: Page title indicates access denial');
-      return res.status(403).json({ error: 'Access Denied by DBD website', diagnostics });
-    }
+    const entityType = taxId.charAt(3);
+    const url = `https://datawarehouse.dbd.go.th/company/profile/${entityType}${taxId}`;
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
 
     const profileData = await page.evaluate(() => {
       // @ts-ignore
-      const store = window.__NUXT__?.pinia?.companyProfileStore?.profile;
-      if (!store) {
-        console.error('[DBD Scraper] Profile store not found in window.__NUXT__');
-        return null;
-      }
+      const store = (window as any).__NUXT__?.pinia?.companyProfileStore;
+      if (!store) return null;
 
-      console.log('[DBD Scraper] Found profile store for:', store.jpName);
+      const profile = store.profile?._value || store.profile;
+      if (!profile) return null;
 
-      // Format date if it's an array [Y, M, D]
-      let regDate = '';
-      if (Array.isArray(store.regDate)) {
-        const [y, m, d] = store.regDate;
-        regDate = `${d}/${m}/${y}`;
-      } else {
-        regDate = store.regDate || '';
-      }
+      const committees = store.committees?._value || [];
+      const committeeSigns = store.signCommittees?._value || [];
 
       return {
-        companyName: store.jpName,
-        taxId: store.jpNo,
-        type: store.jpTypeDesc || store.businessType?.businessTypeDesc || '',
-        status: store.jpStatus?.jpStatDesc || store.jpStatDesc || '',
-        registrationDate: regDate,
-        capital: store.capAmt,
-        address: store.address || '',
-        directors: store.committees?.map((c: any) => 
-          `${c.title || ''}${c.firstName || ''} ${c.lastName || ''}`.trim()
-        ) || [],
-        signingCondition: store.committeeSigns?.[0]?.detail || '',
-        businessCategory: store.jpDescriptions?.map((d: any) => d.tsicDesc).join(', ') || '',
+        companyName: profile.jpName,
+        taxId: profile.jpNo,
+        type: profile.jpTypeDesc,
+        status: profile.jpStatusDesc,
+        registrationDate: profile.registerDate,
+        capital: profile.capAmt,
+        address: [profile.address, profile.locationTumbon?.tumbonDesc, profile.locationAmpur?.ampurDesc, profile.locationProvince?.pvDesc, profile.zipCode].filter(Boolean).join(' ').trim(),
+        directors: committees.map((c: any) => `${c.firstName} ${c.lastName}`),
+        signingCondition: committeeSigns[0]?.signDescription || '',
+        businessCategory: profile.jpDescriptions?.map((d: any) => d.tsicDesc).join(', ') || '',
       };
     });
 
     if (!profileData) {
       console.error('[DBD Scraper] result is null or empty');
-      return res.status(404).json({ error: 'Company not found/mapping failed', diagnostics });
+      return res.status(404).json({ error: 'Company not found/mapping failed' });
     }
 
     console.log('[DBD Scraper] Success! Returning data for:', profileData.companyName);

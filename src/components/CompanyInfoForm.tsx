@@ -45,7 +45,7 @@ function InfoFields({ label, info, onChange, showSearch }: {
           companyName: result.companyName,
           address: result.address,
           taxId: formatThaiId(cleanTaxId),
-          directors: result.directors?.join(', ') || '',
+          directors: (result.directors || []).join('\n'),
         });
       } else {
         setSearchError('ไม่พบข้อมูลบริษัท');
