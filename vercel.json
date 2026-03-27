@@ -1,8 +1,19 @@
 {
+  "version": 2,
   "functions": {
-    "api/getDBDInfo.ts": {
+    "api/*.ts": {
       "memory": 1024,
       "maxDuration": 60
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
