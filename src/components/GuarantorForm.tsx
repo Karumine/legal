@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { Copy, Plus, Trash2, UserPlus } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Copy, Plus, Search, Trash2, UserPlus, Loader2 } from 'lucide-react';
 import type { GuarantorData, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
+import { searchCompanyByTaxId } from '../services/dbdService';
 
 interface Props {
   data: GuarantorData[];
@@ -13,6 +14,7 @@ interface Props {
 export default function GuarantorForm({ data, onChange, agreements }: Props) {
   const prevAgreementsRef = useRef<string[]>([]);
   const mainAgreements = agreements; // Show all main contracts as requested
+  const [searchingId, setSearchingId] = useState<string | null>(null);
 
   // Auto-select ONLY newly added agreements for ALL guarantors
   useEffect(() => {
@@ -78,6 +80,41 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
       : [...currentIds, agreementId];
     
     updateGuarantor(guarantorId, 'selectedAgreementIds', newIds);
+  };
+
+  const handleDBDSearch = async (guarantorId: string, taxId: string) => {
+    const cleanTaxId = taxId.replace(/-/g, '').trim();
+    if (cleanTaxId.length !== 13) {
+      alert('กรุณากรอกเลขทะเบียนนิติบุคคลให้ครบ 13 หลัก');
+      return;
+    }
+
+    setSearchingId(guarantorId);
+    try {
+      const result = await searchCompanyByTaxId(cleanTaxId);
+      if (result) {
+        onChange(
+          data.map((g) => 
+            g.id === guarantorId 
+              ? { 
+                  ...g, 
+                  guarantorName: result.companyName,
+                  guarantorAddress: result.address,
+                  directors: result.directors?.join(', '),
+                  isMarried: false // Corporate guarantors aren't "married"
+                } 
+              : g
+          )
+        );
+      } else {
+        alert('ไม่พบข้อมูลนิติบุคคลนี้ในระบบ DBD');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('เกิดข้อผิดพลาดในการดึงข้อมูลจาก DBD');
+    } finally {
+      setSearchingId(null);
+    }
   };
 
   return (
@@ -177,16 +214,42 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
                 />
               </div>
 
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">รายชื่อกรรมการ</label>
+                <textarea
+                  value={guarantor.directors || ''}
+                  onChange={(e) => updateGuarantor(guarantor.id, 'directors', e.target.value)}
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
+                  placeholder="รายชื่อกรรมการผู้มีอำนาจลงนาม..."
+                  rows={2}
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">เลขบัตรประจำตัวประชาชน</label>
-                  <input
-                    type="text"
-                    value={guarantor.guarantorIdCard}
-                    onChange={(e) => updateGuarantor(guarantor.id, 'guarantorIdCard', formatThaiId(e.target.value))}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-                    placeholder="X-XXXX-XXXXX-XX-X"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={guarantor.guarantorIdCard}
+                      onChange={(e) => updateGuarantor(guarantor.id, 'guarantorIdCard', formatThaiId(e.target.value))}
+                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 pr-10 border"
+                      placeholder="X-XXXX-XXXXX-XX-X"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleDBDSearch(guarantor.id, guarantor.guarantorIdCard)}
+                      disabled={searchingId === guarantor.id}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-emerald-600 hover:text-emerald-700 disabled:text-gray-400 transition-colors"
+                      title="ค้นหาข้อมูลจาก DBD"
+                    >
+                      {searchingId === guarantor.id ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <Search size={16} />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">เบอร์โทรศัพท์</label>
