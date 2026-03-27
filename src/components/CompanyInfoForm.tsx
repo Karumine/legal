@@ -30,20 +30,22 @@ function InfoFields({ label, info, onChange, showSearch }: {
 
 
   const handleSearch = async () => {
-    if (!info.taxId.trim()) {
-      setSearchError('กรุณาใส่เลข Tax ID ก่อน');
+    const cleanTaxId = info.taxId.replace(/-/g, '').trim();
+    if (cleanTaxId.length !== 13) {
+      setSearchError('กรุณากรอกเลขทะเบียนนิติบุคคลให้ครบ 13 หลัก');
       return;
     }
     setIsSearching(true);
     setSearchError('');
     try {
-      const result = await searchCompanyByTaxId(info.taxId.trim());
+      const result = await searchCompanyByTaxId(cleanTaxId);
       if (result) {
         onChange({
           ...info,
           companyName: result.companyName,
           address: result.address,
-          taxId: result.taxId,
+          taxId: formatThaiId(cleanTaxId),
+          directors: result.directors?.join(', ') || '',
         });
       } else {
         setSearchError('ไม่พบข้อมูลบริษัท');

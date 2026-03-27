@@ -3,10 +3,14 @@ import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const { taxId } = req.query;
+  let { taxId } = req.query;
+
+  if (typeof taxId === 'string') {
+    taxId = taxId.replace(/-/g, '').trim();
+  }
 
   if (!taxId || typeof taxId !== 'string' || taxId.length !== 13) {
-    return res.status(400).json({ error: 'Valid 13-digit taxId is required' });
+    return res.status(400).json({ error: 'Valid 13-digit taxId is required', received: taxId });
   }
 
   let browser;
