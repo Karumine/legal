@@ -72,7 +72,20 @@ function dbdApiPlugin(): Plugin {
           console.log(`[DBD API] Navigating to: ${profileUrl}`);
           
           await page.goto(profileUrl, { waitUntil: 'networkidle2', timeout: 30000 });
-          console.log('[DBD API] Page loaded, evaluating content...');
+          console.log('[DBD API] Page loaded, waiting for hydration...');
+
+          // Wait for data to be populated in the Pinia store
+          try {
+            await page.waitForFunction(() => {
+              // @ts-ignore
+              const p = window.__NUXT__?.pinia?.companyProfileStore?.profile?._value;
+              return !!(p && (p.jpName || p.jpNameTH));
+            }, { timeout: 15000 });
+          } catch (e) {
+            console.warn('[DBD API] Waiting for hydration timed out, attempting to scrape anyway');
+          }
+
+          console.log('[DBD API] Evaluating content...');
 
           const profileData = await page.evaluate(() => {
             // @ts-ignore
@@ -80,7 +93,7 @@ function dbdApiPlugin(): Plugin {
             if (!store) return null;
 
             const profile = store.profile?._value || store.profile;
-            if (!profile) return null;
+            if (!profile || (!profile.jpName && !profile.jpNo)) return null;
 
             const committees = store.committees?._value || [];
             const committeeSigns = store.signCommittees?._value || [];
@@ -88,12 +101,18 @@ function dbdApiPlugin(): Plugin {
             return {
               companyName: profile.jpName,
               taxId: profile.jpNo,
-              type: profile.jpTypeDesc,
-              status: profile.jpStatusDesc,
-              registrationDate: profile.registerDate,
+              type: profile.jpType?.jpTypeDesc || profile.jpTypeDesc || '',
+              status: profile.jpStatus?.jpStatDesc || profile.jpStatusDesc || '',
+              registrationDate: profile.regDate || profile.registerDate || '',
               capital: profile.capAmt,
-              address: [profile.address, profile.locationTumbon?.tumbonDesc, profile.locationAmpur?.ampurDesc, profile.locationProvince?.pvDesc, profile.zipCode].filter(Boolean).join(' ').trim(),
-              directors: committees.map((c: any) => `${c.firstName} ${c.lastName}`),
+              address: [
+                profile.address,
+                profile.locationTumbon?.tumbonDesc,
+                profile.locationAmpur?.ampurDesc,
+                profile.locationProvince?.pvDesc,
+                profile.zipCode
+              ].filter(Boolean).join(' ').trim(),
+              directors: committees.map((c: any) => `${c.titleName || ''}${c.firstName} ${c.lastName}`.trim()),
               signingCondition: committeeSigns[0]?.signDescription || '',
               businessCategory: profile.jpDescriptions?.map((d: any) => d.tsicDesc).join(', ') || '',
             };
