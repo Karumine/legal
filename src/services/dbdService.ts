@@ -16,7 +16,8 @@ export interface DBDCompanyResult {
  */
 export async function searchCompanyByTaxId(taxId: string): Promise<DBDCompanyResult | null> {
   try {
-    const response = await fetch(`/api/getDBDInfo?taxId=${taxId}`);
+    const cleanTaxId = taxId.replace(/-/g, '');
+    const response = await fetch(`/api/getDBDInfo?taxId=${cleanTaxId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch from DBD Vercel API');
     }
