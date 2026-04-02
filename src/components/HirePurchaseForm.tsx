@@ -30,7 +30,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
         contractNo: `${data.contractNo || ''}-BB`,
         contractDate: data.contractDate || TODAY
       }));
-      
+
       const hasChanged = JSON.stringify(updatedBuybacks) !== JSON.stringify(data.buybacks);
       if (hasChanged) {
         handleChange('buybacks', updatedBuybacks);
@@ -65,7 +65,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
   const toggleBuyback = (enabled: boolean) => {
     if (enabled && (!data.buybacks || data.buybacks.length === 0)) {
-       addBuyback();
+      addBuyback();
     }
     handleChange('hasBuyback', enabled);
   };
@@ -340,10 +340,10 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                     type="text"
                     placeholder="ใส่ตัวเลขเท่านั้น"
                     value={asset.totalAmount}
-                  onChange={(e) => {
-                    const formatted = formatCurrency(e.target.value);
-                    updateAsset(index, 'totalAmount', formatted);
-                  }}
+                    onChange={(e) => {
+                      const formatted = formatCurrency(e.target.value);
+                      updateAsset(index, 'totalAmount', formatted);
+                    }}
                     className="w-full p-2 border border-gray-300 rounded bg-white shadow-sm font-semibold text-blue-700"
                   />
                 </div>
@@ -451,11 +451,11 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">ค่างวด/เดือน (บาท)</label>
-                <input 
-                  type="text" 
-                  value={data.installmentAmount} 
-                  onChange={(e) => handleChange('installmentAmount', formatCurrency(e.target.value))} 
-                  className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" 
+                <input
+                  type="text"
+                  value={data.installmentAmount}
+                  onChange={(e) => handleChange('installmentAmount', formatCurrency(e.target.value))}
+                  className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border"
                 />
               </div>
             </div>
@@ -493,20 +493,20 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">ค่าอากรแสตมป์ (บาท)</label>
-              <input 
-                type="text" 
-                value={data.stampDuty || ''} 
-                onChange={(e) => handleChange('stampDuty', formatCurrency(e.target.value))} 
-                className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" 
+              <input
+                type="text"
+                value={data.stampDuty || ''}
+                onChange={(e) => handleChange('stampDuty', formatCurrency(e.target.value))}
+                className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border"
               />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">ค่าเบี้ยประกันภัย (บาท)</label>
-              <input 
-                type="text" 
-                value={data.insurancePremium || ''} 
-                onChange={(e) => handleChange('insurancePremium', formatCurrency(e.target.value))} 
-                className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" 
+              <input
+                type="text"
+                value={data.insurancePremium || ''}
+                onChange={(e) => handleChange('insurancePremium', formatCurrency(e.target.value))}
+                className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border"
               />
             </div>
             <div>
@@ -515,41 +515,41 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
             </div>
           </div>
 
-            {type !== 'hirePurchaseBack' && (
-              <div className="space-y-3 mt-4 border-t pt-4">
-                <div className="flex items-center gap-4 mb-2">
-                  <h4 className="font-semibold text-sm text-gray-700">ข้อความไฮไลท์เขียว</h4>
-                  <div className="flex items-center gap-4">
-                    <label className="flex items-center gap-1 text-sm font-medium">
-                      <input
-                        type="radio"
-                        name="hasCustomGreenText"
-                        checked={data.hasCustomGreenText !== false}
-                        onChange={() => handleChange('hasCustomGreenText', true)}
-                      />
-                      มี
-                    </label>
-                    <label className="flex items-center gap-1 text-sm font-medium">
-                      <input
-                        type="radio"
-                        name="hasCustomGreenText"
-                        checked={data.hasCustomGreenText === false}
-                        onChange={() => {
-                          handleChange('hasCustomGreenText', false);
-                        }}
-                      />
-                      ไม่มี
-                    </label>
-                  </div>
+          {type !== 'hirePurchaseBack' && (
+            <div className="space-y-3 mt-4 border-t pt-4">
+              <div className="flex items-center gap-4 mb-2">
+                <h4 className="font-semibold text-sm text-gray-700">ข้อความไฮไลท์เขียว</h4>
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-1 text-sm font-medium">
+                    <input
+                      type="radio"
+                      name="hasCustomGreenText"
+                      checked={data.hasCustomGreenText !== false}
+                      onChange={() => handleChange('hasCustomGreenText', true)}
+                    />
+                    มี
+                  </label>
+                  <label className="flex items-center gap-1 text-sm font-medium">
+                    <input
+                      type="radio"
+                      name="hasCustomGreenText"
+                      checked={data.hasCustomGreenText === false}
+                      onChange={() => {
+                        handleChange('hasCustomGreenText', false);
+                      }}
+                    />
+                    ไม่มี
+                  </label>
                 </div>
-                {data.hasCustomGreenText !== false && (
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">ข้อความเพิ่มเติมการจ่ายเงิน (ไฮไลท์สีเขียว)</label>
-                    <textarea value={data.customGreenText || ''} onChange={(e) => handleChange('customGreenText', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border h-20" />
-                  </div>
-                )}
               </div>
-            )}
+              {data.hasCustomGreenText !== false && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">ข้อความเพิ่มเติมการจ่ายเงิน (ไฮไลท์สีเขียว)</label>
+                  <textarea value={data.customGreenText || ''} onChange={(e) => handleChange('customGreenText', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border h-20" />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
@@ -559,11 +559,11 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">มูลค่ารวมหลักประกัน (6.1) (บาท)</label>
-            <input 
-              type="text" 
-              value={data.collateralValue || ''} 
-              onChange={(e) => handleChange('collateralValue', formatCurrency(e.target.value))} 
-              className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" 
+            <input
+              type="text"
+              value={data.collateralValue || ''}
+              onChange={(e) => handleChange('collateralValue', formatCurrency(e.target.value))}
+              className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border"
             />
           </div>
 
@@ -605,6 +605,15 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                           if (newType === 'land' && !newAssets[idx].landDetails) {
                             newAssets[idx].landDetails = { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: '' };
                           }
+                          if (newType === 'carPledge' && !newAssets[idx].carPledgeDetails) {
+                            newAssets[idx].carPledgeDetails = { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' };
+                          }
+                          if (newType === 'stockPledge' && !newAssets[idx].stockPledgeDetails) {
+                            newAssets[idx].stockPledgeDetails = { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: '' };
+                          }
+                          if (newType === 'machinery' && !newAssets[idx].machineName) {
+                            newAssets[idx] = { ...newAssets[idx], machineName: '', machineModel: '', machineQuantity: '1', machineUnit: 'ชุด', machinePrice: '0', machineOwner: '' };
+                          }
                           handleChange('collateralAssets', newAssets);
                         }}
                         className="block w-full rounded-md border-gray-300 shadow-sm text-xs p-1 border"
@@ -612,6 +621,8 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                         <option value="land">จำนองที่ดิน</option>
                         <option value="cash">เงินสด</option>
                         <option value="machinery">เครื่องจักร</option>
+                        <option value="carPledge">จำนำรถ</option>
+                        <option value="stockPledge">จำนำหุ้น</option>
                       </select>
                     </div>
                   </div>
@@ -673,8 +684,8 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                           subDistrict={asset.landDetails.subDistrict}
                           onChange={(updates) => {
                             const newAssets = [...data.collateralAssets];
-                            newAssets[idx].landDetails = { 
-                              ...newAssets[idx].landDetails!, 
+                            newAssets[idx].landDetails = {
+                              ...newAssets[idx].landDetails!,
                               ...updates as any
                             };
                             handleChange('collateralAssets', newAssets);
@@ -708,10 +719,10 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                           placeholder="เช่น ห้างหุ้นส่วนจำกัด พี.เอ็น.พี.เมดิซัพพลาย"
                         />
                       </div>
-                      
+
                       <div className="grid grid-cols-12 gap-4">
                         <div className="col-span-12">
-                          <label className="block text-xs font-semibold text-gray-500 mb-1">รายละเอียดเครื่องจักร</label>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเครื่องจักร (Asset Name)</label>
                           <input
                             type="text"
                             value={asset.machineName || ''}
@@ -721,9 +732,24 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                               handleChange('collateralAssets', newAssets);
                             }}
                             className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
-                            placeholder="เช่น เครื่องเป่าขวดพลาสติก PET กึ่งอัตโนมัติ"
+                            placeholder="เช่น เครื่องเป่าขวดพลาสติก PET"
                           />
                         </div>
+
+                        <div className="col-span-12">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">รายละเอียด/รุ่น (Description/Model)</label>
+                          <textarea
+                            value={asset.machineModel || ''}
+                            onChange={(e) => {
+                              const newAssets = [...data.collateralAssets];
+                              newAssets[idx] = { ...newAssets[idx], machineModel: e.target.value };
+                              handleChange('collateralAssets', newAssets);
+                            }}
+                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all min-h-[80px]"
+                            placeholder="ระบุรุ่น สเปค หรือรายละเอียดเพิ่มเติมเพื่อให้ตรงกับสัญญา"
+                          />
+                        </div>
+
                         <div className="col-span-4">
                           <label className="block text-xs font-semibold text-gray-500 mb-1">จำนวน</label>
                           <input
@@ -734,12 +760,26 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                               newAssets[idx] = { ...newAssets[idx], machineQuantity: e.target.value };
                               handleChange('collateralAssets', newAssets);
                             }}
-                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-center"
+                            className="block w-full rounded border-gray-300 text-md p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-left"
                             placeholder="1"
                           />
                         </div>
-                        <div className="col-span-8">
-                          <label className="block text-xs font-semibold text-gray-500 mb-1">ราคา (บาท)</label>
+                        <div className="col-span-4">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">หน่วย</label>
+                          <input
+                            type="text"
+                            value={asset.machineUnit || ''}
+                            onChange={(e) => {
+                              const newAssets = [...data.collateralAssets];
+                              newAssets[idx] = { ...newAssets[idx], machineUnit: e.target.value };
+                              handleChange('collateralAssets', newAssets);
+                            }}
+                            className="block w-full rounded border-gray-300 text-md p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-left"
+                            placeholder="เช่น ชุด"
+                          />
+                        </div>
+                        <div className="col-span-4">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">ราคารวม (บาท)</label>
                           <input
                             type="text"
                             value={asset.machinePrice || ''}
@@ -749,7 +789,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                               newAssets[idx] = { ...newAssets[idx], machinePrice: formatted };
                               handleChange('collateralAssets', newAssets);
                             }}
-                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-right font-medium"
+                            className="block w-full rounded border-gray-300 text-md p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-left font-bold text-blue-600"
                             placeholder="0"
                           />
                         </div>
@@ -760,17 +800,149 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                   {asset.type === 'cash' && (
                     <div>
                       <label className="block text-[10px] text-gray-500">จำนวนเงิน (บาท)</label>
-                      <input 
-                        type="text" 
-                        value={asset.cashAmount || ''} 
+                      <input
+                        type="text"
+                        value={asset.cashAmount || ''}
                         onChange={(e) => {
                           const formatted = formatCurrency(e.target.value);
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx].cashAmount = formatted;
                           handleChange('collateralAssets', newAssets);
-                        }} 
-                        className="block w-full rounded border-gray-300 text-xs p-1 border" 
+                        }}
+                        className="block w-full rounded border-gray-300 text-xs p-1 border"
                       />
+                    </div>
+                  )}
+
+                  {asset.type === 'carPledge' && (
+                    <div className="mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">ยี่ห้อ</label>
+                          <input type="text" value={asset.carPledgeDetails?.brand || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].carPledgeDetails = { ...(newAssets[idx].carPledgeDetails || { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' }), brand: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">รุ่น</label>
+                          <input type="text" value={asset.carPledgeDetails?.model || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].carPledgeDetails = { ...(newAssets[idx].carPledgeDetails || { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' }), model: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">ทะเบียนเลขที่</label>
+                          <input type="text" value={asset.carPledgeDetails?.plateNo || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].carPledgeDetails = { ...(newAssets[idx].carPledgeDetails || { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' }), plateNo: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">จังหวัด</label>
+                          <input type="text" value={asset.carPledgeDetails?.province || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].carPledgeDetails = { ...(newAssets[idx].carPledgeDetails || { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' }), province: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">เลขตัวถัง</label>
+                          <input type="text" value={asset.carPledgeDetails?.chassisNo || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].carPledgeDetails = { ...(newAssets[idx].carPledgeDetails || { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' }), chassisNo: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">เลขเครื่องยนต์</label>
+                          <input type="text" value={asset.carPledgeDetails?.engineNo || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].carPledgeDetails = { ...(newAssets[idx].carPledgeDetails || { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' }), engineNo: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">สี</label>
+                          <input type="text" value={asset.carPledgeDetails?.color || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].carPledgeDetails = { ...(newAssets[idx].carPledgeDetails || { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' }), color: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อผู้ถือกรรมสิทธิ์</label>
+                          <input type="text" value={asset.carPledgeDetails?.owner || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].carPledgeDetails = { ...(newAssets[idx].carPledgeDetails || { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' }), owner: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {asset.type === 'stockPledge' && (
+                    <div className="mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="col-span-2">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อบริษัท</label>
+                          <input type="text" value={asset.stockPledgeDetails?.companyName || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].stockPledgeDetails = { ...(newAssets[idx].stockPledgeDetails || { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: '' }), companyName: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">เลขที่ใบหุ้น</label>
+                          <input type="text" value={asset.stockPledgeDetails?.certificateNo || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].stockPledgeDetails = { ...(newAssets[idx].stockPledgeDetails || { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: '' }), certificateNo: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">จำนวนหุ้น</label>
+                          <input type="text" value={asset.stockPledgeDetails?.quantity || ''} onChange={(e) => {
+                            const formatted = formatCurrency(e.target.value);
+                            const newAssets = [...data.collateralAssets];
+                            const stock = { ...(newAssets[idx].stockPledgeDetails || { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: '' }), quantity: formatted };
+                            const qty = parseFloat(stock.quantity.replace(/,/g, '')) || 0;
+                            const par = parseFloat(stock.parValue.replace(/,/g, '')) || 0;
+                            stock.totalValue = (qty * par).toLocaleString('en-US');
+                            newAssets[idx].stockPledgeDetails = stock;
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">มูลค่าหุ้นละ (บาท)</label>
+                          <input type="text" value={asset.stockPledgeDetails?.parValue || ''} onChange={(e) => {
+                            const formatted = formatCurrency(e.target.value);
+                            const newAssets = [...data.collateralAssets];
+                            const stock = { ...(newAssets[idx].stockPledgeDetails || { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: '' }), parValue: formatted };
+                            const qty = parseFloat(stock.quantity.replace(/,/g, '')) || 0;
+                            const par = parseFloat(stock.parValue.replace(/,/g, '')) || 0;
+                            stock.totalValue = (qty * par).toLocaleString('en-US');
+                            newAssets[idx].stockPledgeDetails = stock;
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">รวมมูลค่า (บาท)</label>
+                          <input type="text" value={asset.stockPledgeDetails?.totalValue || ''} readOnly className="block w-full rounded border-gray-300 text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed shadow-sm" />
+                        </div>
+                        <div className="col-span-2">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อผู้ถือหุ้น</label>
+                          <input type="text" value={asset.stockPledgeDetails?.owner || ''} onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].stockPledgeDetails = { ...(newAssets[idx].stockPledgeDetails || { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: '' }), owner: e.target.value };
+                            handleChange('collateralAssets', newAssets);
+                          }} className="block w-full rounded border-gray-300 text-sm p-2 border shadow-sm" />
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -783,7 +955,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
       {/* สัญญารับซื้อคืน Section */}
       <section className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-        <div 
+        <div
           className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors bg-orange-50/30"
           onClick={() => setShowBuyback(!showBuyback)}
         >
@@ -822,7 +994,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                   <div className="flex items-center gap-4 text-[10px] text-orange-600 italic">
                     <ShieldCheck size={12} className="inline mr-1" />
                     เชื่อมโยงข้อมูลจาก {data.contractNo} ({data.contractDate})
-                    <button 
+                    <button
                       onClick={() => {
                         const newBuybacks = data.buybacks?.filter(b => b.id !== bb.id);
                         handleChange('buybacks', newBuybacks);
@@ -837,8 +1009,8 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                     </button>
                   </div>
                 </div>
-                <BuybackForm 
-                  data={bb} 
+                <BuybackForm
+                  data={bb}
                   parentAssets={data.assets}
                   otherBuybacksSelectedAssetIds={data.buybacks?.filter(b => b.id !== bb.id).flatMap(b => b.selectedAssetIds) || []}
                   onChange={(val) => {
@@ -849,9 +1021,9 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                 />
               </div>
             ))}
-            
+
             <div className="p-4 border-t border-gray-100 flex justify-center bg-white">
-              <button 
+              <button
                 onClick={addBuyback}
                 className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm font-bold bg-blue-50 px-4 py-2 rounded-lg transition-all"
               >

@@ -55,16 +55,33 @@ export interface MachineDetail {
 }
 
 export interface CollateralAsset {
-  type: 'land' | 'cash' | 'machinery';
+  type: 'land' | 'cash' | 'machinery' | 'carPledge' | 'stockPledge';
   landDetails?: LandCollateral;
   cashAmount?: string;
-  machineryDetails?: string;
   machineName?: string;
   machineModel?: string;
   machineQuantity?: string;
+  machineUnit?: string;
   machinePrice?: string;
-  machines?: MachineDetail[];
   machineOwner?: string;
+  carPledgeDetails?: {
+    brand: string;
+    model: string;
+    plateNo: string;
+    province: string;
+    chassisNo: string;
+    engineNo: string;
+    color: string;
+    owner: string;
+  };
+  stockPledgeDetails?: {
+    companyName: string;
+    certificateNo: string;
+    quantity: string;
+    parValue: string;
+    totalValue: string;
+    owner: string;
+  };
 }
 
 export interface HirePurchaseData {

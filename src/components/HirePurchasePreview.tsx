@@ -31,18 +31,18 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
   const integratedPageMax = 3;
   const subsequentPageMax = 6;
   const assetCount = data.assets?.length || 0;
-  
+
   const isLargeList = assetCount >= 7;
-  const integratedAssetsCount = (!isLargeList && assetCount > firstPageMax) 
-    ? Math.min(assetCount - firstPageMax, integratedPageMax) 
+  const integratedAssetsCount = (!isLargeList && assetCount > firstPageMax)
+    ? Math.min(assetCount - firstPageMax, integratedPageMax)
     : 0;
   const dedicatedOverflowAssetsCount = assetCount > firstPageMax ? assetCount - firstPageMax - integratedAssetsCount : 0;
-  
+
   const dedicatedOverflowAssets = dedicatedOverflowAssetsCount > 0 ? data.assets!.slice(firstPageMax, firstPageMax + dedicatedOverflowAssetsCount) : [];
   const integratedAssets = integratedAssetsCount > 0 ? data.assets!.slice(assetCount - integratedAssetsCount) : [];
-  
+
   const overflowPagesCount = Math.ceil(dedicatedOverflowAssets.length / subsequentPageMax);
-  
+
   // No longer needed as machinery is now flat
   const hasLargeMachinery = false;
   // collateralOffset triggers a new page (page 10) if more than 3 assets
@@ -124,9 +124,20 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="mt-2">
             <span className="font-bold">เครื่องจักร :</span>{' '}
             <Highlight>{asset.machineName}</Highlight>{' '}
-            จำนวน <Highlight>{asset.machineQuantity}</Highlight>{' '}
+            {asset.machineModel && <span className="italic text-gray-700">({asset.machineModel})</span>}{' '}
+            จำนวน <Highlight>{asset.machineQuantity}</Highlight> <Highlight>{asset.machineUnit || 'ชุด'}</Highlight>{' '}
             ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
             อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
+          </div>
+        )}
+        {asset.type === 'carPledge' && asset.carPledgeDetails && (
+          <div>
+            <span className="font-bold">จำนำรถ :</span> รถยนต์ยี่ห้อ <Highlight>{asset.carPledgeDetails.brand}</Highlight> รุ่น <Highlight>{asset.carPledgeDetails.model}</Highlight> ทะเบียนเลขที่ <Highlight>{asset.carPledgeDetails.plateNo}</Highlight> จังหวัด <Highlight>{asset.carPledgeDetails.province}</Highlight> เลขตัวถัง <Highlight>{asset.carPledgeDetails.chassisNo}</Highlight> เลขเครื่องยนต์ <Highlight>{asset.carPledgeDetails.engineNo}</Highlight> สี <Highlight>{asset.carPledgeDetails.color}</Highlight> โดยมี <Highlight>{asset.carPledgeDetails.owner}</Highlight> เป็นผู้ถือกรรมสิทธิ์
+          </div>
+        )}
+        {asset.type === 'stockPledge' && asset.stockPledgeDetails && (
+          <div>
+            <span className="font-bold">จำนำหุ้น :</span> หุ้นของบริษัท <Highlight>{asset.stockPledgeDetails.companyName}</Highlight> ตามใบถือหุ้นเลขที่ <Highlight>{asset.stockPledgeDetails.certificateNo}</Highlight> จำนวน <Highlight>{asset.stockPledgeDetails.quantity}</Highlight> หุ้น มูลค่าหุ้นละ <Highlight>{asset.stockPledgeDetails.parValue}</Highlight> บาท รวมมูลค่า <Highlight>{asset.stockPledgeDetails.totalValue}</Highlight> บาท โดยมี <Highlight>{asset.stockPledgeDetails.owner}</Highlight> เป็นผู้ถือหุ้น
           </div>
         )}
       </div>
@@ -303,7 +314,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       {/* Contract Sections Page 1 */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
-        
+
         {integratedAssets.length > 0 && (
           <div className="space-y-4 pl-8 mb-6 mt-6">
             {integratedAssets.map((asset, idx) => {
@@ -631,7 +642,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 {(data.collateralAssets || [])
                   .slice(hasLargeMachinery ? 1 : 3)
                   .map((asset, idx) => renderCollateralAsset(asset, idx + (hasLargeMachinery ? 1 : 3)))}
-                
+
                 <div className="mt-4 text-justify italic">
                   นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
                 </div>
