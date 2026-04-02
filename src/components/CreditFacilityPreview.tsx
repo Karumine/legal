@@ -1,7 +1,7 @@
 import PageHeader from './PageHeader';
 import type { CreditFacilityData, CompanyInfo, GuarantorData } from '../types/app';
 import { formatThaiDate } from '../utils/thaiDate';
-import { formatThaiId } from '../utils/formatters';
+import { formatThaiId, getAuthorizedSignatoryText } from '../utils/formatters';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { thaiNumberText } from '../utils/thaiNumberText';
 
@@ -91,7 +91,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">3)</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย <Highlight>{customerInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
+              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
             </div>
           </div>
         </div>
@@ -549,7 +549,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                       <div className="flex-1 text-justify">
                         {asset.type === 'land' && asset.landDetails && (
                           <div>
-                            <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> ตำบล <Highlight>{asset.landDetails.subDistrict}</Highlight> อำเภอ <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
+                            <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
                           </div>
                         )}
                         {asset.type === 'cash' && (
@@ -594,7 +594,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <div className="flex-1 text-justify">
                   {asset.type === 'land' && asset.landDetails && (
                     <div>
-                      <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> ตำบล <Highlight>{asset.landDetails.subDistrict}</Highlight> อำเภอ <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
+                      <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
                     </div>
                   )}
                   {asset.type === 'cash' && (

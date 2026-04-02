@@ -352,6 +352,7 @@ function App() {
     customerDirector: data.customerInfo.directors,
     customerAddress: data.customerInfo.address,
     customerTaxId: data.customerInfo.taxId,
+    entityType: data.customerInfo.entityType,
     items: data.feePaymentData.items,
   });
 

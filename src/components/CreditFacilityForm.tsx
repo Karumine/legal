@@ -1,6 +1,8 @@
 import React from 'react';
 import type { CreditFacilityData, LessorInfo } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
+import { formatCurrency } from '../utils/formatters';
+import ThaiLocationSelector from './ThaiLocationSelector';
 
 interface Props {
   data: CreditFacilityData;
@@ -73,11 +75,8 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                 name="loanAmount"
                 value={data.loanAmount || ''}
                 onChange={(e) => {
-                  const val = e.target.value.replace(/,/g, '');
-                  if (!isNaN(Number(val)) || val === '') {
-                    const formatted = val ? Number(val).toLocaleString('en-US') : '';
-                    onChange({ ...data, loanAmount: formatted });
-                  }
+                  const formatted = formatCurrency(e.target.value);
+                  onChange({ ...data, loanAmount: formatted });
                 }}
                 className="block w-64 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white font-bold text-blue-700"
                 placeholder="0"
@@ -96,11 +95,8 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                 name="stampDuty"
                 value={data.stampDuty || ''}
                 onChange={(e) => {
-                  const val = e.target.value.replace(/,/g, '');
-                  if (!isNaN(Number(val)) || val === '') {
-                    const formatted = val ? Number(val).toLocaleString('en-US') : '';
-                    onChange({ ...data, stampDuty: formatted });
-                  }
+                  const formatted = formatCurrency(e.target.value);
+                  onChange({ ...data, stampDuty: formatted });
                 }}
                 className="block w-64 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white font-bold text-blue-700"
                 placeholder="เช่น 767"
@@ -153,11 +149,8 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                   name="installmentAmount"
                   value={data.installmentAmount || ''}
                   onChange={(e) => {
-                    const val = e.target.value.replace(/,/g, '');
-                    if (!isNaN(Number(val)) || val === '') {
-                      const formatted = val ? Number(val).toLocaleString('en-US') : '';
-                      onChange({ ...data, installmentAmount: formatted });
-                    }
+                    const formatted = formatCurrency(e.target.value);
+                    onChange({ ...data, installmentAmount: formatted });
                   }}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
                   placeholder="เช่น 63,032.64"
@@ -245,11 +238,8 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
               name="collateralValue"
               value={data.collateralValue || ''}
               onChange={(e) => {
-                const val = e.target.value.replace(/,/g, '');
-                if (!isNaN(Number(val)) || val === '') {
-                  const formatted = val ? Number(val).toLocaleString('en-US') : '';
-                  onChange({ ...data, collateralValue: formatted });
-                }
+                const formatted = formatCurrency(e.target.value);
+                onChange({ ...data, collateralValue: formatted });
               }}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
               placeholder="0"
@@ -308,32 +298,44 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
 
                   {asset.type === 'land' && asset.landDetails && (
                     <div className="grid grid-cols-2 gap-x-4 gap-y-3 mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm">
-                      {[
-                        { label: 'โฉนดเลขที่', key: 'deedNo' },
-                        { label: 'เล่ม', key: 'volume' },
-                        { label: 'หน้า', key: 'page' },
-                        { label: 'ระวาง', key: 'mapSheet' },
-                        { label: 'เลขที่ดิน', key: 'landNo' },
-                        { label: 'หน้าสำรวจ', key: 'surveyNo' },
-                        { label: 'ตำบล', key: 'subDistrict' },
-                        { label: 'อำเภอ', key: 'district' },
-                        { label: 'จังหวัด', key: 'province' },
-                        { label: 'ชื่อเจ้าของ', key: 'owner' }
-                      ].map(field => (
-                        <div key={field.key}>
-                          <label className="block text-xs font-semibold text-gray-500 mb-1">{field.label}</label>
-                          <input
-                            type="text"
-                            value={(asset.landDetails as any)[field.key]}
-                            onChange={(e) => {
+                        {[
+                          { label: 'โฉนดเลขที่', key: 'deedNo' },
+                          { label: 'เล่ม', key: 'volume' },
+                          { label: 'หน้า', key: 'page' },
+                          { label: 'ระวาง', key: 'mapSheet' },
+                          { label: 'เลขที่ดิน', key: 'landNo' },
+                          { label: 'หน้าสำรวจ', key: 'surveyNo' },
+                          { label: 'ชื่อเจ้าของ', key: 'owner' }
+                        ].map(field => (
+                          <div key={field.key}>
+                            <label className="block text-xs font-semibold text-gray-500 mb-1">{field.label}</label>
+                            <input
+                              type="text"
+                              value={(asset.landDetails as any)[field.key]}
+                              onChange={(e) => {
+                                const newAssets = [...data.collateralAssets];
+                                newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, [field.key]: e.target.value };
+                                onChange({ ...data, collateralAssets: newAssets });
+                              }}
+                              className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
+                            />
+                          </div>
+                        ))}
+                        <div className="col-span-2 mt-2 pt-2 border-t border-gray-100">
+                          <ThaiLocationSelector
+                            province={asset.landDetails.province}
+                            district={asset.landDetails.district}
+                            subDistrict={asset.landDetails.subDistrict}
+                            onChange={(updates) => {
                               const newAssets = [...data.collateralAssets];
-                              newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, [field.key]: e.target.value };
+                              newAssets[idx].landDetails = { 
+                                ...newAssets[idx].landDetails!, 
+                                ...updates as any
+                              };
                               onChange({ ...data, collateralAssets: newAssets });
                             }}
-                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
                           />
                         </div>
-                      ))}
                     </div>
                   )}
 
@@ -344,8 +346,9 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                         type="text"
                         value={asset.cashAmount || ''}
                         onChange={(e) => {
+                          const formatted = formatCurrency(e.target.value);
                           const newAssets = [...data.collateralAssets];
-                          newAssets[idx].cashAmount = e.target.value;
+                          newAssets[idx].cashAmount = formatted;
                           onChange({ ...data, collateralAssets: newAssets });
                         }}
                         className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
@@ -405,13 +408,10 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                             type="text"
                             value={asset.machinePrice || ''}
                             onChange={(e) => {
-                              const val = e.target.value.replace(/,/g, '');
-                              if (!isNaN(Number(val)) || val === '') {
-                                const formatted = val ? Number(val).toLocaleString('en-US') : '';
-                                const newAssets = [...data.collateralAssets];
-                                newAssets[idx] = { ...newAssets[idx], machinePrice: formatted };
-                                onChange({ ...data, collateralAssets: newAssets });
-                              }
+                              const formatted = formatCurrency(e.target.value);
+                              const newAssets = [...data.collateralAssets];
+                              newAssets[idx] = { ...newAssets[idx], machinePrice: formatted };
+                              onChange({ ...data, collateralAssets: newAssets });
                             }}
                             className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-right font-medium"
                             placeholder="0"

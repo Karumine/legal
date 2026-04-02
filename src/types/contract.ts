@@ -18,6 +18,7 @@ export interface ContractData {
   customerDirector: string;
   customerAddress: string;
   customerTaxId: string;
+  entityType?: 'company' | 'partnership';
 
   // Dynamic contract items
   items: ContractItem[];
@@ -48,5 +49,6 @@ export const initialContractData: ContractData = {
   customerDirector: 'นางสาวรัตนา หมู่ทอง',
   customerAddress: 'เลขที่ 39 หมู่ 4 ตำบลวังจุฬา อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา',
   customerTaxId: '0145554003035',
+  entityType: 'company',
   items: [],
 };

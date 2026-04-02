@@ -14,6 +14,7 @@ export interface CompanyInfo {
   phone: string;
   email?: string;
   contactPerson?: string;
+  entityType?: 'company' | 'partnership';
 }
 
 export interface AssetDetail {
@@ -253,6 +254,7 @@ export const initialAppData: AppData = {
     address: 'เลขที่ 20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ',
     taxId: '0115558012195',
     phone: '02-xxx-xxxx',
+    entityType: 'company',
   },
 
   tkInfo: {
@@ -261,6 +263,7 @@ export const initialAppData: AppData = {
     address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
     taxId: '0107546000130',
     phone: '02-310-7000',
+    entityType: 'company',
   },
 
   customerInfo: {
@@ -269,6 +272,7 @@ export const initialAppData: AppData = {
     address: 'เลขที่ 39 หมู่ที่ 4 ตำบลวังจุฬา อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา',
     taxId: '0145561001530',
     phone: '',
+    entityType: 'company',
   },
 
   agreements: [

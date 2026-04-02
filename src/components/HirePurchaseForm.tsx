@@ -4,7 +4,9 @@ import DirectorInput from './DirectorInput';
 import { TODAY } from '../types/app';
 import type { HirePurchaseData, LessorInfo, AssetDetail, ContractType, CompanyInfo, BuybackData } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
+import { formatCurrency } from '../utils/formatters';
 import BuybackForm from './BuybackForm';
+import ThaiLocationSelector from './ThaiLocationSelector';
 
 interface Props {
   data: HirePurchaseData;
@@ -338,13 +340,10 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                     type="text"
                     placeholder="ใส่ตัวเลขเท่านั้น"
                     value={asset.totalAmount}
-                    onChange={(e) => {
-                      const val = e.target.value.replace(/,/g, '');
-                      if (!isNaN(Number(val)) || val === '') {
-                        const formatted = val ? Number(val).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) : '';
-                        updateAsset(index, 'totalAmount', formatted);
-                      }
-                    }}
+                  onChange={(e) => {
+                    const formatted = formatCurrency(e.target.value);
+                    updateAsset(index, 'totalAmount', formatted);
+                  }}
                     className="w-full p-2 border border-gray-300 rounded bg-white shadow-sm font-semibold text-blue-700"
                   />
                 </div>
@@ -452,7 +451,12 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">ค่างวด/เดือน (บาท)</label>
-                <input type="text" value={data.installmentAmount} onChange={(e) => handleChange('installmentAmount', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
+                <input 
+                  type="text" 
+                  value={data.installmentAmount} 
+                  onChange={(e) => handleChange('installmentAmount', formatCurrency(e.target.value))} 
+                  className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" 
+                />
               </div>
             </div>
           </div>
@@ -489,11 +493,21 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">ค่าอากรแสตมป์ (บาท)</label>
-              <input type="text" value={data.stampDuty || ''} onChange={(e) => handleChange('stampDuty', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
+              <input 
+                type="text" 
+                value={data.stampDuty || ''} 
+                onChange={(e) => handleChange('stampDuty', formatCurrency(e.target.value))} 
+                className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" 
+              />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">ค่าเบี้ยประกันภัย (บาท)</label>
-              <input type="text" value={data.insurancePremium || ''} onChange={(e) => handleChange('insurancePremium', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
+              <input 
+                type="text" 
+                value={data.insurancePremium || ''} 
+                onChange={(e) => handleChange('insurancePremium', formatCurrency(e.target.value))} 
+                className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" 
+              />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">เช็คต่อค่างวด (ขัอ 4.1)</label>
@@ -545,7 +559,12 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">มูลค่ารวมหลักประกัน (6.1) (บาท)</label>
-            <input type="text" value={data.collateralValue || ''} onChange={(e) => handleChange('collateralValue', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
+            <input 
+              type="text" 
+              value={data.collateralValue || ''} 
+              onChange={(e) => handleChange('collateralValue', formatCurrency(e.target.value))} 
+              className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" 
+            />
           </div>
 
 
@@ -647,29 +666,20 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                           handleChange('collateralAssets', newAssets);
                         }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
                       </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">ตำบล</label>
-                        <input type="text" value={asset.landDetails.subDistrict} onChange={(e) => {
-                          const newAssets = [...data.collateralAssets];
-                          newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, subDistrict: e.target.value };
-                          handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">อำเภอ</label>
-                        <input type="text" value={asset.landDetails.district} onChange={(e) => {
-                          const newAssets = [...data.collateralAssets];
-                          newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, district: e.target.value };
-                          handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">จังหวัด</label>
-                        <input type="text" value={asset.landDetails.province} onChange={(e) => {
-                          const newAssets = [...data.collateralAssets];
-                          newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, province: e.target.value };
-                          handleChange('collateralAssets', newAssets);
-                        }} className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all" />
+                      <div className="col-span-2 mt-2 pt-2 border-t border-gray-100">
+                        <ThaiLocationSelector
+                          province={asset.landDetails.province}
+                          district={asset.landDetails.district}
+                          subDistrict={asset.landDetails.subDistrict}
+                          onChange={(updates) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].landDetails = { 
+                              ...newAssets[idx].landDetails!, 
+                              ...updates as any
+                            };
+                            handleChange('collateralAssets', newAssets);
+                          }}
+                        />
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเจ้าของ</label>
@@ -734,13 +744,10 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                             type="text"
                             value={asset.machinePrice || ''}
                             onChange={(e) => {
-                              const val = e.target.value.replace(/,/g, '');
-                              if (!isNaN(Number(val)) || val === '') {
-                                const formatted = val ? Number(val).toLocaleString('en-US') : '';
-                                const newAssets = [...data.collateralAssets];
-                                newAssets[idx] = { ...newAssets[idx], machinePrice: formatted };
-                                handleChange('collateralAssets', newAssets);
-                              }
+                              const formatted = formatCurrency(e.target.value);
+                              const newAssets = [...data.collateralAssets];
+                              newAssets[idx] = { ...newAssets[idx], machinePrice: formatted };
+                              handleChange('collateralAssets', newAssets);
                             }}
                             className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-right font-medium"
                             placeholder="0"
@@ -753,11 +760,17 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                   {asset.type === 'cash' && (
                     <div>
                       <label className="block text-[10px] text-gray-500">จำนวนเงิน (บาท)</label>
-                      <input type="text" value={asset.cashAmount || ''} onChange={(e) => {
-                        const newAssets = [...data.collateralAssets];
-                        newAssets[idx].cashAmount = e.target.value;
-                        handleChange('collateralAssets', newAssets);
-                      }} className="block w-full rounded border-gray-300 text-xs p-1 border" />
+                      <input 
+                        type="text" 
+                        value={asset.cashAmount || ''} 
+                        onChange={(e) => {
+                          const formatted = formatCurrency(e.target.value);
+                          const newAssets = [...data.collateralAssets];
+                          newAssets[idx].cashAmount = formatted;
+                          handleChange('collateralAssets', newAssets);
+                        }} 
+                        className="block w-full rounded border-gray-300 text-xs p-1 border" 
+                      />
                     </div>
                   )}
                 </div>
