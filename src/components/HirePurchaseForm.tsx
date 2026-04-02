@@ -170,7 +170,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
   };
 
   const addAsset = () => {
-    handleChange('assets', [...data.assets, { description: '', quantity: '1', unitPrice: '', totalAmount: '' }]);
+    handleChange('assets', [...data.assets, { id: crypto.randomUUID(), name: '', description: '', quantity: '1', unit: '', unitPrice: '', totalAmount: '' }]);
   };
 
   const removeAsset = (index: number) => {
