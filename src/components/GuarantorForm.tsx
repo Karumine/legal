@@ -4,6 +4,7 @@ import type { GuarantorData, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 import { searchCompanyByTaxId } from '../services/dbdService';
+import ThaiAddressInput from './ThaiAddressInput';
 
 interface Props {
   data: GuarantorData[];
@@ -264,13 +265,9 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่</label>
-                <input
-                  type="text"
+                <ThaiAddressInput
                   value={guarantor.guarantorAddress}
-                  onChange={(e) => updateGuarantor(guarantor.id, 'guarantorAddress', e.target.value)}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
-                  placeholder="ที่อยู่ตามทะเบียนบ้าน"
+                  onChange={(address) => updateGuarantor(guarantor.id, 'guarantorAddress', address)}
                 />
               </div>
 
@@ -334,11 +331,9 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
                         ใช้ที่อยู่เดียวกับผู้ค้ำประกัน
                       </button>
                     </div>
-                    <input
-                      type="text"
+                    <ThaiAddressInput
                       value={guarantor.spouseAddress}
-                      onChange={(e) => updateGuarantor(guarantor.id, 'spouseAddress', e.target.value)}
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
+                      onChange={(address) => updateGuarantor(guarantor.id, 'spouseAddress', address)}
                     />
                   </div>
                 </div>

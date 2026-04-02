@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 import DirectorInput from './DirectorInput';
+import ThaiAddressInput from './ThaiAddressInput';
 import type { CompanyInfo } from '../types/app';
 import { searchCompanyByTaxId } from '../services/dbdService';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
@@ -101,11 +102,9 @@ function InfoFields({ label, info, onChange, showSearch }: {
         />
       </div>
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่</label>
-        <textarea
+        <ThaiAddressInput
           value={info.address}
-          onChange={(e) => handleChange('address', e.target.value)}
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white h-20"
+          onChange={(address) => handleChange('address', address)}
         />
       </div>
       <div className="grid grid-cols-2 gap-3">
