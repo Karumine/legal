@@ -352,6 +352,7 @@ function App() {
     customerDirector: data.customerInfo.directors,
     customerAddress: data.customerInfo.address,
     customerTaxId: data.customerInfo.taxId,
+    entityType: data.customerInfo.entityType,
     items: data.feePaymentData.items,
   });
 
@@ -473,6 +474,7 @@ function App() {
               data={data.guarantors}
               onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
               agreements={data.agreements}
+              customerInfo={data.customerInfo}
             />
           </div>
 

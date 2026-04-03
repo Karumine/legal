@@ -60,3 +60,44 @@ export const formatPhoneNumber = (phone: string): string => {
   }
   return formatted;
 };
+
+/**
+ * Formats a string as currency with commas while allowing decimals while typing.
+ * @param value The value to format
+ * @returns Formatted currency string
+ */
+export const formatCurrency = (value: string): string => {
+  const cleanValue = value.replace(/,/g, '');
+  if (cleanValue === '') return '';
+  if (cleanValue === '.') return '.';
+  
+  const parts = cleanValue.split('.');
+  if (parts.length > 2) return value; // Invalid number with multiple dots
+
+  const integerPart = parts[0];
+  const decimalPart = parts.length > 1 ? parts[1] : null;
+
+  let formattedInteger = integerPart;
+  if (integerPart !== '' && !isNaN(Number(integerPart))) {
+    formattedInteger = Number(integerPart).toLocaleString('en-US', {
+      maximumFractionDigits: 0
+    });
+  }
+
+  if (decimalPart !== null) {
+    return `${formattedInteger}.${decimalPart.substring(0, 2)}`;
+  }
+  return formattedInteger;
+};
+
+/**
+ * Returns the correct terminology for authorized signatories based on entity type.
+ * @param company The company info
+ * @returns "กรรมการผู้มีอำนาจกระทำการแทนบริษัท" or "หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ"
+ */
+export const getAuthorizedSignatoryText = (company?: { entityType?: 'company' | 'partnership' }): string => {
+  if (!company) return 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท';
+  return company.entityType === 'partnership' 
+    ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' 
+    : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท';
+};

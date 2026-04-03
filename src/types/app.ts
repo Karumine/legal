@@ -14,6 +14,7 @@ export interface CompanyInfo {
   phone: string;
   email?: string;
   contactPerson?: string;
+  entityType?: 'company' | 'partnership';
 }
 
 export interface AssetDetail {
@@ -30,7 +31,7 @@ export interface LessorInfo {
   name: string;
   taxId: string;
   address: string;
-  proportion: string;
+  proportion?: string;
 }
 
 export interface LandCollateral {
@@ -54,16 +55,33 @@ export interface MachineDetail {
 }
 
 export interface CollateralAsset {
-  type: 'land' | 'cash' | 'machinery';
+  type: 'land' | 'cash' | 'machinery' | 'carPledge' | 'stockPledge';
   landDetails?: LandCollateral;
   cashAmount?: string;
-  machineryDetails?: string;
   machineName?: string;
   machineModel?: string;
   machineQuantity?: string;
+  machineUnit?: string;
   machinePrice?: string;
-  machines?: MachineDetail[];
   machineOwner?: string;
+  carPledgeDetails?: {
+    brand: string;
+    model: string;
+    plateNo: string;
+    province: string;
+    chassisNo: string;
+    engineNo: string;
+    color: string;
+    owner: string;
+  };
+  stockPledgeDetails?: {
+    companyName: string;
+    certificateNo: string;
+    quantity: string;
+    parValue: string;
+    totalValue: string;
+    owner: string;
+  };
 }
 
 export interface HirePurchaseData {
@@ -253,6 +271,7 @@ export const initialAppData: AppData = {
     address: 'เลขที่ 20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ',
     taxId: '0115558012195',
     phone: '02-xxx-xxxx',
+    entityType: 'company',
   },
 
   tkInfo: {
@@ -261,6 +280,7 @@ export const initialAppData: AppData = {
     address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
     taxId: '0107546000130',
     phone: '02-310-7000',
+    entityType: 'company',
   },
 
   customerInfo: {
@@ -269,6 +289,7 @@ export const initialAppData: AppData = {
     address: 'เลขที่ 39 หมู่ที่ 4 ตำบลวังจุฬา อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา',
     taxId: '0145561001530',
     phone: '',
+    entityType: 'company',
   },
 
   agreements: [
@@ -283,13 +304,11 @@ export const initialAppData: AppData = {
           name: 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด',
           taxId: '0115558012195',
           address: '20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ',
-          proportion: '20',
         },
         lessor2: {
           name: 'บริษัท ฐิติกร จำกัด (มหาชน)',
           taxId: '0107546000130',
           address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
-          proportion: '80',
         },
         assets: [
           { id: 'asset-1', name: 'เครื่องเป่าขวดพลาสติก PET Auto 6 cav.', description: '"F6MV" พร้อมแม่พิมพ์ 1 ชุด', quantity: '1', unit: 'ชุด', unitPrice: '4,119,500', totalAmount: '4,119,500' },

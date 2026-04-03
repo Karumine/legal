@@ -129,6 +129,37 @@ export default function ContractForm({ data, onChange }: Props) {
               <input type="text" name="customerCompany" value={data.customerCompany} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" />
             </div>
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">ประเภทนิติบุคคล</label>
+              <div className="flex gap-4 p-2 bg-slate-50 rounded-md border border-slate-200">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input
+                    type="radio"
+                    name="entityType"
+                    value="company"
+                    checked={data.entityType === 'company'}
+                    onChange={() => onChange({ ...data, entityType: 'company' })}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className={`text-sm ${data.entityType === 'company' ? 'font-bold text-blue-700' : 'text-gray-600'}`}>
+                    บริษัท
+                  </span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input
+                    type="radio"
+                    name="entityType"
+                    value="partnership"
+                    checked={data.entityType === 'partnership'}
+                    onChange={() => onChange({ ...data, entityType: 'partnership' })}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className={`text-sm ${data.entityType === 'partnership' ? 'font-bold text-blue-700' : 'text-gray-600'}`}>
+                    ห้างหุ้นส่วน
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div>
               <label className="block text-sm font-medium text-gray-700">Authorized Director</label>
               <input type="text" name="customerDirector" value={data.customerDirector} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" />
             </div>

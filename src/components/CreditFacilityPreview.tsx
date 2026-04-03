@@ -1,7 +1,7 @@
 import PageHeader from './PageHeader';
 import type { CreditFacilityData, CompanyInfo, GuarantorData } from '../types/app';
 import { formatThaiDate } from '../utils/thaiDate';
-import { formatThaiId } from '../utils/formatters';
+import { formatThaiId, getAuthorizedSignatoryText } from '../utils/formatters';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { thaiNumberText } from '../utils/thaiNumberText';
 
@@ -49,7 +49,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
   const hasLargeMachinery = false;
   const collateralOverflow = (data.collateralAssets || []).length > 2;
   const machineryOffset = collateralOverflow ? 1 : 0;
-  
+
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
@@ -91,7 +91,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">3)</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย <Highlight>{customerInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
+              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
             </div>
           </div>
         </div>
@@ -549,7 +549,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                       <div className="flex-1 text-justify">
                         {asset.type === 'land' && asset.landDetails && (
                           <div>
-                            <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> ตำบล <Highlight>{asset.landDetails.subDistrict}</Highlight> อำเภอ <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
+                            <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
                           </div>
                         )}
                         {asset.type === 'cash' && (
@@ -561,9 +561,20 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                           <div className="mt-2 text-justify">
                             <span className="font-bold border-b border-black text-black italic">เครื่องจักร</span> :{' '}
                             <Highlight>{asset.machineName}</Highlight>{' '}
-                            จำนวน <Highlight>{asset.machineQuantity}</Highlight>{' '}
+                            {asset.machineModel && <span className="italic text-gray-700">({asset.machineModel})</span>}{' '}
+                            จำนวน <Highlight>{asset.machineQuantity}</Highlight> <Highlight>{asset.machineUnit || 'ชุด'}</Highlight>{' '}
                             ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
                             อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
+                          </div>
+                        )}
+                        {asset.type === 'carPledge' && asset.carPledgeDetails && (
+                          <div>
+                            <span className="font-bold border-b border-black text-black italic">จำนำรถ</span> : รถยนต์ยี่ห้อ <Highlight>{asset.carPledgeDetails.brand}</Highlight> รุ่น <Highlight>{asset.carPledgeDetails.model}</Highlight> ทะเบียนเลขที่ <Highlight>{asset.carPledgeDetails.plateNo}</Highlight> จังหวัด <Highlight>{asset.carPledgeDetails.province}</Highlight> เลขตัวถัง <Highlight>{asset.carPledgeDetails.chassisNo}</Highlight> เลขเครื่องยนต์ <Highlight>{asset.carPledgeDetails.engineNo}</Highlight> สี <Highlight>{asset.carPledgeDetails.color}</Highlight> โดยมี <Highlight>{asset.carPledgeDetails.owner}</Highlight> เป็นผู้ถือกรรมสิทธิ์
+                          </div>
+                        )}
+                        {asset.type === 'stockPledge' && asset.stockPledgeDetails && (
+                          <div>
+                            <span className="font-bold border-b border-black text-black italic">จำนำหุ้น</span> : หุ้นของบริษัท <Highlight>{asset.stockPledgeDetails.companyName}</Highlight> ตามใบถือหุ้นเลขที่ <Highlight>{asset.stockPledgeDetails.certificateNo}</Highlight> จำนวน <Highlight>{asset.stockPledgeDetails.quantity}</Highlight> หุ้น มูลค่าหุ้นละ <Highlight>{asset.stockPledgeDetails.parValue}</Highlight> บาท รวมมูลค่า <Highlight>{asset.stockPledgeDetails.totalValue}</Highlight> บาท โดยมี <Highlight>{asset.stockPledgeDetails.owner}</Highlight> เป็นผู้ถือหุ้น
                           </div>
                         )}
                       </div>
@@ -589,31 +600,42 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             {(data.collateralAssets || [])
               .slice(hasLargeMachinery ? 0 : 2)
               .map((asset, idx) => (
-              <div key={idx + (hasLargeMachinery ? 0 : 2)} className="flex gap-2 ml-16 italic">
-                <span>({getThaiIndex(idx + (hasLargeMachinery ? 0 : 2))})</span>
-                <div className="flex-1 text-justify">
-                  {asset.type === 'land' && asset.landDetails && (
-                    <div>
-                      <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> ตำบล <Highlight>{asset.landDetails.subDistrict}</Highlight> อำเภอ <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
-                    </div>
-                  )}
-                  {asset.type === 'cash' && (
-                    <div>
-                      <span className="font-bold border-b border-black text-black">เงินสด</span> : จำนวนเงิน <Highlight>{asset.cashAmount}</Highlight> บาท
-                    </div>
-                  )}
-                  {asset.type === 'machinery' && (
-                    <div className="mt-2">
-                      <span className="font-bold border-b border-black text-black">เครื่องจักร</span> :{' '}
-                      <Highlight>{asset.machineName}</Highlight>{' '}
-                      จำนวน <Highlight>{asset.machineQuantity}</Highlight>{' '}
-                      ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
-                      อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
-                    </div>
-                  )}
+                <div key={idx + (hasLargeMachinery ? 0 : 2)} className="flex gap-2 ml-16 italic">
+                  <span>({getThaiIndex(idx + (hasLargeMachinery ? 0 : 2))})</span>
+                  <div className="flex-1 text-justify">
+                    {asset.type === 'land' && asset.landDetails && (
+                      <div>
+                        <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
+                      </div>
+                    )}
+                    {asset.type === 'cash' && (
+                      <div>
+                        <span className="font-bold border-b border-black text-black">เงินสด</span> : จำนวนเงิน <Highlight>{asset.cashAmount}</Highlight> บาท
+                      </div>
+                    )}
+                    {asset.type === 'machinery' && (
+                      <div className="mt-2 text-justify">
+                        <span className="font-bold border-b border-black text-black italic">เครื่องจักร</span> :{' '}
+                        <Highlight>{asset.machineName}</Highlight>{' '}
+                        {asset.machineModel && <span className="italic text-gray-700">({asset.machineModel})</span>}{' '}
+                        จำนวน <Highlight>{asset.machineQuantity}</Highlight> <Highlight>{asset.machineUnit || 'ชุด'}</Highlight>{' '}
+                        ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
+                        อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
+                      </div>
+                    )}
+                    {asset.type === 'carPledge' && asset.carPledgeDetails && (
+                      <div>
+                        <span className="font-bold border-b border-black text-black italic">จำนำรถ</span> : รถยนต์ยี่ห้อ <Highlight>{asset.carPledgeDetails.brand}</Highlight> รุ่น <Highlight>{asset.carPledgeDetails.model}</Highlight> ทะเบียนเลขที่ <Highlight>{asset.carPledgeDetails.plateNo}</Highlight> จังหวัด <Highlight>{asset.carPledgeDetails.province}</Highlight> เลขตัวถัง <Highlight>{asset.carPledgeDetails.chassisNo}</Highlight> เลขเครื่องยนต์ <Highlight>{asset.carPledgeDetails.engineNo}</Highlight> สี <Highlight>{asset.carPledgeDetails.color}</Highlight> โดยมี <Highlight>{asset.carPledgeDetails.owner}</Highlight> เป็นผู้ถือกรรมสิทธิ์
+                      </div>
+                    )}
+                    {asset.type === 'stockPledge' && asset.stockPledgeDetails && (
+                      <div>
+                        <span className="font-bold border-b border-black text-black italic">จำนำหุ้น</span> : หุ้นของบริษัท <Highlight>{asset.stockPledgeDetails.companyName}</Highlight> ตามใบถือหุ้นเลขที่ <Highlight>{asset.stockPledgeDetails.certificateNo}</Highlight> จำนวน <Highlight>{asset.stockPledgeDetails.quantity}</Highlight> หุ้น มูลค่าหุ้นละ <Highlight>{asset.stockPledgeDetails.parValue}</Highlight> บาท รวมมูลค่า <Highlight>{asset.stockPledgeDetails.totalValue}</Highlight> บาท โดยมี <Highlight>{asset.stockPledgeDetails.owner}</Highlight> เป็นผู้ถือหุ้น
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
             <div className="ml-16 mt-4 text-justify italic">
               นอกจากนี้ ผู้ให้สินเชื่อมีสิทธิกำหนดให้ผู้กู้จัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้สินเชื่อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้กู้ที่มีต่อผู้ให้สินเชื่อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
             </div>

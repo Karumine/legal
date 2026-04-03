@@ -51,7 +51,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
           : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
         
         const rate = 3.0; // Default 3%
-        const calculatedAmount = (netAmount * rate / 100).toFixed(2);
+        const calculatedAmount = (netAmount * rate / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         updatedItems.push({
           id: agreement.id,
@@ -79,9 +79,9 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
         : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
       
       const rateNum = parseFloat(item.rate) || 0;
-      const targetAmount = (netAmount * rateNum / 100).toFixed(2);
+      const targetAmount = (netAmount * rateNum / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-      if (item.contractNo !== targetContractNo || Math.abs(parseFloat(item.amount) - parseFloat(targetAmount)) > 0.01) {
+      if (item.contractNo !== targetContractNo || Math.abs(parseFloat(item.amount.replace(/,/g, '')) - parseFloat(targetAmount.replace(/,/g, ''))) > 0.01) {
         hasChanges = true;
         return { ...item, contractNo: targetContractNo, amount: targetAmount };
       }
@@ -119,7 +119,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
         : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
       
       const rate = 3.0; // Default 3%
-      const calculatedAmount = (netAmount * rate / 100).toFixed(2);
+      const calculatedAmount = (netAmount * rate / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       const newItem: ContractItem = {
         id: agreement.id,
@@ -148,7 +148,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
               : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
             
             const rateNum = parseFloat(value) || 0;
-            updatedItem.amount = (netAmount * rateNum / 100).toFixed(2);
+            updatedItem.amount = (netAmount * rateNum / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
           }
         }
         return updatedItem;

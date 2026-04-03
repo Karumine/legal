@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Copy, Plus, Search, Trash2, UserPlus, Loader2 } from 'lucide-react';
-import type { GuarantorData, Agreement } from '../types/app';
+import type { GuarantorData, Agreement, CompanyInfo } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 import { searchCompanyByTaxId } from '../services/dbdService';
@@ -10,9 +10,10 @@ interface Props {
   data: GuarantorData[];
   onChange: (data: GuarantorData[]) => void;
   agreements: Agreement[];
+  customerInfo: CompanyInfo;
 }
 
-export default function GuarantorForm({ data, onChange, agreements }: Props) {
+export default function GuarantorForm({ data, onChange, agreements, customerInfo }: Props) {
   const prevAgreementsRef = useRef<string[]>([]);
   const mainAgreements = agreements; // Show all main contracts as requested
   const [searchingId, setSearchingId] = useState<string | null>(null);
@@ -265,6 +266,17 @@ export default function GuarantorForm({ data, onChange, agreements }: Props) {
               </div>
 
               <div>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="block text-xs font-medium text-gray-600">ที่อยู่ผู้ค้ำประกัน</label>
+                  <button 
+                    type="button" 
+                    onClick={() => updateGuarantor(guarantor.id, 'guarantorAddress', customerInfo.address)}
+                    className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
+                  >
+                    <Copy size={12} />
+                    ใช้ที่อยู่เดียวกับลูกค้า (ฝ่ายที่ 3)
+                  </button>
+                </div>
                 <ThaiAddressInput
                   value={guarantor.guarantorAddress}
                   onChange={(address) => updateGuarantor(guarantor.id, 'guarantorAddress', address)}

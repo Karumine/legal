@@ -15,11 +15,12 @@ interface Props {
   onCustomerChange: (info: CompanyInfo) => void;
 }
 
-function InfoFields({ label, info, onChange, showSearch }: {
+function InfoFields({ label, info, onChange, showSearch, showEntityType }: {
   label: string;
   info: CompanyInfo;
   onChange: (info: CompanyInfo) => void;
   showSearch?: boolean;
+  showEntityType?: boolean;
 }) {
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState('');
@@ -84,6 +85,31 @@ function InfoFields({ label, info, onChange, showSearch }: {
         </div>
         {searchError && <p className="mt-1 text-xs text-red-500">{searchError}</p>}
       </div>
+      {showEntityType && (
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-2">ประเภทนิติบุคคล</label>
+          <div className="flex gap-4">
+            <label className="inline-flex items-center cursor-pointer">
+              <input
+                type="radio"
+                checked={info.entityType === 'company' || !info.entityType}
+                onChange={() => handleChange('entityType', 'company')}
+                className="text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <span className="ml-2 text-sm text-gray-700 font-medium">บริษัท</span>
+            </label>
+            <label className="inline-flex items-center cursor-pointer">
+              <input
+                type="radio"
+                checked={info.entityType === 'partnership'}
+                onChange={() => handleChange('entityType', 'partnership')}
+                className="text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <span className="ml-2 text-sm text-gray-700 font-medium">หอหจก. / ห้างหุ้นส่วนจำกัด</span>
+            </label>
+          </div>
+        </div>
+      )}
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อบริษัท</label>
         <input
@@ -158,7 +184,7 @@ export default function CompanyInfoForm({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-6">
           <InfoFields label="🏢 Agile (ฝ่ายที่ 1)" info={agileInfo} onChange={onAgileChange} showSearch />
-          <InfoFields label="👤 ลูกค้า (ฝ่ายที่ 3)" info={customerInfo} onChange={onCustomerChange} showSearch />
+          <InfoFields label="👤 ลูกค้า (ฝ่ายที่ 3)" info={customerInfo} onChange={onCustomerChange} showSearch showEntityType />
         </div>
         <div className="space-y-6">
           <InfoFields label="🏢 TK (ฝ่ายที่ 2)" info={tkInfo} onChange={onTkChange} showSearch />

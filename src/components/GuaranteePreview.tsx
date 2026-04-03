@@ -637,7 +637,7 @@ export default function GuaranteePreview({ data }: Props) {
 
                   <div className="leading-[1.8]">
                     <div className="indent-10">
-                      โดยหนังสือฉบับนี้ข้าพเจ้า <Highlight>{guarantor.spouseName}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{guarantor.spouseAddress}</Highlight> ซึ่งเป็นสามี/ภริยา ของ <Highlight>{guarantor.name}</Highlight>
+                      โดยหนังสือฉบับนี้ข้าพเจ้า <Highlight>{guarantor.spouseName}</Highlight> เลขประจำตัวประชาชน <Highlight>{formatThaiId(guarantor.spouseIdCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{guarantor.spouseAddress}</Highlight> ซึ่งเป็นสามี/ภริยา ของ <Highlight>{guarantor.name}</Highlight>
                     </div>
                     <div className="indent-10">
                       ขอให้ความยินยอมโดยหนังสือนี้ว่าให้ <Highlight>{guarantor.name}</Highlight> สามี/ภริยา ของข้าพเจ้าทำนิติกรรม เป็นผู้ค้ำประกันการชำระหนี้ของบริษัท <Highlight>{data.refContractCompany}</Highlight> รวมถึงนิติกรรมต่างๆ กับบริษัท อาไจล์ แอสเซ็ทส์ จำกัด ได้
