@@ -16,6 +16,11 @@ interface Props {
 
 export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, customerInfo, mainContractType }: Props) {
   const contractLabel = mainContractType ? CONTRACT_TYPE_LABELS[mainContractType] : 'สัญญาเช่าซื้อ';
+
+  // Strip leading "เลขที่" from address data to prevent duplication
+  // since the template text already includes the prefix
+  const stripAddressPrefix = (addr: string) =>
+    addr?.replace(/^เลขที่\s*/, '') || '';
   const Highlight = ({ children }: { children: React.ReactNode }) => (
     <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
       {children || '\u00A0'}
@@ -29,7 +34,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
   );
 
   const assets = (hpData.assets || []).filter(a => data.selectedAssetIds?.includes(a.id));
-  
+
   const totalAssetValue = assets.reduce((sum, asset) => {
     const amt = parseFloat(asset.totalAmount.replace(/,/g, '')) || 0;
     return sum + amt;
@@ -65,7 +70,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
       <div className="flex flex-col">
         <span className="bg-[#FFFF00] font-bold px-1 rounded shadow-sm">สัญญารับซื้อคืนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight></span>
       </div>
-      <div className="text-gray-400">หน้า {page} / {totalPages}</div>
+      <div className="text-gray-400">หน้า {page} จาก {totalPages}</div>
     </div>
   );
 
@@ -97,22 +102,22 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4 font-bold">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท ) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{agileInfo.address}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
+              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท ) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(agileInfo.address)}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4 font-bold">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{tkInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 2"</b>)
+              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(tkInfo.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 2"</b>)
             </div>
           </div>
           <div className="pl-6 italic text-gray-700">
             (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>"บริษัทฯ ฝ่ายหนึ่ง"</b>)
           </div>
-          <div className="flex gap-2 text-justify pr-2">
+          <div id="section-vendor" className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4 font-bold">3.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย<Highlight>{data.vendorDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานใหญ่จดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.vendorAddress}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+              <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย<Highlight>{data.vendorDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานใหญ่จดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.vendorAddress)}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
             </div>
           </div>
           <div className="pl-6 italic text-gray-700">
@@ -131,7 +136,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none break-before-page">
         <PageHeader />
 
-        <div className="space-y-6 mt-8">
+        <div id="section-buyback-assets" className="space-y-6 mt-8">
           <div>
             <span className="font-bold text-[14px]">1. รายละเอียดของเครื่องจักรและกรรมสิทธิ์ในเครื่องจักร</span>
           </div>
@@ -233,7 +238,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">1.3.</span>
             <div className="flex-1">
-              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {Math.round(downPaymentPercentage)} ({thaiBahtText(Math.round(downPaymentPercentage).toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText(downPaymentAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จากบริษัท <Highlight>{customerInfo.companyName}</Highlight> (“ผู้เช่าซื้อ”) ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระ และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทุกฝ่ายตกลงให้เงินค่าชำระราคาครั้งดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
+              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {Math.round(downPaymentPercentage)} ({thaiBahtText(Math.round(downPaymentPercentage).toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText(downPaymentAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จาก <Highlight>{customerInfo.companyName}</Highlight> (“ผู้เช่าซื้อ”) ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระ และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทุกฝ่ายตกลงให้เงินค่าชำระราคาครั้งดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
             </div>
           </div>
 
@@ -288,14 +293,14 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 ml-12">
             <span className="shrink-0">(ข)</span>
             <div className="flex-1">
-              การรับซื้อเครื่องจักรคืนทั้งมือ 1 และ มือ 2 เครื่องจักร อุปกรณ์ หรือ สินค้า ต้องมีความสมบูรณ์ และมีสภาพพร้อมใช้งานได้ตามระบบปกติ โดยทางตัวแทนจำหน่าย จะเป็นผู้สรุปผลการตรวจสอบ
+              การรับซื้อเครื่องจักรคืน{data.buybackMode === 'newOnly' ? 'มือ 1' : data.buybackMode === 'usedOnly' ? 'มือ 2' : 'ทั้งมือ 1 และ มือ 2'} เครื่องจักร อุปกรณ์ หรือ สินค้า ต้องมีความสมบูรณ์ และมีสภาพพร้อมใช้งานได้ตามระบบปกติ โดยทางตัวแทนจำหน่าย จะเป็นผู้สรุปผลการตรวจสอบ
             </div>
           </div>
 
           <div className="flex gap-2 ml-12">
             <span className="shrink-0">(ค)</span>
             <div className="flex-1">
-              การรับซื้อคืนทั้งมือ 1 และ มือ 2 เครื่องจักร อุปกรณ์ หรือ สินค้า จะพิจารณาราคาให้ โดยอ้างอิงจากราคาตามสัญญาของบริษัทฯ เป็นหลัก
+              การรับซื้อคืน{data.buybackMode === 'newOnly' ? 'มือ 1' : data.buybackMode === 'usedOnly' ? 'มือ 2' : 'ทั้งมือ 1 และ มือ 2'} เครื่องจักร อุปกรณ์ หรือ สินค้า จะพิจารณาราคาให้ โดยอ้างอิงจากราคาตามสัญญาของบริษัทฯ เป็นหลัก
             </div>
           </div>
 
@@ -306,22 +311,30 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             </div>
           </div>
 
-          <div className="text-center py-4">
+          <div id="section-buyback-rate" className="text-center py-4">
             <div className="font-bold mb-4">เกณฑ์ราคาการรับซื้อคืน เครื่องจักร อุปกรณ์ หรือ สินค้า ดังนี้</div>
             <table className="mx-auto border-collapse border border-black text-center min-w-[300px]">
               <thead>
                 <tr>
                   <th className="border border-black px-4 py-1 bg-[#FFFF00] font-bold">ปี</th>
-                  <th className="border border-black px-4 py-1 bg-[#FFFF00] font-bold">มือ 1</th>
-                  <th className="border border-black px-4 py-1 bg-[#FFFF00] font-bold">มือ 2</th>
+                  {(data.buybackMode === 'all' || data.buybackMode === 'newOnly') && (
+                    <th className="border border-black px-4 py-1 bg-[#FFFF00] font-bold">มือ 1</th>
+                  )}
+                  {(data.buybackMode === 'all' || data.buybackMode === 'usedOnly') && (
+                    <th className="border border-black px-4 py-1 bg-[#FFFF00] font-bold">มือ 2</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {data.buybackTable && data.buybackTable.map((row, idx) => (
                   <tr key={idx}>
                     <td className="border border-black px-4 py-1">{row.year}</td>
-                    <td className="border border-black px-4 py-1">{formatRate(row.newRate)}</td>
-                    <td className="border border-black px-4 py-1">{formatRate(row.usedRate)}</td>
+                    {(data.buybackMode === 'all' || data.buybackMode === 'newOnly') && (
+                      <td className="border border-black px-4 py-1">{formatRate(row.newRate)}</td>
+                    )}
+                    {(data.buybackMode === 'all' || data.buybackMode === 'usedOnly') && (
+                      <td className="border border-black px-4 py-1">{formatRate(row.usedRate)}</td>
+                    )}
                   </tr>
                 ))}
               </tbody>

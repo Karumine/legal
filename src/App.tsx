@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight } from 'lucide-react';
+import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
@@ -24,7 +24,22 @@ import { thaiBahtText } from './utils/thaiBahtText';
 type PreviewTab = string;
 
 function App() {
-  const [data, setData] = useState<AppData>(initialAppData);
+  const [data, setData] = useState<AppData>(() => {
+    const saved = localStorage.getItem('legalAppData');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error('Failed to parse saved data', e);
+      }
+    }
+    return initialAppData;
+  });
+
+  // Auto-save to localStorage whenever data changes
+  useEffect(() => {
+    localStorage.setItem('legalAppData', JSON.stringify(data));
+  }, [data]);
   const [activePreview, setActivePreview] = useState<PreviewTab>('agreement-initial-hp');
 
   // Panel resize & toggle
@@ -401,6 +416,18 @@ function App() {
                 {previewVisible ? 'ซ่อน' : 'แสดง Preview'}
               </button>
               <button
+                onClick={() => {
+                  if (window.confirm('คุณต้องการรีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นหรือไม่? ข้อมูลเก่าจะหายไปทั้งหมด')) {
+                    localStorage.removeItem('legalAppData');
+                    window.location.reload();
+                  }
+                }}
+                className="flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3 py-2 rounded-md font-medium transition-colors text-sm"
+                title="ล้างข้อมูลเริ่มต้นใหม่"
+              >
+                <RotateCcw size={15} /> รีเซ็ต
+              </button>
+              <button
                 onClick={handlePrint}
                 className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm"
               >
@@ -485,11 +512,13 @@ function App() {
                   customerInfo={data.customerInfo}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
                   onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, `agreement-${activeAgreement.id}`)}
+                  onBuybackToggled={(buybackId: string) => setActivePreview(`buyback:${activeAgreement.id}:${buybackId}`)}
                 />
               )}
               {activeAgreement.type === 'loan' && (
                 <CreditFacilityForm
                   data={activeAgreement.data}
+                  customerInfo={data.customerInfo}
                   onChange={(cf: any) => updateAgreementData(activeAgreement.id, cf)}
                   onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, `agreement-${activeAgreement.id}`)}
                 />
@@ -573,7 +602,8 @@ function App() {
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">สัญญาหลัก</span>
             <div className="flex gap-1.5 flex-wrap">
               {mainContractGroups.map((group) => {
-                const isActive = activePreview === group.key || group.buybacks.some(b => b.key === activePreview);
+                const activeBuyback = group.buybacks.find(b => b.key === activePreview);
+                const isActive = activePreview === group.key || !!activeBuyback;
                 const hasBuybacks = group.buybacks.length > 0;
                 return (
                   <div key={group.id} className="relative">
@@ -582,7 +612,9 @@ function App() {
                         if (hasBuybacks) {
                           setOpenDropdownId(openDropdownId === group.id ? null : group.id);
                         }
-                        setActivePreview(group.key);
+                        if (!hasBuybacks) {
+                          setActivePreview(group.key);
+                        }
                       }}
                       className={`flex items-center gap-1.5 py-1.5 px-3 text-xs font-semibold rounded-md transition-all whitespace-nowrap ${
                         isActive
@@ -591,7 +623,7 @@ function App() {
                       }`}
                     >
                       <FileText size={13} className={isActive ? 'text-white' : 'text-slate-400'} />
-                      <span>{group.label}</span>
+                      <span>{activeBuyback ? activeBuyback.label : group.label}</span>
                       {group.contractNo && <span className={`text-[10px] ${isActive ? 'text-slate-300' : 'text-slate-400'}`}>({group.contractNo})</span>}
                       {hasBuybacks && <ChevronDown size={12} className={`ml-0.5 transition-transform ${openDropdownId === group.id ? 'rotate-180' : ''}`} />}
                     </button>

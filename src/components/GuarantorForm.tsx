@@ -34,7 +34,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
         }
         return guarantor;
       });
-      
+
       const hasChanged = newData.some((g, i) => g !== data[i]);
       if (hasChanged) {
         onChange(newData);
@@ -80,7 +80,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
     const newIds = currentIds.includes(agreementId)
       ? currentIds.filter(id => id !== agreementId)
       : [...currentIds, agreementId];
-    
+
     updateGuarantor(guarantorId, 'selectedAgreementIds', newIds);
   };
 
@@ -96,15 +96,15 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
       const result = await searchCompanyByTaxId(cleanTaxId);
       if (result) {
         onChange(
-          data.map((g) => 
-            g.id === guarantorId 
-              ? { 
-                  ...g, 
-                  guarantorName: result.companyName,
-                  guarantorAddress: result.address,
-                  directors: result.directors?.join(', '),
-                  isMarried: false // Corporate guarantors aren't "married"
-                } 
+          data.map((g) =>
+            g.id === guarantorId
+              ? {
+                ...g,
+                guarantorName: result.companyName,
+                guarantorAddress: result.address,
+                directors: result.directors?.join(', '),
+                isMarried: false // Corporate guarantors aren't "married"
+              }
               : g
           )
         );
@@ -216,17 +216,6 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">รายชื่อกรรมการ</label>
-                <textarea
-                  value={guarantor.directors || ''}
-                  onChange={(e) => updateGuarantor(guarantor.id, 'directors', e.target.value)}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
-                  placeholder="รายชื่อกรรมการผู้มีอำนาจลงนาม..."
-                  rows={2}
-                />
-              </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">เลขบัตรประจำตัวประชาชน</label>
@@ -268,8 +257,8 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <label className="block text-xs font-medium text-gray-600">ที่อยู่ผู้ค้ำประกัน</label>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => updateGuarantor(guarantor.id, 'guarantorAddress', customerInfo.address)}
                     className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
                   >
@@ -334,8 +323,8 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                   <div>
                     <div className="flex justify-between items-center mb-1">
                       <label className="block text-xs font-medium text-gray-600">ที่อยู่คู่สมรส</label>
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={() => updateGuarantor(guarantor.id, 'spouseAddress', guarantor.guarantorAddress)}
                         className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
                       >
@@ -354,7 +343,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
           </div>
         ))}
       </div>
-      
+
       {data.length > 2 && (
         <div className="mt-4 flex justify-center">
           <button

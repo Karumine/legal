@@ -21,6 +21,11 @@ const Highlight = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function JointVenturePreview({ data, agileInfo, tkInfo, agreements, appData }: Props) {
+  // Strip leading "เลขที่" from address data to prevent duplication
+  // since the template text already includes the prefix
+  const stripAddressPrefix = (addr: string) =>
+    addr?.replace(/^เลขที่\s*/, '') || '';
+
   const translateRateToThai = (rate: string) => {
     const digits: Record<string, string> = {
       '0': 'ศูนย์', '1': 'หนึ่ง', '2': 'สอง', '3': 'สาม', '4': 'สี่',
@@ -186,9 +191,9 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
   const p12 = saData.agreementOriginationFeePeriods?.[selectedAgreements[1]?.id] || 0;
   const p13 = saData.agreementOriginationFeePeriods?.[selectedAgreements[2]?.id] || 0;
   const origFeePagesCount = selectedAgreements.length === 0 ? 0 :
-                            selectedAgreements.length === 1 ? 1 :
-                            selectedAgreements.length === 2 ? 2 :
-                            (p12 > 6 || p13 > 6 ? 3 : 2);
+    selectedAgreements.length === 1 ? 1 :
+      selectedAgreements.length === 2 ? 2 :
+        (p12 > 6 || p13 > 6 ? 3 : 2);
 
   const totalPagesCount = 13 + 3 + origFeePagesCount + 1 + selectedAgreements.length + serviceFeeAdditionalPages + 1 + 1;
 
@@ -212,7 +217,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         สัญญาค้าร่วมเลขที่ {data.contractNo}
       </div>
       <div>
-        หน้า {pageNum} / {totalPagesCount}
+        หน้า {pageNum} จาก {totalPagesCount}
       </div>
     </div>
   );
@@ -240,13 +245,13 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{agileInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 1”</b>) และ
+              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(agileInfo.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 1”</b>) และ
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{tkInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 2”</b>)
+              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(tkInfo.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 2”</b>)
             </div>
           </div>
         </div>
@@ -769,26 +774,22 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           </div>
 
           <div className="space-y-8 my-8">
-            <div className="grid grid-cols-[120px_1fr] gap-4">
+            <div className="flex flex-col gap-2">
               <span className="font-bold">คู่สัญญาฝ่ายที่ 1:</span>
-              <div className="space-y-1">
-                <div className="font-bold">{agileInfo.companyName}</div>
-                <div>{agileInfo.address}</div>
-                <div>โทรศัพท์ : <Highlight>{formatPhoneNumber(agileInfo.phone)}</Highlight></div>
-                <div>จดหมายอิเล็กทรอนิกส์ (E-mail) : <Highlight>{agileInfo.email}</Highlight></div>
-                <div>ผู้ติดต่อ : <Highlight>{agileInfo.contactPerson}</Highlight></div>
-              </div>
+              <div className="font-bold">{agileInfo.companyName}</div>
+              <div>เลขที่ {stripAddressPrefix(agileInfo.address)}</div>
+              <div>โทรศัพท์ : <Highlight>{formatPhoneNumber(agileInfo.phone)}</Highlight></div>
+              <div>จดหมายอิเล็กทรอนิกส์ (E-mail) : <Highlight>{agileInfo.email}</Highlight></div>
+              <div>ผู้ติดต่อ : <Highlight>{agileInfo.contactPerson}</Highlight></div>
             </div>
 
-            <div className="grid grid-cols-[120px_1fr] gap-4">
+            <div className="flex flex-col gap-2">
               <span className="font-bold">คู่สัญญาฝ่ายที่ 2:</span>
-              <div className="space-y-1">
-                <div className="font-bold">{tkInfo.companyName}</div>
-                <div>เลขที่ {tkInfo.address}</div>
-                <div>โทรศัพท์ : <Highlight>{formatPhoneNumber(tkInfo.phone)}</Highlight></div>
-                <div>จดหมายอิเล็กทรอนิกส์ (E-mail) : <Highlight>{tkInfo.email}</Highlight></div>
-                <div>ผู้ติดต่อ : <Highlight>{tkInfo.contactPerson}</Highlight></div>
-              </div>
+              <div className="font-bold">{tkInfo.companyName}</div>
+              <div>เลขที่ {stripAddressPrefix(tkInfo.address)}</div>
+              <div>โทรศัพท์ : <Highlight>{formatPhoneNumber(tkInfo.phone)}</Highlight></div>
+              <div>จดหมายอิเล็กทรอนิกส์ (E-mail) : <Highlight>{tkInfo.email}</Highlight></div>
+              <div>ผู้ติดต่อ : <Highlight>{tkInfo.contactPerson}</Highlight></div>
             </div>
           </div>
 

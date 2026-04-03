@@ -16,6 +16,11 @@ const Highlight = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function ServiceAgreementPreview({ data, appData }: Props) {
+  // Strip leading "เลขที่" from address data to prevent duplication
+  // since the template text already includes the prefix
+  const stripAddressPrefix = (addr: string) =>
+    addr?.replace(/^เลขที่\s*/, '') || '';
+
   const formatCurrency = (value: string | number) => {
     if (value === undefined || value === null || value === '') return '';
     const num = typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value;
@@ -93,7 +98,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
 
     const exactTotal = principal * (proportion2 / 100) * (svcRate / 100) * (periods / 12);
     const grandTotal = Math.round(exactTotal * 100) / 100;
-    
+
     // Derived tax components from exact total
     const totalFee = Number((grandTotal / 1.07).toFixed(2));
     const totalVat = Number((grandTotal - totalFee).toFixed(2));
@@ -175,7 +180,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     // Calculations
     const vatPerInstallment = Math.round(totalAmount * 7 / 107 * 100) / 100;
     const feePerInstallment = Math.round((totalAmount - vatPerInstallment) * 100) / 100;
-    
+
     let principal = 0;
     if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
       principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
@@ -249,7 +254,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
         </div>
 
         <div className="indent-10 mb-6 font-normal">
-          สัญญาจ้างบริการฉบับนี้ทำขึ้นระหว่าง <Highlight>{appData.tkInfo.companyName}</Highlight> โดย <Highlight>{appData.tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจ มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{appData.tkInfo.address}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า “ผู้ว่าจ้าง” กับ <Highlight>{appData.agileInfo.companyName}</Highlight> โดย <Highlight>{appData.agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{appData.agileInfo.address}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า “ผู้รับจ้าง” ทั้งสองฝ่ายได้ทำสัญญาจ้างบริการโดยมีข้อความดังต่อไปนี้
+          สัญญาจ้างบริการฉบับนี้ทำขึ้นระหว่าง <Highlight>{appData.tkInfo.companyName}</Highlight> โดย <Highlight>{appData.tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจ มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(appData.tkInfo.address)}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า “ผู้ว่าจ้าง” กับ <Highlight>{appData.agileInfo.companyName}</Highlight> โดย <Highlight>{appData.agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(appData.agileInfo.address)}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า “ผู้รับจ้าง” ทั้งสองฝ่ายได้ทำสัญญาจ้างบริการโดยมีข้อความดังต่อไปนี้
         </div>
 
         <div className="space-y-6 font-normal">
@@ -276,7 +281,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
 
             <div className="pl-8 flex gap-3 font-bold">
               <span className="shrink-0">2.3</span>
-              <div className="underline decoration-dotted underline-offset-4">
+              <div>
                 รวมค่าตอบแทนทั้งหมดตาม ข้อ 2.1 และ ข้อ 2.2 ค่าบริการ {formatCurrency(grandTotal.price)} บาท ภาษีมูลค่าเพิ่ม {formatCurrency(grandTotal.vat)} บาท รวมทั้งหมด {formatCurrency(grandTotal.total)} บาท
               </div>
             </div>
@@ -621,16 +626,16 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
           </div>
         </div>
 
-          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
-            <div>สัญญาจ้างบริการ</div>
-            <div>หน้า {6 + selectedAgreements.length} จาก {totalPages}</div>
-          </div>
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
+          <div>สัญญาจ้างบริการ</div>
+          <div>หน้า {6 + selectedAgreements.length} จาก {totalPages}</div>
+        </div>
       </div>
 
       {/* Pages 9+: Service Fee Schedules per contract */}
       {(() => {
         let currentPageOffset = 0;
-        
+
         const renderClosingText = () => (
           <div className="mt-8 space-y-4 font-normal text-[12px]">
             <div className="text-justify">
@@ -650,7 +655,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
 
           const basePageNum = 6 + selectedAgreements.length + 1 + idx + currentPageOffset;
           const pages = [];
-          
+
           // Page 1 for this agreement
           pages.push(
             <div key={`sf-schedule-${agreement.id}-p1`} className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DirectorInput from './DirectorInput';
+import ThaiAddressInput from './ThaiAddressInput';
 import type { BuybackData, AssetDetail } from '../types/app';
 import { ShieldAlert, CheckCircle2, Search, Loader2 } from 'lucide-react';
 import { searchCompanyByTaxId } from '../services/dbdService';
@@ -10,9 +11,10 @@ interface Props {
   parentAssets?: AssetDetail[];
   otherBuybacksSelectedAssetIds?: string[];
   onChange: (data: BuybackData) => void;
+  onFocusSection?: (sectionId: string) => void;
 }
 
-export default function BuybackForm({ data, parentAssets = [], otherBuybacksSelectedAssetIds = [], onChange }: Props) {
+export default function BuybackForm({ data, parentAssets = [], otherBuybacksSelectedAssetIds = [], onChange, onFocusSection }: Props) {
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState('');
 
@@ -69,7 +71,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4" onClick={() => onFocusSection?.('section-vendor')}>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญารับซื้อคืน</label>
           <input
@@ -91,7 +93,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
         </div>
       </div>
 
-      <div className="p-4 border border-blue-100 rounded-lg bg-blue-50/30">
+      <div className="p-4 border border-blue-100 rounded-lg bg-blue-50/30" onClick={() => onFocusSection?.('section-buyback-assets')}>
         <h5 className="text-xs font-bold text-blue-700 mb-3 flex items-center gap-2">
           <CheckCircle2 size={14} /> เลือกเครื่องจักรในสัญญานี้
         </h5>
@@ -162,7 +164,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
         </div>
       </div>
       
-      <div className="pt-2">
+      <div className="pt-2" onClick={() => onFocusSection?.('section-vendor')}>
         <h5 className="text-xs font-bold text-orange-700 mb-3 uppercase tracking-wider">ข้อมูลผู้ขาย / ตัวแทนจำหน่าย (คู่สัญญาฝ่ายที่ 3)</h5>
         <div className="space-y-3 bg-orange-50/30 p-4 rounded-lg border border-orange-100">
           <div>
@@ -209,47 +211,74 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
 
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่จดทะเบียน</label>
-            <textarea
+            <ThaiAddressInput
               value={data.vendorAddress}
-              onChange={(e) => updateBuyback('vendorAddress', e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white h-20"
-              placeholder="ที่อยู่ตามหนังสือรับรอง"
+              onChange={(val) => updateBuyback('vendorAddress', val)}
             />
           </div>
         </div>
       </div>
 
-      <div className="pt-4 border-t border-orange-100">
-        <h5 className="text-xs font-bold text-orange-700 mb-3 uppercase tracking-wider">เกณฑ์ราคาการรับซื้อคืน (ตามปี)</h5>
+      <div className="pt-4 border-t border-orange-100" onClick={() => onFocusSection?.('section-buyback-rate')}>
+        <div className="flex justify-between items-center mb-3">
+          <h5 className="text-xs font-bold text-orange-700 uppercase tracking-wider">เกณฑ์ราคาการรับซื้อคืน (ตามปี)</h5>
+          <div className="flex bg-orange-100/50 p-1 rounded-lg border border-orange-200">
+            {[
+              { id: 'newOnly', label: 'มือ 1' },
+              { id: 'usedOnly', label: 'มือ 2' },
+              { id: 'all', label: 'ทั้งคู่' }
+            ].map(m => (
+              <button
+                key={m.id}
+                onClick={() => updateBuyback('buybackMode', m.id)}
+                className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${
+                  data.buybackMode === m.id 
+                    ? 'bg-orange-500 text-white shadow-sm' 
+                    : 'text-orange-700 hover:bg-orange-200/50'
+                }`}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="overflow-x-auto bg-white rounded-md border border-orange-100">
           <table className="min-w-full text-[11px] text-left border-collapse">
             <thead>
               <tr className="border-b border-orange-200 bg-orange-50/50">
                 <th className="py-2 px-3 font-bold text-orange-800">ปีที่</th>
-                <th className="py-2 px-3 font-bold text-orange-800 text-center">มือ 1 (%)</th>
-                <th className="py-2 px-3 font-bold text-orange-800 text-center">มือ 2 (%)</th>
+                {(data.buybackMode === 'all' || data.buybackMode === 'newOnly') && (
+                  <th className="py-2 px-3 font-bold text-orange-800 text-center">มือ 1 (%)</th>
+                )}
+                {(data.buybackMode === 'all' || data.buybackMode === 'usedOnly') && (
+                  <th className="py-2 px-3 font-bold text-orange-800 text-center">มือ 2 (%)</th>
+                )}
               </tr>
             </thead>
             <tbody>
               {(data.buybackTable || []).map((row, rowIdx) => (
                 <tr key={rowIdx} className="border-b border-orange-50/50 hover:bg-orange-50/20">
                   <td className="py-2 px-3 font-medium text-gray-700">ปีที่ {row.year}</td>
-                  <td className="py-1.5 px-3">
-                    <input
-                      type="text"
-                      value={row.newRate}
-                      onChange={(e) => updateTable(rowIdx, 'newRate', e.target.value)}
-                      className="w-full p-1.5 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none text-center"
-                    />
-                  </td>
-                  <td className="py-1.5 px-3">
-                    <input
-                      type="text"
-                      value={row.usedRate}
-                      onChange={(e) => updateTable(rowIdx, 'usedRate', e.target.value)}
-                      className="w-full p-1.5 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none text-center"
-                    />
-                  </td>
+                  {(data.buybackMode === 'all' || data.buybackMode === 'newOnly') && (
+                    <td className="py-1.5 px-3">
+                      <input
+                        type="text"
+                        value={row.newRate}
+                        onChange={(e) => updateTable(rowIdx, 'newRate', e.target.value)}
+                        className="w-full p-1.5 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none text-center"
+                      />
+                    </td>
+                  )}
+                  {(data.buybackMode === 'all' || data.buybackMode === 'usedOnly') && (
+                    <td className="py-1.5 px-3">
+                      <input
+                        type="text"
+                        value={row.usedRate}
+                        onChange={(e) => updateTable(rowIdx, 'usedRate', e.target.value)}
+                        className="w-full p-1.5 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none text-center"
+                      />
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
