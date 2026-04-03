@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ShieldCheck, ChevronDown, ChevronUp, FileText, Plus, Trash2 } from 'lucide-react';
-import DirectorInput from './DirectorInput';
+
 import ThaiAddressInput from './ThaiAddressInput';
 import { TODAY } from '../types/app';
 import type { HirePurchaseData, LessorInfo, AssetDetail, ContractType, CompanyInfo, BuybackData } from '../types/app';
@@ -243,14 +243,6 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
               value={data.contractDate}
               onChange={(e) => handleChange('contractDate', e.target.value)}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-            />
-          </div>
-          <div className="col-span-2">
-            <DirectorInput
-              label="กรรมการผู้มีอำนาจ (ผู้เช่าซื้อ)"
-              value={data.lesseeSignatories}
-              onChange={(val) => handleChange('lesseeSignatories', val)}
-              placeholder="ชื่อ-นามสกุล กรรมการ"
             />
           </div>
 
