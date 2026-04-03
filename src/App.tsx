@@ -485,11 +485,13 @@ function App() {
                   customerInfo={data.customerInfo}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
                   onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, `agreement-${activeAgreement.id}`)}
+                  onBuybackToggled={(buybackId: string) => setActivePreview(`buyback:${activeAgreement.id}:${buybackId}`)}
                 />
               )}
               {activeAgreement.type === 'loan' && (
                 <CreditFacilityForm
                   data={activeAgreement.data}
+                  customerInfo={data.customerInfo}
                   onChange={(cf: any) => updateAgreementData(activeAgreement.id, cf)}
                   onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, `agreement-${activeAgreement.id}`)}
                 />
@@ -573,7 +575,8 @@ function App() {
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">สัญญาหลัก</span>
             <div className="flex gap-1.5 flex-wrap">
               {mainContractGroups.map((group) => {
-                const isActive = activePreview === group.key || group.buybacks.some(b => b.key === activePreview);
+                const activeBuyback = group.buybacks.find(b => b.key === activePreview);
+                const isActive = activePreview === group.key || !!activeBuyback;
                 const hasBuybacks = group.buybacks.length > 0;
                 return (
                   <div key={group.id} className="relative">
@@ -582,7 +585,9 @@ function App() {
                         if (hasBuybacks) {
                           setOpenDropdownId(openDropdownId === group.id ? null : group.id);
                         }
-                        setActivePreview(group.key);
+                        if (!hasBuybacks) {
+                          setActivePreview(group.key);
+                        }
                       }}
                       className={`flex items-center gap-1.5 py-1.5 px-3 text-xs font-semibold rounded-md transition-all whitespace-nowrap ${
                         isActive
@@ -591,7 +596,7 @@ function App() {
                       }`}
                     >
                       <FileText size={13} className={isActive ? 'text-white' : 'text-slate-400'} />
-                      <span>{group.label}</span>
+                      <span>{activeBuyback ? activeBuyback.label : group.label}</span>
                       {group.contractNo && <span className={`text-[10px] ${isActive ? 'text-slate-300' : 'text-slate-400'}`}>({group.contractNo})</span>}
                       {hasBuybacks && <ChevronDown size={12} className={`ml-0.5 transition-transform ${openDropdownId === group.id ? 'rotate-180' : ''}`} />}
                     </button>

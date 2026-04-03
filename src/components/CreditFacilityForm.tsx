@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
-import type { CreditFacilityData, LessorInfo } from '../types/app';
+import type { CreditFacilityData, LessorInfo, CompanyInfo } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatCurrency } from '../utils/formatters';
 import ThaiLocationSelector from './ThaiLocationSelector';
 
 interface Props {
   data: CreditFacilityData;
+  customerInfo?: CompanyInfo;
   onChange: (data: CreditFacilityData) => void;
   onFocusSection?: (sectionId: string) => void;
 }
 
-export default function CreditFacilityForm({ data, onChange, onFocusSection }: Props) {
+export default function CreditFacilityForm({ data, onChange, customerInfo, onFocusSection }: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     onChange({ ...data, [name]: value });
@@ -300,7 +301,7 @@ export default function CreditFacilityForm({ data, onChange, onFocusSection }: P
                 type="button"
                 onClick={() => onChange({
                   ...data,
-                  collateralAssets: [...(data.collateralAssets || []), { type: 'land', landDetails: { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: '' } }]
+                  collateralAssets: [...(data.collateralAssets || []), { type: 'land', landDetails: { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: customerInfo?.companyName || '' } }]
                 })}
                 className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-200 hover:bg-blue-100"
               >
@@ -330,16 +331,16 @@ export default function CreditFacilityForm({ data, onChange, onFocusSection }: P
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx] = { ...newAssets[idx], type: newType };
                           if (newType === 'land' && !newAssets[idx].landDetails) {
-                            newAssets[idx].landDetails = { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: '' };
+                            newAssets[idx].landDetails = { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: customerInfo?.companyName || '' };
                           }
                           if (newType === 'carPledge' && !newAssets[idx].carPledgeDetails) {
-                            newAssets[idx].carPledgeDetails = { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: '' };
+                            newAssets[idx].carPledgeDetails = { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: customerInfo?.companyName || '' };
                           }
                           if (newType === 'stockPledge' && !newAssets[idx].stockPledgeDetails) {
-                            newAssets[idx].stockPledgeDetails = { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: '' };
+                            newAssets[idx].stockPledgeDetails = { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: customerInfo?.companyName || '' };
                           }
                           if (newType === 'machinery' && !newAssets[idx].machineName) {
-                            newAssets[idx] = { ...newAssets[idx], machineName: '', machineModel: '', machineQuantity: '1', machineUnit: 'ชุด', machinePrice: '0', machineOwner: '' };
+                            newAssets[idx] = { ...newAssets[idx], machineName: '', machineModel: '', machineQuantity: '1', machineUnit: 'ชุด', machinePrice: '0', machineOwner: customerInfo?.companyName || '' };
                           }
                           onChange({ ...data, collateralAssets: newAssets });
                         }}

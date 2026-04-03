@@ -147,6 +147,7 @@ export interface BuybackData {
   vendorTaxId: string;
   selectedAssetIds: string[];
   downPercentage: string;
+  buybackMode: 'newOnly' | 'usedOnly' | 'all';
   buybackTable: BuybackTableEntry[];
 }
 
@@ -271,7 +272,9 @@ export const initialAppData: AppData = {
     directors: 'นายพรรษา เริงพิทยา และ นายกอบพงษ์ ตรีสุขี',
     address: 'เลขที่ 20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ',
     taxId: '0115558012195',
-    phone: '02-xxx-xxxx',
+    phone: '02-000-9392',
+    email: 'kiattikhun@agileassets.co.th',
+    contactPerson: 'คุณเกียรติคุณ สนร้อย',
     entityType: 'company',
   },
 
@@ -281,6 +284,8 @@ export const initialAppData: AppData = {
     address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
     taxId: '0107546000130',
     phone: '02-310-7000',
+    email: 'prapol@tk.co.th',
+    contactPerson: 'นายประพล พรประภา',
     entityType: 'company',
   },
 
@@ -298,7 +303,7 @@ export const initialAppData: AppData = {
       id: 'initial-hp',
       type: 'hirePurchase',
       data: {
-        contractNo: 'AGA/81-LA2026',
+        contractNo: '',
         contractDate: TODAY,
         madeAt: 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด',
         lessor1: {
@@ -313,77 +318,42 @@ export const initialAppData: AppData = {
           address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
           proportion: '80',
         },
-        assets: [
-          { id: 'asset-1', name: 'เครื่องเป่าขวดพลาสติก PET Auto 6 cav.', description: '"F6MV" พร้อมแม่พิมพ์ 1 ชุด', quantity: '1', unit: 'ชุด', unitPrice: '4,119,500', totalAmount: '4,119,500' },
-          { id: 'asset-2', name: 'เครื่องบรรจุน้ำ XGF 40-40-12', description: '(Air conveyor, Outlet conveyor, Online cap sterilization, Lamp Checker, Cap loader) พร้อมอุปกรณ์ครบชุด', quantity: '1', unit: 'ชุด', unitPrice: '3,905,500', totalAmount: '3,905,500' }
-        ],
-        totalAmount: '8,025,000',
-        downPaymentPercentage: '20',
-        downPayment: '1,605,000', // แก้ไขให้สัมพันธ์กับ 20% ของ 8,025,000
-        customGreenText: 'ทั้งนี้ ผู้ให้เช่าซื้อทุกฝ่ายจะชำระเงินค่าเครื่องจักรส่วนที่เหลือ (ที่หักด้วยเงินดาวน์) ให้แก่ผู้ค้าโดยตรงตามสัดส่วนในข้อ 1 โดยตกลงให้ชำระงวดแรกภายในเดือนมิถุนายน 2569 และจะชำระงวดต่อไปตามเงื่อนไขที่ผู้ค้าได้ตกลงไว้กับผู้ให้เช่าซื้อ และตกลงจะชำระค่าเครื่องจักรที่เหลือทั้งหมดต่อเมื่อผู้เช่าซื้อได้รับเครื่องจักร ติดตั้ง ทดสอบ ใช้งานได้โดยสมบูรณ์แล้วเท่านั้น',
-        hasCustomGreenText: true,
-        remainingAmount: '6,420,000', // ยอดจัดคงเหลือหลังหักดาวน์
-        installments: '48',
-        installmentAmount: '166,660.00', // ตัวอย่างยอดผ่อนต่อเดือน
+        assets: [],
+        totalAmount: '',
+        downPaymentPercentage: '',
+        downPayment: '',
+        customGreenText: '',
+        hasCustomGreenText: false,
+        remainingAmount: '',
+        installments: '',
+        installmentAmount: '',
         interestType: 'แบบคงที่',
-        interestRate: '9',
-        firstInstallmentDate: '2026-07-25',
-        paymentDay: '25',
-        lastInstallmentDate: '2030-06-25',
-        stampDuty: '3,210',
-        insurancePremium: '93,040.47',
-        chequesPerInstallment: '2',
+        interestRate: '',
+        firstInstallmentDate: '',
+        paymentDay: '',
+        lastInstallmentDate: '',
+        stampDuty: '',
+        insurancePremium: '',
+        chequesPerInstallment: '',
         clause4_2Text: 'ในกรณีที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งมีความประสงค์จะเปลี่ยนแปลงวิธีการชำระตามที่ระบุในข้อ 4.1 ของสัญญาฉบับนี้เป็นรูปแบบอื่น คู่สัญญาทั้งสามฝ่ายจะต้องตกลงกันเป็นลายลักษณ์อักษร',
         lessor1Signatories: 'นายพรรษา เริงพิทยา และ นายกอบพงษ์ ตรีสุขี',
         lessor2Signatories: 'นางสาวปัทมา พรประภา และ นายประพล พรประภา',
         lesseeSignatories: 'นางสาวรัตนา หมู่ทอง',
         witnesses: '',
-        businessPurpose: 'โรงงานผลิตและจำหน่ายน้ำดื่มและรับจ้างผลิตน้ำดื่มในแบรนด์ของลูกค้าของผู้เช่าซื้อ',
-        installationLocation: '39 หมู่ 4 ตำบลวังจุฬา อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา',
-        collateralValue: '19,641,298',
-        hpGuarantors: ['นางสาวรัตนา หมู่ทอง', 'นายทวีป คล้ายสุบรรณ์'],
-        collateralAssets: [
-          {
-            type: 'land',
-            landDetails: {
-              deedNo: '4541', volume: '46', page: '41', mapSheet: '5142 III 7230',
-              landNo: '261', surveyNo: '1878', subDistrict: 'บ้านน้อยซุ้มขี้เหล็ก',
-              district: 'เนินมะปราง', province: 'พิษณุโลก', owner: 'นายทวีป คล้ายสุบรรณ์'
-            }
-          },
-          {
-            type: 'land',
-            landDetails: {
-              deedNo: '6054', volume: '61', page: '54', mapSheet: '5142 III 7230',
-              landNo: '264', surveyNo: '1427', subDistrict: 'บ้านน้อยซุ้มขี้เหล็ก',
-              district: 'เนินมะปราง', province: 'พิษณุโลก', owner: 'นายทวีป คล้ายสุบรรณ์'
-            }
-          }
-        ]
+        businessPurpose: '',
+        installationLocation: '',
+        collateralValue: '',
+        hpGuarantors: [],
+        collateralAssets: []
       }
     }
   ],
   activeAgreementId: 'initial-hp',
 
-  guarantors: [
-    {
-      id: '1',
-      contractNo: 'AGA/81-LA2026-G1',
-      contractDate: TODAY,
-      guarantorName: 'นายทวีป คล้ายสุบรรณ์',
-      guarantorIdCard: 'x-xxxx-xxxxx-xx-x',
-      guarantorAddress: '...',
-      isMarried: false,
-      spouseName: '',
-      spouseIdCard: '',
-      spouseAddress: '',
-      phone: '',
-      selectedAgreementIds: ['initial-hp'],
-    },
-  ],
+  guarantors: [],
 
   jointVentureData: {
-    contractNo: 'AGA/08-CON032026',
+    contractNo: '',
     contractDate: '2026-03-20',
     selectedAgreementIds: ['initial-hp'],
     proportion1: 20,

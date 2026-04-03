@@ -27,12 +27,22 @@ const GreenHighlight = ({ children }: { children: React.ReactNode }) => (
 
 export default function HirePurchasePreview({ data, customerInfo, guarantors = [], type = 'hirePurchase' }: Props) {
 
+  // Strip leading "เลขที่" from address data to prevent duplication
+  // since the template text already includes the prefix
+  const stripAddressPrefix = (addr: string) =>
+    addr?.replace(/^เลขที่\s*/, '') || '';
   const firstPageMax = 3;
   const integratedPageMax = 3;
   const subsequentPageMax = 6;
   const assetCount = data.assets?.length || 0;
 
   const isLargeList = assetCount >= 7;
+  
+  const collateralAssetsCount = (data.collateralAssets || []).length;
+  const isDedicatedCollateral = collateralAssetsCount >= 5;
+  const isIntegratedCollateral = collateralAssetsCount === 4;
+  const collateralOffset = isDedicatedCollateral ? 1 : 0;
+
   const integratedAssetsCount = (!isLargeList && assetCount > firstPageMax)
     ? Math.min(assetCount - firstPageMax, integratedPageMax)
     : 0;
@@ -43,10 +53,6 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
   const overflowPagesCount = Math.ceil(dedicatedOverflowAssets.length / subsequentPageMax);
 
-  // No longer needed as machinery is now flat
-  const hasLargeMachinery = false;
-  // collateralOffset triggers a new page (page 10) if more than 3 assets
-  const collateralOffset = (data.collateralAssets || []).length > 3 ? 1 : 0;
   const totalPages = 24 + overflowPagesCount + collateralOffset;
 
   const renderPageFooter = (pageNum: number) => (
@@ -175,13 +181,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor1.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
+              <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.lessor1.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{data.lessor2.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
+              <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.lessor2.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
             </div>
           </div>
           <div className="pl-6">
@@ -190,7 +196,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">3.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{customerInfo.address}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
+              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(customerInfo.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
             </div>
           </div>
         </div>
@@ -342,7 +348,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-4">
             <span className="">2.2</span>
             <div className="flex-1">
-              ผู้เช่าซื้อตกลงเช่าซื้อทรัพย์สินไปเพื่อใช้ในการประกอบกิจการเกี่ยวกับ <Highlight>{data.businessPurpose}</Highlight> เท่านั้น ณ สำนักงานใหญ่เลขที่ <Highlight>{data.installationLocation}</Highlight> (“สถานที่ตั้ง”) แต่หากภายหลังจากที่เข้าทำสัญญาฉบับนี้ ในกรณีที่ผู้เช่าซื้อจำเป็นต้องทำการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อจากสถานที่ตั้งเดิมที่เคยแจ้งไว้ตามสัญญาฉบับนี้ ผู้เช่าซื้อจะต้องได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อก่อนการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อออกจากสถานที่ตั้งเดิม
+              ผู้เช่าซื้อตกลงเช่าซื้อทรัพย์สินไปเพื่อใช้ในการประกอบกิจการเกี่ยวกับ <Highlight>{data.businessPurpose}</Highlight> เท่านั้น ณ สำนักงานใหญ่ <Highlight>{data.installationLocation}</Highlight> (“สถานที่ตั้ง”) แต่หากภายหลังจากที่เข้าทำสัญญาฉบับนี้ ในกรณีที่ผู้เช่าซื้อจำเป็นต้องทำการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อจากสถานที่ตั้งเดิมที่เคยแจ้งไว้ตามสัญญาฉบับนี้ ผู้เช่าซื้อจะต้องได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อก่อนการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อออกจากสถานที่ตั้งเดิม
             </div>
           </div>
 
@@ -615,12 +621,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="flex-1 space-y-4">
               <div>ผู้เช่าซื้อตกลงว่าบรรดาทรัพย์สินดังต่อไปนี้ (“ทรัพย์สินหลักประกัน”) เป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า</div>
 
-              {/* If we have large machinery, only show non-machinery on this page, or show machinery if it's small */}
-              {(data.collateralAssets || [])
-                .slice(0, hasLargeMachinery ? 1 : 3)
-                .map((asset, idx) => renderCollateralAsset(asset, idx))}
+              {/* Strictly show first 3 items (ก, ข, ค) if the list continues elsewhere */}
+              {(data.collateralAssets || []).slice(0, 3).map((asset, idx) => renderCollateralAsset(asset, idx))}
 
-              {!hasLargeMachinery && (data.collateralAssets || []).length > 0 && (data.collateralAssets || []).length <= 3 && (
+              {/* Show summary text on Page 9 ONLY if there is no overflow at all (1-3 assets) */}
+              {(data.collateralAssets || []).length > 0 && (data.collateralAssets || []).length <= 3 && (
                 <div className="mt-4 text-justify italic">
                   นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
                 </div>
@@ -631,17 +636,17 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         {renderPageFooter(9 + overflowPagesCount)}
       </div>
 
-      {/* Contract Sections Page 8 - Continued Section 6.3 (Machinery or Overflow) */}
-      {collateralOffset === 1 && (
+      {/* Contract Sections Page 10 - Dedicated Overflow for Section 6.3 (Triggered at 5+ items) */}
+      {isDedicatedCollateral && (
         <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
           <PageHeader />
           <div className="mt-8 space-y-6">
             <div className="flex gap-4">
-              <span className="opacity-0">5.3</span>
+              <span className="opacity-0">6.3</span>
               <div className="flex-1 space-y-4">
                 {(data.collateralAssets || [])
-                  .slice(hasLargeMachinery ? 1 : 3)
-                  .map((asset, idx) => renderCollateralAsset(asset, idx + (hasLargeMachinery ? 1 : 3)))}
+                  .slice(3)
+                  .map((asset, idx) => renderCollateralAsset(asset, idx + 3))}
 
                 <div className="mt-4 text-justify italic">
                   นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
@@ -653,10 +658,23 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         </div>
       )}
 
+
       {/* Contract Sections Page 9 - Sections 6.4-6.7 */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
+          {/* Integrated collateral overflow if exactly 4 items exist */}
+          {isIntegratedCollateral && (
+            <div className="flex gap-4 mb-4 pb-4 border-b border-gray-100 italic">
+              <span className="opacity-0">6.3</span>
+              <div className="flex-1 space-y-4">
+                {(data.collateralAssets || []).slice(3).map((asset, idx) => renderCollateralAsset(asset, idx + 3))}
+                <div className="mt-4 text-justify">
+                  นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="flex gap-4">
             <span className="">6.4</span>

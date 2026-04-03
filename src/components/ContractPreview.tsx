@@ -31,7 +31,7 @@ export default function ContractPreview({ data }: Props) {
         สัญญาชำระค่าธรรมเนียม เลขที่ <Highlight>{data.contractNo}</Highlight>
       </div>
       <div>
-        page {pageNum} of {totalPages}
+        หน้า {pageNum} จาก {totalPages}
       </div>
     </div>
   );
