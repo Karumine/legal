@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { CreditFacilityData, LessorInfo } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatCurrency } from '../utils/formatters';
@@ -24,11 +24,48 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
 
   // Calculated Credit Limits
   const loanAmt = parseFloat(data.loanAmount.replace(/,/g, '')) || 0;
-  const p1 = parseFloat(data.lender1.proportion) || 0;
-  const p2 = parseFloat(data.lender2.proportion) || 0;
+  const p1 = parseFloat(data.lender1.proportion || '0') || 0;
+  const p2 = parseFloat(data.lender2.proportion || '0') || 0;
 
   const limit1 = Math.floor(loanAmt * (p1 / 100));
   const limit2 = Math.floor(loanAmt * (p2 / 100));
+
+  // Auto-calculations
+  useEffect(() => {
+    const loanAmountRaw = parseFloat(data.loanAmount.replace(/,/g, '')) || 0;
+    const numInstallments = parseInt(data.installments) || 1;
+    const interestRateRaw = parseFloat(data.interestRate) || 0;
+
+    if (loanAmountRaw > 0) {
+      let monthlyAmount = 0;
+
+      if (data.interestType === 'แบบลดต้นลดดอก' && interestRateRaw > 0) {
+        // Effective Rate (Amortization) Formula: P * [ i(1+i)^n ] / [ (1+i)^n – 1 ]
+        const monthlyRate = (interestRateRaw / 100) / 12;
+        monthlyAmount = (loanAmountRaw * monthlyRate * Math.pow(1 + monthlyRate, numInstallments)) / 
+                       (Math.pow(1 + monthlyRate, numInstallments) - 1);
+      } else {
+        // Flat Rate Formula: (Principal / n) + (Principal * annualRate / 12)
+        const principalPerMonth = loanAmountRaw / numInstallments;
+        const interestPerMonth = (loanAmountRaw * (interestRateRaw / 100)) / 12;
+        monthlyAmount = principalPerMonth + interestPerMonth;
+      }
+
+      const formattedInstallment = monthlyAmount.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      if (formattedInstallment !== data.installmentAmount) {
+        onChange({ ...data, installmentAmount: formattedInstallment });
+      }
+    }
+  }, [
+    data.loanAmount,
+    data.installments,
+    data.interestRate,
+    data.interestType
+  ]);
 
   return (
     <div className="space-y-6">
@@ -121,7 +158,19 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
 
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">อัตราดอกเบี้ยร้อยละต่อปี (4.2)</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">ประเภทดอกเบี้ย</label>
+                <select
+                  name="interestType"
+                  value={data.interestType}
+                  onChange={(e) => onChange({ ...data, interestType: e.target.value as any })}
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                >
+                  <option value="แบบคงที่">แบบคงที่ (Flat Rate)</option>
+                  <option value="แบบลดต้นลดดอก">แบบลดต้นลดดอก (Effective Rate)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">อัตราดอกเบี้ย (%) (4.2)</label>
                 <input
                   type="text"
                   name="interestRate"
@@ -132,7 +181,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนงวด (4.3 ข)</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนงวด (เดือน) (4.3 ข)</label>
                 <input
                   type="text"
                   name="installments"
@@ -143,16 +192,13 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนเงินต่องวด (5.1) (บาท)</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">ค่างวด/เดือน (5.1) (บาท)</label>
                 <input
                   type="text"
                   name="installmentAmount"
                   value={data.installmentAmount || ''}
-                  onChange={(e) => {
-                    const formatted = formatCurrency(e.target.value);
-                    onChange({ ...data, installmentAmount: formatted });
-                  }}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+                  readOnly
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-gray-100 text-gray-400 font-bold cursor-not-allowed"
                   placeholder="เช่น 63,032.64"
                 />
               </div>

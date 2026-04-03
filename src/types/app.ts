@@ -104,7 +104,7 @@ export interface HirePurchaseData {
   remainingAmount: string;
   installments: string;
   installmentAmount: string;
-  interestType: 'แบบคงที่' | 'แบบลดต้นดอก';
+  interestType: 'แบบคงที่' | 'แบบลดต้นลดดอก';
   interestRate: string;
 
   firstInstallmentDate: string;
@@ -175,6 +175,7 @@ export interface CreditFacilityData {
   installments: string;
   installmentAmount: string;
   interestRate: string;
+  interestType: 'แบบคงที่' | 'แบบลดต้นลดดอก';
   businessPurpose: string;
   firstInstallmentDate: string;
   paymentDay: string;

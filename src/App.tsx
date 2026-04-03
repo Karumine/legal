@@ -159,6 +159,7 @@ function App() {
             loanAmount: '0',
             installments: '48',
             interestRate: '9',
+            interestType: 'แบบลดต้นลดดอก',
             businessPurpose: '',
             collateralValue: '0',
             collateralAssets: [],

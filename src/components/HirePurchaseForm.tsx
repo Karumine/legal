@@ -1057,3 +1057,4 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
   );
 }
 
+
