@@ -245,6 +245,14 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
             />
           </div>
+          <div className="col-span-2">
+            <DirectorInput
+              label="กรรมการผู้มีอำนาจ (ผู้เช่าซื้อ)"
+              value={data.lesseeSignatories}
+              onChange={(val) => handleChange('lesseeSignatories', val)}
+              placeholder="ชื่อ-นามสกุล กรรมการ"
+            />
+          </div>
 
         </div>
       </section>
