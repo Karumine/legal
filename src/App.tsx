@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight } from 'lucide-react';
+import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
@@ -24,7 +24,22 @@ import { thaiBahtText } from './utils/thaiBahtText';
 type PreviewTab = string;
 
 function App() {
-  const [data, setData] = useState<AppData>(initialAppData);
+  const [data, setData] = useState<AppData>(() => {
+    const saved = localStorage.getItem('legalAppData');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error('Failed to parse saved data', e);
+      }
+    }
+    return initialAppData;
+  });
+
+  // Auto-save to localStorage whenever data changes
+  useEffect(() => {
+    localStorage.setItem('legalAppData', JSON.stringify(data));
+  }, [data]);
   const [activePreview, setActivePreview] = useState<PreviewTab>('agreement-initial-hp');
 
   // Panel resize & toggle
@@ -399,6 +414,18 @@ function App() {
               >
                 {previewVisible ? <EyeOff size={15} /> : <Eye size={15} />}
                 {previewVisible ? 'ซ่อน' : 'แสดง Preview'}
+              </button>
+              <button
+                onClick={() => {
+                  if (window.confirm('คุณต้องการรีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นหรือไม่? ข้อมูลเก่าจะหายไปทั้งหมด')) {
+                    localStorage.removeItem('legalAppData');
+                    window.location.reload();
+                  }
+                }}
+                className="flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3 py-2 rounded-md font-medium transition-colors text-sm"
+                title="ล้างข้อมูลเริ่มต้นใหม่"
+              >
+                <RotateCcw size={15} /> รีเซ็ต
               </button>
               <button
                 onClick={handlePrint}
