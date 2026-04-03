@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ShieldCheck, ChevronDown, ChevronUp, FileText, Plus, Trash2 } from 'lucide-react';
 import DirectorInput from './DirectorInput';
 import { TODAY } from '../types/app';
-import type { HirePurchaseData, LessorInfo, AssetDetail, ContractType, CompanyInfo, BuybackData } from '../types/app';
+import type { HirePurchaseData, AssetDetail, ContractType, CompanyInfo, BuybackData } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatCurrency } from '../utils/formatters';
 import BuybackForm from './BuybackForm';
@@ -97,7 +97,33 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
       if (formattedRemaining !== data.remainingAmount) {
         updates.remainingAmount = formattedRemaining;
       }
+
+      // Calculate Installment Amount (ค่างวด) based on new requirements
+      // Step 1: Principal after down payment (remainingAmount) -> Remove VAT 7%
+      const pExVat = calculatedRemaining / 1.07;
+
+      // Step 2: Principal per Installment
+      const numInstallments = parseInt(data.installments) || 48;
+      const principalPerMonth = pExVat / numInstallments;
+
+      // Step 3: Interest per Installment
+      const interestRate = parseFloat(data.interestRate) || 0;
+      const interestPerMonth = (pExVat * (interestRate / 100)) / 12;
+
+      // Step 4: Final Installment (Include VAT 7%)
+      const monthlyExVat = principalPerMonth + interestPerMonth;
+      const finalMonthlyAmount = monthlyExVat * 1.07;
+
+      const formattedInstallment = finalMonthlyAmount.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      if (formattedInstallment !== data.installmentAmount) {
+        updates.installmentAmount = formattedInstallment;
+      }
     }
+
 
     // Date calculations
     if (data.firstInstallmentDate && data.installments) {
@@ -149,6 +175,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
     data.downPaymentPercentage,
     data.firstInstallmentDate,
     data.installments,
+    data.interestRate,
   ]);
 
   // Auto-fill installation location from customer address if empty
@@ -157,13 +184,6 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
       handleChange('installationLocation', customerInfo.address);
     }
   }, [customerInfo?.address, data.installationLocation]);
-
-  const handleLessorChange = (lessor: 'lessor1' | 'lessor2', field: keyof LessorInfo, value: string) => {
-    onChange({
-      ...data,
-      [lessor]: { ...data[lessor], [field]: value }
-    });
-  };
 
   const updateAsset = (index: number, field: keyof AssetDetail, value: string) => {
     const newAssets = [...data.assets];
@@ -248,13 +268,13 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                     className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-medium text-blue-600 mb-1 font-bold">สัดส่วน (%) *แก้ไขได้*</label>
+                <div className="invisible">
+                  <label className="block text-xs font-medium text-blue-600 mb-1 font-bold">สัดส่วน (%)</label>
                   <input
                     type="text"
-                    value={(data as any)[l.key].proportion}
-                    onChange={(e) => handleLessorChange(l.key as any, 'proportion', e.target.value)}
-                    className="block w-full rounded-md border-blue-300 shadow-sm text-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                    value={(data as any)[l.key].proportion || ''}
+                    readOnly
+                    className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -454,8 +474,8 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                 <input
                   type="text"
                   value={data.installmentAmount}
-                  onChange={(e) => handleChange('installmentAmount', formatCurrency(e.target.value))}
-                  className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border"
+                  readOnly
+                  className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-100 text-gray-400 font-bold cursor-not-allowed"
                 />
               </div>
             </div>

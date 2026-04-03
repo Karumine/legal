@@ -31,7 +31,7 @@ export interface LessorInfo {
   name: string;
   taxId: string;
   address: string;
-  proportion: string;
+  proportion?: string;
 }
 
 export interface LandCollateral {
@@ -304,13 +304,11 @@ export const initialAppData: AppData = {
           name: 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด',
           taxId: '0115558012195',
           address: '20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ',
-          proportion: '20',
         },
         lessor2: {
           name: 'บริษัท ฐิติกร จำกัด (มหาชน)',
           taxId: '0107546000130',
           address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
-          proportion: '80',
         },
         assets: [
           { id: 'asset-1', name: 'เครื่องเป่าขวดพลาสติก PET Auto 6 cav.', description: '"F6MV" พร้อมแม่พิมพ์ 1 ชุด', quantity: '1', unit: 'ชุด', unitPrice: '4,119,500', totalAmount: '4,119,500' },
