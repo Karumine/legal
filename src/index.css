@@ -74,3 +74,26 @@
 #preview-panel {
   scroll-behavior: smooth;
 }
+
+/* Resize handle */
+.resize-handle {
+  position: relative;
+}
+.resize-handle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -4px;
+  right: -4px;
+  bottom: 0;
+  z-index: 1;
+}
+
+/* Dropdown menu animation */
+@keyframes dropdown-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-in {
+  animation: dropdown-in 0.15s ease-out forwards;
+}

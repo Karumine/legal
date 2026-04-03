@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback } from 'react';
-import { Printer, FileText, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
@@ -26,17 +26,17 @@ type PreviewTab = string;
 function App() {
   const [data, setData] = useState<AppData>(initialAppData);
   const [activePreview, setActivePreview] = useState<PreviewTab>('agreement-initial-hp');
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const startXRef = useRef(0);
-  const scrollLeftRef = useRef(0);
-  const [hasMoved, setHasMoved] = useState(false);
 
-  // Momentum refs
-  const velocityRef = useRef(0);
-  const lastXRef = useRef(0);
-  const lastTimeRef = useRef(0);
-  const animationFrameRef = useRef<number | null>(null);
+  // Panel resize & toggle
+  const [previewVisible, setPreviewVisible] = useState(true);
+  const [formWidth, setFormWidth] = useState(900);
+  const isResizingRef = useRef(false);
+  const resizeStartXRef = useRef(0);
+  const resizeStartWidthRef = useRef(900);
+
+  // Dropdown menu for main contracts
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Preview scroll sync: switches to the correct preview tab and scrolls to the matching section
   const lastFocusSectionRef = useRef<string>('');
@@ -72,79 +72,48 @@ function App() {
     });
   }, []);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!tabsRef.current) return;
+  // ── Resize handle logic ──
+  const handleResizeStart = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    isResizingRef.current = true;
+    resizeStartXRef.current = e.clientX;
+    resizeStartWidthRef.current = formWidth;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+  }, [formWidth]);
 
-    // Stop any existing momentum animation
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
-
-    setIsDragging(true);
-    setHasMoved(false);
-    startXRef.current = e.pageX - tabsRef.current.offsetLeft;
-    scrollLeftRef.current = tabsRef.current.scrollLeft;
-
-    lastXRef.current = e.pageX;
-    lastTimeRef.current = Date.now();
-    velocityRef.current = 0;
-  };
-
-  const applyMomentum = () => {
-    if (!tabsRef.current || Math.abs(velocityRef.current) < 0.1) return;
-
-    const step = () => {
-      if (!tabsRef.current || isDragging) return;
-
-      tabsRef.current.scrollLeft -= velocityRef.current * 10;
-      velocityRef.current *= 0.95; // Decay factor
-
-      if (Math.abs(velocityRef.current) > 0.1) {
-        animationFrameRef.current = requestAnimationFrame(step);
-      } else {
-        animationFrameRef.current = null;
+  useEffect(() => {
+    const handleResizeMove = (e: MouseEvent) => {
+      if (!isResizingRef.current) return;
+      const delta = e.clientX - resizeStartXRef.current;
+      const newWidth = Math.min(1400, Math.max(450, resizeStartWidthRef.current + delta));
+      setFormWidth(newWidth);
+    };
+    const handleResizeEnd = () => {
+      if (isResizingRef.current) {
+        isResizingRef.current = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
       }
     };
+    window.addEventListener('mousemove', handleResizeMove);
+    window.addEventListener('mouseup', handleResizeEnd);
+    return () => {
+      window.removeEventListener('mousemove', handleResizeMove);
+      window.removeEventListener('mouseup', handleResizeEnd);
+    };
+  }, []);
 
-    animationFrameRef.current = requestAnimationFrame(step);
-  };
-
-  const handleMouseLeave = () => {
-    if (isDragging) {
-      setIsDragging(false);
-      applyMomentum();
-    }
-  };
-
-  const handleMouseUp = () => {
-    if (isDragging) {
-      setIsDragging(false);
-      applyMomentum();
-    }
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !tabsRef.current) return;
-
-    const currentTime = Date.now();
-    const timeElapsed = currentTime - lastTimeRef.current;
-
-    if (timeElapsed > 0) {
-      const deltaX = e.pageX - lastXRef.current;
-      velocityRef.current = deltaX / timeElapsed;
-      lastXRef.current = e.pageX;
-      lastTimeRef.current = currentTime;
-    }
-
-    const x = e.pageX - tabsRef.current.offsetLeft;
-    const walk = (x - startXRef.current) * 1.5;
-
-    if (Math.abs(walk) > 5) {
-      setHasMoved(true);
-      tabsRef.current.scrollLeft = scrollLeftRef.current - walk;
-    }
-  };
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpenDropdownId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handlePrint = () => {
     const rightPanel = document.getElementById('preview-panel');
@@ -314,35 +283,51 @@ function App() {
     };
   };
 
-  // Build preview tabs: agreements → buyback → guarantee → additional contracts
-  const previewTabs: { key: PreviewTab; label: string }[] = [];
-
-  data.agreements.forEach((agreement, idx) => {
-    previewTabs.push({
-      key: `agreement-${agreement.id}`,
-      label: `${CONTRACT_TYPE_LABELS[agreement.type]} ${data.agreements.filter(a => a.type === agreement.type).length > 1 ? `(${idx + 1})` : ''}`.trim()
-    });
-  });
-
-  data.agreements.forEach((agreement) => {
+  // ── Build grouped preview tabs ──
+  // Main contracts: each agreement + its buybacks as sub-items
+  const mainContractGroups = data.agreements.map((agreement, idx) => {
+    const buybacks: { key: string; label: string }[] = [];
     if ((agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')) {
       const hp = agreement.data as HirePurchaseData;
       if (hp.hasBuyback && hp.buybacks) {
-        hp.buybacks.forEach((bb, index) => {
-          previewTabs.push({ 
-            key: `buyback:${agreement.id}:${bb.id}`, 
-            label: `สัญญารับซื้อคืน(${index + 1}) (${hp.contractNo || 'รอดำเนินการ'})` 
+        hp.buybacks.forEach((bb, bbIdx) => {
+          buybacks.push({
+            key: `buyback:${agreement.id}:${bb.id}`,
+            label: `สัญญารับซื้อคืน (${bbIdx + 1})`
           });
         });
       }
     }
+    return {
+      id: agreement.id,
+      key: `agreement-${agreement.id}`,
+      type: agreement.type,
+      label: `${CONTRACT_TYPE_LABELS[agreement.type]}${data.agreements.filter(a => a.type === agreement.type).length > 1 ? ` (${idx + 1})` : ''}`,
+      contractNo: (agreement.data as any).contractNo || '',
+      buybacks
+    };
   });
+
+  // Supplementary tabs
+  const supplementaryTabs: { key: string; label: string; icon: 'shield' | 'handshake' | 'wrench' | 'receipt' }[] = [];
   if (data.guarantors && data.guarantors.length > 0) {
-    previewTabs.push({ key: 'guarantee', label: 'สัญญาค้ำประกัน' });
+    supplementaryTabs.push({ key: 'guarantee', label: 'ค้ำประกัน', icon: 'shield' });
   }
-  previewTabs.push({ key: 'jointVenture', label: 'สัญญาค้าร่วม' });
-  previewTabs.push({ key: 'serviceAgreement', label: 'สัญญาจ้างบริการ' });
-  previewTabs.push({ key: 'feePayment', label: 'สัญญาชำระค่าธรรมเนียม' });
+  supplementaryTabs.push({ key: 'jointVenture', label: 'ค้าร่วม', icon: 'handshake' });
+  supplementaryTabs.push({ key: 'serviceAgreement', label: 'จ้างบริการ', icon: 'wrench' });
+  supplementaryTabs.push({ key: 'feePayment', label: 'ค่าธรรมเนียม', icon: 'receipt' });
+
+  const suppIcon = (icon: string) => {
+    switch (icon) {
+      case 'shield': return <Shield size={13} />;
+      case 'handshake': return <Handshake size={13} />;
+      case 'wrench': return <Wrench size={13} />;
+      case 'receipt': return <Receipt size={13} />;
+      default: return <FileText size={13} />;
+    }
+  };
+
+
 
   const renderContractPreview = (agreement: Agreement) => {
     if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
@@ -394,17 +379,34 @@ function App() {
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100 print:bg-white print:h-auto print:overflow-visible">
       {/* Left Panel: Form */}
-      <div className="w-[900px] flex-shrink-0 border-r border-gray-300 print:hidden overflow-y-auto bg-white shadow-lg z-10 flex flex-col h-full">
+      <div
+        style={{ width: previewVisible ? `${formWidth}px` : '100%' }}
+        className="flex-shrink-0 border-r border-gray-300 print:hidden overflow-y-auto bg-white shadow-lg z-10 flex flex-col h-full transition-[width] duration-200"
+      >
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 z-20 shadow-sm">
+        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-3 z-20 shadow-sm">
           <div className="flex justify-between items-center">
             <h1 className="text-xl font-bold tracking-tight text-slate-800">Control Panel</h1>
-            <button
-              onClick={handlePrint}
-              className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm"
-            >
-              <Printer size={16} /> Print
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPreviewVisible(!previewVisible)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-md font-medium transition-all text-sm border ${
+                  previewVisible
+                    ? 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
+                    : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+                }`}
+                title={previewVisible ? 'ซ่อน Preview' : 'แสดง Preview'}
+              >
+                {previewVisible ? <EyeOff size={15} /> : <Eye size={15} />}
+                {previewVisible ? 'ซ่อน' : 'แสดง Preview'}
+              </button>
+              <button
+                onClick={handlePrint}
+                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm"
+              >
+                <Printer size={16} /> Print
+              </button>
+            </div>
           </div>
         </div>
 
@@ -551,59 +553,99 @@ function App() {
         </div>
       </div>
 
-      {/* Right Panel: Preview */}
-      <div id="preview-panel" className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col transform-gpu">
-        <div className="sticky top-0 z-10 bg-slate-200 px-6 pt-4 pb-2 print:hidden">
-          <div className="relative flex items-center bg-white rounded-lg p-1.5 shadow-sm border border-slate-200">
-            {/* Scroll Left Button */}
-            <button
-              onClick={(e) => {
-                const container = e.currentTarget.nextElementSibling;
-                if (container) container.scrollBy({ left: -200, behavior: 'smooth' });
-              }}
-              className="p-1 px-2 text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-md transition-all z-10 border-r border-slate-100 flex items-center justify-center shrink-0"
-            >
-              <ChevronLeft size={18} />
-            </button>
+      {/* ── Resize Handle ── */}
+      {previewVisible && (
+        <div
+          onMouseDown={handleResizeStart}
+          className="resize-handle w-[6px] flex-shrink-0 bg-slate-200 hover:bg-blue-400 active:bg-blue-500 cursor-col-resize print:hidden flex items-center justify-center transition-colors group relative z-20"
+          title="ลากเพื่อปรับขนาด"
+        >
+          <GripVertical size={14} className="text-slate-400 group-hover:text-white transition-colors" />
+        </div>
+      )}
 
-            {/* Tabs Container */}
-            <div
-              ref={tabsRef}
-              onMouseDown={handleMouseDown}
-              onMouseLeave={handleMouseLeave}
-              onMouseUp={handleMouseUp}
-              onMouseMove={handleMouseMove}
-              className={`flex gap-1.5 overflow-x-auto no-scrollbar flex-1 items-center px-1 ${isDragging ? 'cursor-grabbing select-none scroll-auto' : 'cursor-grab scroll-smooth'}`}
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              <style>{`.no-scrollbar::-webkit-scrollbar { display: none; }`}</style>
-              {previewTabs.map((tab) => (
+      {/* Right Panel: Preview */}
+      {previewVisible && (
+      <div id="preview-panel" className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col transform-gpu">
+        <div className="sticky top-0 z-10 bg-slate-200 px-4 pt-3 pb-2 print:hidden flex justify-center">
+          <div className="w-[210mm] max-w-full">
+          <div className="bg-white rounded-t-lg border border-b-0 border-slate-200 px-3 py-2 flex items-center gap-2" ref={dropdownRef}>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">สัญญาหลัก</span>
+            <div className="flex gap-1.5 flex-wrap">
+              {mainContractGroups.map((group) => {
+                const isActive = activePreview === group.key || group.buybacks.some(b => b.key === activePreview);
+                const hasBuybacks = group.buybacks.length > 0;
+                return (
+                  <div key={group.id} className="relative">
+                    <button
+                      onClick={() => {
+                        if (hasBuybacks) {
+                          setOpenDropdownId(openDropdownId === group.id ? null : group.id);
+                        }
+                        setActivePreview(group.key);
+                      }}
+                      className={`flex items-center gap-1.5 py-1.5 px-3 text-xs font-semibold rounded-md transition-all whitespace-nowrap ${
+                        isActive
+                          ? 'bg-slate-800 text-white shadow-md'
+                          : 'text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200'
+                      }`}
+                    >
+                      <FileText size={13} className={isActive ? 'text-white' : 'text-slate-400'} />
+                      <span>{group.label}</span>
+                      {group.contractNo && <span className={`text-[10px] ${isActive ? 'text-slate-300' : 'text-slate-400'}`}>({group.contractNo})</span>}
+                      {hasBuybacks && <ChevronDown size={12} className={`ml-0.5 transition-transform ${openDropdownId === group.id ? 'rotate-180' : ''}`} />}
+                    </button>
+                    {/* Dropdown for buybacks */}
+                    {hasBuybacks && openDropdownId === group.id && (
+                      <div className="absolute top-full left-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 min-w-[200px] animate-in fade-in slide-in-from-top-1 duration-150">
+                        <button
+                          onClick={() => { setActivePreview(group.key); setOpenDropdownId(null); }}
+                          className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors ${
+                            activePreview === group.key ? 'bg-slate-100 font-bold text-slate-800' : 'text-slate-600 hover:bg-slate-50'
+                          }`}
+                        >
+                          <FileText size={12} /> {group.label}
+                        </button>
+                        <div className="border-t border-slate-100 my-1" />
+                        {group.buybacks.map(bb => (
+                          <button
+                            key={bb.key}
+                            onClick={() => { setActivePreview(bb.key); setOpenDropdownId(null); }}
+                            className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors ${
+                              activePreview === bb.key ? 'bg-orange-50 font-bold text-orange-700' : 'text-slate-600 hover:bg-slate-50'
+                            }`}
+                          >
+                            <ChevronRight size={12} className="text-orange-400" /> {bb.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── Row 2: Supplementary Tabs ── */}
+          <div className="bg-white rounded-b-lg border border-t-0 border-slate-200 shadow-sm px-3 py-2 flex items-center gap-2">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">สัญญาเสริม</span>
+            <div className="flex gap-1 flex-wrap">
+              {supplementaryTabs.map(tab => (
                 <button
                   key={tab.key}
-                  onClick={() => {
-                    if (!hasMoved) setActivePreview(tab.key);
-                  }}
-                  className={`flex-shrink-0 flex items-center justify-center gap-2 py-2 px-4 text-xs font-semibold rounded-md transition-all whitespace-nowrap ${activePreview === tab.key
-                    ? 'bg-slate-800 text-white shadow-md ring-1 ring-slate-900 ring-offset-1 ring-offset-white'
-                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
-                    }`}
+                  onClick={() => setActivePreview(tab.key)}
+                  className={`flex items-center gap-1.5 py-1.5 px-3 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
+                    activePreview === tab.key
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                  }`}
                 >
-                  <Eye size={13} className={activePreview === tab.key ? 'text-white' : 'text-slate-400'} />
+                  {suppIcon(tab.icon)}
                   {tab.label}
                 </button>
               ))}
             </div>
-
-            {/* Scroll Right Button */}
-            <button
-              onClick={(e) => {
-                const container = e.currentTarget.previousElementSibling;
-                if (container) container.scrollBy({ left: 200, behavior: 'smooth' });
-              }}
-              className="p-1 px-2 text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-md transition-all z-10 border-l border-slate-100 flex items-center justify-center shrink-0"
-            >
-              <ChevronRight size={18} />
-            </button>
+          </div>
           </div>
         </div>
 
@@ -664,6 +706,7 @@ function App() {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }
