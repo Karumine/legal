@@ -53,7 +53,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
+      <div data-section-id="cf-general" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
@@ -116,7 +116,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       </div>
 
       {/* Page 2 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
+      <div data-section-id="cf-financials" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
         <div className="space-y-6 mt-4">
@@ -499,7 +499,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       </div>
 
       {/* Page 9 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans text-gray-900">
+      <div data-section-id="cf-collateral" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans text-gray-900">
         <PageHeader />
         <div className="space-y-6 mt-4">
           <div className="flex gap-2 ml-8">

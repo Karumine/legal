@@ -7,9 +7,10 @@ import ThaiLocationSelector from './ThaiLocationSelector';
 interface Props {
   data: CreditFacilityData;
   onChange: (data: CreditFacilityData) => void;
+  onFocusSection?: (sectionId: string) => void;
 }
 
-export default function CreditFacilityForm({ data, onChange }: Props) {
+export default function CreditFacilityForm({ data, onChange, onFocusSection }: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     onChange({ ...data, [name]: value });
@@ -70,7 +71,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
   return (
     <div className="space-y-6">
       {/* Basic Info */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('cf-general')}>
         <div className="flex items-center gap-2 mb-3">
           <div className="w-2 h-2 rounded-full bg-blue-500"></div>
           <h3 className="font-semibold text-lg text-blue-700">ข้อมูลทั่วไป</h3>
@@ -101,7 +102,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
       </section>
 
       {/* Financial Info */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('cf-financials')}>
         <h3 className="font-semibold text-md text-blue-700 mb-3 text-lg">ข้อมูลทางการเงิน</h3>
         <div className="space-y-4">
           <div>
@@ -274,7 +275,7 @@ export default function CreditFacilityForm({ data, onChange }: Props) {
       </div>
 
       {/* Collateral Section */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('cf-collateral')}>
         <h3 className="font-semibold text-lg text-blue-700 mb-3 underline decoration-blue-200">ข้อ 7. หลักประกัน</h3>
         <div className="space-y-4">
           <div>

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Printer, FileText, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
@@ -37,6 +37,40 @@ function App() {
   const lastXRef = useRef(0);
   const lastTimeRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
+
+  // Preview scroll sync: switches to the correct preview tab and scrolls to the matching section
+  const lastFocusSectionRef = useRef<string>('');
+  const scrollToPreviewSection = useCallback((sectionId: string, previewTabKey?: string) => {
+    const key = `${previewTabKey || ''}::${sectionId}`;
+    if (key === lastFocusSectionRef.current) return; // Skip if already on this section
+    lastFocusSectionRef.current = key;
+
+    // Switch to the correct preview tab if provided
+    if (previewTabKey) {
+      setActivePreview(previewTabKey);
+    }
+
+    // If no sectionId, just switch the tab (for supplementary contracts)
+    if (!sectionId) return;
+
+    // Wait for render to complete, then scroll to the section
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const previewPanel = document.getElementById('preview-panel');
+        const target = previewPanel?.querySelector(`[data-section-id="${sectionId}"]`);
+        if (target && previewPanel) {
+          const panelRect = previewPanel.getBoundingClientRect();
+          const targetRect = target.getBoundingClientRect();
+          const scrollOffset = targetRect.top - panelRect.top + previewPanel.scrollTop - 80;
+          previewPanel.scrollTo({ top: scrollOffset, behavior: 'smooth' });
+
+          // Brief highlight flash on the target element
+          target.classList.add('preview-highlight-flash');
+          setTimeout(() => target.classList.remove('preview-highlight-flash'), 1500);
+        }
+      }, 50);
+    });
+  }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!tabsRef.current) return;
@@ -448,12 +482,14 @@ function App() {
                   type={activeAgreement.type}
                   customerInfo={data.customerInfo}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
+                  onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, `agreement-${activeAgreement.id}`)}
                 />
               )}
               {activeAgreement.type === 'loan' && (
                 <CreditFacilityForm
                   data={activeAgreement.data}
                   onChange={(cf: any) => updateAgreementData(activeAgreement.id, cf)}
+                  onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, `agreement-${activeAgreement.id}`)}
                 />
               )}
               {activeAgreement.type !== 'hirePurchase' && activeAgreement.type !== 'hirePurchaseBack' && activeAgreement.type !== 'loan' && (
@@ -468,7 +504,7 @@ function App() {
             </div>
           )}
           {/* Step 5: Global Layout (Guarantors, etc.) */}
-          <div className="space-y-5 border-t-2 border-slate-100 pt-5 mt-5">
+          <div className="space-y-5 border-t-2 border-slate-100 pt-5 mt-5" onFocusCapture={() => scrollToPreviewSection('', 'guarantee')}>
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest px-1">ข้อมูลประกอบและสัญญาพ่วง</h3>
 
             <GuarantorForm
@@ -486,24 +522,30 @@ function App() {
 
             {/* Contract 4: สัญญาค้าร่วม */}
             <div className="space-y-5">
-              <JointVentureForm
-                data={data.jointVentureData}
-                onChange={(jv: JointVentureData) => updateField('jointVentureData', jv)}
-              />
+              <div onFocusCapture={() => scrollToPreviewSection('', 'jointVenture')}>
+                <JointVentureForm
+                  data={data.jointVentureData}
+                  onChange={(jv: JointVentureData) => updateField('jointVentureData', jv)}
+                />
+              </div>
 
               {/* Contract 5: สัญญาจ้างบริการ */}
-              <ServiceAgreementForm
-                data={data.serviceAgreementData}
-                appData={data}
-                onChange={(sa: ServiceAgreementData) => updateField('serviceAgreementData', sa)}
-              />
+              <div onFocusCapture={() => scrollToPreviewSection('', 'serviceAgreement')}>
+                <ServiceAgreementForm
+                  data={data.serviceAgreementData}
+                  appData={data}
+                  onChange={(sa: ServiceAgreementData) => updateField('serviceAgreementData', sa)}
+                />
+              </div>
 
               {/* Contract 6: สัญญาชำระค่าธรรมเนียม */}
-              <FeePaymentForm
-                data={data.feePaymentData}
-                agreements={data.agreements}
-                onChange={(fp: FeePaymentData) => updateField('feePaymentData', fp)}
-              />
+              <div onFocusCapture={() => scrollToPreviewSection('', 'feePayment')}>
+                <FeePaymentForm
+                  data={data.feePaymentData}
+                  agreements={data.agreements}
+                  onChange={(fp: FeePaymentData) => updateField('feePaymentData', fp)}
+                />
+              </div>
             </div>
           </div>
         </div>

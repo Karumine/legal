@@ -13,9 +13,10 @@ interface Props {
   onChange: (data: HirePurchaseData) => void;
   type?: ContractType;
   customerInfo?: CompanyInfo;
+  onFocusSection?: (sectionId: string) => void;
 }
 
-export default function HirePurchaseForm({ data, onChange, customerInfo, type = 'hirePurchase' }: Props) {
+export default function HirePurchaseForm({ data, onChange, customerInfo, type = 'hirePurchase', onFocusSection }: Props) {
   const [showBuyback, setShowBuyback] = useState(true);
 
   const handleChange = (field: keyof HirePurchaseData, value: any) => {
@@ -202,7 +203,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
   return (
     <div className="space-y-6 pb-20">
       {/* General Info */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('hp-general')}>
         <div className="flex items-center gap-2 mb-3">
           <div className="w-2 h-2 rounded-full bg-blue-500"></div>
           <h3 className="font-semibold text-lg text-blue-700">ข้อมูลทั่วไป</h3>
@@ -292,7 +293,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
       </div>
 
       {/* Assets */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('hp-assets')}>
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-lg text-blue-700">รายการทรัพย์สิน</h3>
           <button onClick={addAsset} className="bg-blue-600 text-white px-3 py-1 rounded text-xs">+ เพิ่มรายการ</button>
@@ -374,7 +375,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
       </section>
 
       {/* Purpose and Location */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('hp-purpose')}>
         <h3 className="font-semibold text-lg text-blue-700 mb-3">วัตถุประสงค์และสถานที่ตั้ง</h3>
         <div className="space-y-4">
           <div>
@@ -410,7 +411,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
       </section>
 
       {/* Financials & Clauses (Sections 3.2 - 4.4) */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('hp-financials')}>
         <h3 className="font-semibold text-lg text-blue-700 mb-3">เงื่อนไขการเงินและข้อสัญญา (ข้อ 3.2 - 4.4)</h3>
 
         <div className="space-y-6">
@@ -574,7 +575,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
       </section>
 
       {/* Collateral Section */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('hp-collateral')}>
         <h3 className="font-semibold text-lg text-blue-700 mb-3">6. หลักประกัน</h3>
         <div className="space-y-4">
           <div>
