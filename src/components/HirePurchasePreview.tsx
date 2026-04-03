@@ -152,7 +152,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
+      <div data-section-id="hp-general" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
@@ -210,7 +210,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       </div>
 
       {/* Page 2 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+      <div data-section-id="hp-assets" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
 
         <div className="space-y-4 mb-6 mt-4">
@@ -283,7 +283,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       })}
 
       {/* Contract Sections Page 1 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+      <div data-section-id="hp-purpose" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
 
         {integratedAssets.length > 0 && (
@@ -338,7 +338,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       </div>
 
       {/* Contract Sections Page 2 (3.2 and 3.3) */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+      <div data-section-id="hp-financials" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
@@ -553,7 +553,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       </div>
 
       {/* Contract Sections Page 7 - Section 6 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+      <div data-section-id="hp-collateral" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4 font-bold">
