@@ -21,7 +21,10 @@ export default function GuaranteePreview({ data }: Props) {
   const stripAddressPrefix = (addr: string) =>
     addr?.replace(/^เลขที่\s*/, '') || '';
 
-  const totalPages = 8 + data.guarantors.reduce((sum, g) => sum + (g.isMarried ? 2 : 1), 0);
+  const totalPages = 8 + data.guarantors.reduce((sum, g) => {
+    if (g.type === 'company' || g.type === 'partnership') return 0;
+    return g.isMarried ? 2 : 1;
+  }, 0);
 
   const PageFooter = ({ pageNum }: { pageNum: number }) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
@@ -53,7 +56,7 @@ export default function GuaranteePreview({ data }: Props) {
         </div>
 
         <div className="indent-10 mb-6">
-          สัญญาค้ำประกัน ("สัญญา") ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> (<b>"วันที่สัญญาค้ำประกันมีผลบังคับ"</b>) โดยและระหว่าง
+          สัญญาค้ำประกัน <b>("สัญญา")</b> ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> (<b>"วันที่สัญญาค้ำประกันมีผลบังคับ"</b>) โดยและระหว่าง
         </div>
 
         <div className="space-y-4 mb-6">
@@ -75,28 +78,41 @@ export default function GuaranteePreview({ data }: Props) {
             ซึ่ง (1) และ (2) จะเรียกรวมกันว่า <b>"ผู้ให้เช่าซื้อ"</b> ฝ่ายหนึ่ง
           </div>
 
-          {data.guarantors.map((guarantor, idx) => (
-            <div key={idx} className="flex gap-2 text-justify pr-2">
-              <span className="shrink-0 w-6">({idx + 3})</span>
-              <div className="flex-1">
-                <b><Highlight>{guarantor.name}</Highlight></b> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(guarantor.address)}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+          {data.guarantors.map((guarantor, idx) => {
+            const isCorporate = guarantor.type === 'company' || guarantor.type === 'partnership';
+            const typeLabel = guarantor.type === 'partnership' ? 'ห้างหุ้นส่วน' : 'บริษัท';
+
+            return (
+              <div key={idx} className="flex gap-2 text-justify pr-2">
+                <span className="shrink-0 w-6">({idx + 3})</span>
+                <div className="flex-1">
+                  {isCorporate ? (
+                    <>
+                      <b>{typeLabel} <Highlight>{guarantor.name}</Highlight></b> (โดย<Highlight>{guarantor.directors}</Highlight> {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการ' : 'กรรมการผู้มีอำนาจกระทำการแทน'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(guarantor.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                    </>
+                  ) : (
+                    <>
+                      <b><Highlight>{guarantor.name}</Highlight></b> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(guarantor.address)}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        <div className="indent-10 mb-4 mt-8">
+        <div className="font-bold mb-4 mt-8">
           ดังนั้น คู่สัญญาจึงได้ตกลงเข้าทำสัญญาฉบับนี้ขึ้นภายใต้ข้อตกลงและเงื่อนไขดังต่อไปนี้
         </div>
 
         <div className="flex gap-2 text-justify pr-2 mb-4">
           <span className="shrink-0 w-6">1.</span>
           <div className="flex-1">
-            ตามที่ผู้ให้เช่าซื้อและ<b>บริษัท <Highlight>{data.refContractCompany}</Highlight> (“ผู้เช่าซื้อ”)</b> ได้เข้าทำ{data.refContracts.map((ref, idx) => (
+            ตามที่ผู้ให้เช่าซื้อและ<b><Highlight>{data.refContractCompany}</Highlight> (“ลูกหนี้”)</b> ได้เข้าทำ{data.refContracts.map((ref, idx) => (
               <span key={idx}>
-                {idx > 0 && (idx === data.refContracts.length - 1 ? ' และ' : ', ')} {CONTRACT_TYPE_LABELS[ref.type as keyof typeof CONTRACT_TYPE_LABELS]}เลขที่ <Highlight>{ref.no}</Highlight> ลงวันที่ <Highlight>{formatThaiDate(ref.date)}</Highlight>
+                {idx > 0 && (idx === data.refContracts.length - 1 ? ' และ' : ', ')} {CONTRACT_TYPE_LABELS[ref.type as keyof typeof CONTRACT_TYPE_LABELS]}เลขที่ <Highlight>{ref.no}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(ref.date)}</Highlight>
               </span>
-            ))} ผู้ค้ำประกันยินยอมเข้าค้ำประกันการชำระหนี้อันครบถ้วนสมบูรณ์ ตรงต่อเวลาและเป็นไปตามข้อกำหนดและเงื่อนไขภายใต้สัญญาดังกล่าว โดยมีวงเงินค้ำประกันหนี้ตามสัญญาฉบับนี้รวมกันทั้งสิ้น<b>ไม่เกินจำนวน <Highlight>{data.guaranteeAmountNumber}</Highlight> บาท (<Highlight>{data.guaranteeAmountText}</Highlight>)</b> บวกด้วยดอกเบี้ย ดอกเบี้ยผิดนัด ค่าธรรมเนียม ค่าสินไหมทดแทนซึ่งผู้เช่าซื้อค้างชำระ ค่าเบี้ยประกันภัย ค่าปรับ ค่าใช้จ่ายในการติดตามทวงถาม บังคับชำระหนี้ ตลอดจนค่าภาระติดพันอันเป็นอุปกรณ์แห่งหนี้ของผู้เช่าซื้อและค่าใช้จ่ายอื่นใดตามสัญญาดังกล่าวให้แก่ผู้ให้เช่าซื้อจนกว่าผู้ให้เช่าซื้อจะได้รับชำระหนี้ภายใต้สัญญาดังกล่าวจนครบถ้วน
+            ))} ผู้ค้ำประกันยินยอมเข้าค้ำประกันการชำระหนี้อันครบถ้วนสมบูรณ์ ตรงต่อเวลาและเป็นไปตามข้อกำหนดและเงื่อนไขภายใต้สัญญาดังกล่าว โดยมีวงเงินค้ำประกันหนี้ตามสัญญา<b>รวมกันทั้งสิ้นไม่เกินจำนวน <Highlight>{data.guaranteeAmountNumber}</Highlight> บาท (<Highlight>{data.guaranteeAmountText}</Highlight>)</b> บวกด้วยดอกเบี้ย ดอกเบี้ยผิดนัด ค่าธรรมเนียม ค่าสินไหมทดแทนซึ่งลูกหนี้ค้างชำระ ค่าเบี้ยประกันภัย ค่าปรับ ค่าใช้จ่ายในการติดตามทวงถาม บังคับชำระหนี้ ตลอดจนค่าภาระติดพันอันเป็นอุปกรณ์แห่งหนี้ของลูกหนี้ และค่าใช้จ่ายอื่นใดตามสัญญาดังกล่าวให้แก่ผู้ให้เช่าซื้อจนกว่าผู้ให้เช่าซื้อจะได้รับชำระหนี้ภายใต้สัญญาดังกล่าวจนครบถ้วน
           </div>
         </div>
 
@@ -114,14 +130,14 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="flex gap-2 text-justify pr-2 mb-4">
             <span className="shrink-0 w-6">2.</span>
             <div className="flex-1">
-              ถ้าผู้เช่าซื้อผิดนัดไม่ชำระหนี้ และ/หรือ ไม่สามารถชำระหนี้ตามสัญญาดังกล่าวให้ผู้ให้เช่าซื้อไม่ว่าด้วยเหตุใดๆ ก็ตาม หรือกระทำให้ผู้ให้เช่าซื้อไม่ได้รับชำระหนี้อันเกิดจากสัญญาครบถ้วน และตามที่ระบุไว้ในสัญญาดังกล่าวก็ดี และผู้ให้เช่าซื้อมีหนังสือบอกกล่าวไปยังผู้ค้ำประกันภายใน 60 (หกสิบ) วัน นับแต่วันที่ผู้เช่าซื้อผิดนัดแล้ว ผู้ค้ำประกันตกลงที่จะชำระหนี้อันค้างชำระและถึงกำหนดชำระทั้งสิ้น ซึ่งรวมไปถึงดอกเบี้ย ดอกเบี้ยผิดนัด ค่าธรรมเนียม ค่าสินไหมทดแทนซึ่งผู้เช่าซื้อค้างชำระ ค่าเบี้ยประกันภัย ค่าปรับ ค่าใช้จ่ายในการติดตามทวงถามบังคับชำระหนี้ ตลอดจนค่าภาระติดพันอันเป็นอุปกรณ์แห่งหนี้ของผู้เช่าซื้อ และค่าใช้จ่ายอื่นใดตามสัญญาดังกล่าวให้แก่ผู้ให้เช่าซื้อจนครบถ้วนทันทีที่ได้รับการบอกกล่าวเป็นหนังสือนั้น หากผู้ค้ำประกันไม่ชำระหนี้และเงินอื่นใดให้ครบถ้วน ผู้ค้ำประกันจะต้องรับผิดในดอกเบี้ยผิดนัดนับแต่วันที่หนี้ถึงกำหนดชำระจนกว่าจะได้ชำระหนี้ทั้งสิ้นให้ครบถ้วน ในอัตราเท่ากับอัตราดอกเบี้ยผิดนัดสูงสุดเท่าที่กฎหมายที่เกี่ยวข้องจะกำหนดให้นำมาใช้บังคับได้แก่หนี้เงิน
+              ถ้าลูกหนี้ผิดนัดไม่ชำระหนี้ และ/หรือ ไม่สามารถชำระหนี้ตามสัญญาดังกล่าวให้ผู้ให้เช่าซื้อไม่ว่าด้วยเหตุใดๆ ก็ตาม หรือกระทำให้ผู้ให้เช่าซื้อไม่ได้รับชำระหนี้อันเกิดจากสัญญาครบถ้วน และตามที่ระบุไว้ในสัญญาดังกล่าวก็ดี และผู้ให้เช่าซื้อมีหนังสือบอกกล่าวไปยังผู้ค้ำประกันภายใน 60 (หกสิบ) วัน นับแต่วันที่ลูกหนี้ผิดนัดแล้ว ผู้ค้ำประกันตกลงที่จะชำระหนี้อันค้างชำระและถึงกำหนดชำระทั้งสิ้น ซึ่งรวมไปถึงดอกเบี้ย ดอกเบี้ยผิดนัด ค่าธรรมเนียม ค่าสินไหมทดแทนซึ่งลูกหนี้ค้างชำระ ค่าเบี้ยประกันภัย ค่าปรับ ค่าใช้จ่ายในการติดตามทวงถามบังคับชำระหนี้ ตลอดจนค่าภาระติดพันอันเป็นอุปกรณ์แห่งหนี้ของลูกหนี้ และค่าใช้จ่ายอื่นใดตามสัญญาดังกล่าวให้แก่ผู้ให้เช่าซื้อจนครบถ้วนทันทีที่ได้รับการบอกกล่าวเป็นหนังสือนั้น หากผู้ค้ำประกันไม่ชำระหนี้และเงินอื่นใดให้ครบถ้วน ผู้ค้ำประกันจะต้องรับผิดในดอกเบี้ยผิดนัดนับแต่วันที่หนี้ถึงกำหนดชำระจนกว่าจะได้ชำระหนี้ทั้งสิ้นให้ครบถ้วน ในอัตราเท่ากับอัตราดอกเบี้ยผิดนัดสูงสุดเท่าที่กฎหมายที่เกี่ยวข้องจะกำหนดให้นำมาใช้บังคับได้แก่หนี้เงิน
             </div>
           </div>
 
           <div className="flex gap-2 text-justify pr-2 mb-4">
             <span className="shrink-0 w-6">3.</span>
             <div className="flex-1">
-              สัญญาฉบับนี้มีผลบังคับใช้ตั้งแต่วันที่สัญญาค้ำประกันมีผลบังคับจนกว่าหนี้ใดๆ และทั้งปวงซึ่งผู้เช่าซื้อมีอยู่กับผู้ให้เช่าซื้อภายใต้สัญญาดังกล่าวจะได้มีการชำระจนครบถ้วนหรือเมื่อหนี้ทั้งหมดภายใต้สัญญาดังกล่าวได้ระงับไป
+              สัญญาฉบับนี้มีผลบังคับใช้ตั้งแต่วันที่สัญญาค้ำประกันมีผลบังคับจนกว่าหนี้ใดๆ และทั้งปวงซึ่งลูกหนี้มีอยู่กับผู้ให้เช่าซื้อภายใต้สัญญาดังกล่าวจะได้มีการชำระจนครบถ้วนหรือเมื่อหนี้ทั้งหมดภายใต้สัญญาดังกล่าวได้ระงับไป
             </div>
           </div>
 
@@ -139,7 +155,7 @@ export default function GuaranteePreview({ data }: Props) {
               <div className="mt-2 space-y-2">
                 <div className="flex gap-2">
                   <span className="shrink-0 w-6">ก.</span>
-                  <div className="flex-1">ผู้ค้ำประกันตกลงเข้าผูกพันตนรับผิดต่อผู้ให้เช่าซื้อในหนี้ของผู้เช่าซื้ออย่างลูกหนี้ร่วม</div>
+                  <div className="flex-1">ผู้ค้ำประกันตกลงเข้าผูกพันตนรับผิดต่อผู้ให้เช่าซื้อในหนี้ของลูกหนี้อย่างลูกหนี้ร่วม</div>
                 </div>
                 <div className="flex gap-2">
                   <span className="shrink-0 w-6">ข.</span>
@@ -181,15 +197,15 @@ export default function GuaranteePreview({ data }: Props) {
               <div className="mt-2 space-y-2">
                 <div className="flex gap-2">
                   <span className="shrink-0 w-6">ก.</span>
-                  <div className="flex-1">ผ่อนเวลาชำระหนี้หรือขยายระยะเวลาการชำระหนี้ตามสัญญาเช่าซื้อให้แก่ผู้เช่าซื้อ</div>
+                  <div className="flex-1">ผ่อนเวลาชำระหนี้หรือขยายระยะเวลาการชำระหนี้ตามสัญญาดังกล่าวให้แก่ลูกหนี้</div>
                 </div>
                 <div className="flex gap-2">
                   <span className="shrink-0 w-6">ข.</span>
-                  <div className="flex-1">ปลดหนี้หรือยินยอมให้พ้นความรับผิดไม่ว่าบางส่วนหรือทั้งหมดแก่ผู้ค้ำประกันรายอื่นๆ หรือบุคคลใดๆ ก็ตาม ซึ่งต้องหรืออาจต้องรับผิดในหนี้เงินส่วนใดๆ หรือทั้งปวงของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ (เพื่อมิให้เป็นที่สงสัย ให้รวมถึงหนี้หรือความรับผิดของผู้ค้ำประกันเองภายใต้สัญญาอื่นด้วย) ซึ่งรวมถึงแต่ไม่จำกัดเพียงการปลดจำนอง จำนำ หรือหลักประกันอื่นใดไม่ว่าบางส่วนหรือทั้งหมดอันผู้ให้เช่าซื้อได้รับไว้เป็นหลักประกันเพื่อการชำระหนี้ใดๆ ภายใต้สัญญาเช่าซื้อและ/หรือ</div>
+                  <div className="flex-1">ปลดหนี้หรือยินยอมให้พ้นความรับผิดไม่ว่าบางส่วนหรือทั้งหมดแก่ผู้ค้ำประกันรายอื่นๆ หรือบุคคลใดๆ ก็ตาม ซึ่งต้องหรืออาจต้องรับผิดในหนี้เงินส่วนใดๆ หรือทั้งปวงของลูกหนี้ที่มีต่อผู้ให้เช่าซื้อ (เพื่อมิให้เป็นที่สงสัย ให้รวมถึงหนี้หรือความรับผิดของผู้ค้ำประกันเองภายใต้สัญญาอื่นด้วย) ซึ่งรวมถึงแต่ไม่จำกัดเพียงการปลดจำนอง จำนำ หรือหลักประกันอื่นใดไม่ว่าบางส่วนหรือทั้งหมดอันผู้ให้เช่าซื้อได้รับไว้เป็นหลักประกันเพื่อการชำระหนี้ใดๆ ภายใต้สัญญาเช่าซื้อ และ/หรือ สัญญาให้สินเชื่อ</div>
                 </div>
                 <div className="flex gap-2">
                   <span className="shrink-0 w-6">ค.</span>
-                  <div className="flex-1">ได้มาซึ่งหลักประกัน การค้ำประกัน ข้อตกลงรับผิดชดใช้ค่าเสียหายโดยประการใดๆ เป็นการเพิ่มเติม จากบุคคลใดๆ ก็ตามเพื่อหรือเกี่ยวกับการชำระหนี้ใดๆ ภายใต้สัญญาเช่าซื้อ</div>
+                  <div className="flex-1">ได้มาซึ่งหลักประกัน การค้ำประกัน ข้อตกลงรับผิดชดใช้ค่าเสียหายโดยประการใดๆ เป็นการเพิ่มเติม จากบุคคลใดๆ ก็ตามเพื่อหรือเกี่ยวกับการชำระหนี้ใดๆ ภายใต้สัญญาเช่าซื้อ และ/หรือ สัญญาให้สินเชื่อ</div>
                 </div>
               </div>
             </div>
@@ -205,14 +221,14 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="flex gap-2 text-justify pr-2 mb-4">
             <span className="shrink-0 w-6">9.</span>
             <div className="flex-1">
-              สัญญาฉบับนี้ย่อมมีผลเนื่อต่อไปอย่างสมบูรณ์ภายใต้กฎหมายที่บังคับใช้ แม้ว่าผู้เช่าซื้อ และ/หรือ ผู้ให้เช่าซื้อจะได้เข้าสู่กระบวนการชำระบัญชี ล้มละลาย หรือตกเป็นบุคคลไร้ความสามารถ
+              สัญญาฉบับนี้ย่อมมีผลเนื่อต่อไปอย่างสมบูรณ์ภายใต้กฎหมายที่บังคับใช้ แม้ว่าลูกหนี้ และ/หรือ ผู้ให้เช่าซื้อจะได้เข้าสู่กระบวนการชำระบัญชี ล้มละลาย หรือตกเป็นบุคคลไร้ความสามารถ
             </div>
           </div>
 
           <div className="flex gap-2 text-justify pr-2 mb-4">
             <span className="shrink-0 w-6">10.</span>
             <div className="flex-1">
-              การเลิกสัญญาฉบับนี้ย่อมทำได้แต่โดยการตกลงเลิกสัญญาเป็นลายลักษณ์อักษร โดยผู้ให้เช่าซื้อเท่านั้น เว้นแต่สัญญานี้จะได้สิ้นสุดลงเนื่องจากหนี้ใดๆ และทั้งปวงซึ่งผู้เช่าซื้อมีอยู่กับผู้ให้เช่าซื้อภายใต้สัญญาเช่าซื้อจะได้มีการชำระจนครบถ้วนหรือเมื่อหนี้ทั้งหมดภายใต้สัญญาเช่าซื้อได้ระงับไป ในกรณีที่ผู้ให้เช่าซื้อได้ตกลงเลิกสัญญาเป็นลายลักษณ์อักษร โดยผู้ค้ำประกันย่อมมิอาจยังคงต้องรับผิดในหนี้ใดๆ และทั้งปวงซึ่งผู้เช่าซื้อมีอยู่กับผู้ให้เช่าซื้อภายใต้สัญญาเช่าซื้อ จนถึงวันที่ได้มีการเลิกสัญญานี้ ทั้งนี้ ตามข้อกำหนด and เงื่อนไขของสัญญานี้
+              การเลิกสัญญาฉบับนี้ย่อมทำได้แต่โดยการตกลงเลิกสัญญาเป็นลายลักษณ์อักษร โดยผู้ให้เช่าซื้อเท่านั้น เว้นแต่สัญญานี้จะได้สิ้นสุดลงเนื่องจากหนี้ใดๆ และทั้งปวงซึ่งลูกหนี้มีอยู่กับผู้ให้เช่าซื้อภายใต้สัญญาเช่าซื้อ และ/หรือ สัญญาให้สินเชื่อ จะได้มีการชำระจนครบถ้วนหรือเมื่อหนี้ทั้งหมดภายใต้สัญญาได้ระงับไป ในกรณีที่ผู้ให้เช่าซื้อได้ตกลงเลิกสัญญาเป็นลายลักษณ์อักษร โดยผู้ค้ำประกันย่อมมิอาจยังคงต้องรับผิดในหนี้ใดๆ และทั้งปวงซึ่งลูกหนี้มีอยู่กับผู้ให้เช่าซื้อภายใต้สัญญาเช่าซื้อ และ/หรือ สัญญาให้สินเชื่อ จนถึงวันที่ได้มีการเลิกสัญญานี้ ทั้งนี้ ตามข้อกำหนดและเงื่อนไขของสัญญานี้
             </div>
           </div>
 
@@ -282,7 +298,7 @@ export default function GuaranteePreview({ data }: Props) {
               <div className="flex-1">ผู้ค้ำประกันได้ปฏิบัติตามกฎหมายที่บังคับใช้ทุกประการในการดำเนินธุรกิจของตน</div>
             </div>
             <div className="flex gap-2">
-              <span className="shrink-0 w-6">ฉ.</span>
+              <span className="shrink-0 w-6 mb-4">ฉ.</span>
               <div className="flex-1">ไม่มีเหตุใดๆ ที่อาจคาดหมายได้ว่าผู้ค้ำประกันจะไม่สามารถชำระหนี้ของตนได้ เมื่อหนี้นั้นถึงกำหนดชำระ</div>
             </div>
           </div>
@@ -290,7 +306,7 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="flex gap-2 text-justify pr-2 mb-4">
             <span className="shrink-0 w-6">12.</span>
             <div className="flex-1">
-              ผู้ให้เช่าซื้อมีสิทธิที่จะ โอนสิทธิของตนภายใต้สัญญานี้ให้แก่บุคคลใดๆ ก็ได้โดยไม่ต้องบอกกล่าวหรือขอความยินยอมจากผู้ค้ำประกันหรือผู้เช่าซื้อ ส่วนหน้าที่ของผู้ค้ำประกันภายใต้สัญญานี้ย่อมมีผลผูกพันผู้แทนตามกฎหมายของผู้ค้ำประกันรวมถึงเจ้าหน้าที่กรงานพิทักษ์ทรัพย์ด้วย โดยหน้าที่ของผู้ค้ำประกันภายใต้สัญญานี้ไม่สามารถโอนแก่บุคคลได้ เว้นแต่จะได้รับความยินยอมล่วงหน้าเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อ
+              ผู้ให้เช่าซื้อมีสิทธิที่จะ โอนสิทธิของตนภายใต้สัญญานี้ให้แก่บุคคลใดๆ ก็ได้โดยไม่ต้องบอกกล่าวหรือขอความยินยอมจากผู้ค้ำประกันหรือลูกหนี้ ส่วนหน้าที่ของผู้ค้ำประกันภายใต้สัญญานี้ย่อมมีผลผูกพันผู้แทนตามกฎหมายของผู้ค้ำประกันรวมถึงเจ้าหน้าที่กรงานพิทักษ์ทรัพย์ด้วย โดยหน้าที่ของผู้ค้ำประกันภายใต้สัญญานี้ไม่สามารถโอนแก่บุคคลได้ เว้นแต่จะได้รับความยินยอมล่วงหน้าเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อ
             </div>
           </div>
 
@@ -330,7 +346,7 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="mb-4 space-y-4">
             {data.guarantors.map((guarantor, idx) => (
               <div key={idx}>
-                <div className="font-bold text-slate-700 mb-1 leading-none">ในกรณีของผู้ค้ำประกันคนที่ {idx + 1}:</div>
+                <div className="font-bold mb-1">ในกรณีของผู้ค้ำประกัน:</div>
                 <div><Highlight>{guarantor.name}</Highlight></div>
                 <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(guarantor.address)}</Highlight></div>
                 <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(guarantor.phone) || '-'}</Highlight></div>
@@ -339,14 +355,14 @@ export default function GuaranteePreview({ data }: Props) {
           </div>
 
           <div className="mb-4">
-            <div className="font-bold text-slate-700 mb-1 leading-none">ในกรณีของผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
+            <div className="font-bold mb-1 ">ในกรณีของผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
             <div><Highlight>{data.lenderCompany}</Highlight></div>
             <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(data.lenderAddress)}</Highlight> รหัสไปรษณีย์ 10270</div>
             <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.lenderPhone)}</Highlight></div>
           </div>
 
           <div className="mb-4">
-            <div className="font-bold text-slate-700 mb-1 leading-none">ในกรณีของผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
+            <div className="font-bold mb-1 ">ในกรณีของผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
             <div><Highlight>{data.borrowerCompany}</Highlight></div>
             <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(data.borrowerAddress)}</Highlight> รหัสไปรษณีย์ 10240</div>
             <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.borrowerPhone)}</Highlight></div>
@@ -372,7 +388,7 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="flex gap-2 text-justify pr-2 mb-4">
             <span className="shrink-0 w-6">17.</span>
             <div className="flex-1">
-              ทั้งนี้ การติดต่อหรือบอกกล่าวจากผู้เช่าซื้อไปยังผู้ให้เช่าซื้อ จะมีผลสมบูรณ์ต่อเมื่อผู้ให้เช่าซื้อได้รับทราบแล้วเท่านั้น
+              ทั้งนี้ การติดต่อหรือบอกกล่าวจากลูกหนี้ไปยังผู้ให้เช่าซื้อ จะมีผลสมบูรณ์ต่อเมื่อผู้ให้เช่าซื้อได้รับทราบแล้วเท่านั้น
             </div>
           </div>
 
@@ -463,24 +479,47 @@ export default function GuaranteePreview({ data }: Props) {
               {/* Right: Guarantor */}
               <div className="p-6 flex flex-col min-h-[600px]">
                 <div className="flex-1 pt-4 space-y-16">
-                  {data.guarantors.map((guarantor, idx) => (
-                    <div key={idx} className="space-y-4 pb-8 border-b border-gray-100 last:border-0">
-                      <div className="font-bold mb-2 text-[13px]">
-                        <div>ผู้ค้ำประกันคนที่ {idx + 1} :</div>
-                        <Highlight>{guarantor.name}</Highlight>
-                      </div>
+                  {data.guarantors.map((guarantor, idx) => {
+                    const isCorporate = guarantor.type === 'company' || guarantor.type === 'partnership';
+                    const signatories = guarantor.directors?.split(/\s*และ\s*|,\s*/) || [guarantor.name];
 
-                      <div className="space-y-2">
-                        <div className="border-b border-black w-full h-12"></div>
-                        <div className="flex gap-2">
-                          <span>ชื่อ:</span>
-                          <div className="flex-1">
-                            <Highlight>{guarantor.name}</Highlight>
-                          </div>
+                    return (
+                      <div key={idx} className="space-y-4 pb-8 border-b border-gray-100 last:border-0 grow">
+                        <div className="font-bold mb-2 text-[13px]">
+                          <div>ผู้ค้ำประกันคนที่ {idx + 1} :</div>
+                          <Highlight>{guarantor.name}</Highlight>
                         </div>
+
+                        {isCorporate ? (
+                          <div className="space-y-12">
+                            {signatories.map((sig, sIdx) => (
+                              <div key={sIdx} className="space-y-2">
+                                <div className="border-b border-black w-full h-12"></div>
+                                <div className="flex gap-2">
+                                  <span>ชื่อ:</span>
+                                  <div className="flex-1">{sig.trim()}</div>
+                                </div>
+                              </div>
+                            ))}
+                            <div className="pt-4 text-left">
+                              <div className="font-bold">ตำแหน่ง: {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการ' : 'กรรมการผู้มีอำนาจลงนาม'}</div>
+                              <div className="font-bold"><Highlight>{guarantor.name}</Highlight></div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2 mt-12">
+                            <div className="border-b border-black w-full h-12"></div>
+                            <div className="flex gap-2">
+                              <span>ชื่อ:</span>
+                              <div className="flex-1">
+                                <Highlight>{guarantor.name}</Highlight>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <div className="mt-auto pt-8 space-y-4">
@@ -547,7 +586,7 @@ export default function GuaranteePreview({ data }: Props) {
       </div>
 
       {/* Individual Status Confirmation and Consent Pages */}
-      {data.guarantors.map((guarantor, idx) => (
+      {data.guarantors.filter(g => g.type === 'person' || !g.type).map((guarantor, idx) => (
         <React.Fragment key={idx}>
           {/* Page Break for Print */}
           <div className="hidden print:block page-break"></div>
@@ -559,10 +598,9 @@ export default function GuaranteePreview({ data }: Props) {
             <div className="mt-8">
               <div className="text-center font-bold mb-8 mt-4">
                 <h2 className="text-[13px]">หนังสือยืนยันสถานภาพและให้ความยินยอมของคู่สมรส</h2>
-                <div className="text-[11px] text-gray-500 mt-1 font-normal">(สำหรับผู้ค้ำประกันคนที่ {idx + 1})</div>
               </div>
 
-              <div className="text-right mb-6 pr-4">
+              <div className="text-end mb-6 pr-4">
                 เขียนที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด
               </div>
 
@@ -607,7 +645,7 @@ export default function GuaranteePreview({ data }: Props) {
               </div>
             </div>
 
-            <PageFooter pageNum={totalPages - data.guarantors.slice(idx).reduce((sum, g) => sum + (g.isMarried ? 2 : 1), 0) + 1} />
+            <PageFooter pageNum={totalPages - data.guarantors.filter(g => g.type === 'person' || !g.type).slice(data.guarantors.filter(g => g.type === 'person' || !g.type).indexOf(guarantor)).reduce((sum, g) => sum + (g.isMarried ? 2 : 1), 0) + 1} />
           </div>
 
           {guarantor.isMarried && (
@@ -622,10 +660,9 @@ export default function GuaranteePreview({ data }: Props) {
                 <div className="mt-8">
                   <div className="text-center font-bold mb-8 mt-4">
                     <h2 className="text-[13px]">หนังสือยินยอมให้คู่สมรสทำนิติกรรม</h2>
-                    <div className="text-[11px] text-gray-500 mt-1 font-normal">(สำหรับผู้ค้ำประกันคนที่ {idx + 1})</div>
                   </div>
 
-                  <div className="text-right mb-6 pr-4">
+                  <div className="text-end mb-6 pr-4">
                     เขียนที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด
                   </div>
 
@@ -638,7 +675,7 @@ export default function GuaranteePreview({ data }: Props) {
                       โดยหนังสือฉบับนี้ข้าพเจ้า <Highlight>{guarantor.spouseName}</Highlight> เลขประจำตัวประชาชน <Highlight>{formatThaiId(guarantor.spouseIdCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(guarantor.spouseAddress)}</Highlight> ซึ่งเป็นสามี/ภริยา ของ <Highlight>{guarantor.name}</Highlight>
                     </div>
                     <div className="indent-10">
-                      ขอให้ความยินยอมโดยหนังสือนี้ว่าให้ <Highlight>{guarantor.name}</Highlight> สามี/ภริยา ของข้าพเจ้าทำนิติกรรม เป็นผู้ค้ำประกันการชำระหนี้ของบริษัท <Highlight>{data.refContractCompany}</Highlight> รวมถึงนิติกรรมต่างๆ กับบริษัท อาไจล์ แอสเซ็ทส์ จำกัด ได้
+                      ขอให้ความยินยอมโดยหนังสือนี้ว่าให้ <Highlight>{guarantor.name}</Highlight> สามี/ภริยา ของข้าพเจ้าทำนิติกรรม เป็นผู้ค้ำประกันการชำระหนี้ของบริษัท <Highlight>{data.refContractCompany}</Highlight> รวมถึงนิติกรรมต่างๆ กับ<Highlight>บริษัท อาไจล์ แอสเซ็ทส์ จำกัด และ บริษัท ฐิติกร จำกัด (มหาชน)</Highlight> ได้
                     </div>
                     <div className="indent-10">
                       การใดที่สามี/ภริยา ของข้าพเจ้าได้กระทำไป ข้าพเจ้าขอร่วมรับผิดในนิติกรรมนั้นเสมือนหนึ่งข้าพเจ้าได้กระทำเองทุกประการ
@@ -681,7 +718,7 @@ export default function GuaranteePreview({ data }: Props) {
                   </div>
                 </div>
 
-                <PageFooter pageNum={totalPages - data.guarantors.slice(idx).reduce((sum, g) => sum + (g.isMarried ? 2 : 1), 0) + 2} />
+                <PageFooter pageNum={totalPages - data.guarantors.filter(g => g.type === 'person' || !g.type).slice(data.guarantors.filter(g => g.type === 'person' || !g.type).indexOf(guarantor)).reduce((sum, g) => sum + (g.isMarried ? 2 : 1), 0) + 2} />
               </div>
             </>
           )}

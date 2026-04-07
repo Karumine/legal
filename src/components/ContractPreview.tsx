@@ -15,9 +15,9 @@ export default function ContractPreview({ data }: Props) {
     const num = parseFloat(numStr.replace(/,/g, ''));
     if (isNaN(num)) return numStr;
     const isWhole = num % 1 === 0;
-    return num.toLocaleString('en-US', { 
-      minimumFractionDigits: isWhole ? 0 : 2, 
-      maximumFractionDigits: isWhole ? 0 : 2 
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: isWhole ? 0 : 2,
+      maximumFractionDigits: isWhole ? 0 : 2
     });
   };
 
@@ -50,7 +50,7 @@ export default function ContractPreview({ data }: Props) {
     const label = CONTRACT_TYPE_LABELS[item.type];
     return `${label.prefix} ${item.contractNo}`;
   });
-  
+
   const itemSummaryText = itemSummaryParts.length > 1
     ? itemSummaryParts.slice(0, -1).join(', ') + ' และ ' + itemSummaryParts[itemSummaryParts.length - 1]
     : itemSummaryParts[0] || '';
@@ -69,7 +69,7 @@ export default function ContractPreview({ data }: Props) {
         </div>
 
         <div className="indent-10 mb-6">
-          สัญญาชำระค่าธรรมเนียม ("สัญญา") ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> ("วันที่สัญญามีผลใช้บังคับ") ระหว่าง
+          สัญญาชำระค่าธรรมเนียม ("สัญญา") ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> <b>("วันที่สัญญามีผลใช้บังคับ")</b> ระหว่าง
         </div>
 
         <div className="mb-4 pr-2 flex gap-2 text-justify">
@@ -103,7 +103,7 @@ export default function ContractPreview({ data }: Props) {
             <div key={item.id} className={`flex gap-2 pl-6 pr-2 text-justify ${index === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
               <span className="shrink-0 font-bold whitespace-nowrap">1.{index + 1}.</span>
               <div className="flex-1 text-justify">
-                 ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
+                ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
               </div>
             </div>
           );

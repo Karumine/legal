@@ -477,9 +477,8 @@ export default function ThaiAddressInput({ value, onChange, className = '' }: Pr
             type="text"
             value={fields.postalCode}
             onChange={(e) => updateField('postalCode', e.target.value)}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-gray-50"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
             placeholder="รหัสไปรษณีย์"
-            readOnly
           />
         </div>
       </div>

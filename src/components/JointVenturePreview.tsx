@@ -26,6 +26,13 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
   const stripAddressPrefix = (addr: string) =>
     addr?.replace(/^เลขที่\s*/, '') || '';
 
+  const CONTRACT_TYPE_EN: Record<string, string> = {
+    hirePurchase: ' (Hire purchase)',
+    hirePurchaseBack: ' (Hire purchase back)',
+    loan: ' (Loan agreement)',
+    od: '',
+  };
+
   const translateRateToThai = (rate: string) => {
     const digits: Record<string, string> = {
       '0': 'ศูนย์', '1': 'หนึ่ง', '2': 'สอง', '3': 'สาม', '4': 'สี่',
@@ -40,6 +47,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
   const renderServiceFeeTable = (agreement: any, agreeIdx: number) => {
     const label = CONTRACT_TYPE_LABELS[agreement.type as ContractType] || agreement.type;
+    const enLabel = CONTRACT_TYPE_EN[agreement.type as string] || '';
     const firstDate = saData.agreementServiceFeeFirstDates?.[agreement.id] || '';
     const installmentAmountStr = saData.agreementServiceFeeAmounts?.[agreement.id] || '0';
     const periods = saData.agreementServiceFeePeriods?.[agreement.id] || 0;
@@ -99,7 +107,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
     const part1 = (
       <div className="space-y-3">
         <div className="font-normal text-justify">
-          2.{agreeIdx + 1} {label} เลขที่ <Highlight>{agreement.data.contractNo}</Highlight> โดยชำระงวดละ <Highlight>{formatNum(totalAmount)}</Highlight> บาท ({thaiBahtText(totalAmount)}) (รวมภาษีมูลค่าเพิ่ม)
+          2.{agreeIdx + 1} {label}{enLabel} เลขที่ <Highlight>{agreement.data.contractNo}</Highlight> โดยชำระค่า Service Fee ตามตารางที่แนบมาด้วย ดังนี้
         </div>
         <div className={periods > 1 ? "grid grid-cols-2 gap-4" : "w-1/2"}>
           <div>{renderColumn(1, rowsPage1Column1)}</div>
@@ -111,7 +119,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
     const part2 = periods > 60 ? (
       <div className="space-y-3">
         <div className="font-normal text-justify opacity-50">
-          (ต่อ) 2.{agreeIdx + 1} {label} เลขที่ {agreement.data.contractNo}
+          (ต่อ) 2.{agreeIdx + 1} {label}{enLabel} เลขที่ {agreement.data.contractNo}
         </div>
         <div className="w-1/2">
           {renderColumn(49, periods)}
@@ -124,6 +132,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
   const renderAgreementTable = (agreement: any, agreeIdx: number) => {
     const label = CONTRACT_TYPE_LABELS[agreement.type as ContractType] || agreement.type;
+    const enLabel = CONTRACT_TYPE_EN[agreement.type as string] || '';
     const firstDate = saData.agreementFirstDates?.[agreement.id] || '';
     const installmentAmountStr = saData.agreementInstallmentAmounts?.[agreement.id] || '0';
     const periods = saData.agreementOriginationFeePeriods?.[agreement.id] || 0;
@@ -142,7 +151,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
     return (
       <div key={agreement.id} className="space-y-3">
         <div className="font-bold text-justify text-[13px]">
-          1.{agreeIdx + 1}. {label} เลขที่ {agreement.data.contractNo} โดยชำระงวดละ {formatNum(totalAmount)} บาท ({thaiBahtText(totalAmount)}) (รวมภาษีมูลค่าเพิ่ม)
+          1.{agreeIdx + 1}. {label}{enLabel} เลขที่ {agreement.data.contractNo} โดยชำระค่า Origination Fee ตามตารางที่แนบมาด้วย ดังนี้
         </div>
 
         <table className="w-full border-collapse border border-black text-center text-[12px]">
@@ -197,12 +206,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
   const totalPagesCount = 13 + 3 + origFeePagesCount + 1 + selectedAgreements.length + serviceFeeAdditionalPages + 1 + 1;
 
-  const CONTRACT_TYPE_EN: Record<string, string> = {
-    hirePurchase: ' (Hire Purchase)',
-    hirePurchaseBack: ' (Hire Purchase Back)',
-    loan: ' (Loan Agreement)',
-    od: '',
-  };
+
 
   // Create the referenced agreements string
   const agreementRefs = selectedAgreements.map((a, idx) => {
@@ -243,12 +247,9 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           </div>
         </div>
 
-        <div className="indent-10 mb-6">
-          สัญญาค้าร่วม (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{agileInfo.companyName}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight>
+        <div className="mb-4">
+          สัญญาค้าร่วม (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{agileInfo.companyName}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง
         </div>
-
-        <div className="mb-6">โดยและระหว่าง</div>
-
         <div className="space-y-4 mb-6">
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">1.</span>
@@ -269,13 +270,13 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           <div className="flex gap-4">
             <span>ก.</span>
             <div className="flex-1">
-              คู่สัญญาทั้งสองฝ่ายได้ตกลงกันทำสัญญาค้าร่วมฉบับนี้ เพื่อเป็นการระดมทุนระหว่างคู่สัญญา เพื่อประโยชน์ในการร่วมกันเข้าทำ <Highlight>{agreementRefs}</Highlight> (“สัญญาทางการเงิน”) กับผู้กู้/ผู้เช่าซื้อ (“ลูกค้า”) เนื่องจากสัญญาทางการเงินดังกล่าวเป็นการให้การสนับสนุนทางการเงินแก่ลูกค้าในวงเงินที่สูง และเพื่อเป็นการกำหนดสิทธิและหน้าที่ of คู่สัญญาในการดำเนินการใด ๆ ที่เกี่ยวข้องกับสัญญาทางการเงิน
+              คู่สัญญาทั้งสองฝ่ายได้ตกลงกันทำสัญญาค้าร่วมฉบับนี้ เพื่อเป็นการระดมทุนระหว่างคู่สัญญา เพื่อประโยชน์ในการร่วมกันเข้าทำ <Highlight>{agreementRefs}</Highlight> <b>(“สัญญาทางการเงิน”)</b> กับผู้กู้/ผู้เช่าซื้อ <b>(“ลูกค้า”)</b> เนื่องจากสัญญาทางการเงินดังกล่าวเป็นการให้การสนับสนุนทางการเงินแก่ลูกค้าในวงเงินที่สูง และเพื่อเป็นการกำหนดสิทธิและหน้าที่ของคู่สัญญาในการดำเนินการใด ๆ ที่เกี่ยวข้องกับสัญญาทางการเงิน
             </div>
           </div>
           <div className="flex gap-4">
             <span>ข.</span>
             <div className="flex-1">
-              การที่คู่สัญญาทั้งสองฝ่ายได้ตกลงกันทำสัญญาฉบับนี้ จะทำให้คู่สัญญาไม่ต้องรับภาระในการให้การสนับสนุนทางการเงิน และ/หรือ การปฏิบัติหน้าที่ตามข้อตกลงและเงื่อนไขภายใต้สัญญาทางการเงินที่มากจนเกินไป และเพื่อให้บรรลุตามวัตถุประสงค์ของสัญญาทั้งสองฝ่ายในการเข้าทำสัญญาทางการเงินดังกล่าว
+              การที่คู่สัญญาทั้งสองฝ่ายได้ตกลงกันทำสัญญาฉบับนี้ จะทำให้คู่สัญญาไม่ต้องรับภาระในการให้การสนับสนุนทางการเงิน และ/หรือ การปฏิบัติหน้าที่ตามข้อตกลงและเงื่อนไขภายใต้สัญญาทางการเงินที่มากจนเกินไป และเพื่อให้บรรลุตามวัตถุประสงค์ของคู่สัญญาทั้งสองฝ่ายในการเข้าทำสัญญาทางการเงินดังกล่าว
             </div>
           </div>
           <div className="flex gap-4">
@@ -297,16 +298,16 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageHeader />
 
         <div className="space-y-6 mt-8">
-          <div className="font-bold text-center mb-4">
+          <div className="font-bold mb-4">
             คู่สัญญาทั้งสองฝ่ายจึงได้ตกลงทำสัญญาฉบับนี้ขึ้น โดยมีข้อความต่อไปนี้
           </div>
-          <div>
+          <div className="space-y-6">
             <div className="font-bold">1. ข้อตกลงในการค้าร่วม</div>
-            <div className="indent-10 mt-2">
+            <div className="indent-10 text-justify">
               คู่สัญญาทั้งสองฝ่ายตกลงแบ่งสัดส่วนการค้าร่วมกัน กล่าวคือ คู่สัญญาจะให้การสนับสนุนทางการเงินแก่ลูกค้าภายใต้สัญญาทางการเงินในสัดส่วน ดังต่อไปนี้
             </div>
 
-            <table className="w-full border-collapse border border-black text-center mt-6">
+            <table className="w-full border-collapse border border-black text-center">
               <thead>
                 <tr className="bg-gray-100 print:bg-transparent">
                   <th className="border border-black p-2 w-1/2">ผู้ค้าร่วม</th>
@@ -330,14 +331,14 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             </table>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="font-bold">2. การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน</div>
 
             <div className="flex gap-2">
               <span className="shrink-0 w-6">2.1</span>
               <div className="flex-1 space-y-4">
                 <div className="text-justify leading-relaxed">
-                  คู่สัญญาฝ่ายที่ 2 ตกลงรับบริการ from คู่สัญญาฝ่ายที่ 1 สำหรับการให้บริการที่เกี่ยวข้องกับการจัดหาลูกค้าและจัดทำสัญญาทางการเงิน และบริหารจัดการสัญญาทางการเงิน โดยคู่สัญญาฝ่ายที่ 1 มีขอบเขตอำนาจ หน้าที่ และเงื่อนไขในการให้บริการตามที่กำหนดใน<span className="font-bold underline">เอกสารแนบท้ายหมายเลข 1</span> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน)
+                  คู่สัญญาฝ่ายที่ 2 ตกลงรับบริการจากคู่สัญญาฝ่ายที่ 1 สำหรับการให้บริการที่เกี่ยวข้องกับการจัดหาลูกค้าและจัดทำสัญญาทางการเงิน และบริหารจัดการสัญญาทางการเงิน โดยคู่สัญญาฝ่ายที่ 1 มีขอบเขตอำนาจ หน้าที่ และเงื่อนไขในการให้บริการตามที่กำหนดใน<span className="font-bold underline">เอกสารแนบท้ายหมายเลข 1</span> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน)
                 </div>
                 <div className="text-justify leading-relaxed">
                   อย่างไรก็ดี คู่สัญญาตกลงว่าข้อสัญญาข้างต้นไม่ตัดสิทธิคู่สัญญาฝ่ายที่ 2 ที่จะร่วมดำเนินการต่าง ๆ กับคู่สัญญาฝ่ายที่ 1 ในการให้บริการตามที่กำหนดใน<span className="font-bold underline">เอกสารแนบท้ายหมายเลข 1</span> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) หรือดำเนินการดังกล่าวด้วยตนเองตามที่คู่สัญญาฝ่ายที่ 2 เห็นสมควร
@@ -347,8 +348,8 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
             <div className="flex gap-2">
               <span className="shrink-0 w-6">2.2</span>
-              <div className="flex-1">
-                คู่สัญญาฝ่ายที่ 2 ตกลงชำระค่าตอบแทนให้แก่คู่สัญญาฝ่ายที่ 1 สำหรับการให้บริการตามที่ระบุในข้อ 2.1 ของสัญญาฉบับนี้ โดยมีรายละเอียด of ค่าตอบแทนและวิธีการชำระค่าตอบแทนตามที่กำหนดใน<span className="font-bold underline">เอกสารแนบท้ายหมายเลข 2</span> (ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ)
+              <div className="flex-1 text-justify">
+                คู่สัญญาฝ่ายที่ 2 ตกลงชำระค่าตอบแทนให้แก่คู่สัญญาฝ่ายที่ 1 สำหรับการให้บริการตามที่ระบุในข้อ 2.1 ของสัญญาฉบับนี้ โดยมีรายละเอียดของค่าตอบแทนและวิธีการชำระค่าตอบแทนตามที่กำหนดใน<span className="font-bold underline">เอกสารแนบท้ายหมายเลข 2</span> (ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ)
               </div>
             </div>
           </div>
@@ -364,28 +365,28 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
-        <div className="space-y-6 mt-8">
+        <div className="space-y-6">
           <div>
             <div className="font-bold">3. ระยะเวลาและการมีผลบังคับใช้ของสัญญา</div>
-            <div className="indent-10 mt-2 text-justify">
-              คู่สัญญาทั้งสองฝ่ายตกลงให้สัญญาฉบับนี้มีผลบังคับใช้นับแต่วันที่คู่สัญญาลงนามในสัญญาฉบับนี้ และให้สัญญาฉบับนี้สิ้นสุดลงทันที เมื่อ (1) สัญญาทางการเงินสิ้นสุดลง และ (2) คู่สัญญาได้รับชำระหนี้ ดอกเบี้ย ค่าเสียหาย และค่าใช้จ่ายอื่น ๆ (ถ้ามี) ภายใต้สัญญาทางการเงินจนครบถ้วนแล้ว
+            <div className="indent-10 text-justify">
+              คู่สัญญาทั้งสองฝ่ายตกลงให้สัญญาฉบับนี้มีผลบังคับใชับแต่วันที่คู่สัญญาลงนามในสัญญาฉบับนี้ และให้สัญญาฉบับนี้สิ้นสุดลงทันที เมื่อ (1) สัญญาทางการเงินสิ้นสุดลง และ (2) คู่สัญญาได้รับชำระหนี้ ดอกเบี้ย ค่าเสียหาย และค่าใช้จ่ายอื่น ๆ (ถ้ามี) ภายใต้สัญญาทางการเงินจนครบถ้วนแล้ว
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="font-bold">4. วิธีการรับชำระเงินและค่าใช้จ่ายอื่น ๆ ที่เกิดขึ้นตามสัญญาทางการเงิน</div>
 
             <div className="flex gap-2">
               <span className="shrink-0 w-6">4.1</span>
               <div className="flex-1 text-justify">
-                คู่สัญญาทั้งสองฝ่ายตกลงกำหนดให้ลูกค้าชำระค่างวดเช่าซื้อ และ/หรือ ค่าใช้จ่ายอื่น ๆ (ซึ่งรวมถึงดอกเบี้ย ค่าปรับ และ/หรือ ค่าใช้จ่ายต่าง ๆ ในการเข้าทำสัญญาทางการเงิน) ที่เกิดขึ้นตามสัญญาทางการเงิน (“หนี้เงิน”) ด้วยเงินสด เช็ค การโอนเงินเข้าบัญชี หรือด้วยการสั่งจ่ายเช็คล่วงหน้า (วิธีการใดวิธีการหนึ่งหรือหลายวิธี) หรือวิธีการอื่นใดตามที่คู่สัญญาตกลงร่วมกันเท่านั้น โดยรายละเอียดให้เป็นไปตามสัญญาทางการเงิน ทั้งนี้ ลูกค้าจะต้องชำระหนี้เงินให้แก่คู่สัญญาแต่ละรายโดยตรง ตามสัดส่วนที่ระบุ in ข้อ 1. ของสัญญาฉบับนี้
+                คู่สัญญาทั้งสองฝ่ายตกลงกำหนดให้ลูกค้าชำระค่างวดเช่าซื้อ และ/หรือ ค่าใช้จ่ายอื่น ๆ (ซึ่งรวมถึงดอกเบี้ย ค่าปรับ และ/หรือ ค่าใช้จ่ายต่าง ๆ ในการเข้าทำสัญญาทางการเงิน) ที่เกิดขึ้นตามสัญญาทางการเงิน <b>(“หนี้เงิน”)</b> ด้วยเงินสด เช็ค การโอนเงินเข้าบัญชี หรือด้วยการสั่งจ่ายเช็คล่วงหน้า (วิธีการใดวิธีการหนึ่งหรือหลายวิธี) หรือวิธีการอื่นใดตามที่คู่สัญญาตกลงร่วมกันเท่านั้น โดยรายละเอียดให้เป็นไปตามสัญญาทางการเงิน ทั้งนี้ ลูกค้าจะต้องชำระหนี้เงินให้แก่คู่สัญญาแต่ละรายโดยตรง ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
               </div>
             </div>
 
             <div className="flex gap-2">
               <span className="shrink-0 w-6">4.2</span>
               <div className="flex-1 text-justify">
-                คู่สัญญาทั้งสองฝ่ายตกลงว่าระหว่างคู่สัญญาด้วยกันเองและกับลูกค้า สิทธิและข้อเรียกร้องทุกประการของคู่สัญญาแต่ละรายในหนี้เงินของคู่สัญญาภายใต้สัญญาทางการเงิน เป็นสิทธิและข้อเรียกร้องที่เท่าเทียมกัน (Pari Passu) ระหว่างคู่สัญญาภายใต้สัญญาฉบับนี้ และตามสัดส่วนในการให้การสนับสนุนทางการเงินแก่ลูกค้าของคู่สัญญาแต่ละราย (Pro Rata) ดังนั้น หากคู่สัญญารายใดรายหนึ่งได้รับเงินจำนวนหนึ่งซึ่งมิใช่จำนวนเงินที่ตนจะมีสิทธิได้รับ หรือเกินกว่าจำนวนเงินที่ตนจะมีสิทธิได้รับตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้จากลูกค้า (ไม่ว่าโดยวิธีการใดก็ตาม) คู่สัญญาที่เป็นผู้ได้รับเงินนั้นจะต้องแจ้งจำนวนเงินที่ได้รับดังกล่าวมให้คู่สัญญาอีกฝ่ายทราบทันที และคู่สัญญาทั้งสองฝ่ายจะดำเนินการร่วมกันจัดสรรจำนวนเงินที่ได้รับมานั้นตามสัดส่วนที่ถูกต้องตามสิทธิที่คู่สัญญาแต่ละรายมีภายใต้สัญญาฉบับนี้ต่อไป
+                คู่สัญญาทั้งสองฝ่ายตกลงว่าระหว่างคู่สัญญาด้วยกันเองและกับลูกค้า สิทธิและข้อเรียกร้องทุกประการของคู่สัญญาแต่ละรายในหนี้เงินของคู่สัญญาภายใต้สัญญาทางการเงิน เป็นสิทธิและข้อเรียกร้องที่เท่าเทียมกัน (Pari Passu) ระหว่างคู่สัญญาภายใต้สัญญาฉบับนี้ และตามสัดส่วนในการให้การสนับสนุนทางการเงินแก่ลูกค้าของคู่สัญญาแต่ละราย (Pro Rata) ดังนั้น หากคู่สัญญารายใดรายหนึ่งได้รับเงินจำนวนหนึ่งซึ่งมิใช่จำนวนเงินที่ตนจะมีสิทธิได้รับ หรือเกินกว่าจำนวนเงินที่ตนจะมีสิทธิได้รับตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้จากลูกค้า (ไม่ว่าโดยวิธีการใดก็ตาม) คู่สัญญาที่เป็นผู้ได้รับเงินนั้นจะต้องแจ้งจำนวนเงินที่ได้รับดังกล่าวให้คู่สัญญาอีกฝ่ายทราบทันที และคู่สัญญาทั้งสองฝ่ายจะดำเนินการร่วมกันจัดสรรจำนวนเงินที่ได้รับมานั้นตามสัดส่วนที่ถูกต้องตามสิทธิที่คู่สัญญาแต่ละรายมีภายใต้สัญญาฉบับนี้ต่อไป
               </div>
             </div>
           </div>
@@ -401,17 +402,17 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
-        <div className="space-y-6 mt-8">
-          <div>
+        <div className="space-y-4 mt-8">
+          <div className="space-y-6">
             <div className="font-bold">5. สิทธิ หน้าที่ และความรับผิดชอบระหว่างคู่สัญญา</div>
 
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2">
               <span className="shrink-0 w-6">5.1</span>
-              <div className="flex-1 space-y-4">
-                <div className="text-justify leading-relaxed">
-                  คู่สัญญาทั้งสองฝ่ายตกลงร่วมกันซื้อทรัพย์สินที่จะให้เช่าซื้อ (ในกรณีของสัญญาเช่าซื้อ) โดยอ้างอิงตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ ตามเงื่อนไขและในเวลาที่คู่สัญญาทั้งสองฝ่ายเห็นพ้องต้องกัน
+              <div className="flex-1 space-y-4 text-justify">
+                <div>
+                  คู่สัญญาทั้งสองฝ่ายตกลงร่วมกันซื้อทรัพย์สินที่จะให้เช่าซื้อ (ในกรณีของสัญญาเช่าซื้อ) โดยอ้างอิงตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ ตามเงื่อนไขและในวันเวลาที่คู่สัญญาทั้งสองฝ่ายเห็นพ้องต้องกัน
                 </div>
-                <div className="text-justify leading-relaxed">
+                <div>
                   ทั้งนี้ ในการดำเนินการตามวรรคแรก คู่สัญญาฝ่ายที่ 2 ตกลงโอนเงินเข้าบัญชีของตัวแทนจำหน่ายโดยตรง เพื่อประโยชน์ในการซื้อทรัพย์สินที่จะให้เช่าซื้อ เว้นแต่คู่สัญญาจะตกลงเป็นอย่างอื่น โดยในกรณีดังกล่าวคู่สัญญาฝ่ายที่ 1 ตกลงจะแจ้งรายละเอียดของเลขบัญชีธนาคารให้คู่สัญญาฝ่ายที่ 2 ทราบล่วงหน้าอย่างน้อย 5 (ห้า) วัน ก่อนวันที่คู่สัญญาทั้งสองฝ่ายเห็นพ้องต้องกันในวรรคแรก หากคู่สัญญาฝ่ายใดไม่ปฏิบัติตามเงื่อนไขที่กำหนดในวรรคแรก และทำให้คู่สัญญาอีกฝ่ายได้รับความเสียหาย คู่สัญญาฝ่ายที่กระทำผิดต้องชำระค่าชดเชยให้แก่คู่สัญญาอีกฝ่าย ในอัตราร้อยละ 7 (เจ็ด) ต่อปี ของจำนวนเงินที่คู่สัญญาฝ่ายดังกล่าวจะต้องส่งมอบให้แก่ลูกค้า โดยอ้างอิงตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ นับจากวันที่คู่สัญญาทั้งสองฝ่ายตกลงซื้อทรัพย์สินที่จะให้เช่าซื้อ (ในกรณีของสัญญาเช่าซื้อ)
                 </div>
               </div>
@@ -421,7 +422,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               <span className="shrink-0 w-6">5.2</span>
               <div className="flex-1 space-y-4 text-justify">
                 <div>
-                  คู่สัญญาทั้งสองฝ่ายตกลงว่าสิทธิ หน้าที่ และความรับผิดชอบของคู่สัญญาแต่ละฝ่าย ภายใต้สัญญาทางการเงินจะแยกต่างหากจากกัน การที่คู่สัญญารายใดไม่ปฏิบัติตามหน้าที่ที่กำหนดไว้ในสัญญาทางการเงิน ไม่เป็นเหตุปลดเปลื้องคู่สัญญาอีกรายหนึ่งในการปฏิบัติตามหน้าที่ในส่วนของคู่สัญญารายนั้นและไม่เป็นเหตุให้คู่สัญญาอีกรายหนึ่งมีความรับผิดหรือภาระผูกพันใด ๆ เพิ่มเกินกว่าหน้าที่และภาระผูกพันของตนตามที่กำหนดไว้ในสัญญาทางการเงิน
+                  คู่สัญญาทั้งสองฝ่ายตกลงว่าสิทธิ หน้าที่ และความรับผิดของคู่สัญญาแต่ละฝ่าย ภายใต้สัญญาทางการเงินจะแยกต่างหากจากกัน การที่คู่สัญญารายใดไม่ปฏิบัติตามหน้าที่ที่กำหนดไว้ในสัญญาทางการเงิน ไม่เป็นเหตุปลดเปลื้องคู่สัญญาอีกรายหนึ่งในการปฏิบัติตามหน้าที่ในส่วนของคู่สัญญารายนั้นและไม่เป็นเหตุให้คู่สัญญาอีกรายหนึ่งมีความรับผิดหรือภาระผูกพันใด ๆ เพิ่มเกินกว่าหน้าที่และภาระผูกพันของตนตามที่กำหนดไว้ในสัญญาทางการเงิน
                 </div>
                 <div>
                   หนี้เงินตามสัญญาทางการเงินที่ถึงกำหนดชำระใด ๆ ต่อคู่สัญญาไม่ว่า ณ ขณะใดก็ตาม เป็นหนี้ซึ่งแยกต่างหากจากกัน และเป็นอิสระจากกัน นอกจากนี้ คู่สัญญาทางการเงินมีสิทธิที่จะปกป้อง รักษา และบังคับใช้สิทธิในสัดส่วนของตนที่มีภายใต้สัญญาทางการเงินได้โดยไม่ต้องให้คู่สัญญาอีกฝ่ายเข้ามาร่วมเป็นคู่ความร่วมในการดำเนินการเพื่อปกป้อง รักษา หรือบังคับใช้สิทธิดังกล่าวด้วยแต่อย่างใด แต่ยังคงต้องปฏิบัติตามมติของคู่สัญญาภายใต้การลงมิติดตามที่กำหนดในข้อ 5.4 และ/หรือ ข้อ 5.5 ของสัญญาฉบับนี้
@@ -444,7 +445,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <div className="space-y-6 mt-8">
           <div className="flex gap-2">
             <span className="shrink-0 w-6">5.3</span>
-            <div className="flex-1 text-justify">
+            <div className="flex-1 text-justify leading-relaxed">
               ในกรณีที่ลูกค้าตามสัญญาทางการเงิน ชำระหนี้เงินล่าช้า หรือไม่ปฏิบัติตามสัญญาทางการเงิน คู่สัญญาตกลงรับผิดชอบค่าใช้จ่ายในการดำเนินการต่าง ๆ เพื่อติดตามให้ลูกค้าชำระหนี้หรือปฏิบัติตามสัญญาทางการเงินตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
             </div>
           </div>
@@ -459,7 +460,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                 ในกรณีที่มีค่าใช้จ่ายที่เกิดขึ้นจากการดำเนินการ และ/หรือ ค่าใช้จ่ายอื่นใด อันเกี่ยวข้องกับการใช้สิทธิตามวรรคแรก ให้คู่สัญญาฝ่ายที่ 1 สามารถดำเนินการได้หากค่าใช้จ่ายดังกล่าวไม่เกิน 20,000 บาท (สองหมื่นบาทถ้วน) ในแต่ละคราว แต่หากมีค่าใช้จ่ายเกิน 20,000 บาท (สองหมื่นบาทถ้วน) ในแต่ละคราว ต้องได้รับความเห็นชอบร่วมกันจากคู่สัญญาทั้งสองฝ่าย
               </div>
               <div className="text-justify leading-relaxed">
-                ทั้งนี้ นอกเหนือจากข้อความตามข้อ 5.4 วรรคหนึ่งและวรรคสองข้างต้น ให้ใช้มติของเสียงข้างมาก เพื่อให้เป็นที่สงสัย <span className="font-bold">“มติเสียงข้างมากของคู่สัญญา”</span> หมายถึง มติให้ความเห็นชอบจากคู่สัญญาภายใต้สัญญาฉบับนี้ในสัดส่วนไม่น้อยกว่าร้อยละ 50 (ห้าสิบ) ของสิทธิในการออกเสียงลงมติทั้งหมดของคู่สัญญา โดยสิทธิในการออกเสียงลงมติของคู่สัญญาแต่ละรายเป็นไปตามสัดส่วนที่ระบุ in ข้อ 1. ของสัญญาฉบับนี้
+                ทั้งนี้ นอกเหนือจากข้อความตามข้อ 5.4 วรรคหนึ่งและวรรคสองข้างต้น ให้ใช้มติของเสียงข้างมาก เพื่อมิให้เป็นที่สงสัย <span className="font-bold">“มติเสียงข้างมากของคู่สัญญา”</span> หมายถึง มติให้ความเห็นชอบจากคู่สัญญาภายใต้สัญญาฉบับนี้ในสัดส่วนไม่น้อยกว่าร้อยละ 50 (ห้าสิบ) ของสิทธิในการออกเสียงลงมติทั้งหมดของคู่สัญญา โดยสิทธิในการออกเสียงลงมติของคู่สัญญาแต่ละรายเป็นไปตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
               </div>
             </div>
           </div>
@@ -802,7 +803,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           </div>
 
           <div className="text-justify leading-relaxed">
-            หากคู่สัญญาฝ่ายหนึ่งฝ่ายใดต้องการเปลี่ยนสถานที่อยู่ คู่สัญญาฝ่ายนั้นต้องแจ้งให้คู่สัญญาอีกฝ่ายทราบล่วงหน้าเป็นลายลักษณ์อักษรไม่น้อยกว่า 5 (ห้า) วันทำการก่อนวันที่ย้ายหรือเปลี่ยนแปลงสถานที่อยู่ ในกรณีเช่นนี้คู่สัญญาฝ่ายที่ได้รับแจ้งการเปลี่ยนแปลงสถานที่อยู่จะส่งคำบอกกล่าวให้แก่คู่สัญญาฝ่ายที่แจ้งเปลี่ยนสถานที่อยู่ตามรายละเอียดที่ได้รับแจ้งดังกล่าว
+            หากคู่สัญญาฝ่ายหนึ่งฝ่ายใดต้องการเปลี่ยนสถานที่อยู่ คู่สัญญาฝ่ายนั้นต้องแจ้งให้คู่สัญญาอีกฝ่ายทราบล่วงหน้าเป็นลายลักษณ์อักษรไม่น้อยกว่า 5 (ห้า) วันทำการก่อนวันที่ย้ายหรือเปลี่ยนแปลงสถานที่อยู่ ในกรณีเช่นนี้คู่สัญญาฝ่ายที่ได้รับแจ้งการเปลี่ยนแปลงสถานที่อยู่จะส่งคำบอกกล่าวให้แก่คู่สัญญาฝ่ายที่แจ้งเปลี่ยนแปลงสถานที่อยู่ตามรายละเอียดที่ได้รับแจ้งดังกล่าว
           </div>
 
           <div className="space-y-4 pt-4">
@@ -967,7 +968,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
         <div className="flex flex-col items-center mb-12">
           <div className="font-bold">เอกสารแนบท้ายหมายเลข 1</div>
-          <div className="font-bold uppercase underline">การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน</div>
+          <div className="font-bold">การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน</div>
         </div>
 
         <div className="space-y-6">
@@ -1051,7 +1052,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             <div className="flex gap-4">
               <span className="shrink-0 w-10">3.1.</span>
               <div className="flex-1 text-justify leading-relaxed">
-                คู่สัญญาฝ่ายที่ 1 ในฐานะผู้ให้บริการ ("ผู้ให้บริการ") ตกลงให้บริการตามข้อ 1. และ/หรือ ข้อ 2. ข้างต้น ภายใต้เงื่อนไขที่กำหนดในสัญญาฉบับนี้ ทั้งนี้ การใดที่ขัดหรือแย้งกับเงื่อนไขที่กำหนดในสัญญาฉบับนี้ ให้ถือว่าไม่มีผลผูกพันคู่สัญญาฝ่ายที่ 2 และให้มีผลผูกพันเฉพาะคู่สัญญาฝ่ายที่ 1
+                คู่สัญญาฝ่ายที่ 1 ในฐานะผู้ให้บริการ <b></b>("ผู้ให้บริการ") ตกลงให้บริการตามข้อ 1. และ/หรือ ข้อ 2. ข้างต้น ภายใต้เงื่อนไขที่กำหนดในสัญญาฉบับนี้ ทั้งนี้ การใดที่ขัดหรือแย้งกับเงื่อนไขที่กำหนดในสัญญาฉบับนี้ ให้ถือว่าไม่มีผลผูกพันคู่สัญญาฝ่ายที่ 2 และให้มีผลผูกพันเฉพาะคู่สัญญาฝ่ายที่ 1
               </div>
             </div>
 
@@ -1112,25 +1113,34 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                   return (
                     <div key={`orig-fee-content-${agreement.id}`} className="space-y-4">
                       {isFirstOfAll ? (
-                        <div className="text-center font-bold mb-8">
-                          <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 2</div>
-                          <div className="text-[14px]">ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ (Fees)</div>
-                          <div className="grid grid-cols-[30px_1fr] gap-2 pt-4 text-left font-normal">
-                            <span className="font-bold underline text-[13px]">1.</span>
-                            <div className="space-y-4">
-                              <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
-                              <div className="text-justify leading-loose text-[12px]">
-                                เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง ในอัตราร้อยละ {saData.originationFeeRate} ({translateRateToThai(saData.originationFeeRate)}) ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน โดยมีรายละเอียดการชำระเงินของแต่ละสัญญาทางการเงิน ดังนี้
+                        <div className="mb-8">
+                          <div className="text-center font-bold">
+                            <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 2</div>
+                            <div className="text-[14px]">ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ</div>
+                          </div>
+                          <div className="flex gap-4 pt-4 text-left font-normal">
+                            <span className="shrink-0 font-bold">1.</span>
+                            <div className="space-y-1">
+                              <span className="font-bold">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
+                              <div className="text-justify leading-relaxed mt-2">
+                                {(() => {
+                                  const periods = selectedAgreements.length > 0 ? (saData.agreementOriginationFeePeriods?.[selectedAgreements[0].id] || 0) : 0;
+                                  return (
+                                    <>
+                                      เนื่องจากคู่สัญญาฝ่ายที่ 1 รับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <b><u>เอกสารแนบท้ายหมายเลข 1</u></b> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้คู่สัญญาฝ่ายที่ 2 เป็นผู้ชำระค่าตอบแทนให้แก่คู่สัญญาฝ่ายที่ 1 ในอัตราร้อยละ {saData.originationFeeRate} ({translateRateToThai(saData.originationFeeRate)}) ของจำนวนเงินที่คู่สัญญาฝ่ายที่ 2 ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน อ้างอิงตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ โดยแบ่งชำระเป็น {periods} ({thaiNumberText(periods)}) งวด รายละเอียดปรากฎตามตารางแนบท้ายดังนี้
+                                    </>
+                                  );
+                                })()}
                               </div>
                             </div>
                           </div>
                         </div>
                       ) : (
                         groupIdx === 0 && (
-                          <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
-                            <div />
+                          <div className="flex gap-4 pt-4">
+                            <div className="w-8 shrink-0" />
                             <div className="text-justify">
-                              <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee) - (ต่อ)</span>
+                              <span className="font-bold">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee) - (ต่อ)</span>
                             </div>
                           </div>
                         )
@@ -1156,19 +1166,19 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <div className="space-y-6 font-normal">
           <div className="space-y-4 text-[12px] leading-relaxed mb-6">
             <div className="text-justify">
-              ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันที่ธนาคารเปิดดำเนินการเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย ("วันทำการ") ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
+              ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันที่ธนาคารเปิดดำเนินการเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย <b>("วันทำการ")</b> ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
             </div>
             <div className="text-justify">
               อนึ่ง ตลอดระยะเวลาของสัญญานี้ คู่สัญญาฝ่ายที่ 2 ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
             </div>
           </div>
 
-          <div className="pl-8 flex gap-2 pt-4">
-            <span className="shrink-0 font-bold underline">2.</span>
+          <div className=" flex gap-4 pt-4">
+            <span className="shrink-0 font-bold">2.</span>
             <div className="text-justify">
-              <span className="font-bold underline">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
-              <div className="mt-4 leading-loose">
-                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent">ในอัตราร้อยละ {saData.serviceFeeRate} ({translateRateToThai(saData.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
+              <span className="font-bold">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
+              <div className="mt-2 leading-relaxed">
+                เนื่องจากคู่สัญญาฝ่ายที่ 1 รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <b><u>เอกสารแนบท้ายหมายเลข 1</u></b> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้คู่สัญญาฝ่ายที่ 2 เป็นผู้ชำระค่าตอบแทนให้แก่คู่สัญญาฝ่ายที่ 1 <span className="bg-[#ccffcc] print:bg-transparent">ในอัตราร้อยละ {saData.serviceFeeRate} ({translateRateToThai(saData.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่คู่สัญญาฝ่ายที่ 2 ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน อ้างอิงตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้ รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
               </div>
             </div>
           </div>
@@ -1244,9 +1254,9 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
         <div className="space-y-6 font-normal text-[12px] pt-4">
           <div className="grid grid-cols-[30px_1fr] gap-2">
-            <span className="font-bold underline">1.</span>
+            <span className="font-bold">1.</span>
             <div className="space-y-6">
-              <span className="font-bold underline">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 1</span>
+              <span className="font-bold">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 1</span>
               <div>ณ วันที่ตามสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ คู่สัญญาฝ่ายที่ 1 ให้คำรับรองและยืนยันว่า</div>
 
               <div className="space-y-6 ml-4">
@@ -1288,7 +1298,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <div className="pl-8 flex gap-2 pt-4">
           <span className="shrink-0 font-bold">2.</span>
           <div className="text-justify">
-            <span className="font-bold underline">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 2</span>
+            <span className="font-bold">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 2</span>
             <div className="mt-4 leading-loose">
               ณ วันที่ตามสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ คู่สัญญาฝ่ายที่ 2 ให้คำรับรองและยืนยันว่า
             </div>

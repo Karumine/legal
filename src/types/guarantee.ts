@@ -7,6 +7,8 @@ export interface GuarantorInfo {
   spouseName: string;
   spouseIdCard: string;
   spouseAddress: string;
+  type?: 'person' | 'company' | 'partnership';
+  directors?: string;
 }
 
 export interface GuaranteeData {
