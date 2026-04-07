@@ -22,8 +22,8 @@ export default function GuaranteePreview({ data }: Props) {
     addr?.replace(/^เลขที่\s*/, '') || '';
 
   const totalPages = 8 + data.guarantors.reduce((sum, g) => {
-    if (g.type === 'company' || g.type === 'partnership') return 0;
-    return g.isMarried ? 2 : 1;
+    if (g.type === 'company' || g.type === 'partnership') return sum;
+    return sum + (g.isMarried ? 2 : 1);
   }, 0);
 
   const PageFooter = ({ pageNum }: { pageNum: number }) => (
@@ -446,22 +446,24 @@ export default function GuaranteePreview({ data }: Props) {
               {/* Left: Lender 1 */}
               <div className="p-6 flex flex-col min-h-[600px]">
                 <div className="flex-1 pt-4 space-y-16">
-                  <div className="font-bold mb-2 text-[13px]">
+                  <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
                     <div>ผู้ให้เช่าซื้อฝ่ายที่ 1 :</div>
                     <Highlight>{data.lenderCompany}</Highlight>
                   </div>
 
-                  {data.lenderDirectors.split(/\s*และ\s*/).map((sig, idx) => (
-                    <div key={idx} className="space-y-2">
-                      <div className="border-b border-black w-full h-12"></div>
-                      <div className="flex gap-2">
-                        <span>ชื่อ:</span>
-                        <div className="flex-1">{sig.trim()}</div>
+                  <div className="space-y-16">
+                    {data.lenderDirectors.split(/\s*และ\s*/).map((sig, idx) => (
+                      <div key={idx} className="space-y-2">
+                        <div className="border-b border-black w-full h-12"></div>
+                        <div className="flex justify-center gap-2">
+                          <span>ชื่อ:</span>
+                          <div className="">{sig.trim()}</div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
 
-                  <div className="pt-4 text-left">
+                  <div className="text-left">
                     <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
                     <div className="font-bold"><Highlight>{data.lenderCompany}</Highlight></div>
                   </div>
@@ -484,34 +486,34 @@ export default function GuaranteePreview({ data }: Props) {
                     const signatories = guarantor.directors?.split(/\s*และ\s*|,\s*/) || [guarantor.name];
 
                     return (
-                      <div key={idx} className="space-y-4 pb-8 border-b border-gray-100 last:border-0 grow">
-                        <div className="font-bold mb-2 text-[13px]">
+                      <div key={idx} className="space-y-16 pb-8 border-b border-gray-100 last:border-0">
+                        <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
                           <div>ผู้ค้ำประกันคนที่ {idx + 1} :</div>
                           <Highlight>{guarantor.name}</Highlight>
                         </div>
 
                         {isCorporate ? (
-                          <div className="space-y-12">
+                          <div className="space-y-16">
                             {signatories.map((sig, sIdx) => (
                               <div key={sIdx} className="space-y-2">
                                 <div className="border-b border-black w-full h-12"></div>
-                                <div className="flex gap-2">
+                                <div className="flex justify-center gap-2">
                                   <span>ชื่อ:</span>
-                                  <div className="flex-1">{sig.trim()}</div>
+                                  <div className="">{sig.trim()}</div>
                                 </div>
                               </div>
                             ))}
-                            <div className="pt-4 text-left">
+                            <div className="text-left">
                               <div className="font-bold">ตำแหน่ง: {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการ' : 'กรรมการผู้มีอำนาจลงนาม'}</div>
                               <div className="font-bold"><Highlight>{guarantor.name}</Highlight></div>
                             </div>
                           </div>
                         ) : (
-                          <div className="space-y-2 mt-12">
+                          <div className="space-y-2">
                             <div className="border-b border-black w-full h-12"></div>
-                            <div className="flex gap-2">
+                            <div className="flex justify-center gap-2">
                               <span>ชื่อ:</span>
-                              <div className="flex-1">
+                              <div className="">
                                 <Highlight>{guarantor.name}</Highlight>
                               </div>
                             </div>
@@ -548,21 +550,23 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="grid grid-cols-2 divide-x-2 divide-black">
             <div className="p-6 min-h-[600px] flex flex-col">
               <div className="flex-1 mt-4 space-y-16">
-                <div className="font-bold mb-2 text-[13px]">
+                <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
                   <div>ผู้ให้เช่าซื้อฝ่ายที่ 2 :</div>
                   <Highlight>{data.borrowerCompany}</Highlight>
                 </div>
-                {data.borrowerDirectors.split(/\s*และ\s*/).map((sig, idx) => (
-                  <div key={idx} className="space-y-2">
-                    <div className="border-b border-black w-full h-12"></div>
-                    <div className="flex gap-2">
-                      <span>ชื่อ:</span>
-                      <div className="flex-1">{sig.trim()}</div>
+                <div className="space-y-16">
+                  {data.borrowerDirectors.split(/\s*และ\s*/).map((sig, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <div className="border-b border-black w-full h-12"></div>
+                      <div className="flex justify-center gap-2">
+                        <span>ชื่อ:</span>
+                        <div className="">{sig.trim()}</div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
 
-                <div className="pt-4 text-left">
+                <div className="text-left">
                   <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
                   <div className="font-bold"><Highlight>{data.borrowerCompany}</Highlight></div>
                 </div>

@@ -906,16 +906,16 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           {/* Left Column: Lessor 1 */}
           <div className="border-r border-black p-4 flex flex-col h-full">
             <div className="space-y-12">
-              <div className="font-bold underline">ผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
-              <div className="font-bold">{data.lessor1.name}</div>
+              <div className="font-bold underline text-left">ผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
+              <div className="font-bold text-left">{data.lessor1.name}</div>
 
               <div className="pt-8 space-y-12">
                 {data.lessor1Signatories.split(/\s*และ\s*/).map((sig, idx) => (
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
-                    <div className="flex gap-2">
+                    <div className="flex justify-center gap-2">
                       <span>ชื่อ:</span>
-                      <div className="flex-1">{sig.trim()}</div>
+                      <div className="">{sig.trim()}</div>
                     </div>
                   </div>
                 ))}
@@ -940,8 +940,8 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
           <div className="p-4 flex flex-col h-full">
             <div className="space-y-12">
-              <div className="font-bold underline">ผู้เช่าซื้อ:</div>
-              <div className="font-bold">
+              <div className="font-bold underline text-left">ผู้เช่าซื้อ:</div>
+              <div className="font-bold text-left">
                 <Highlight>{customerInfo.companyName}</Highlight>
               </div>
 
@@ -949,9 +949,9 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
-                    <div className="flex gap-2">
+                    <div className="flex justify-center gap-2">
                       <span>ชื่อ:</span>
-                      <div className="flex-1">
+                      <div className="">
                         <Highlight>{sig.trim()}</Highlight>
                       </div>
                     </div>
@@ -989,13 +989,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           {/* Left Column: Lessor 2 */}
           <div className="border-r border-black p-4 flex flex-col h-full">
             <div className="space-y-12">
-              <div className="font-bold underline">ผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
-              <div className="font-bold">{data.lessor2.name}</div>
+              <div className="font-bold underline text-left">ผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
+              <div className="font-bold text-left">{data.lessor2.name}</div>
               <div className="pt-8 space-y-12">
                 {data.lessor2Signatories.split(/\s*และ\s*/).map((sig, idx) => (
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
-                    <div className="flex gap-2">
+                    <div className="flex justify-center gap-2">
                       <span>ชื่อ:</span>
                       <div className="flex-1 font-bold">
                         {sig.trim()}
@@ -1311,60 +1311,66 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         {/* Signature Box */}
         <div className="mt-10 grid grid-cols-2 gap-x-12 gap-y-12 px-4">
           {/* Lessor 1 */}
-          <div className="flex justify-center">
+          <div className="flex flex-col">
+            <div className="mb-4 text-left">
+              <span className="text-[12px] font-bold">ผู้ให้เช่าซื้อฝ่ายที่ 1:</span>
+              <div className="text-[11px] font-bold">{data.lessor1.name}</div>
+            </div>
             <div className="flex flex-col items-center w-[280px] space-y-8">
               {(data.lessor1Signatories || '').split(/\s*และ\s*/).map((sig, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
+                <div key={i} className="flex flex-col items-center w-full">
+                  <span className="border-b border-dotted border-black w-full inline-block h-[18px]"></span>
                   <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
-                    ( {sig} )<br />
-                    กรรมการผู้มีอำนาจกระทำการ
+                    ( {sig} )
+                  </div>
+                  <div className="mt-1 text-left w-full text-[11px] leading-tight font-bold">
+                    ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม
                   </div>
                 </div>
               ))}
-              <div className="text-center text-[11px] font-bold">
-                {data.lessor1.name}
-              </div>
             </div>
-            <span className="text-[12px] ml-2 mt-[4px] whitespace-nowrap">ผู้ให้เช่าซื้อฝ่ายที่ 1</span>
           </div>
 
           {/* Lessee */}
-          <div className="flex justify-center">
+          <div className="flex flex-col">
+            <div className="mb-4 text-left">
+              <span className="text-[12px] font-bold">ผู้เช่าซื้อ:</span>
+              <div className="text-[11px] font-bold">{customerInfo.companyName}</div>
+            </div>
             <div className="flex flex-col items-center w-[280px] space-y-8">
               {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
+                <div key={i} className="flex flex-col items-center w-full">
+                  <span className="border-b border-dotted border-black w-full inline-block h-[18px]"></span>
                   <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
-                    ( {sig} )<br />
-                    กรรมการผู้มีอำนาจกระทำการ
+                    ( {sig} )
+                  </div>
+                  <div className="mt-1 text-left w-full text-[11px] leading-tight font-bold">
+                    ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม
                   </div>
                 </div>
               ))}
-              <div className="text-center text-[11px] font-bold">
-                {customerInfo.companyName}
-              </div>
             </div>
-            <span className="text-[12px] ml-2 mt-[4px] whitespace-nowrap">ผู้เช่าซื้อ</span>
           </div>
 
           {/* Lessor 2 */}
-          <div className="flex justify-center">
+          <div className="flex flex-col">
+            <div className="mb-4 text-left">
+              <span className="text-[12px] font-bold">ผู้ให้เช่าซื้อฝ่ายที่ 2:</span>
+              <div className="text-[11px] font-bold">{data.lessor2.name}</div>
+            </div>
             <div className="flex flex-col items-center w-[280px] space-y-8">
               {(data.lessor2Signatories || '').split(/\s*และ\s*/).map((sig, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <span className="border-b border-dotted border-black w-[200px] inline-block h-[18px]"></span>
+                <div key={i} className="flex flex-col items-center w-full">
+                  <span className="border-b border-dotted border-black w-full inline-block h-[18px]"></span>
                   <div className="mt-2 text-center text-[11px] leading-tight whitespace-nowrap">
-                    ( {sig} )<br />
-                    กรรมการผู้มีอำนาจกระทำการ
+                    ( {sig} )
+                  </div>
+                  <div className="mt-1 text-left w-full text-[11px] leading-tight font-bold">
+                    ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม
                   </div>
                 </div>
               ))}
-              <div className="text-center text-[11px] font-bold">
-                {data.lessor2.name}
-              </div>
             </div>
-            <span className="text-[12px] ml-2 mt-[4px] whitespace-nowrap">ผู้ให้เช่าซื้อฝ่ายที่ 2</span>
           </div>
         </div>
 

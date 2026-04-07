@@ -1292,21 +1292,21 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <div className="font-bold underline">ผู้ให้สินเชื่อฝ่ายที่ 1:</div>
                 <div className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></div>
 
-                <div className="pt-8 space-y-12">
-                  {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
-                    <div key={idx} className="space-y-2">
-                      <div className="border-b border-black w-full h-8"></div>
-                      <div className="flex gap-2">
-                        <span>ชื่อ:</span>
-                        <div className="flex-1 font-bold"><Highlight>{sig.trim()}</Highlight></div>
+                  <div className="pt-8 space-y-12">
+                    {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                      <div key={idx} className="space-y-2">
+                        <div className="border-b border-black w-full h-8"></div>
+                        <div className="flex justify-center gap-2">
+                          <span>ชื่อ:</span>
+                          <div className="font-bold"><Highlight>{sig.trim()}</Highlight></div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
 
-                  <div className="pt-4 text-left">
-                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                    <div className="mt-2"><Highlight>{agileInfo.companyName}</Highlight></div>
-                  </div>
+                    <div className="pt-4 text-left">
+                      <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                      <div className="mt-2 text-left font-bold"><Highlight>{agileInfo.companyName}</Highlight></div>
+                    </div>
                 </div>
               </div>
 
@@ -1329,25 +1329,25 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   <Highlight>{customerInfo.companyName}</Highlight>
                 </div>
 
-                <div className="pt-8 space-y-12">
-                  {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
-                    <div key={idx} className="space-y-2">
-                      <div className="border-b border-black w-full h-8"></div>
-                      <div className="flex gap-2">
-                        <span>ชื่อ:</span>
-                        <div className="flex-1">
-                          <Highlight>{sig.trim()}</Highlight>
+                  <div className="pt-8 space-y-12">
+                    {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                      <div key={idx} className="space-y-2">
+                        <div className="border-b border-black w-full h-8"></div>
+                        <div className="flex justify-center gap-2">
+                          <span>ชื่อ:</span>
+                          <div className="font-bold">
+                            <Highlight>{sig.trim()}</Highlight>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
 
-                  <div className="pt-4 text-left">
-                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                    <div className="mt-2">
-                      <Highlight>{customerInfo.companyName}</Highlight>
+                    <div className="pt-4 text-left">
+                      <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                      <div className="mt-2 text-left font-bold">
+                        <Highlight>{customerInfo.companyName}</Highlight>
+                      </div>
                     </div>
-                  </div>
                 </div>
               </div>
 
@@ -1378,25 +1378,25 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   ผู้ให้สินเชื่อฝ่ายที่ 2: <Highlight>{tkInfo.companyName}</Highlight>
                 </div>
 
-                <div className="pt-8 space-y-12">
-                  {(tkInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
-                    <div key={idx} className="space-y-2">
-                      <div className="border-b border-black w-full h-8"></div>
-                      <div className="flex gap-2">
-                        <span>ชื่อ:</span>
-                        <div className="flex-1 font-bold">
-                          <Highlight>{sig.trim()}</Highlight>
+                  <div className="pt-8 space-y-12">
+                    {(tkInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                      <div key={idx} className="space-y-2">
+                        <div className="border-b border-black w-full h-8"></div>
+                        <div className="flex justify-center gap-2">
+                          <span>ชื่อ:</span>
+                          <div className="font-bold">
+                            <Highlight>{sig.trim()}</Highlight>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
 
-                  <div className="pt-4 text-left">
-                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                    <div className="mt-2">
-                      <Highlight>{tkInfo.companyName}</Highlight>
+                    <div className="pt-4 text-left">
+                      <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                      <div className="mt-2 text-left font-bold">
+                        <Highlight>{tkInfo.companyName}</Highlight>
+                      </div>
                     </div>
-                  </div>
                 </div>
               </div>
 

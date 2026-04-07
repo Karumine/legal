@@ -12,7 +12,7 @@ export default function SignatureSection({ data }: Props) {
         {/* Left Column - Company (Fee Receiver) */}
         <div className="p-8 flex flex-col min-h-[550px]">
           <div className="flex-1 space-y-12">
-            <div className="space-y-1 mb-8">
+            <div className="space-y-1 mb-8 text-left">
               <div className="font-bold whitespace-nowrap">ผู้รับค่าธรรมเนียม:</div>
               <div className="font-bold">
                 <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">บริษัท อาไจล์ แอสเซ็ทส์ จำกัด</span>
@@ -21,9 +21,9 @@ export default function SignatureSection({ data }: Props) {
 
             <div className="space-y-12">
               {(data.companyDirectors || '').split(/\s*(?:และ|,)\s*/).map((dir: string, idx: number) => (
-                <div key={idx} className="flex flex-col items-start w-full">
+                <div key={idx} className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-full mb-1 h-8"></div>
-                  <div className="w-full text-left">
+                  <div className="w-full text-center">
                     ชื่อ: <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span>
                   </div>
                 </div>
@@ -50,7 +50,7 @@ export default function SignatureSection({ data }: Props) {
         {/* Right Column - Customer (Fee Payer) */}
         <div className="p-8 flex flex-col min-h-[550px]">
           <div className="flex-1 space-y-12">
-            <div className="space-y-1 mb-8">
+            <div className="space-y-1 mb-8 text-left">
               <div className="font-bold whitespace-nowrap">ผู้ชำระค่าธรรมเนียม:</div>
               <div className="font-bold">
                 <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{data.customerCompany || '\u00A0'}</span>
@@ -59,9 +59,9 @@ export default function SignatureSection({ data }: Props) {
 
             <div className="space-y-12">
               {(data.customerDirector || '').split(/\s*(?:และ|,)\s*/).map((dir: string, idx: number) => (
-                <div key={idx} className="flex flex-col items-start w-full">
+                <div key={idx} className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-full mb-1 h-8"></div>
-                  <div className="w-full text-left">
+                  <div className="w-full text-center">
                     ชื่อ: <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span>
                   </div>
                 </div>

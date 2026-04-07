@@ -658,7 +658,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
               ))}
             </div>
 
-            <div className="mt-12 text-center space-y-1">
+            <div className="mt-12 text-left space-y-1">
               <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
               <div className="font-bold">{agileInfo.companyName}</div>
             </div>
@@ -688,7 +688,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
               ))}
             </div>
 
-            <div className="mt-12 text-center space-y-1">
+            <div className="mt-12 text-left space-y-1">
               <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
               <div className="font-bold"><Highlight>{data.vendorName}</Highlight></div>
             </div>
@@ -726,7 +726,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
               ))}
             </div>
 
-            <div className="mt-12 text-center space-y-1">
+            <div className="mt-12 text-left space-y-1">
               <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
               <div className="font-bold">{tkInfo.companyName}</div>
             </div>
