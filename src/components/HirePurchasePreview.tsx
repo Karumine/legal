@@ -14,7 +14,7 @@ interface Props {
 }
 
 const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
+  <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
     {children || '\u00A0'}
   </span>
 );
@@ -37,7 +37,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
   const assetCount = data.assets?.length || 0;
 
   const isLargeList = assetCount >= 7;
-  
+
   const collateralAssetsCount = (data.collateralAssets || []).length;
   const isDedicatedCollateral = collateralAssetsCount >= 5;
   const isIntegratedCollateral = collateralAssetsCount === 4;
@@ -920,7 +920,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   </div>
                 ))}
 
-                <div className="pt-4">
+                <div className="pt-4 text-left">
                   <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
                   <div className="mt-2">{data.lessor1.name}</div>
                 </div>
@@ -958,7 +958,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   </div>
                 ))}
 
-                <div className="pt-4">
+                <div className="pt-4 text-left">
                   <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
                   <div className="mt-2">
                     <Highlight>{customerInfo.companyName}</Highlight>
@@ -1004,7 +1004,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   </div>
                 ))}
 
-                <div className="pt-4">
+                <div className="pt-4 text-left">
                   <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
                   <div className="mt-2">{data.lessor2.name}</div>
                 </div>
@@ -1151,7 +1151,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         {/* Table 1 */}
         <table className="w-full border-collapse border border-black text-[12px] mb-1.5">
           <thead>
-            <tr className="bg-gray-100 text-left">
+            <tr className="bg-gray-100 print:bg-transparent text-left">
               <th colSpan={2} className="border border-black p-1 ">1. ค่าธรรมเนียมในการติดตามทวงถามหนี้</th>
             </tr>
           </thead>
@@ -1177,7 +1177,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         {/* Table 2 */}
         <table className="w-full border-collapse border border-black text-[12px] mb-1.5">
           <thead>
-            <tr className="bg-gray-100 text-left">
+            <tr className="bg-gray-100 print:bg-transparent text-left">
               <th colSpan={2} className="border border-black p-1">2. ค่าดำเนินการทางกฎหมาย</th>
             </tr>
           </thead>
@@ -1212,7 +1212,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         {/* Table 3 */}
         <table className="w-full border-collapse border border-black text-[12px] text-center mb-4">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="bg-gray-200 print:bg-transparent">
               <th className="border border-black p-1 text-left"></th>
               <th className="border border-black p-1">งวดที่ 1<br />(ม.ค.)</th>
               <th className="border border-black p-1">งวดที่ 2<br />(ก.พ.)</th>
@@ -1228,7 +1228,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <td className="border border-black p-1">100 บาท</td>
               <td className="border border-black p-1">100 บาท</td>
               <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1 font-bold bg-gray-100">350 บาท</td>
+              <td className="border border-black p-1 font-bold bg-gray-100 print:bg-transparent">350 บาท</td>
             </tr>
             <tr>
               <td className="border-x border-black p-1 text-left font-bold">กรณีที่มีการชำระหนี้เพิ่มเติม</td>
@@ -1236,7 +1236,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <td className="border-x border-black p-1"></td>
               <td className="border-x border-black p-1"></td>
               <td className="border-x border-black p-1"></td>
-              <td className="border-x border-black p-1 bg-gray-100"></td>
+              <td className="border-x border-black p-1 bg-gray-100 print:bg-transparent"></td>
             </tr>
             <tr>
               <td className="border border-black p-1 text-left pl-4 whitespace-normal leading-tight">
@@ -1246,7 +1246,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <td className="border border-black p-1">100 บาท</td>
               <td className="border border-black p-1">100 บาท</td>
               <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1 font-bold bg-gray-100">300 บาท</td>
+              <td className="border border-black p-1 font-bold bg-gray-100 print:bg-transparent">300 บาท</td>
             </tr>
             <tr>
               <td className="border border-black p-1 text-left pl-4 whitespace-normal leading-tight">
@@ -1256,7 +1256,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <td className="border border-black p-1 line-through">100 บาท</td>
               <td className="border border-black p-1">100 บาท</td>
               <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1 font-bold bg-gray-100">200 บาท</td>
+              <td className="border border-black p-1 font-bold bg-gray-100 print:bg-transparent">200 บาท</td>
             </tr>
           </tbody>
         </table>
@@ -1271,7 +1271,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         {/* Table 4 - Mixed Payment Example */}
         <table className="w-full border-collapse border border-black text-[12px] text-center mt-12 mb-12">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="bg-gray-200 print:bg-transparent">
               <th className="border border-black p-1 text-left"></th>
               <th className="border border-black p-1">งวดที่ 1<br />(ม.ค.)</th>
               <th className="border border-black p-1">งวดที่ 2<br />(ก.พ.)</th>
@@ -1292,7 +1292,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <td className="border border-black p-1 line-through">100 บาท</td>
               <td className="border border-black p-1">50 บาท</td>
               <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1 font-bold bg-gray-100">150 บาท</td>
+              <td className="border border-black p-1 font-bold bg-gray-100 print:bg-transparent">150 บาท</td>
             </tr>
           </tbody>
         </table>
@@ -1311,7 +1311,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         {/* Signature Box */}
         <div className="mt-10 grid grid-cols-2 gap-x-12 gap-y-12 px-4">
           {/* Lessor 1 */}
-          <div className="flex items-start">
+          <div className="flex justify-center">
             <div className="flex flex-col items-center w-[280px] space-y-8">
               {(data.lessor1Signatories || '').split(/\s*และ\s*/).map((sig, i) => (
                 <div key={i} className="flex flex-col items-center">
@@ -1330,7 +1330,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           {/* Lessee */}
-          <div className="flex items-start">
+          <div className="flex justify-center">
             <div className="flex flex-col items-center w-[280px] space-y-8">
               {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, i) => (
                 <div key={i} className="flex flex-col items-center">
@@ -1349,7 +1349,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           {/* Lessor 2 */}
-          <div className="flex items-start">
+          <div className="flex justify-center">
             <div className="flex flex-col items-center w-[280px] space-y-8">
               {(data.lessor2Signatories || '').split(/\s*และ\s*/).map((sig, i) => (
                 <div key={i} className="flex flex-col items-center">

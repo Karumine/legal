@@ -14,11 +14,20 @@ export default function ContractPreview({ data }: Props) {
   const formatNum = (numStr: string) => {
     const num = parseFloat(numStr.replace(/,/g, ''));
     if (isNaN(num)) return numStr;
-    return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const isWhole = num % 1 === 0;
+    return num.toLocaleString('en-US', { 
+      minimumFractionDigits: isWhole ? 0 : 2, 
+      maximumFractionDigits: isWhole ? 0 : 2 
+    });
+  };
+
+  const stripAddressPrefix = (addr: string) => {
+    if (!addr) return '';
+    return addr.replace(/^(เลขที่\s*|ที่อยู่:\s*เลขที่\s*|ที่อยู่\s*)/, '');
   };
 
   const Highlight = ({ children }: { children: React.ReactNode }) => (
-    <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
+    <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
       {children || '\u00A0'}
     </span>
   );
@@ -66,14 +75,14 @@ export default function ContractPreview({ data }: Props) {
         <div className="mb-4 pr-2 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(1)</span>
           <div className="flex-1 text-justify">
-            <b>บริษัท อาไจล์ แอสเซ็ทส์ จำกัด</b> ซึ่งเป็นบริษัทจำกัด จดทะเบียนจัดตั้งในประเทศไทย โดยมีสำนักงานใหญ่ตั้งอยู่เลขที่ 20 หมู่ที่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ เลขประจำตัวผู้เสียภาษี {formatThaiId('0115558012195')} (ซึ่งต่อไปในสัญญานี้จะเรียกว่า "ผู้รับค่าธรรมเนียม") และ
+            <b><Highlight>{data.companyName}</Highlight></b> (โดย <Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.companyAddress)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้รับค่าธรรมเนียม"</b>) และ
           </div>
         </div>
 
         <div className="mb-6 pr-2 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(2)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่ <Highlight>{data.customerAddress}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า "ผู้ชำระค่าธรรมเนียม")
+            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.customerAddress)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้ชำระค่าธรรมเนียม"</b>)
           </div>
         </div>
 
@@ -84,7 +93,7 @@ export default function ContractPreview({ data }: Props) {
         <div className="mb-4 flex gap-2 pr-2 text-justify">
           <span className="shrink-0 w-6 font-bold">1.</span>
           <div className="flex-1 text-justify">
-            ผู้รับค่าธรรมเนียม รับหน้าที่ในการจัดหาสินเชื่อตาม{itemSummaryText} ผ่านวิธีการคัดกรองความสามารถของผู้ชำระค่าธรรมเนียม ประเมินความเสี่ยง และจัดทำสัญญาต่างๆ ผู้ชำระค่าธรรมเนียมจึงตกลงและยินยอมชำระค่า Origination Fee (ค่าธรรมเนียม) เพื่อการทำสัญญาในอัตราร้อยละ <Highlight>{data.items[0]?.rate || '3'}</Highlight> ของวงเงินสินเชื่อ
+            ผู้รับค่าธรรมเนียม รับหน้าที่ในการจัดหาสินเชื่อตาม{itemSummaryText} ผ่านวิธีการคัดกรองความสามารถของผู้ชำระค่าธรรมเนียม ประเมินความเสี่ยง และจัดทำสัญญาต่างๆ ผู้ชำระค่าธรรมเนียมจึงตกลงและยินยอมชำระค่า Origination Fee (ค่าธรรมเนียม) เพื่อการทำสัญญาในอัตราร้อยละ <Highlight>{data.items[0]?.rate ? Number(data.items[0].rate) : 3}</Highlight> ของวงเงินสินเชื่อ
           </div>
         </div>
 

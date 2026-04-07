@@ -383,6 +383,10 @@ function App() {
   const buildFeeContractData = (): ContractData => ({
     contractNo: data.feePaymentData.contractNo,
     effectiveDate: data.feePaymentData.effectiveDate,
+    companyName: data.agileInfo.companyName,
+    companyAddress: data.agileInfo.address,
+    companyTaxId: data.agileInfo.taxId,
+    companyDirectors: data.agileInfo.directors,
     customerCompany: data.customerInfo.companyName,
     customerDirector: data.customerInfo.directors,
     customerAddress: data.customerInfo.address,

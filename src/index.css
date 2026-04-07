@@ -1,5 +1,35 @@
 @import "tailwindcss";
 
+/* Thai Distributed alignment - mimics Word's "Thai Distributed"
+   Distributes spacing evenly between characters instead of words,
+   which prevents excessive word-spacing in Thai text */
+.print-page {
+  text-align: justify;
+  text-justify: inter-character;
+  -webkit-text-justify: inter-character;
+  text-align-last: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Ensure centered elements and headers stay centered */
+.print-page .text-center,
+.print-page h1,
+.print-page h2,
+.print-page h3 {
+  text-align: center;
+  text-align-last: center;
+}
+
+.text-justify-reset {
+  text-align: left !important;
+  text-justify: none !important;
+  text-align-last: auto !important;
+  word-break: normal !important;
+  white-space: nowrap !important;
+}
+
+
 @media print {
 
   html,

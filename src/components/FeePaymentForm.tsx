@@ -10,8 +10,6 @@ interface Props {
   agreements: Agreement[];
 }
 
-
-
 export default function FeePaymentForm({ data, onChange, agreements }: Props) {
   const prevAgreementsRef = useRef<string[]>([]);
 
@@ -19,13 +17,13 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
   useEffect(() => {
     const agreementMap = new Map(agreements.map(a => [a.id, a]));
     const agreementIds = agreements.map(a => a.id);
-    
+
     // Track new agreements to auto-select them once
     const newIds = agreementIds.filter(id => !prevAgreementsRef.current.includes(id));
     prevAgreementsRef.current = agreementIds;
 
     let hasChanges = false;
-    
+
     // 1. Remove orphaned items (where agreementId exists but is no longer in agreements)
     let updatedItems = data.items.filter(item => {
       if (!item.agreementId) return true; // Keep manually added items
@@ -49,7 +47,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
         const netAmount = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
           ? parseFloat(agreementData.remainingAmount?.toString().replace(/,/g, '') || '0')
           : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
-        
+
         const rate = 3.0; // Default 3%
         const calculatedAmount = (netAmount * rate / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -70,14 +68,14 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
       if (!item.agreementId) return item;
       const agreement = agreementMap.get(item.agreementId);
       if (!agreement) return item;
-      
+
       const agreementData = agreement.data as any;
       const targetContractNo = agreementData.contractNo || '';
-      
+
       const netAmount = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
         ? parseFloat(agreementData.remainingAmount?.toString().replace(/,/g, '') || '0')
         : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
-      
+
       const rateNum = parseFloat(item.rate) || 0;
       const targetAmount = (netAmount * rateNum / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -117,7 +115,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
       const netAmount = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
         ? parseFloat(agreementData.remainingAmount?.toString().replace(/,/g, '') || '0')
         : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
-      
+
       const rate = 3.0; // Default 3%
       const calculatedAmount = (netAmount * rate / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -137,7 +135,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
     const updatedItems = data.items.map(item => {
       if (item.id === id) {
         const updatedItem = { ...item, [field]: value };
-        
+
         // Recalculate amount if rate changes
         if (field === 'rate' && item.agreementId) {
           const agreement = agreements.find(a => a.id === item.agreementId);
@@ -146,7 +144,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
             const netAmount = (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')
               ? parseFloat(agreementData.remainingAmount?.toString().replace(/,/g, '') || '0')
               : parseFloat((agreementData.loanAmount || agreementData.totalAmount || '0').toString().replace(/,/g, ''));
-            
+
             const rateNum = parseFloat(value) || 0;
             updatedItem.amount = (netAmount * rateNum / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
           }
@@ -155,7 +153,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
       }
       return item;
     });
-    
+
     onChange({ ...data, items: updatedItems });
   };
 

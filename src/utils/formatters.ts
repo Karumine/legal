@@ -6,7 +6,7 @@
 export const formatThaiId = (id: string): string => {
   if (!id) return '';
   const digits = id.replace(/\D/g, ''); // Remove non-digits
-  
+
   let formatted = '';
   if (digits.length > 0) {
     formatted += digits.substring(0, 1);
@@ -34,7 +34,7 @@ export const formatThaiId = (id: string): string => {
 export const formatPhoneNumber = (phone: string): string => {
   if (!phone) return '';
   const digits = phone.replace(/\D/g, '').substring(0, 10);
-  
+
   let formatted = '';
   if (digits.length > 0) {
     if (digits.startsWith('02')) {
@@ -70,7 +70,7 @@ export const formatCurrency = (value: string): string => {
   const cleanValue = value.replace(/,/g, '');
   if (cleanValue === '') return '';
   if (cleanValue === '.') return '.';
-  
+
   const parts = cleanValue.split('.');
   if (parts.length > 2) return value; // Invalid number with multiple dots
 
@@ -97,7 +97,7 @@ export const formatCurrency = (value: string): string => {
  */
 export const getAuthorizedSignatoryText = (company?: { entityType?: 'company' | 'partnership' }): string => {
   if (!company) return 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท';
-  return company.entityType === 'partnership' 
-    ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' 
-    : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท';
+  return company.entityType === 'partnership'
+    ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ'
+    : 'กรรมการผู้มีอำนาจลงนาม';
 };

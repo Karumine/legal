@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
+  <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
     {children || '\u00A0'}
   </span>
 );
@@ -57,9 +57,17 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
 
   const selectedAgreements = appData.agreements.filter(a => data.selectedAgreementIds.includes(a.id));
 
+  const CONTRACT_TYPE_EN: Record<string, string> = {
+    hirePurchase: ' (Hire Purchase)',
+    hirePurchaseBack: ' (Hire Purchase Back)',
+    loan: ' (Loan Agreement)',
+    od: '',
+  };
+
   const contractListText = selectedAgreements.map(a => {
     const label = CONTRACT_TYPE_LABELS[a.type as ContractType] || a.type;
-    return `${label} เลขที่ ${a.data.contractNo}`;
+    const enLabel = CONTRACT_TYPE_EN[a.type as string] || '';
+    return `${label}${enLabel} เลขที่ ${a.data.contractNo}`;
   }).join(' , ');
 
   const serviceFeeAdditionalPages = selectedAgreements.reduce((acc, a, idx) => {
@@ -107,7 +115,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     const renderColumn = (startIdx: number, endIdx: number) => (
       <table className="w-full border-collapse border border-black text-center text-[10px]">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-gray-100 print:bg-transparent">
             <th className="border border-black p-0.5 w-[35px]">ลำดับ</th>
             <th className="border border-black p-0.5 text-center">วันที่</th>
             <th className="border border-black p-0.5 text-center">Service Fee</th>
@@ -131,7 +139,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
             );
           })}
           {endIdx >= periods && periods > 0 && (
-            <tr className="font-bold bg-gray-50 h-[21px]">
+            <tr className="font-bold bg-gray-50 print:bg-transparent h-[21px]">
               <td className="border border-black p-0.5" colSpan={2}>รวม</td>
               <td className="border border-black p-0.5">{formatNum(totalFee)}</td>
               <td className="border border-black p-0.5">{formatNum(totalVat)}</td>
@@ -147,7 +155,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     const part1 = (
       <div className="space-y-3">
         <div className="font-normal text-justify">
-          2.{agreeIdx + 1} {label} เลขที่ <Highlight>{agreement.data.contractNo}</Highlight> โดยชำระงวดละ <Highlight>{formatNum(totalAmount)}</Highlight> บาท ({thaiBahtText(totalAmount)}) (รวมภาษีมูลค่าเพิ่ม)
+          2.{agreeIdx + 1} {label} เลขที่ <Highlight>{agreement.data.contractNo}</Highlight> โดยชำระค่า Service Fee ตามตารางที่แนบมาด้วย ดังนี้
         </div>
         <div className={periods > 1 ? "grid grid-cols-2 gap-4" : "w-1/2"}>
           <div>{renderColumn(1, rowsPage1Column1)}</div>
@@ -201,12 +209,12 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     return (
       <div key={agreement.id} className="space-y-3">
         <div className="font-bold text-justify">
-          1.{agreeIdx + 1}. {label} เลขที่ {agreement.data.contractNo} โดยชำระงวดละ {formatNum(totalAmount)} บาท ({thaiBahtText(totalAmount)}) (รวมภาษีมูลค่าเพิ่ม)
+          1.{agreeIdx + 1}. {label} เลขที่ <Highlight>{agreement.data.contractNo}</Highlight> โดยชำระค่า Origination Fee ตามตารางที่แนบมาด้วย ดังนี้
         </div>
 
         <table className="w-full border-collapse border border-black text-center text-[12px]">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-gray-100 print:bg-transparent">
               <th className="border border-black p-1 py-1.5 w-[80px]">ลำดับ</th>
               <th className="border border-black p-1 py-1.5">วันที่</th>
               <th className="border border-black p-1 py-1.5">Origination Fee</th>
@@ -227,7 +235,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
                 </tr>
               );
             })}
-            <tr className="font-bold bg-gray-50">
+            <tr className="font-bold bg-gray-50 print:bg-transparent">
               <td className="border border-black p-1" colSpan={2}>รวม</td>
               <td className="border border-black p-1">{formatNum(totalFee)}</td>
               <td className="border border-black p-1">{formatNum(totalVat)}</td>
@@ -254,7 +262,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
         </div>
 
         <div className="indent-10 mb-6 font-normal">
-          สัญญาจ้างบริการฉบับนี้ทำขึ้นระหว่าง <Highlight>{appData.tkInfo.companyName}</Highlight> โดย <Highlight>{appData.tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจ มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(appData.tkInfo.address)}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า “ผู้ว่าจ้าง” กับ <Highlight>{appData.agileInfo.companyName}</Highlight> โดย <Highlight>{appData.agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(appData.agileInfo.address)}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า “ผู้รับจ้าง” ทั้งสองฝ่ายได้ทำสัญญาจ้างบริการโดยมีข้อความดังต่อไปนี้
+          สัญญาจ้างบริการฉบับนี้ทำขึ้นระหว่าง <Highlight>{appData.tkInfo.companyName}</Highlight> โดย <Highlight>{appData.tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(appData.tkInfo.address)}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า <b>“ผู้ว่าจ้าง”</b> กับ <Highlight>{appData.agileInfo.companyName}</Highlight> โดย <Highlight>{appData.agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(appData.agileInfo.address)}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า <b>“ผู้รับจ้าง”</b> ทั้งสองฝ่ายได้ทำสัญญาจ้างบริการโดยมีข้อความดังต่อไปนี้
         </div>
 
         <div className="space-y-6 font-normal">
@@ -333,8 +341,8 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
                 <span>ผู้ว่าจ้าง</span>
               </div>
               <div className="mt-4 text-center text-sm">
-                <div>{appData.tkInfo.companyName}</div>
-                <div className="mt-2 text-sm">โดย {appData.tkInfo.directors}</div>
+                <div className="font-bold">{appData.tkInfo.companyName}</div>
+                <div className="mt-2">โดย {appData.tkInfo.directors}</div>
               </div>
             </div>
 
@@ -345,8 +353,8 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
                 <span>ผู้รับจ้าง</span>
               </div>
               <div className="mt-4 text-center text-sm">
-                <div>{appData.agileInfo.companyName}</div>
-                <div className="mt-2 text-sm">โดย {appData.agileInfo.directors}</div>
+                <div className="font-bold">{appData.agileInfo.companyName}</div>
+                <div className="mt-2">โดย {appData.agileInfo.directors}</div>
               </div>
             </div>
           </div>
@@ -388,7 +396,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
         </div>
 
         <div className="space-y-4 font-normal">
-          <div className="font-bold underline">1. การจัดหาลูกค้าและจัดทำสัญญาทางการเงิน</div>
+          <div className="font-bold">1. การจัดหาลูกค้าและจัดทำสัญญาทางการเงิน</div>
 
           <div className="grid grid-cols-[40px_1fr] gap-2 pl-4">
             <span>1.1.</span>
@@ -458,7 +466,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
 
         <div className="space-y-3 font-normal">
           <div className="space-y-1.5">
-            <div className="font-bold underline">2. การบริหารจัดการสัญญาทางการเงินให้แก่คู่สัญญา</div>
+            <div className="font-bold">2. การบริหารจัดการสัญญาทางการเงินให้แก่คู่สัญญา</div>
 
             <div className="grid grid-cols-[30px_1fr] gap-1 pl-4">
               <span>2.1.</span>
@@ -517,7 +525,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
           </div>
 
           <div className="space-y-1.5 pt-1">
-            <div className="font-bold underline">3. ข้อตกลงกระทำการของผู้รับจ้าง (“ผู้ให้บริการ”)</div>
+            <div className="font-bold">3. ข้อตกลงกระทำการของผู้รับจ้าง (“ผู้ให้บริการ”)</div>
 
             <div className="grid grid-cols-[30px_1fr] gap-1 pl-4">
               <span>3.1.</span>
@@ -566,18 +574,18 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
           {idx === 0 && (
             <div className="text-center font-bold mb-8">
               <div className="text-[14px]">เอกสารแนบท้ายหมายเลข 2</div>
-              <div className="text-[14px]">ประเภทและอัตราค่าตอบแทน (Fees)</div>
+              <div className="text-[14px]">ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ</div>
             </div>
           )}
 
           <div className="space-y-6 font-normal">
             {idx === 0 ? (
-              <div className="grid grid-cols-[30px_1fr] gap-2 pt-4">
-                <span className="font-bold underline text-[13px]">1.</span>
-                <div className="space-y-4">
-                  <span className="font-bold underline text-[13px]">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
-                  <div className="text-justify leading-loose text-[12px]">
-                    เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง ในอัตราร้อยละ {data.originationFeeRate} ({translateRateToThai(data.originationFeeRate)}) ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน โดยมีรายละเอียดการชำระเงินของแต่ละสัญญาทางการเงิน ดังนี้
+              <div className="flex gap-2 pt-4">
+                <span className="shrink-0 font-bold">1.</span>
+                <div className="text-justify">
+                  <span className="font-bold ">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
+                  <div className="mt-4 leading-loose">
+                    เนื่องจากผู้รับจ้างรับหน้าที่และให้บริการในการจัดหาลูกค้า ตามที่ระบุในข้อ 1. ของ <u><b>เอกสารแนบท้ายหมายเลข 1</b></u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้างเป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง ในอัตราร้อยละ {data.originationFeeRate} ({translateRateToThai(data.originationFeeRate)}) ของจำนวนเงินที่ผู้ว่าจ้างให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน โดยมีรายละเอียดการชำระเงินของแต่ละสัญญาทางการเงิน ดังนี้
                   </div>
                 </div>
               </div>
@@ -608,19 +616,19 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
         <div className="space-y-6 font-normal">
           <div className="space-y-4 text-[12px] leading-relaxed mb-6">
             <div className="text-justify">
-              ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันที่ธนาคารเปิดดำเนินการเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย ("วันทำการ") ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
+              ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันที่ธนาคารเปิดดำเนินการเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย <b>("วันทำการ") ให้ผู้ว่าจ้าง</b> ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
             </div>
             <div className="text-justify">
-              อนึ่ง ตลอดระยะเวลาของสัญญานี้ คู่สัญญาฝ่ายที่ 2 ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
+              อนึ่ง ตลอดระยะเวลาของสัญญานี้ <b>ผู้ว่าจ้าง</b> ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
             </div>
           </div>
 
-          <div className="pl-8 flex gap-2 pt-4">
-            <span className="shrink-0 font-bold underline">2.</span>
+          <div className="flex gap-2 pt-4">
+            <span className="shrink-0 font-bold">2.</span>
             <div className="text-justify">
-              <span className="font-bold underline">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
+              <span className="font-bold">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
               <div className="mt-4 leading-loose">
-                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent px-1">ในอัตราร้อยละ {data.serviceFeeRate} ({translateRateToThai(data.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent px-1">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
+                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent">ในอัตราร้อยละ {data.serviceFeeRate} ({translateRateToThai(data.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
               </div>
             </div>
           </div>
@@ -639,10 +647,10 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
         const renderClosingText = () => (
           <div className="mt-8 space-y-4 font-normal text-[12px]">
             <div className="text-justify">
-              ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันที่ธนาคารเปิดดำเนินการเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย ("วันทำการ") ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
+              ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันที่ธนาคารเปิดดำเนินการเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย <b>("วันทำการ") ผู้ว่าจ้าง</b> ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
             </div>
             <div className="text-justify">
-              อนึ่ง ตลอดระยะเวลาของสัญญานี้ คู่สัญญาฝ่ายที่ 2 ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
+              อนึ่ง ตลอดระยะเวลาของสัญญานี้ <b>ผู้ว่าจ้าง</b> ตกลงรับผิดชอบภาษีมูลค่าเพิ่ม (Value Added Tax) และอากรแสตมป์ (Stamp Duty) และมีสิทธิหักภาษีหักเงินได้ ณ ที่จ่าย (Withholding tax) ในอัตราเท่ากับร้อยละ 3 (สาม) ของค่าตอบแทนข้างต้นหรือตามอัตราอื่นใดที่กำหนดโดยหน่วยงานที่เกี่ยวข้องในระยะเวลานั้นๆ
             </div>
           </div>
         );

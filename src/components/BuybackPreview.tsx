@@ -22,13 +22,13 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
   const stripAddressPrefix = (addr: string) =>
     addr?.replace(/^เลขที่\s*/, '') || '';
   const Highlight = ({ children }: { children: React.ReactNode }) => (
-    <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
+    <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
       {children || '\u00A0'}
     </span>
   );
 
   const GreenHighlight = ({ children }: { children: React.ReactNode }) => (
-    <span className="bg-[#00FF00] font-bold print:bg-transparent px-1 rounded inline break-words">
+    <span className="bg-[#00FF00] font-bold print:bg-transparent rounded inline break-words">
       {children || '\u00A0'}
     </span>
   );
@@ -68,7 +68,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
   const renderPageFooter = (page: number) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
       <div className="flex flex-col">
-        <span className="bg-[#FFFF00] font-bold px-1 rounded shadow-sm">สัญญารับซื้อคืนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight></span>
+        <span className="bg-[#FFFF00] print:bg-transparent font-bold rounded shadow-sm">สัญญารับซื้อคืนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight></span>
       </div>
       <div className="text-gray-400">หน้า {page} จาก {totalPages}</div>
     </div>
@@ -316,12 +316,12 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             <table className="mx-auto border-collapse border border-black text-center min-w-[300px]">
               <thead>
                 <tr>
-                  <th className="border border-black px-4 py-1 bg-[#FFFF00] font-bold">ปี</th>
+                  <th className="border border-black px-4 py-1 bg-[#FFFF00] print:bg-transparent font-bold">ปี</th>
                   {(data.buybackMode === 'all' || data.buybackMode === 'newOnly') && (
-                    <th className="border border-black px-4 py-1 bg-[#FFFF00] font-bold">มือ 1</th>
+                    <th className="border border-black px-4 py-1 bg-[#FFFF00] print:bg-transparent font-bold">มือ 1</th>
                   )}
                   {(data.buybackMode === 'all' || data.buybackMode === 'usedOnly') && (
-                    <th className="border border-black px-4 py-1 bg-[#FFFF00] font-bold">มือ 2</th>
+                    <th className="border border-black px-4 py-1 bg-[#FFFF00] print:bg-transparent font-bold">มือ 2</th>
                   )}
                 </tr>
               </thead>
@@ -651,14 +651,14 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
 
             <div className="flex-1 flex flex-col justify-start space-y-16 pt-12 pb-16">
               {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, i) => (
-                <div key={i} className="flex flex-col items-start w-full pr-8">
+                <div key={i} className="flex flex-col items-center w-full pr-8">
                   <div className="border-b border-black w-full h-8"></div>
-                  <div className="mt-2 font-bold whitespace-nowrap">ชื่อ: {sig}</div>
+                  <div className="mt-2 font-bold whitespace-nowrap text-center">ชื่อ: {sig}</div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-12 space-y-1">
+            <div className="mt-12 text-center space-y-1">
               <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
               <div className="font-bold">{agileInfo.companyName}</div>
             </div>
@@ -681,14 +681,14 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
 
             <div className="flex-1 flex flex-col justify-start space-y-16 pt-12 pb-16">
               {(data.vendorDirectors || '').split(/\s*และ\s*/).map((sig, i) => (
-                <div key={i} className="flex flex-col items-start w-full pr-8">
+                <div key={i} className="flex flex-col items-center w-full pr-8">
                   <div className="border-b border-black w-full h-8"></div>
-                  <div className="mt-2 font-bold whitespace-nowrap">ชื่อ: <Highlight>{sig}</Highlight></div>
+                  <div className="mt-2 font-bold whitespace-nowrap text-center">ชื่อ: <Highlight>{sig}</Highlight></div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-12 space-y-1">
+            <div className="mt-12 text-center space-y-1">
               <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
               <div className="font-bold"><Highlight>{data.vendorName}</Highlight></div>
             </div>
@@ -719,14 +719,14 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
 
             <div className="flex-1 flex flex-col justify-start space-y-16 pt-12 pb-16">
               {(tkInfo.directors || '').split(/\s*และ\s*/).map((sig, i) => (
-                <div key={i} className="flex flex-col items-start w-full pr-8">
+                <div key={i} className="flex flex-col items-center w-full pr-8">
                   <div className="border-b border-black w-full h-8"></div>
-                  <div className="mt-2 font-bold whitespace-nowrap">ชื่อ: {sig}</div>
+                  <div className="mt-2 font-bold whitespace-nowrap text-center">ชื่อ: {sig}</div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-12 space-y-1">
+            <div className="mt-12 text-center space-y-1">
               <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
               <div className="font-bold">{tkInfo.companyName}</div>
             </div>

@@ -11,7 +11,7 @@ interface Props {
 
 export default function GuaranteePreview({ data }: Props) {
   const Highlight = ({ children }: { children: React.ReactNode }) => (
-    <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
+    <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
       {children || '\u00A0'}
     </span>
   );
@@ -445,12 +445,9 @@ export default function GuaranteePreview({ data }: Props) {
                     </div>
                   ))}
 
-                  <div className="pt-4">
-                    <div className="font-bold">ตำแหน่ง:</div>
-                    <div className="text-center">
-                      <div>กรรมการผู้มีอำนาจลงนาม</div>
-                      <div><Highlight>{data.lenderCompany}</Highlight></div>
-                    </div>
+                  <div className="pt-4 text-left">
+                    <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                    <div className="font-bold"><Highlight>{data.lenderCompany}</Highlight></div>
                   </div>
                 </div>
 
@@ -526,12 +523,9 @@ export default function GuaranteePreview({ data }: Props) {
                   </div>
                 ))}
 
-                <div className="pt-4">
-                  <div className="font-bold">ตำแหน่ง:</div>
-                  <div className="text-center">
-                    <div>กรรมการผู้มีอำนาจลงนาม</div>
-                    <div><Highlight>{data.borrowerCompany}</Highlight></div>
-                  </div>
+                <div className="pt-4 text-left">
+                  <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                  <div className="font-bold"><Highlight>{data.borrowerCompany}</Highlight></div>
                 </div>
               </div>
 

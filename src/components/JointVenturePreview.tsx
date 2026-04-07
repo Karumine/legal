@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-yellow-200 print:bg-transparent py-0.5 rounded inline break-words">
+  <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
     {children || '\u00A0'}
   </span>
 );
@@ -59,7 +59,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
     const renderColumn = (startIdx: number, endIdx: number) => (
       <table className="w-full border-collapse border border-black text-center text-[10px]">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-gray-100 print:bg-transparent">
             <th className="border border-black p-0.5 w-[35px]">ลำดับ</th>
             <th className="border border-black p-0.5 text-center">วันที่</th>
             <th className="border border-black p-0.5 text-center">Service Fee</th>
@@ -83,7 +83,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             );
           })}
           {endIdx >= periods && periods > 0 && (
-            <tr className="font-bold bg-gray-50 h-[21px]">
+            <tr className="font-bold bg-gray-50 print:bg-transparent h-[21px]">
               <td className="border border-black p-0.5" colSpan={2}>รวม</td>
               <td className="border border-black p-0.5">{formatNum(totalFee)}</td>
               <td className="border border-black p-0.5">{formatNum(totalVat)}</td>
@@ -147,7 +147,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
         <table className="w-full border-collapse border border-black text-center text-[12px]">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-gray-100 print:bg-transparent">
               <th className="border border-black p-1 py-1.5 w-[80px]">ลำดับ</th>
               <th className="border border-black p-1 py-1.5">วันที่</th>
               <th className="border border-black p-1 py-1.5">Origination Fee</th>
@@ -168,7 +168,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                 </tr>
               );
             })}
-            <tr className="font-bold bg-gray-50">
+            <tr className="font-bold bg-gray-50 print:bg-transparent">
               <td className="border border-black p-1" colSpan={2}>รวม</td>
               <td className="border border-black p-1">{formatNum(totalFee)}</td>
               <td className="border border-black p-1">{formatNum(totalVat)}</td>
@@ -197,16 +197,24 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
   const totalPagesCount = 13 + 3 + origFeePagesCount + 1 + selectedAgreements.length + serviceFeeAdditionalPages + 1 + 1;
 
+  const CONTRACT_TYPE_EN: Record<string, string> = {
+    hirePurchase: ' (Hire Purchase)',
+    hirePurchaseBack: ' (Hire Purchase Back)',
+    loan: ' (Loan Agreement)',
+    od: '',
+  };
+
   // Create the referenced agreements string
   const agreementRefs = selectedAgreements.map((a, idx) => {
     const label = CONTRACT_TYPE_LABELS[a.type as keyof typeof CONTRACT_TYPE_LABELS] || a.type;
+    const enLabel = CONTRACT_TYPE_EN[a.type as string] || '';
     const isLast = idx === selectedAgreements.length - 1;
     const isSecondToLast = idx === selectedAgreements.length - 2;
 
-    let text = `${label}เลขที่ ${a.data.contractNo}`;
+    let text = `${label}${enLabel} เลขที่ ${a.data.contractNo}`;
     if (selectedAgreements.length > 1) {
-      if (isSecondToLast) text += ' และ';
-      else if (!isLast) text += ' ';
+      if (isSecondToLast) text += ' และ ';
+      else if (!isLast) text += ', ';
     }
     return text;
   }).join('');
@@ -261,7 +269,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           <div className="flex gap-4">
             <span>ก.</span>
             <div className="flex-1">
-              คู่สัญญาทั้งสองฝ่ายได้ตกลงกันทำสัญญาค้าร่วมฉบับนี้ เพื่อเป็นการระดมทุนระหว่างคู่สัญญา เพื่อประโยชน์ในการร่วมกันเข้าทำ<Highlight>{agreementRefs}</Highlight> (“สัญญาทางการเงิน”) กับผู้กู้/ผู้เช่าซื้อ (“ลูกค้า”) เนื่องจากสัญญาทางการเงินดังกล่าวเป็นการให้การสนับสนุนทางการเงินแก่ลูกค้าในวงเงินที่สูง และเพื่อเป็นการกำหนดสิทธิและหน้าที่ of คู่สัญญาในการดำเนินการใด ๆ ที่เกี่ยวข้องกับสัญญาทางการเงิน
+              คู่สัญญาทั้งสองฝ่ายได้ตกลงกันทำสัญญาค้าร่วมฉบับนี้ เพื่อเป็นการระดมทุนระหว่างคู่สัญญา เพื่อประโยชน์ในการร่วมกันเข้าทำ <Highlight>{agreementRefs}</Highlight> (“สัญญาทางการเงิน”) กับผู้กู้/ผู้เช่าซื้อ (“ลูกค้า”) เนื่องจากสัญญาทางการเงินดังกล่าวเป็นการให้การสนับสนุนทางการเงินแก่ลูกค้าในวงเงินที่สูง และเพื่อเป็นการกำหนดสิทธิและหน้าที่ of คู่สัญญาในการดำเนินการใด ๆ ที่เกี่ยวข้องกับสัญญาทางการเงิน
             </div>
           </div>
           <div className="flex gap-4">
@@ -300,7 +308,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
             <table className="w-full border-collapse border border-black text-center mt-6">
               <thead>
-                <tr className="bg-gray-100">
+                <tr className="bg-gray-100 print:bg-transparent">
                   <th className="border border-black p-2 w-1/2">ผู้ค้าร่วม</th>
                   <th className="border border-black p-2">สัดส่วน (ร้อยละ)</th>
                 </tr>
@@ -891,7 +899,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                 </div>
               </div>
 
-              <div className="mt-12 text-center space-y-1">
+              <div className="mt-12 text-left space-y-1">
                 <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
                 <div className="font-bold">{agileInfo.companyName}</div>
               </div>
@@ -927,7 +935,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                 </div>
               </div>
 
-              <div className="mt-12 text-center space-y-1">
+              <div className="mt-12 text-left space-y-1">
                 <div className="font-bold">
                   <Highlight>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</Highlight>
                 </div>
@@ -1160,7 +1168,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             <div className="text-justify">
               <span className="font-bold underline">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
               <div className="mt-4 leading-loose">
-                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent px-1">ในอัตราร้อยละ {saData.serviceFeeRate} ({translateRateToThai(saData.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent px-1">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
+                เนื่องจากผู้รับจ้าง รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <u>เอกสารแนบท้ายหมายเลข 1</u> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้ผู้ว่าจ้าง เป็นผู้ชำระค่าตอบแทนให้แก่ผู้รับจ้าง <span className="bg-[#ccffcc] print:bg-transparent">ในอัตราร้อยละ {saData.serviceFeeRate} ({translateRateToThai(saData.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่ผู้ว่าจ้าง ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน <span className="bg-yellow-200 print:bg-transparent">โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้</span> รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
               </div>
             </div>
           </div>

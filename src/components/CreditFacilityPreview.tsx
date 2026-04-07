@@ -14,7 +14,7 @@ interface Props {
 }
 
 const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-yellow-100 px-1 rounded">
+  <span className="bg-yellow-100 px-1 rounded print:bg-transparent">
     {children || '\u00A0'}
   </span>
 );
@@ -145,7 +145,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
 
             <table className="w-full border-collapse border border-black text-center text-[12px] mb-6">
               <thead>
-                <tr className="bg-slate-50 uppercase font-bold text-black border-black">
+                <tr className="bg-slate-50 print:bg-transparent uppercase font-bold text-black border-black">
                   <th className="border border-black p-2 w-[40%]">ผู้ให้สินเชื่อ</th>
                   <th className="border border-black p-2 w-[30%]">สัดส่วน (ร้อยละ)</th>
                   <th className="border border-black p-2 w-[30%]">วงเงินสินเชื่อ (บาท)</th>
@@ -380,7 +380,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               </div>
               <table className="w-[60%] border-collapse border border-black text-center text-[12px] mb-6 mx-auto">
                 <thead>
-                  <tr className="bg-slate-50 uppercase font-bold text-black border-black">
+                  <tr className="bg-slate-50 print:bg-transparent uppercase font-bold text-black border-black">
                     <th className="border border-black p-2">งวดที่</th>
                     <th className="border border-black p-2">อัตราดอกเบี้ยร้อยละ</th>
                   </tr>
@@ -1303,7 +1303,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                     </div>
                   ))}
 
-                  <div className="pt-4">
+                  <div className="pt-4 text-left">
                     <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
                     <div className="mt-2"><Highlight>{agileInfo.companyName}</Highlight></div>
                   </div>
@@ -1342,7 +1342,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                     </div>
                   ))}
 
-                  <div className="pt-4">
+                  <div className="pt-4 text-left">
                     <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
                     <div className="mt-2">
                       <Highlight>{customerInfo.companyName}</Highlight>
@@ -1391,7 +1391,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                     </div>
                   ))}
 
-                  <div className="pt-4">
+                  <div className="pt-4 text-left">
                     <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
                     <div className="mt-2">
                       <Highlight>{tkInfo.companyName}</Highlight>
