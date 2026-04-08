@@ -64,13 +64,13 @@ export default function ContractPreview({ data }: Props) {
 
         <div className="text-center font-bold mb-6">
           <h2 className="text-xl">สัญญาชำระค่าธรรมเนียม</h2>
-          <div className="mt-2">
+          <div className="mt-2 text-[14px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
         </div>
 
         <div className="indent-10 mb-6">
-          สัญญาชำระค่าธรรมเนียม ("สัญญา") ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> <b>("วันที่สัญญามีผลใช้บังคับ")</b> ระหว่าง
+          สัญญาชำระค่าธรรมเนียม <b>("สัญญา")</b> ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> <b>("วันที่สัญญามีผลใช้บังคับ")</b> ระหว่าง
         </div>
 
         <div className="mb-4 pr-2 flex gap-2 text-justify">

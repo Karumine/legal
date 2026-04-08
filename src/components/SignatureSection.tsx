@@ -24,7 +24,7 @@ export default function SignatureSection({ data }: Props) {
                 <div key={idx} className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-full mb-1 h-8"></div>
                   <div className="w-full text-center">
-                    ( ชื่อ: <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span> )
+                    ( <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span> )
                   </div>
                 </div>
               ))}
@@ -66,7 +66,7 @@ export default function SignatureSection({ data }: Props) {
                 <div key={idx} className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-full mb-1 h-8"></div>
                   <div className="w-full text-center">
-                    ( ชื่อ: <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span> )
+                    ( <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span> )
                   </div>
                 </div>
               ))}

@@ -247,8 +247,8 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           </div>
         </div>
 
-        <div className="mb-4">
-          สัญญาค้าร่วม (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{agileInfo.companyName}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง
+        <div className="indent-10 mb-4">
+          สัญญาค้าร่วม <b>(“สัญญา”)</b> ฉบับนี้ ทำขึ้นที่ <Highlight>{agileInfo.companyName}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง
         </div>
         <div className="space-y-4 mb-6">
           <div className="flex gap-2 text-justify pr-2">
@@ -936,7 +936,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                 <div className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-4/5 h-8 mb-2"></div>
                   <div className="text-center w-full">
-                    ( ชื่อ: <Highlight>{tkInfo.directors.split(' และ ')[0]}</Highlight> )
+                    ( <Highlight>{tkInfo.directors.split(' และ ')[0]}</Highlight> )
                   </div>
                 </div>
 

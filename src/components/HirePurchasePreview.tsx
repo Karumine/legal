@@ -115,7 +115,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
   const renderCollateralAsset = (asset: CollateralAsset, idx: number) => (
     <div key={idx} className="flex gap-4">
-      <span>({getThaiIndex(idx)})</span>
+      <span className="w-8 shrink-0 whitespace-nowrap">({getThaiIndex(idx)})</span>
       <div className="flex-1">
         {asset.type === 'land' && asset.landDetails && (
           <div>
@@ -174,19 +174,19 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
         </div>
 
-        <div className="indent-10 mb-6 font-bold">
-          สัญญาเช่าซื้อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง:
+        <div className="indent-10 mb-6">
+          สัญญาเช่าซื้อ <b>(“สัญญา”)</b> ฉบับนี้ ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง:
         </div>
 
         <div className="space-y-4 mb-6">
           <div className="flex gap-2 text-justify pr-2">
-            <span className="shrink-0 w-4">1.</span>
+            <span className="shrink-0 w-8">1.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
-            <span className="shrink-0 w-4">2.</span>
+            <span className="shrink-0 w-8">2.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor2.address, data.lessor2.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
             </div>
@@ -195,7 +195,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
           </div>
           <div className="flex gap-2 text-justify pr-2">
-            <span className="shrink-0 w-4">3.</span>
+            <span className="shrink-0 w-8">3.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
             </div>
@@ -205,11 +205,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <div className="font-bold mb-4">โดยที่</div>
         <div className="space-y-3 mb-6">
           <div className="flex gap-4">
-            <span>ก.</span>
+            <span className="w-8 shrink-0 whitespace-nowrap">ก.</span>
             <div className="flex-1">ผู้เช่าซื้อมีความประสงค์จะเช่าซื้อทรัพย์สินจากผู้ให้เช่าซื้อ</div>
           </div>
           <div className="flex gap-4">
-            <span>ข.</span>
+            <span className="w-8 shrink-0 whitespace-nowrap">ข.</span>
             <div className="flex-1">ผู้ให้เช่าซื้อตกลงจะให้เช่าซื้อทรัพย์สินแก่ผู้เช่าซื้อตามเงื่อนไขและข้อกำหนดที่ระบุไว้ในสัญญาฉบับนี้</div>
           </div>
         </div>
@@ -223,11 +223,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
         <div className="space-y-4 mb-6 mt-4">
           <div className="flex gap-4">
-            <span>ค.</span>
+            <span className="w-8 shrink-0 whitespace-nowrap">ค.</span>
             <div className="flex-1">ผู้ให้เช่าซื้อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้เช่าซื้อในการติดต่อประสานงานกับผู้เช่าซื้อเพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ (<b>“ตัวแทนเช่าซื้อ”</b>)</div>
           </div>
           <div className="flex gap-4">
-            <span>ง.</span>
+            <span className="w-8 shrink-0 whitespace-nowrap">ง.</span>
             <div className="flex-1">ผู้เช่าซื้อและผู้ให้เช่าซื้อฝ่ายที่ 2 ตกลงจะให้ผู้ให้เช่าซื้อฝ่ายที่ 1 ทำหน้าที่เป็นตัวแทนเช่าซื้อ</div>
           </div>
         </div>
@@ -266,13 +266,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <div className="mb-6">
           <div className="font-bold mb-2">2. รายละเอียดของทรัพย์สินที่เช่าซื้อ</div>
           <div className="flex gap-4 mb-2">
-            <span>2.1</span>
+            <span className="w-8 shrink-0">2.1</span>
             <div className="flex-1">ผู้ให้เช่าซื้อตกลงให้เช่าซื้อ และผู้เช่าซื้อตกลงเช่าซื้อเครื่องจักรและอุปกรณ์ประกอบ ดังต่อไปนี้</div>
           </div>
           <div className="space-y-4 pl-8">
             {data.assets?.slice(0, firstPageMax).map((asset, idx) => (
               <div key={idx} className="flex gap-2">
-                <span className="">(2.1.{idx + 1})</span>
+                <span className="w-12 shrink-0 whitespace-nowrap">(2.1.{idx + 1})</span>
                 <div className="flex-1">
                   <span>
                     <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight> จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
@@ -302,7 +302,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 const globalIdx = firstPageMax + startIndex + idx;
                 return (
                   <div key={globalIdx} className="flex gap-2">
-                    <span className="">(2.1.{globalIdx + 1})</span>
+                    <span className="w-12 shrink-0 whitespace-nowrap">(2.1.{globalIdx + 1})</span>
                     <div className="flex-1">
                       <span>
                         <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight> จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
@@ -328,7 +328,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               const globalIdx = assetCount - integratedAssets.length + idx;
               return (
                 <div key={globalIdx} className="flex gap-2">
-                  <span className="">(2.1.{globalIdx + 1})</span>
+                  <span className="w-12 shrink-0 whitespace-nowrap">(2.1.{globalIdx + 1})</span>
                   <div className="flex-1">
                     <span>
                       <Highlight>{asset.name}</Highlight> <Highlight>{asset.description}</Highlight> จำนวน <Highlight>{asset.quantity}</Highlight> <Highlight>{asset.unit}</Highlight> ราคา <Highlight>{asset.totalAmount}</Highlight> บาท <Highlight>({thaiBahtText(asset.totalAmount)})</Highlight> <span>(รวมภาษีมูลค่าเพิ่ม)</span>
@@ -342,28 +342,28 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         )}
 
         <div className="mt-8 space-y-6">
-          <div className="indent-10">
+          <div>
             ซึ่งเครื่องจักรและอุปกรณ์ประกอบในข้อ 2.1 ต่อไปนี้จะเรียกรวมว่า (<b>“ทรัพย์สินที่เช่าซื้อ”</b>) และผู้ให้เช่าซื้อตกลงให้เช่าซื้อทรัพย์สินที่เช่าซื้อตามสัดส่วนกรรมสิทธิ์รวมที่กำหนดไว้ในข้อ 1. ของสัญญาฉบับนี้
           </div>
 
           <div className="flex gap-4">
-            <span className="">2.2</span>
+            <span className="w-8 shrink-0">2.2</span>
             <div className="flex-1">
               ผู้เช่าซื้อตกลงเช่าซื้อทรัพย์สินไปเพื่อใช้ในการประกอบกิจการเกี่ยวกับ <Highlight>{data.businessPurpose}</Highlight> เท่านั้น ณ สำนักงานใหญ่ <Highlight>{data.installationLocation}</Highlight> (“สถานที่ตั้ง”) แต่หากภายหลังจากที่เข้าทำสัญญาฉบับนี้ ในกรณีที่ผู้เช่าซื้อจำเป็นต้องทำการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อจากสถานที่ตั้งเดิมที่เคยแจ้งไว้ตามสัญญาฉบับนี้ ผู้เช่าซื้อจะต้องได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อก่อนการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อออกจากสถานที่ตั้งเดิม
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">2.3</span>
+            <span className="w-8 shrink-0">2.3</span>
             <div className="flex-1">
-              การเช่าซื้อทรัพย์สินที่เช่าซื้อ (<b>ตามสภาพ</b>) ผู้เช่าซื้อตกลง ยินยอม และรับทราบว่าผู้ให้เช่าซื้อ มิได้ให้คำรับรองแต่อย่างหนึ่งอย่างใดไม่ว่าทางตรง ทางอ้อม หรือโดยปริยาย เกี่ยวกับความเสียหายและความชำรุดบกพร่องของทรัพย์สินที่เช่าซื้อ และผู้ให้เช่าซื้อ มิได้ให้การรับประกันใด ๆ ในเรื่องสภาพของทรัพย์สินที่เช่าซื้อดังกล่าวและผู้เช่าซื้อตกลงจะไม่ใช้สิทธิเรียกร้องใด ๆ สำหรับความชำรุดบกพร่องของทรัพย์สินที่เช่าซื้อ หรือการถูกรอนสิทธิจากทรัพย์สินที่เช่าซื้อที่เกิดขึ้นหรือปรากฏขึ้นภายหลังจากวันที่ผู้เช่าซื้อรับมอบและตรวจสอบทรัพย์สินที่เช่าซื้อ รวมทั้งไม่มีสิทธิในการยึดหน่วงหรือระงับการชำระค่าเช่าซื้อหรือเงินอื่นใดที่จะต้องชำระให้แก่ผู้ให้เช่าซื้อจนกว่าจะครบถ้วนตามจำนวนที่ระบุในสัญญาฉบับนี้
+              การเช่าซื้อทรัพย์สินที่เช่าซื้อ (<b>ตามสภาพ</b>) ผู้เช่าซื้อตกลง ยินยอม และรับทราบว่าผู้ให้เช่าซื้อ <u>มิได้</u>ให้คำรับรองแต่อย่างหนึ่งอย่างใดไม่ว่าทางตรง ทางอ้อม หรือโดยปริยาย เกี่ยวกับความเสียหายและความชำรุดบกพร่องของทรัพย์สินที่เช่าซื้อ และผู้ให้เช่าซื้อ <u>มิได้</u>ให้การรับประกันใด ๆ ในเรื่องสภาพของทรัพย์สินที่เช่าซื้อดังกล่าวและผู้เช่าซื้อตกลงจะไม่ใช้สิทธิเรียกร้องใด ๆ สำหรับความชำรุดบกพร่องของทรัพย์สินที่เช่าซื้อ หรือการถูกรอนสิทธิจากทรัพย์สินที่เช่าซื้อที่เกิดขึ้นหรือปรากฏขึ้นภายหลังจากวันที่ผู้เช่าซื้อรับมอบและตรวจสอบทรัพย์สินที่เช่าซื้อ รวมทั้งไม่มีสิทธิในการยึดหน่วงหรือระงับการชำระค่าเช่าซื้อหรือเงินอื่นใดที่จะต้องชำระให้แก่ผู้ให้เช่าซื้อจนกว่าจะครบถ้วนตามจำนวนที่ระบุในสัญญาฉบับนี้
             </div>
           </div>
 
           <div className="pt-4">
             <div className="font-bold mb-4">3. ค่าเช่าซื้อ การชำระค่าเช่าซื้อ และค่าใช้จ่ายอื่น ๆ</div>
             <div className="flex gap-4">
-              <span className="">3.1</span>
+              <span className="w-8 shrink-0">3.1</span>
               <div className="flex-1">
                 <b>ผู้เช่าซื้อตกลงชำระค่าเช่าซื้อในราคา <Highlight>{totalAmountFormatted}</Highlight> บาท (<Highlight>{totalAmountThai}</Highlight>) (“ค่าเช่าซื้อ”)</b> ให้แก่ผู้ให้เช่าซื้อตามสัดส่วนที่ระบุในข้อ 1. และตามรายละเอียดที่ระบุในข้อ 3.2 ของสัญญาฉบับนี้
               </div>
@@ -378,14 +378,14 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
-            <span className="">3.2</span>
+            <span className="w-8 shrink-0">3.2</span>
             <div className="flex-1 space-y-4">
               <div className="underline">การชำระค่าเช่าซื้อ</div>
               {type !== 'hirePurchaseBack' && (
                 <div className="flex gap-4">
-                  <span className="">(ก)</span>
+                  <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
                   <div className="flex-1">
-                    ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก (Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
+                    ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก <b>(Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
                     {data.hasCustomGreenText !== false && data.customGreenText && (
                       <div className="mt-4">
                         <GreenHighlight>{data.customGreenText}</GreenHighlight>
@@ -395,26 +395,26 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 </div>
               )}
               <div className="flex gap-4">
-                <span className="">(ข)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ข)</span>
                 <div className="flex-1">
-                  ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อที่เหลือทั้งหมด (จำนวนค่าเช่าซื้อที่หักด้วยเงินดาวน์) ให้แก่ผู้ให้เช่าซื้อเป็นจำนวนเงินทั้งสิ้น <Highlight>{remainingAmount}</Highlight> บาท (<Highlight>{remainingAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) โดยคิดดอกเบี้ย<Highlight>{data.interestType}</Highlight> ที่อัตราร้อยละ <Highlight>{data.interestRate}</Highlight> ต่อปี โดยผ่อนชำระค่าเช่าซื้อเป็นงวด งวดละ <Highlight>{installmentAmountText}</Highlight> บาท (<Highlight>{installmentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) (โดยแต่ละงวดเรียกว่า “ค่างวดการเช่าซื้อ”)
+                  ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อที่เหลือทั้งหมด (จำนวนค่าเช่าซื้อที่หักด้วยเงินดาวน์) ให้แก่ผู้ให้เช่าซื้อ<b>เป็นจำนวนเงินทั้งสิ้น <Highlight>{remainingAmount}</Highlight> บาท (<Highlight>{remainingAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) โดยคิดดอกเบี้ย<Highlight>{data.interestType}</Highlight> ที่อัตราร้อยละ <Highlight>{data.interestRate}</Highlight> ต่อปี โดยผ่อนชำระค่าเช่าซื้อเป็นงวด งวดละ <Highlight>{installmentAmountText}</Highlight> บาท (<Highlight>{installmentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> (โดยแต่ละงวดเรียกว่า <b>“ค่างวดการเช่าซื้อ”</b>)
                 </div>
               </div>
               <div className="flex gap-4">
-                <span className="">(ค)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ค)</span>
                 <div className="flex-1">
-                  ผู้เช่าซื้อตกลงจะชำระค่างวดการเช่าซื้อให้แก่ผู้ให้เช่าซื้องวดแรก ภายในวันที่ <Highlight>{formatThaiDate(data.firstInstallmentDate)}</Highlight> และจะชำระค่าเช่าซื้อแต่ละงวดให้แก่ผู้ให้เช่าซื้อ ภายในวันที่ <Highlight>{data.paymentDay}</Highlight> ของทุกเดือน จนกว่าจะชำระค่างวดการเช่าซื้อให้แก่ผู้ให้เช่าซื้อครบถ้วนตามจำนวน รวมทั้งสิ้น <Highlight>{data.installments}</Highlight> งวด <b>โดยงวดสุดท้าย กำหนดชำระภายในวันที่ <Highlight>{formatThaiDate(data.lastInstallmentDate)}</Highlight></b>
+                  <b>ผู้เช่าซื้อตกลงจะชำระค่างวดการเช่าซื้อให้แก่ผู้ให้เช่าซื้อ งวดแรกภายในวันที่ <Highlight>{formatThaiDate(data.firstInstallmentDate)}</Highlight></b> และจะชำระค่าเช่าซื้อแต่ละงวดให้แก่ผู้ให้เช่าซื้อ ภายในวันที่ <Highlight>{data.paymentDay}</Highlight> ของทุกเดือน จนกว่าจะชำระค่างวดการเช่าซื้อให้แก่ผู้ให้เช่าซื้อครบถ้วนตามจำนวน รวมทั้งสิ้น <Highlight>{data.installments}</Highlight> งวด <b>โดยงวดสุดท้าย กำหนดชำระภายในวันที่ <Highlight>{formatThaiDate(data.lastInstallmentDate)}</Highlight></b>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">3.3</span>
+            <span className="w-8 shrink-0">3.3</span>
             <div className="flex-1 space-y-4">
               <div className="underline">ค่าอากรแสตมป์</div>
               <div>
-                ผู้เช่าซื้อมีหน้าที่ต้องชำระค่าอากรแสตมป์สำหรับการทำสัญญาฉบับนี้ <Highlight>เป็นจำนวนทั้งสิ้น {stampDutyText} บาท ({stampDutyThai})</Highlight> โดยตกลงชำระ ณ วันที่ทำสัญญาฉบับนี้ และมีหน้าที่ต้องชำระค่าภาษีอากรอื่น ๆ
+                <b>ผู้เช่าซื้อมีหน้าที่ต้องชำระค่าอากรแสตมป์สำหรับการทำสัญญาฉบับนี้ <Highlight>เป็นจำนวนทั้งสิ้น {stampDutyText} บาท ({stampDutyThai})</Highlight> โดยตกลงชำระ ณ วันที่ทำสัญญาฉบับนี้</b> และมีหน้าที่ต้องชำระค่าภาษีอากรอื่น ๆ
                 ในทำนองเดียวกันที่เกี่ยวข้องกับสัญญาฉบับนี้ แต่เพียงผู้เดียว (เว้นแต่ ค่าอากรแสตมป์ และค่าภาษีอากรอื่น ๆ ที่เกี่ยวข้องกับหนังสือโอนสิทธิ และ/หรือ หน้าที่ (หากมี)) และหากผู้ให้เช่าซื้อได้ชำระค่าอากรแสตมป์ หรือค่าภาษีอากรอื่น ๆ ไปแทนผู้เช่าซื้ออันเนื่องมาจากการที่ผู้เช่าซื้อชำระล่าช้าหรือไม่ชำระเงินค่าอากรดังกล่าว ผู้เช่าซื้อต้องชดใช้เงินจำนวนดังกล่าวคืนให้แก่ผู้ให้เช่าซื้อเต็มจำนวน
 
               </div>
@@ -429,7 +429,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
-            <span className="">3.4</span>
+            <span className="w-8 shrink-0">3.4</span>
             <div className="flex-1 space-y-2">
               <div className="underline">ค่าบริการอันเกี่ยวข้องกับสัญญาฉบับนี้</div>
               <div>
@@ -439,7 +439,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="flex gap-4">
-            <span className="">3.5</span>
+            <span className="w-8 shrink-0">3.5</span>
             <div className="flex-1 space-y-2">
               <div className="underline">ค่าธรรมเนียมการจดทะเบียนหลักประกัน หรือ กรรมสิทธิ์เครื่องจักร</div>
               <div>
@@ -518,19 +518,19 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="flex-1 space-y-4">
               <div className="underline">การใช้ทรัพย์สินที่เช่าซื้อ</div>
               <div className="flex gap-4">
-                <span className="">(ก)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
                 <div className="flex-1">
                   ผู้เช่าซื้อจะใช้สอยทรัพย์สินที่เช่าซื้อสำหรับตนเอง หรือในธุรกิจของผู้เช่าซื้อและ ณ สถานที่ที่ระบุไว้ในข้อ 2.2 ของสัญญาฉบับนี้เท่านั้น ด้วยความระมัดระวังในระดับวิญญูชนที่พึงใช้สำหรับทรัพย์สินประเภทนั้น ๆ ทั้งนี้ ห้ามมิให้ผู้เช่าซื้อใช้ และ/หรือ ยินยอมให้บุคคลอื่นใช้ ให้เช่าช่วง จำนำ จำนอง ยักย้าย เคลื่อนที่หรือกระทำการอย่างหนึ่งอย่างใดต่อทรัพย์สินที่เช่าซื้อโดยมิได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อทุกกรณี
                 </div>
               </div>
               <div className="flex gap-4">
-                <span className="">(ข)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ข)</span>
                 <div className="flex-1">
                   ผู้เช่าซื้อจะดูแลรักษาทรัพย์สินที่เช่าซื้อให้อยู่ในสภาพเรียบร้อยใช้งานได้ดี ในระดับวิญญูชนที่พึงใช้ในการดูแลรักษาทรัพย์สินของตน และจัดให้มีการซ่อมแซมที่ดี รวมถึงการบำรุงรักษาทรัพย์สินตามกำหนดระยะเวลาในการบำรุงรักษาด้วย ผู้เช่าซื้อตกลงแจ้งให้ตัวแทนผู้ให้เช่าซื้อทราบเป็นลายลักษณ์อักษรโดยทันที ถ้าทรัพย์สินไม่สามารถใช้งานได้ตามปกติ หรือเกิดความเสียหายหรือสูญหาย หรือถูกทำลาย หรือผู้เช่าซื้อไม่ได้ใช้ทรัพย์สินเป็นระยะเวลาเกินกว่า 30 (สามสิบ) วัน
                 </div>
               </div>
               <div className="flex gap-4">
-                <span className="">(ค)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ค)</span>
                 <div className="flex-1">
                   ผู้เช่าซื้อจะไม่เปลี่ยนแปลงสภาพ ดัดแปลง แก้ไข หรือต่อเติมทรัพย์สินที่เช่าซื้อ อุปกรณ์ หรืออะไหล่ หรือส่วนหนึ่งส่วนใดของทรัพย์สินด้วยประการใด ๆ เว้นแต่ได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อ
                 </div>
@@ -580,7 +580,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="flex-1 space-y-2">
               <div className="underline">การประกันภัยทรัพย์สิน</div>
               <div>
-                ตลอดอายุของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงจะทำประกันภัยทรัพย์สินกับบริษัทประกันภัยที่ผู้ให้เช่าซื้อยอมรับ<b>โดยเงื่อนไขการเอาประกันภัยจะเป็นไปตามที่ผู้ให้เช่าซื้อกำหนด และผู้เช่าซื้อตกลงชำระค่าเบี้ยประกันภัยเป็นรายปี จำนวนเงิน <Highlight>{insurancePremiumFormatted}</Highlight> บาท (<Highlight>{insurancePremiumThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> ด้วยวิธีการสั่งจ่ายเช็คล่วงหน้าในนามผู้ให้เช่าซื้อฝ่ายที่ 1 ให้ครบถ้วนตามจำนวนปีของอายุสัญญา และมอบไว้ให้แก่ผู้ให้เช่าซื้อฝ่ายที่ 1 ณ วันที่ทำสัญญาฉบับนี้ เพื่อให้ผู้ให้เช่าซื้อฝ่ายที่ 1 เป็นผู้ดำเนินการชำระเบี้ยประกันภัยให้แก่บริษัทประกันภัยแทนผู้เช่าซื้อ โดยหากเบี้ยประกันภัยที่จ่ายจริงต่ำกว่ายอดเงินตามเช็ค ผู้ให้เช่าซื้อจะคืนเงินส่วนเกินให้ แต่หากเบี้ยประกันภัยจริงสูงกว่ายอดเงินตามเช็ค ผู้เช่าซื้อตกลงชำระส่วนที่ขาดเพิ่มทันทีภายใน 7 วัน นับจากวันที่ได้รับแจ้ง ผู้ให้เช่าซื้อมีสิทธิเข้าชำระค่าเบี้ยประกันภัยแทนไปก่อนเพื่อให้ความคุ้มครองมีผลต่อเนื่อง และให้ถือว่าเงินจำนวนที่ได้สำรองจ่ายไปนั้นเป็นหนี้ที่มีอยู่จริงและบังคับได้ตามกฎหมายซึ่งผู้เช่าซื้อต้องมีหน้าที่ชำระคืนทันที ทั้งนี้ ในกรณีที่ธนาคารปฏิเสธการจ่ายเงินตามเช็คฉบับใดฉบับหนึ่ง ผู้เช่าซื้อตกลงให้ผู้ให้เช่าซื้อทรงไว้ซึ่งสิทธิในการดำเนินคดีกับผู้เช่าซื้อจนกว่าคดีจะถึงที่สุดในทางแพ่งและทางอาญาที่เกี่ยวข้องจากการที่ธนาคารปฏิเสธการจ่ายเงินตามเช็คดังกล่าว
+                ตลอดอายุของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงจะทำประกันภัยทรัพย์สินกับบริษัทประกันภัยที่ผู้ให้เช่าซื้อยอมรับ<b>โดยเงื่อนไขการเอาประกันภัยจะเป็นไปตามที่ผู้ให้เช่าซื้อกำหนด และผู้เช่าซื้อตกลงชำระค่าเบี้ยประกันภัยเป็นรายปี จำนวนเงิน <Highlight>{insurancePremiumFormatted}</Highlight> บาท (<Highlight>{insurancePremiumThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> ด้วยวิธีการสั่งจ่ายเช็คล่วงหน้าในนามผู้ให้เช่าซื้อฝ่ายที่ 1 ให้ครบถ้วนตามจำนวนปีของอายุสัญญา และมอบไว้ให้แก่ผู้ให้เช่าซื้อฝ่ายที่ 1 ณ วันที่ทำสัญญาฉบับนี้ เพื่อให้ผู้ให้เช่าซื้อฝ่ายที่ 1 เป็นผู้ดำเนินการชำระเบี้ยประกันภัยให้แก่บริษัทประกันภัยแทนผู้เช่าซื้อ โดยหากเบี้ยประกันภัยที่จ่ายจริงต่ำกว่ายอดเงินตามเช็ค ผู้ให้เช่าซื้อจะคืนเงินส่วนเกินให้ แต่หากเบี้ยประกันภัยที่จ่ายจริงสูงกว่ายอดเงินตามเช็ค ผู้เช่าซื้อตกลงชำระส่วนที่ขาดเพิ่มทันทีภายใน 7 วัน นับจากวันที่ได้รับแจ้ง ผู้ให้เช่าซื้อมีสิทธิเข้าชำระค่าเบี้ยประกันภัยแทนไปก่อนเพื่อให้ความคุ้มครองมีผลต่อเนื่อง และให้ถือว่าเงินจำนวนที่ได้สำรองจ่ายไปนั้นเป็นหนี้ที่มีอยู่จริงและบังคับได้ตามกฎหมายซึ่งผู้เช่าซื้อต้องมีหน้าที่ชำระคืนทันที ทั้งนี้ ในกรณีที่ธนาคารปฏิเสธการจ่ายเงินตามเช็คฉบับใดฉบับหนึ่ง ผู้เช่าซื้อตกลงให้ผู้ให้เช่าซื้อทรงไว้ซึ่งสิทธิในการดำเนินคดีกับผู้เช่าซื้อจนกว่าคดีจะถึงที่สุดในทางแพ่งและทางอาญาที่เกี่ยวข้องจากการที่ธนาคารปฏิเสธการจ่ายเงินตามเช็คดังกล่าว
               </div>
             </div>
           </div>
@@ -598,20 +598,20 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.1</span>
+            <span className="w-8 shrink-0">6.1</span>
             <div className="flex-1">
-              ในวันที่เข้าทำสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงจัดหาหลักประกันให้แก่ผู้ให้เช่าซื้อ โดยมูลค่าของหลักประกัน ภายใต้เงื่อนไขที่กำหนดในข้อ 6.4 ของสัญญาฉบับนี้จะต้องมีมูลค่ารวมกันไม่น้อยกว่า <Highlight>{collateralValueFormatted}</Highlight> บาท (<Highlight>{collateralValueThai}</Highlight>) หรือตามที่ผู้ให้เช่าซื้อเห็นสมควร
+              ในวันที่เข้าทำสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงจัดหาหลักประกันให้แก่ผู้ให้เช่าซื้อ โดยมูลค่าของหลักประกัน ภายใต้เงื่อนไขที่กำหนดในข้อ 6. ของสัญญาฉบับนี้จะต้องมีมูลค่ารวมกันไม่น้อยกว่า <Highlight>{collateralValueFormatted}</Highlight> บาท (<Highlight>{collateralValueThai}</Highlight>) หรือตามที่ผู้ให้เช่าซื้อเห็นสมควร
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.2</span>
+            <span className="w-8 shrink-0">6.2</span>
             <div className="flex-1 space-y-2">
               <div>ในการทำสัญญาเช่าซื้อฉบับนี้ ผู้เช่าซื้อได้ตกลงทำสัญญาค้ำประกันโดยบุคคลภายนอก (“บุคคลค้ำประกัน”)</div>
               <div className="flex gap-4">
-                <span>(ก)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
                 <div>
-                  <span className="font-bold">สัญญาค้ำประกันโดยบุคคลภายนอก:</span> <Highlight>{(guarantors || []).filter(g => g.guarantorName.trim()).map((g, i) => `${i + 1}. ${g.guarantorName}`).join(' ')}</Highlight> โดยผู้ค้ำประกันอาจเป็นบุคคลธรรมดาหรือนิติบุคคลซึ่งไม่มีหนี้สินล้นพ้นตัว มีแหล่งรายได้ชัดเจนและมีคุณสมบัติอื่น ๆ ตามที่ผู้ให้สินเชื่อกำหนด โดยผู้ให้สินเชื่อขอสงวนสิทธิในการใช้ดุลยพินิจฝ่ายเดียวในการพิจารณาคุณสมบัติในการเลือกบุคคลผู้เป็นผู้ค้ำประกัน เพื่อเข้าค้ำประกันแทนหรือเพิ่มเติม เพื่อค้ำประกันหนี้สินใด ๆ ภายใต้หรือที่เกี่ยวข้องกับสัญญาฉบับนี้
+                  <span className="font-bold">สัญญาค้ำประกันโดยบุคคลภายนอก:</span> <Highlight>{(guarantors || []).filter(g => g.guarantorName.trim()).map((g, i) => `${i + 1}. ${g.guarantorName}`).join(' ')}</Highlight> โดยผู้ค้ำประกันอาจเป็นบุคคลธรรมดาหรือนิติบุคคลซึ่งไม่มีหนี้สินล้นพ้นตัว มีแหล่งรายได้ชัดเจนและมีคุณสมบัติอื่น ๆ ตามที่ผู้ให้เช่าซื้อกำหนด โดยผู้ให้เช่าซื้อขอสงวนสิทธิในการใช้ดุลยพินิจฝ่ายเดียวในการพิจารณาคุณสมบัติในการเลือกบุคคลผู้เป็นผู้ค้ำประกัน เพื่อเข้าค้ำประกันแทนหรือเพิ่มเติม เพื่อค้ำประกันหนี้สินใด ๆ ภายใต้หรือที่เกี่ยวข้องกับสัญญาฉบับนี้
                 </div>
               </div>
             </div>
@@ -620,7 +620,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-4">
             <span className="">6.3</span>
             <div className="flex-1 space-y-4">
-              <div>ผู้เช่าซื้อตกลงว่าบรรดาทรัพย์สินดังต่อไปนี้ (“ทรัพย์สินหลักประกัน”) เป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า</div>
+              <div>ผู้เช่าซื้อตกลงว่าบรรดาทรัพย์สินดังต่อไปนี้ <b>(“ทรัพย์สินหลักประกัน”)</b> เป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า</div>
 
               {/* Strictly show first 3 items (ก, ข, ค) if the list continues elsewhere */}
               {(data.collateralAssets || []).slice(0, 3).map((asset, idx) => renderCollateralAsset(asset, idx))}
@@ -643,7 +643,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <PageHeader />
           <div className="mt-8 space-y-6">
             <div className="flex gap-4">
-              <span className="opacity-0">6.3</span>
+              <span className="opacity-0 w-8 shrink-0">6.3</span>
               <div className="flex-1 space-y-4">
                 {(data.collateralAssets || [])
                   .slice(3)
@@ -667,7 +667,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           {/* Integrated collateral overflow if exactly 4 items exist */}
           {isIntegratedCollateral && (
             <div className="flex gap-4 mb-4 pb-4 border-b border-gray-100 italic">
-              <span className="opacity-0">6.3</span>
+              <span className="opacity-0 w-8 shrink-0">6.3</span>
               <div className="flex-1 space-y-4">
                 {(data.collateralAssets || []).slice(3).map((asset, idx) => renderCollateralAsset(asset, idx + 3))}
                 <div className="mt-4 text-justify">
@@ -678,7 +678,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           )}
 
           <div className="flex gap-4">
-            <span className="">6.4</span>
+            <span className="w-8 shrink-0">6.4</span>
             <div className="flex-1 text-justify">
               คู่สัญญาทั้งสามฝ่ายตกลงว่าสิทธิของผู้ให้เช่าซื้อเหนือทรัพย์สินที่เป็นหลักประกันตามข้อ 6.3 ของสัญญาฉบับนี้ นั้น เป็นไปตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
             </div>
@@ -686,21 +686,21 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
 
           <div className="flex gap-4">
-            <span className="">6.5</span>
+            <span className="w-8 shrink-0">6.5</span>
             <div className="flex-1 text-justify">
-              ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ (“ผู้ประเมินมูลค่าทรัพย์สิน”) และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+              ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ <b>(“ผู้ประเมินมูลค่าทรัพย์สิน”)</b> และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.6</span>
+            <span className="w-8 shrink-0">6.6</span>
             <div className="flex-1 text-justify">
               ในกรณีที่ทรัพย์สินหลักประกันเป็นสิ่งปลูกสร้าง และ/หรือ เครื่องจักร ผู้เช่าซื้อตกลงจัดให้มีการทำประกันภัยทรัพย์สินบนสิ่งปลูกสร้าง และ/หรือ เครื่องจักรที่เป็นทรัพย์สินหลักประกันกับบริษัทประกันภัยที่ผู้ให้เช่าซื้อยอมรับ ตลอดระยะเวลาจนกว่าผู้เช่าซื้อจะชำระหนี้ตามสัญญาฉบับนี้จนครบถ้วน โดยผู้เช่าซื้อจะเป็นผู้ชำระเบี้ยประกันและค่าใช้จ่าย และให้ผู้ให้เช่าซื้อเป็นผู้รับผลประโยชน์ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.7</span>
+            <span className="w-8 shrink-0">6.7</span>
             <div className="flex-1 space-y-4">
               <div>
                 ผู้เช่าซื้อตกลงว่าหากมูลค่าทรัพย์สินหลักประกันลดลงน้อยกว่ามูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อจะนำทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกันจนครบมูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ภายใน 30 (สามสิบ) วัน นับจากวันที่ผู้เช่าซื้อได้รับแจ้งจากผู้ให้เช่าซื้อ
@@ -719,36 +719,36 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
-            <span className="">6.8</span>
+            <span className="w-8 shrink-0">6.8</span>
             <div className="flex-1">
-              โดยไม่คำนึงถึงข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงว่าในกรณีที่ผู้ให้เช่าซื้อได้ร้องขอให้ผู้ให้เช่าซื้อจัดหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อตกลงจัดหาทรัพย์สินเพิ่มเติมแก่ผู้ให้เช่าซื้อภายใน 1 (หนึ่ง) เดือน นับจากวันที่ผู้ให้เช่าซื้อร้องขอ ทั้งนี้ ผู้ให้เช่าซื้อตกลงว่าจะไม่ใช้สิทธิในข้อนี้โดยไม่มีเหตุอันสมควร
+              โดยไม่คำนึงถึงข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงว่าในกรณีที่ผู้ให้เช่าซื้อได้ร้องขอให้ผู้เช่าซื้อจัดหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อตกลงจัดหาทรัพย์สินเพิ่มเติมแก่ผู้ให้เช่าซื้อภายใน 1 (หนึ่ง) เดือน นับจากวันที่ผู้ให้เช่าซื้อร้องขอ ทั้งนี้ ผู้ให้เช่าซื้อตกลงว่าจะไม่ใช้สิทธิในข้อนี้โดยไม่มีเหตุอันสมควร
             </div>
           </div>
 
 
           <div className="flex gap-4">
-            <span className="">6.9</span>
+            <span className="w-8 shrink-0">6.9</span>
             <div className="flex-1">
               ผู้เช่าซื้อตกลงเป็นผู้รับผิดชอบในค่าธรรมเนียม ค่าจดทะเบียน ค่าภาษีอากร อากรแสตมป์ การประเมินมูลค่าทรัพย์สิน หรือค่าใช้จ่ายอื่นใดอันเกี่ยวข้องกับสัญญาหรือเอกสารที่เกี่ยวข้องกับทรัพย์สินหลักประกัน หรือการให้หลักประกันใด ๆ ตามที่ระบุในข้อ 6.3 ของสัญญาฉบับนี้ แต่เพียงผู้เดียว
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.10</span>
+            <span className="w-8 shrink-0">6.10</span>
             <div className="flex-1">
               ภายหลังจากที่ผู้เช่าซื้อได้ปฏิบัติหน้าที่ตามสัญญาฉบับนี้เสร็จสิ้นแล้ว ผู้ให้เช่าซื้อตกลงจะดำเนินการตามที่จำเป็นเพื่อส่งคืนหลักประกันดังกล่าวแก่ผู้เช่าซื้อ ภายใน 1 (หนึ่ง) เดือน หลังจากที่ผู้เช่าซื้อได้ปฏิบัติหน้าที่ตามสัญญานี้เสร็จสิ้นดังกล่าว
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.11</span>
+            <span className="w-8 shrink-0">6.11</span>
             <div className="flex-1">
               ในกรณีที่ผู้เช่าซื้อมีการนำทรัพย์สินหลักประกันมาเป็นหลักประกันให้แก่ผู้ให้เช่าซื้อ ถ้าผู้ให้เช่าซื้อบังคับหลักประกันไม่ว่าจะด้วยวิธีการขายทอดตลาดแล้ว ได้เงินสุทธิไม่พอชำระหนี้ หรือเอาทรัพย์สินหลักประกันหลุดเป็นสิทธิและราคาทรัพย์สินหลักประกันนั้นต่ำกว่าจำนวนหนี้อยู่เท่าใด ผู้เช่าซื้อยอมรับชำระหนี้ที่ขาดจำนวนนั้นจากทรัพย์สินอื่นของผู้เช่าซื้อให้แก่ผู้ให้เช่าซื้อตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ จนครบถ้วน
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.12</span>
+            <span className="w-8 shrink-0">6.12</span>
             <div className="flex-1">
               กรณีที่มีเครื่องจักรเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อยินยอมและอนุญาตให้ผู้ให้เช่าซื้อฝ่ายใดฝ่ายหนึ่ง ตัวแทนหรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งโดยชอบจากผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินหรือตัวแทนจำหน่ายทรัพย์สินที่ใช้เป็นหลักประกัน ให้มีสิทธิเข้าถึงข้อมูลการใช้งานทรัพย์สินหลักประกันทั้งในการใช้งานและการบำรุงรักษา เพื่อให้สามารถตรวจสอบประสิทธิภาพของทรัพย์สินหลักประกันได้ในระหว่างที่สัญญาฉบับนี้มีผลบังคับใช้ ทั้งนี้ ไม่ว่าการเข้าถึงข้อมูลดังกล่าวจะกระทำผ่านทางระบบออนไลน์ หรือทางการติดต่อสื่อสารใด ๆ ทั้งนี้ หากผู้ให้เช่าซื้อฝ่ายใดฝ่ายหนึ่งตรวจพบว่า ทรัพย์สินหรือส่วนหนึ่งส่วนใดของทรัพย์สินเสียหาย ชำรุด หรืออยู่ในสภาพที่ไม่เหมาะสมแก่การใช้งาน ตัวแทนเช่าซื้อจะดำเนินการแจ้งเป็นลายลักษณ์อักษรไปยังผู้เช่าซื้อเพื่อให้ทราบเรื่องดังกล่าว และให้ดำเนินการซ่อมแซมทรัพย์สินในการนี้ ผู้เช่าซื้อตกลงที่จะทำการซ่อมแซมทรัพย์สินหลักประกันให้กลับคืนสู่สภาพที่ดีและเหมาะสมในการใช้งานได้อย่างมีประสิทธิภาพ ภายในระยะเวลาที่ผู้ให้เช่าซื้อกำหนด โดยค่าใช้จ่ายทั้งหมดให้ถือเป็นหน้าที่ของผู้เช่าซื้อแต่เพียงผู้เดียว
             </div>
@@ -764,23 +764,23 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="space-y-4">
             <div className="font-bold">7. การโอนกรรมสิทธิ์ให้แก่ผู้เช่าซื้อ</div>
             <div className="indent-8 text-justify">
-              เมื่อผู้เช่าซื้อได้ชำระเงินค่าเช่าซื้อ และค่าใช้จ่าย ๆ ที่ผู้ให้เช่าซื้อเรียกเก็บได้ตามสัญญานี้จนครบถ้วน ผู้ให้เช่าซื้อตกลงให้กรรมสิทธิในทรัพย์สินที่เช่าซื้อเป็นของผู้เช่าซื้อทันที โดยผู้เช่าซื้อตกลงชำระค่าธรรมเนียมการโอน ทะเบียนทรัพย์สินที่เช่าซื้อให้แก่หน่วยงานราชการที่เกี่ยวข้อง (ถ้ามี) ภาษีมูลค่าเพิ่ม และภาษีอากรที่เกี่ยวข้อง
+              เมื่อผู้เช่าซื้อได้ชำระเงินค่าเช่าซื้อ และค่าใช้จ่ายอื่นๆ ที่ผู้ให้เช่าซื้อเรียกเก็บได้ตามสัญญานี้จนครบถ้วน ผู้ให้เช่าซื้อตกลงให้กรรมสิทธิ์ในทรัพย์สินที่เช่าซื้อเป็นของผู้เช่าซื้อทันที โดยผู้เช่าซื้อตกลงชำระค่าธรรมเนียมการโอน ทะเบียนทรัพย์สินที่เช่าซื้อให้แก่หน่วยงานราชการที่เกี่ยวข้อง (ถ้ามี) ภาษีมูลค่าเพิ่ม และภาษีอากรที่เกี่ยวข้อง
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="font-bold">8. การผิดนัดชำระหนี้</div>
             <div className="indent-8 text-justify">
-              หากผู้เช่าซื้อผิดนัดชำระหนี้ตามสัญญาฉบับนี้ ผู้เช่าซื้อยินยอมและตกลงชำระค่าปรับกรณีผิดนัดชำระเงินใด ๆ ตามสัญญาฉบับนี้ ในอัตราร้อยละ 18 (สิบแปด) ต่อปี บนจำนวนต้นเงินงวดที่ผิดนัดชำระ นับแต่วันที่ครบกำหนดชำระหนี้นั้น ๆ เป็นต้นไปจนถึงวันที่ผู้เช่าซื้อได้ชำระหนี้ค้างชำระจนครบถ้วน ทั้งนี้ อัตราดอกเบี้ยผิดนัดชำระหนี้ผู้เช่าซื้อตกลงยินยอมชำระอัตราดอกเบี้ยผิดนัดดังกล่าวตามที่ผู้ให้เช่าซื้อกำหนด และไม่ว่าอัตราดอกเบี้ยผิดนัดนั้นจะเพิ่มขึ้นหรือลดลง ผู้ให้เช่าซื้อทั้งสองฝ่ายไม่ต้องบอกกล่าวผู้เช่าซื้อล่วงหน้า และมิต้องได้รับความยินยอมจากผู้เช่าซื้อก่อน โดยคู่สัญญาทั้งสามฝ่ายถือปฏิบัติเช่นนี้ตลอดไป จนกว่าผู้เช่าซื้อจะชำระค่างวดเช่าซื้อแก่ผู้ให้เช่าซื้อจนครบถ้วน
+              หากผู้เช่าซื้อผิดนัดชำระหนี้ตามสัญญาฉบับนี้ <b>ผู้เช่าซื้อยินยอมและตกลงชำระค่าปรับกรณีผิดนัดชำระเงินใด ๆ ตามสัญญาฉบับนี้ ในอัตราร้อยละ 18 (สิบแปด) ต่อปี</b> บนจำนวนต้นเงินงวดที่ผิดนัดชำระ นับแต่วันที่ครบกำหนดชำระหนี้นั้น ๆ เป็นต้นไปจนถึงวันที่ผู้เช่าซื้อได้ชำระหนี้ค้างชำระจนครบถ้วน ทั้งนี้ อัตราดอกเบี้ยผิดนัดชำระหนี้ผู้เช่าซื้อตกลงยินยอมชำระอัตราดอกเบี้ยผิดนัดดังกล่าวตามที่ผู้ให้เช่าซื้อกำหนด และไม่ว่าอัตราดอกเบี้ยผิดนัดนั้นจะเพิ่มขึ้นหรือลดลง ผู้ให้เช่าซื้อทั้งสองฝ่ายไม่ต้องบอกกล่าวผู้เช่าซื้อล่วงหน้า และมิต้องได้รับความยินยอมจากผู้เช่าซื้อก่อน โดยคู่สัญญาทั้งสามฝ่ายถือปฏิบัติเช่นนี้ตลอดไป จนกว่าผู้เช่าซื้อจะชำระค่างวดเช่าซื้อแก่ผู้ให้เช่าซื้อจนครบถ้วน
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="font-bold">9. การบอกเลิกสัญญา</div>
             <div className="flex gap-4">
-              <span className="">9.1.</span>
+              <span className="w-8 shrink-0">9.1.</span>
               <div className="flex-1 text-justify">
-                กรณีหากผู้เช่าซื้อผิดนัดไม่ชำระค่าเช่าซื้องวดหนึ่งงวดใด หรือไม่ปฏิบัติตามเงื่อนไขและรายละเอียดที่กำหนดไว้ในสัญญาฉบับนี้ และ/หรือ สัญญาและเอกสารอื่นใดที่เกี่ยวข้องกับทรัพย์สินหลักประกันหรือไม่ปฏิบัติตามข้อกำหนดของผู้ให้เช่าซื้อทั้งหมดแต่เพียงบางส่วน เป็นเหตุให้ผู้ให้เช่าซื้อได้รับความเสียหาย ผู้ให้เช่าซื้อมีสิทธิบอกเลิกสัญญาได้ ภายใต้บทบัญญัติตามกฎหมาย โดยเมื่อมีการเลิกสัญญาฉบับนี้ ผู้ให้เช่าซื้อตกลงว่าบรรดาเงินที่ผู้เช่าซื้อได้ชำระมาแล้วแต่ก่อน ให้รับเป็นของผู้ให้เช่าซื้อ และผู้ให้เช่าซื้อมีสิทธิที่จะกลับเข้าครองทรัพย์สินที่เช่าซื้อได้
+                กรณีหากผู้เช่าซื้อผิดนัดไม่ชำระค่าเช่าซื้องวดหนึ่งงวดใด หรือไม่ปฏิบัติตามเงื่อนไขและรายละเอียดที่กำหนดไว้ในสัญญาฉบับนี้ และ/หรือ สัญญาและเอกสารอื่นใดที่เกี่ยวข้องกับทรัพย์สินหลักประกันหรือไม่ปฏิบัติตามข้อกำหนดของผู้ให้เช่าซื้อทั้งหมดหรือแต่เพียงบางส่วน เป็นเหตุให้ผู้ให้เช่าซื้อได้รับความเสียหาย ผู้ให้เช่าซื้อมีสิทธิบอกเลิกสัญญาได้ ภายใต้บทบัญญัติตามกฎหมาย โดยเมื่อมีการเลิกสัญญาฉบับนี้ ผู้ให้เช่าซื้อตกลงว่าบรรดาเงินที่ผู้เช่าซื้อได้ชำระมาแล้วแต่ก่อนให้ริบเป็นของผู้ให้เช่าซื้อ และผู้ให้เช่าซื้อมีสิทธิที่จะกลับเข้าครองทรัพย์สินที่เช่าซื้อได้
               </div>
             </div>
           </div>
@@ -793,7 +793,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
-            <span className="">9.2.</span>
+            <span className="w-8 shrink-0">9.2.</span>
             <div className="flex-1 text-justify">
               ผู้ให้เช่าซื้อทั้งสองฝ่ายมีสิทธิได้รับชดใช้บรรดาค่าใช้จ่าย ค่าฤชาธรรมเนียม หรือค่าธรรมเนียมทั้งปวงที่เกี่ยวข้องกับการดำเนินการทางกฎหมาย การทวงถาม การค้นหา ติดตามตัวผู้เช่าซื้อ หรือทรัพย์สิน และการติดตามเอาทรัพย์สินคืนมาจากการครอบครองของผู้เช่าซื้อ หรือบุคคล ห้างร้าน หรือบริษัทอื่นใด
             </div>
@@ -807,25 +807,25 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
             <div className="space-y-4 pt-4">
               <div className="flex gap-4">
-                <span>(ก)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
                 <div className="flex-1">ในกรณีที่ส่งโดยบุคคล (By Hand) ให้มีผลเมื่อได้จัดส่งหนังสือบอกกล่าว</div>
               </div>
               <div className="flex gap-4">
-                <span>(ข)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ข)</span>
                 <div className="flex-1">ในกรณีที่ส่งทางไปรษณีย์ลงทะเบียน ให้มีผลภายในวันที่กำหนดในใบตอบรับทางไปรษณีย์หรือใบรับที่เป็นลายลักษณ์อักษรอื่น</div>
               </div>
               <div className="flex gap-4">
-                <span>(ค)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ค)</span>
                 <div className="flex-1">ในกรณีที่ส่งทางโทรสาร ให้มีผลเมื่อครบกำหนด 1 (หนึ่ง) วัน นับแต่วันที่ส่งหนังสือบอกกล่าว</div>
               </div>
               <div className="flex gap-4">
-                <span>(ง)</span>
+                <span className="w-8 shrink-0 whitespace-nowrap">(ง)</span>
                 <div className="flex-1">ในกรณีที่ส่งทางอิเล็กทรอนิกส์ ให้มีผลในวันถัดไป</div>
               </div>
             </div>
 
             <div className="indent-8 text-justify mt-6">
-              หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่ว่าในการส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มีผลนั้นมิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้ว ในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป
+              หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่หากในการส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้ว ในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป
             </div>
 
             <div className="indent-8 text-justify">

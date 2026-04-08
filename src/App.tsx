@@ -53,6 +53,34 @@ function App() {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Preview scroll persistence
+  const scrollPositionsRef = useRef<Record<string, number>>({});
+  const currentTabRef = useRef(activePreview);
+  const isInternalScrollRef = useRef(false);
+
+  // Sync currentTabRef for the scroll listener
+  useEffect(() => {
+    currentTabRef.current = activePreview;
+  }, [activePreview]);
+
+  // Scroll Observer: Capture scroll position in real-time
+  useEffect(() => {
+    const previewPanel = document.getElementById('preview-panel');
+    if (!previewPanel) return;
+
+    const handleScroll = () => {
+      // Don't save if this scroll was triggered by our restoration or section sync
+      if (isInternalScrollRef.current) return;
+      
+      if (currentTabRef.current) {
+        scrollPositionsRef.current[currentTabRef.current] = previewPanel.scrollTop;
+      }
+    };
+
+    previewPanel.addEventListener('scroll', handleScroll, { passive: true });
+    return () => previewPanel.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Preview scroll sync: switches to the correct preview tab and scrolls to the matching section
   const lastFocusSectionRef = useRef<string>('');
   const scrollToPreviewSection = useCallback((sectionId: string, previewTabKey?: string) => {
@@ -61,7 +89,8 @@ function App() {
     lastFocusSectionRef.current = key;
 
     // Switch to the correct preview tab if provided
-    if (previewTabKey) {
+    if (previewTabKey && previewTabKey !== activePreview) {
+      isInternalScrollRef.current = true; // Block restoration scroll
       setActivePreview(previewTabKey);
     }
 
@@ -74,6 +103,7 @@ function App() {
         const previewPanel = document.getElementById('preview-panel');
         const target = previewPanel?.querySelector(`[data-section-id="${sectionId}"]`);
         if (target && previewPanel) {
+          isInternalScrollRef.current = true;
           const panelRect = previewPanel.getBoundingClientRect();
           const targetRect = target.getBoundingClientRect();
           const scrollOffset = targetRect.top - panelRect.top + previewPanel.scrollTop - 80;
@@ -82,10 +112,15 @@ function App() {
           // Brief highlight flash on the target element
           target.classList.add('preview-highlight-flash');
           setTimeout(() => target.classList.remove('preview-highlight-flash'), 1500);
+          
+          // Reset internal scroll flag after smooth animation finishes
+          setTimeout(() => { isInternalScrollRef.current = false; }, 1000);
+        } else {
+          isInternalScrollRef.current = false;
         }
       }, 50);
     });
-  }, []);
+  }, [activePreview]); // Added activePreview to deps as we reference it
 
   // ── Resize handle logic ──
   const handleResizeStart = useCallback((e: React.MouseEvent) => {
@@ -129,6 +164,31 @@ function App() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Scroll Restoration: Restore position when tab changes manually
+  useEffect(() => {
+    // If this change was triggered by scrollToPreviewSection, skip restoration
+    if (isInternalScrollRef.current) {
+      // isInternalScrollRef might be reset by the section scroll timer, 
+      // but we need to ensure it's not permanently stuck if sectionId was empty
+      return;
+    }
+
+    const lastPos = scrollPositionsRef.current[activePreview] || 0;
+    
+    // Tiny delay to allow Content components to mount and get their layout height
+    const timer = setTimeout(() => {
+      const previewPanel = document.getElementById('preview-panel');
+      if (previewPanel) {
+        isInternalScrollRef.current = true;
+        previewPanel.scrollTo({ top: lastPos });
+        // Release the flag quickly for restoration as it's an instant scroll
+        setTimeout(() => { isInternalScrollRef.current = false; }, 50);
+      }
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [activePreview]);
 
   const handlePrint = () => {
     const rightPanel = document.getElementById('preview-panel');
