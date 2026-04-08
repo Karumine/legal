@@ -24,7 +24,7 @@ export default function SignatureSection({ data }: Props) {
                 <div key={idx} className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-full mb-1 h-8"></div>
                   <div className="w-full text-center">
-                    ชื่อ: <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span>
+                    ( ชื่อ: <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span> )
                   </div>
                 </div>
               ))}
@@ -33,16 +33,20 @@ export default function SignatureSection({ data }: Props) {
             <div className="mt-8 space-y-1 text-left px-0">
               <div className="font-bold whitespace-nowrap">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
               <div className="font-bold">
-                 <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">บริษัท อาไจล์ แอสเซ็ทส์ จำกัด</span>
+                <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">บริษัท อาไจล์ แอสเซ็ทส์ จำกัด</span>
               </div>
             </div>
           </div>
 
           <div className="mt-12">
             <div className="font-bold mb-8 text-left">พยาน:</div>
-            <div className="flex flex-col items-center max-w-[250px]">
-               <div className="border-b border-black w-full mb-1 h-8"></div>
-               <div className="text-center w-full">( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )</div>
+            <div className="flex items-end w-full max-w-[280px]">
+              <span className="text-[14px] leading-none"></span>
+              <div className="flex-1 border-b border-black mx-2 mb-1"></div>
+              <span className="text-[14px] leading-none"></span>
+            </div>
+            <div className="text-center mt-2 w-full max-w-[280px] text-[12px]">
+              ( __________________________________________ )
             </div>
           </div>
         </div>
@@ -62,7 +66,7 @@ export default function SignatureSection({ data }: Props) {
                 <div key={idx} className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-full mb-1 h-8"></div>
                   <div className="w-full text-center">
-                    ชื่อ: <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span>
+                    ( ชื่อ: <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{dir.trim() || '\u00A0'}</span> )
                   </div>
                 </div>
               ))}
@@ -71,16 +75,20 @@ export default function SignatureSection({ data }: Props) {
             <div className="mt-8 space-y-1 text-left px-0">
               <div className="font-bold whitespace-nowrap">ตำแหน่ง: {getAuthorizedSignatoryText({ entityType: data.entityType })}</div>
               <div className="font-bold">
-                 <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{data.customerCompany || '\u00A0'}</span>
+                <span className="bg-yellow-200 print:bg-transparent leading-relaxed rounded px-1">{data.customerCompany || '\u00A0'}</span>
               </div>
             </div>
           </div>
 
           <div className="mt-12">
             <div className="font-bold mb-8 text-left">พยาน:</div>
-            <div className="flex flex-col items-center max-w-[250px]">
-               <div className="border-b border-black w-full mb-1 h-8"></div>
-               <div className="text-center w-full">( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )</div>
+            <div className="flex items-end w-full max-w-[280px]">
+              <span className="text-[14px] leading-none"></span>
+              <div className="flex-1 border-b border-black mx-2 mb-1"></div>
+              <span className="text-[14px] leading-none"></span>
+            </div>
+            <div className="text-center mt-2 w-full max-w-[280px] text-[12px]">
+              ( __________________________________________ )
             </div>
           </div>
         </div>

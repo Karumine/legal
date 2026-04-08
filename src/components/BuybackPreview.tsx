@@ -3,6 +3,7 @@ import type { BuybackData, CompanyInfo, HirePurchaseData, ContractType } from '.
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatThaiDate } from '../utils/thaiDate';
 import { formatThaiId } from '../utils/formatters';
+import { formatAddressWithPostalCode } from '../utils/address';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 
 interface Props {
@@ -102,13 +103,13 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4 font-bold">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท ) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(agileInfo.address)}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
+              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท ) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4 font-bold">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(tkInfo.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 2"</b>)
+              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 2"</b>)
             </div>
           </div>
           <div className="pl-6 italic text-gray-700">
@@ -117,7 +118,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div id="section-vendor" className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4 font-bold">3.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย<Highlight>{data.vendorDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานใหญ่จดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.vendorAddress)}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+              <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย<Highlight>{data.vendorDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานใหญ่จดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
             </div>
           </div>
           <div className="pl-6 italic text-gray-700">

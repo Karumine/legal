@@ -2,11 +2,13 @@ export interface GuarantorInfo {
   name: string;
   idCard: string;
   address: string;
+  postalCode?: string;
   phone: string;
   isMarried: boolean;
   spouseName: string;
   spouseIdCard: string;
   spouseAddress: string;
+  spousePostalCode?: string;
   type?: 'person' | 'company' | 'partnership';
   directors?: string;
 }
@@ -19,6 +21,7 @@ export interface GuaranteeData {
   lenderCompany: string; // บริษัท อาไจล์ แอสเซ็ทส์ จำกัด
   lenderDirectors: string; // นายพรรษา เริงพิทยา และ นายกอบพงษ์ ตรีสุขี
   lenderAddress: string; // ที่ตั้ง ...
+  lenderPostalCode?: string;
   lenderTaxId: string; // 0115558012195
   lenderPhone: string;
 
@@ -26,6 +29,7 @@ export interface GuaranteeData {
   borrowerCompany: string; // บริษัท ฐิติกร จำกัด (มหาชน)
   borrowerDirectors: string; // นางสาวปฐมา พรประภา และนายประพล พรประภา
   borrowerAddress: string;
+  borrowerPostalCode?: string;
   borrowerTaxId: string;
   borrowerPhone: string;
 

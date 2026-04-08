@@ -1,10 +1,10 @@
 import PageHeader from './PageHeader';
 import type { JointVentureData, CompanyInfo, Agreement, AppData, ContractType } from '../types/app';
 import { formatThaiDate, formatThaiDateShort, addMonths } from '../utils/thaiDate';
-import { thaiBahtText } from '../utils/thaiBahtText';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiNumberText } from '../utils/thaiNumberText';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
+import { formatAddressWithPostalCode } from '../utils/address';
 
 interface Props {
   data: JointVentureData;
@@ -254,13 +254,13 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(agileInfo.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 1”</b>) และ
+              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 1”</b>) และ
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(tkInfo.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 2”</b>)
+              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 2”</b>)
             </div>
           </div>
         </div>
@@ -786,7 +786,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             <div className="flex flex-col gap-2">
               <span className="font-bold">คู่สัญญาฝ่ายที่ 1:</span>
               <div className="font-bold">{agileInfo.companyName}</div>
-              <div>เลขที่ {stripAddressPrefix(agileInfo.address)}</div>
+              <div>เลขที่ {stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</div>
               <div>โทรศัพท์ : <Highlight>{formatPhoneNumber(agileInfo.phone)}</Highlight></div>
               <div>จดหมายอิเล็กทรอนิกส์ (E-mail) : <Highlight>{agileInfo.email}</Highlight></div>
               <div>ผู้ติดต่อ : <Highlight>{agileInfo.contactPerson}</Highlight></div>
@@ -795,7 +795,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             <div className="flex flex-col gap-2">
               <span className="font-bold">คู่สัญญาฝ่ายที่ 2:</span>
               <div className="font-bold">{tkInfo.companyName}</div>
-              <div>เลขที่ {stripAddressPrefix(tkInfo.address)}</div>
+              <div>เลขที่ {stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</div>
               <div>โทรศัพท์ : <Highlight>{formatPhoneNumber(tkInfo.phone)}</Highlight></div>
               <div>จดหมายอิเล็กทรอนิกส์ (E-mail) : <Highlight>{tkInfo.email}</Highlight></div>
               <div>ผู้ติดต่อ : <Highlight>{tkInfo.contactPerson}</Highlight></div>
@@ -889,14 +889,18 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               </div>
 
               <div className="space-y-16 mt-8">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-4/5 h-8 mb-2"></div>
-                  <div className="text-center">ชื่อ: {agileInfo.directors.split(' และ ')[0]}</div>
+                  <div className="text-center w-full">
+                    ( {agileInfo.directors.split(' และ ')[0]} )
+                  </div>
                 </div>
 
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-4/5 h-8 mb-2"></div>
-                  <div className="text-center">ชื่อ: {agileInfo.directors.split(' และ ')[1]}</div>
+                  <div className="text-center w-full">
+                    ( {agileInfo.directors.split(' และ ')[1]} )
+                  </div>
                 </div>
               </div>
 
@@ -906,10 +910,14 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               </div>
 
               <div className="mt-auto pt-16">
-                <div className="font-bold mb-8">พยาน:</div>
-                <div className="flex flex-col items-center">
-                  <div className="border-b border-black w-4/5 mb-2 h-8"></div>
-                  <div className="text-center">( <span className="inline-block w-40"></span> )</div>
+                <div className="font-bold mb-8 text-left">พยาน:</div>
+                <div className="flex items-end w-full px-4">
+                  <span className="text-[14px] leading-none"></span>
+                  <div className="flex-1 border-b border-black mx-2 mb-1"></div>
+                  <span className="text-[14px] leading-none"></span>
+                </div>
+                <div className="text-center mt-2 w-full text-[12px]">
+                  ( __________________________________________ )
                 </div>
               </div>
             </div>
@@ -925,14 +933,18 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               </div>
 
               <div className="space-y-16 mt-8">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-4/5 h-8 mb-2"></div>
-                  <div className="text-center">ชื่อ: <Highlight>{tkInfo.directors.split(' และ ')[0]}</Highlight></div>
+                  <div className="text-center w-full">
+                    ( ชื่อ: <Highlight>{tkInfo.directors.split(' และ ')[0]}</Highlight> )
+                  </div>
                 </div>
 
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center w-full">
                   <div className="border-b border-black w-4/5 h-8 mb-2"></div>
-                  <div className="text-center">ชื่อ: <Highlight>{tkInfo.directors.split(' และ ')[1]}</Highlight></div>
+                  <div className="text-center w-full">
+                    ( <Highlight>{tkInfo.directors.split(' และ ')[1]}</Highlight> )
+                  </div>
                 </div>
               </div>
 
@@ -946,10 +958,14 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               </div>
 
               <div className="mt-auto pt-16">
-                <div className="font-bold mb-8">พยาน:</div>
-                <div className="flex flex-col items-center">
-                  <div className="border-b border-black w-4/5 mb-2 h-8"></div>
-                  <div className="text-center">( <span className="inline-block w-40"></span> )</div>
+                <div className="font-bold mb-8 text-left">พยาน:</div>
+                <div className="flex items-end w-full px-4">
+                  <span className="text-[14px] leading-none"></span>
+                  <div className="flex-1 border-b border-black mx-2 mb-1"></div>
+                  <span className="text-[14px] leading-none"></span>
+                </div>
+                <div className="text-center mt-2 w-full text-[12px]">
+                  ( __________________________________________ )
                 </div>
               </div>
             </div>

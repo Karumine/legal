@@ -5,6 +5,7 @@ import { CONTRACT_TYPE_LABELS } from '../types/contract';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatThaiDate } from '../utils/thaiDate';
 import { formatThaiId, getAuthorizedSignatoryText } from '../utils/formatters';
+import { formatAddressWithPostalCode } from '../utils/address';
 
 interface Props {
   data: ContractData;
@@ -75,14 +76,14 @@ export default function ContractPreview({ data }: Props) {
         <div className="mb-4 pr-2 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(1)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.companyName}</Highlight></b> (โดย <Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.companyAddress)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้รับค่าธรรมเนียม"</b>) และ
+            <b><Highlight>{data.companyName}</Highlight></b> (โดย <Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.companyAddress, data.companyPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้รับค่าธรรมเนียม"</b>) และ
           </div>
         </div>
 
         <div className="mb-6 pr-2 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(2)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.customerAddress)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้ชำระค่าธรรมเนียม"</b>)
+            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.customerAddress, data.customerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้ชำระค่าธรรมเนียม"</b>)
           </div>
         </div>
 

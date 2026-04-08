@@ -2,6 +2,7 @@ import PageHeader from './PageHeader';
 import type { ServiceAgreementData, AppData, ContractType } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiDate, formatThaiDateShort, addMonths } from '../utils/thaiDate';
+import { formatAddressWithPostalCode } from '../utils/address';
 
 
 interface Props {
@@ -264,7 +265,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
         </div>
 
         <div className="indent-10 mb-6 font-normal">
-          สัญญาจ้างบริการฉบับนี้ทำขึ้นระหว่าง <Highlight>{appData.tkInfo.companyName}</Highlight> โดย <Highlight>{appData.tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(appData.tkInfo.address)}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า <b>“ผู้ว่าจ้าง”</b> กับ <Highlight>{appData.agileInfo.companyName}</Highlight> โดย <Highlight>{appData.agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(appData.agileInfo.address)}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า <b>“ผู้รับจ้าง”</b> ทั้งสองฝ่ายได้ทำสัญญาจ้างบริการโดยมีข้อความดังต่อไปนี้
+          สัญญาจ้างบริการฉบับนี้ทำขึ้นระหว่าง <Highlight>{appData.tkInfo.companyName}</Highlight> โดย <Highlight>{appData.tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(appData.tkInfo.address, appData.tkInfo.postalCode))}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า <b>“ผู้ว่าจ้าง”</b> กับ <Highlight>{appData.agileInfo.companyName}</Highlight> โดย <Highlight>{appData.agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท มีสำนักงานใหญ่ตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(appData.agileInfo.address, appData.agileInfo.postalCode))}</Highlight> ซึ่งต่อไปนี้ในสัญญาจะเรียกว่า <b>“ผู้รับจ้าง”</b> ทั้งสองฝ่ายได้ทำสัญญาจ้างบริการโดยมีข้อความดังต่อไปนี้
         </div>
 
         <div className="space-y-6 font-normal">

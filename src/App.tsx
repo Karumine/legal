@@ -216,10 +216,10 @@ function App() {
       agileInfo: info,
       agreements: prev.agreements.map(a => {
         if (a.type === 'hirePurchase' || a.type === 'hirePurchaseBack') {
-          return { ...a, data: { ...a.data, lessor1: { ...a.data.lessor1, name: info.companyName, taxId: info.taxId, address: info.address }, lessor1Signatories: info.directors } };
+          return { ...a, data: { ...a.data, lessor1: { ...a.data.lessor1, name: info.companyName, taxId: info.taxId, address: info.address, postalCode: info.postalCode }, lessor1Signatories: info.directors } };
         }
         if (a.type === 'loan') {
-          return { ...a, data: { ...a.data, lender1: { ...a.data.lender1, name: info.companyName, taxId: info.taxId, address: info.address }, lender1Signatories: info.directors } };
+          return { ...a, data: { ...a.data, lender1: { ...a.data.lender1, name: info.companyName, taxId: info.taxId, address: info.address, postalCode: info.postalCode }, lender1Signatories: info.directors } };
         }
         return a;
       })
@@ -232,10 +232,10 @@ function App() {
       tkInfo: info,
       agreements: prev.agreements.map(a => {
         if (a.type === 'hirePurchase' || a.type === 'hirePurchaseBack') {
-          return { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address }, lessor2Signatories: info.directors } };
+          return { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address, postalCode: info.postalCode }, lessor2Signatories: info.directors } };
         }
         if (a.type === 'loan') {
-          return { ...a, data: { ...a.data, lender2: { ...a.data.lender2, name: info.companyName, taxId: info.taxId, address: info.address }, lender2Signatories: info.directors } };
+          return { ...a, data: { ...a.data, lender2: { ...a.data.lender2, name: info.companyName, taxId: info.taxId, address: info.address, postalCode: info.postalCode }, lender2Signatories: info.directors } };
         }
         return a;
       })
@@ -261,9 +261,11 @@ function App() {
     return {
       contractNo: guarantors[0]?.contractNo || (hpData?.contractNo ? `AGA/XX-SUR` : ''),
       effectiveDate: guarantors[0]?.contractDate || hpData?.contractDate || '',
+      // Party 1 (Lender)
       lenderCompany: data.agileInfo.companyName,
       lenderDirectors: data.agileInfo.directors,
       lenderAddress: data.agileInfo.address,
+      lenderPostalCode: data.agileInfo.postalCode,
       lenderTaxId: data.agileInfo.taxId,
       lenderPhone: data.agileInfo.phone,
 
@@ -271,6 +273,7 @@ function App() {
       borrowerCompany: data.companyMode === 'agileTK' ? data.tkInfo.companyName : '',
       borrowerDirectors: data.companyMode === 'agileTK' ? data.tkInfo.directors : '',
       borrowerAddress: data.companyMode === 'agileTK' ? data.tkInfo.address : '',
+      borrowerPostalCode: data.companyMode === 'agileTK' ? data.tkInfo.postalCode : '',
       borrowerTaxId: data.companyMode === 'agileTK' ? data.tkInfo.taxId : '',
       borrowerPhone: data.companyMode === 'agileTK' ? data.tkInfo.phone : '',
 
@@ -279,11 +282,15 @@ function App() {
         name: g.guarantorName,
         idCard: g.guarantorIdCard,
         address: g.guarantorAddress,
+        postalCode: g.guarantorPostalCode,
         phone: g.phone || '',
         isMarried: g.isMarried,
         spouseName: g.spouseName,
         spouseIdCard: g.spouseIdCard,
         spouseAddress: g.spouseAddress,
+        spousePostalCode: g.spousePostalCode,
+        type: g.guarantorType,
+        directors: g.directors,
       })),
 
       refContractCompany: data.customerInfo.companyName,
@@ -385,11 +392,13 @@ function App() {
     effectiveDate: data.feePaymentData.effectiveDate,
     companyName: data.agileInfo.companyName,
     companyAddress: data.agileInfo.address,
+    companyPostalCode: data.agileInfo.postalCode,
     companyTaxId: data.agileInfo.taxId,
     companyDirectors: data.agileInfo.directors,
     customerCompany: data.customerInfo.companyName,
     customerDirector: data.customerInfo.directors,
     customerAddress: data.customerInfo.address,
+    customerPostalCode: data.customerInfo.postalCode,
     customerTaxId: data.customerInfo.taxId,
     entityType: data.customerInfo.entityType,
     items: data.feePaymentData.items,

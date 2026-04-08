@@ -312,7 +312,12 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                   <label className="block text-xs font-medium text-gray-600">ที่อยู่ผู้ค้ำประกัน</label>
                   <button
                     type="button"
-                    onClick={() => updateGuarantor(guarantor.id, 'guarantorAddress', customerInfo.address)}
+                    onClick={() => {
+                      updateGuarantor(guarantor.id, 'guarantorAddress', customerInfo.address);
+                      if (customerInfo.postalCode) {
+                        updateGuarantor(guarantor.id, 'guarantorPostalCode', customerInfo.postalCode);
+                      }
+                    }}
                     className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
                   >
                     <Copy size={12} />
@@ -322,6 +327,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                 <ThaiAddressInput
                   value={guarantor.guarantorAddress}
                   onChange={(address) => updateGuarantor(guarantor.id, 'guarantorAddress', address)}
+                  onPostalCodeChange={(code) => updateGuarantor(guarantor.id, 'guarantorPostalCode', code)}
                 />
               </div>
 
@@ -380,7 +386,12 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                       <label className="block text-xs font-medium text-gray-600">ที่อยู่คู่สมรส</label>
                       <button
                         type="button"
-                        onClick={() => updateGuarantor(guarantor.id, 'spouseAddress', guarantor.guarantorAddress)}
+                        onClick={() => {
+                          updateGuarantor(guarantor.id, 'spouseAddress', guarantor.guarantorAddress);
+                          if (guarantor.guarantorPostalCode) {
+                            updateGuarantor(guarantor.id, 'spousePostalCode', guarantor.guarantorPostalCode);
+                          }
+                        }}
                         className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
                       >
                         <Copy size={12} />
@@ -390,6 +401,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                     <ThaiAddressInput
                       value={guarantor.spouseAddress}
                       onChange={(address) => updateGuarantor(guarantor.id, 'spouseAddress', address)}
+                      onPostalCodeChange={(code) => updateGuarantor(guarantor.id, 'spousePostalCode', code)}
                     />
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import type { GuaranteeData } from '../types/guarantee';
 import { formatThaiDate } from '../utils/thaiDate';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
+import { formatAddressWithPostalCode } from '../utils/address';
 
 interface Props {
   data: GuaranteeData;
@@ -63,14 +64,14 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-6">(1)</span>
             <div className="flex-1">
-              <b><Highlight>{data.lenderCompany}</Highlight></b> (โดย<Highlight>{data.lenderDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.lenderAddress)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lenderTaxId)}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 1"</b>)
+              <b><Highlight>{data.lenderCompany}</Highlight></b> (โดย<Highlight>{data.lenderDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lenderAddress, data.lenderPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lenderTaxId)}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 1"</b>)
             </div>
           </div>
 
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-6">(2)</span>
             <div className="flex-1">
-              <b><Highlight>{data.borrowerCompany}</Highlight></b> (โดย<Highlight>{data.borrowerDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.borrowerAddress)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.borrowerTaxId)}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 2"</b>)
+              <b><Highlight>{data.borrowerCompany}</Highlight></b> (โดย<Highlight>{data.borrowerDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.borrowerAddress, data.borrowerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.borrowerTaxId)}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 2"</b>)
             </div>
           </div>
 
@@ -80,7 +81,6 @@ export default function GuaranteePreview({ data }: Props) {
 
           {data.guarantors.map((guarantor, idx) => {
             const isCorporate = guarantor.type === 'company' || guarantor.type === 'partnership';
-            const typeLabel = guarantor.type === 'partnership' ? 'ห้างหุ้นส่วน' : 'บริษัท';
 
             return (
               <div key={idx} className="flex gap-2 text-justify pr-2">
@@ -88,11 +88,11 @@ export default function GuaranteePreview({ data }: Props) {
                 <div className="flex-1">
                   {isCorporate ? (
                     <>
-                      <b>{typeLabel} <Highlight>{guarantor.name}</Highlight></b> (โดย<Highlight>{guarantor.directors}</Highlight> {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการ' : 'กรรมการผู้มีอำนาจกระทำการแทน'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(guarantor.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                      <b><Highlight>{guarantor.name}</Highlight></b> (โดย<Highlight>{guarantor.directors}</Highlight> {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
                     </>
                   ) : (
                     <>
-                      <b><Highlight>{guarantor.name}</Highlight></b> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(guarantor.address)}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                      <b><Highlight>{guarantor.name}</Highlight></b> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
                     </>
                   )}
                 </div>
@@ -112,7 +112,7 @@ export default function GuaranteePreview({ data }: Props) {
               <span key={idx}>
                 {idx > 0 && (idx === data.refContracts.length - 1 ? ' และ' : ', ')} {CONTRACT_TYPE_LABELS[ref.type as keyof typeof CONTRACT_TYPE_LABELS]}เลขที่ <Highlight>{ref.no}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(ref.date)}</Highlight>
               </span>
-            ))} ผู้ค้ำประกันยินยอมเข้าค้ำประกันการชำระหนี้อันครบถ้วนสมบูรณ์ ตรงต่อเวลาและเป็นไปตามข้อกำหนดและเงื่อนไขภายใต้สัญญาดังกล่าว โดยมีวงเงินค้ำประกันหนี้ตามสัญญา<b>รวมกันทั้งสิ้นไม่เกินจำนวน <Highlight>{data.guaranteeAmountNumber}</Highlight> บาท (<Highlight>{data.guaranteeAmountText}</Highlight>)</b> บวกด้วยดอกเบี้ย ดอกเบี้ยผิดนัด ค่าธรรมเนียม ค่าสินไหมทดแทนซึ่งลูกหนี้ค้างชำระ ค่าเบี้ยประกันภัย ค่าปรับ ค่าใช้จ่ายในการติดตามทวงถาม บังคับชำระหนี้ ตลอดจนค่าภาระติดพันอันเป็นอุปกรณ์แห่งหนี้ของลูกหนี้ และค่าใช้จ่ายอื่นใดตามสัญญาดังกล่าวให้แก่ผู้ให้เช่าซื้อจนกว่าผู้ให้เช่าซื้อจะได้รับชำระหนี้ภายใต้สัญญาดังกล่าวจนครบถ้วน
+            ))} ผู้ค้ำประกันยินยอมเข้าค้ำประกันการชำระหนี้อันครบถ้วนสมบูรณ์ ตรงต่อเวลาและเป็นไปตามข้อกำหนดและเงื่อนไขภายใต้สัญญาดังกล่าว โดยมีวงเงินค้ำประกันหนี้ตามสัญญาฉบับนี้ <b>รวมกันทั้งสิ้นไม่เกินจำนวน <Highlight>{data.guaranteeAmountNumber}</Highlight> บาท (<Highlight>{data.guaranteeAmountText}</Highlight>)</b> บวกด้วยดอกเบี้ย ดอกเบี้ยผิดนัด ค่าธรรมเนียม ค่าสินไหมทดแทนซึ่งลูกหนี้ค้างชำระ ค่าเบี้ยประกันภัย ค่าปรับ ค่าใช้จ่ายในการติดตามทวงถาม บังคับชำระหนี้ ตลอดจนค่าภาระติดพันอันเป็นอุปกรณ์แห่งหนี้ของลูกหนี้ และค่าใช้จ่ายอื่นใดตามสัญญาดังกล่าวให้แก่ผู้ให้เช่าซื้อจนกว่าผู้ให้เช่าซื้อจะได้รับชำระหนี้ภายใต้สัญญาดังกล่าวจนครบถ้วน
           </div>
         </div>
 
@@ -441,8 +441,8 @@ export default function GuaranteePreview({ data }: Props) {
             สัญญาฉบับนี้ทำขึ้นมา 3 (สาม) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านข้อความในสัญญาและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
           </div>
 
-          <div className="border-2 border-black text-[13px] font-bold">
-            <div className="grid grid-cols-2 divide-x-2 divide-black">
+          <div className="border border-black text-[13px] font-bold">
+            <div className="grid grid-cols-2 divide-x divide-black">
               {/* Left: Lender 1 */}
               <div className="p-6 flex flex-col min-h-[600px]">
                 <div className="flex-1 pt-4 space-y-16">
@@ -451,13 +451,12 @@ export default function GuaranteePreview({ data }: Props) {
                     <Highlight>{data.lenderCompany}</Highlight>
                   </div>
 
-                  <div className="space-y-16">
+                  <div className="space-y-12">
                     {data.lenderDirectors.split(/\s*และ\s*/).map((sig, idx) => (
                       <div key={idx} className="space-y-2">
-                        <div className="border-b border-black w-full h-12"></div>
-                        <div className="flex justify-center gap-2">
-                          <span>ชื่อ:</span>
-                          <div className="">{sig.trim()}</div>
+                        <div className="border-b border-black w-full h-8"></div>
+                        <div className="text-center w-full">
+                          ชื่อ: <Highlight>{sig.trim()}</Highlight>
                         </div>
                       </div>
                     ))}
@@ -470,10 +469,12 @@ export default function GuaranteePreview({ data }: Props) {
                 </div>
 
                 <div className="mt-auto pt-8 space-y-4">
-                  <div className="font-bold">พยาน:</div>
-                  <div className="flex flex-col items-center">
-                    <div className="border-b border-black w-[80%] h-12 mb-1"></div>
-                    <div className="text-center">(<span className="inline-block w-[150px]"></span>)</div>
+                  <div>พยาน:</div>
+                  <div className="border-b border-black w-full h-8"></div>
+                  <div className="flex justify-between px-4">
+                    <span>(</span>
+                    <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                    <span>)</span>
                   </div>
                 </div>
               </div>
@@ -493,13 +494,12 @@ export default function GuaranteePreview({ data }: Props) {
                         </div>
 
                         {isCorporate ? (
-                          <div className="space-y-16">
+                          <div className="space-y-12">
                             {signatories.map((sig, sIdx) => (
                               <div key={sIdx} className="space-y-2">
-                                <div className="border-b border-black w-full h-12"></div>
-                                <div className="flex justify-center gap-2">
-                                  <span>ชื่อ:</span>
-                                  <div className="">{sig.trim()}</div>
+                                <div className="border-b border-black w-full h-8"></div>
+                                <div className="text-center w-full">
+                                  ( ชื่อ: <Highlight>{sig.trim()}</Highlight> )
                                 </div>
                               </div>
                             ))}
@@ -510,12 +510,9 @@ export default function GuaranteePreview({ data }: Props) {
                           </div>
                         ) : (
                           <div className="space-y-2">
-                            <div className="border-b border-black w-full h-12"></div>
-                            <div className="flex justify-center gap-2">
-                              <span>ชื่อ:</span>
-                              <div className="">
-                                <Highlight>{guarantor.name}</Highlight>
-                              </div>
+                            <div className="border-b border-black w-full h-8"></div>
+                            <div className="text-center w-full">
+                              ( ชื่อ: <Highlight>{guarantor.name}</Highlight> )
                             </div>
                           </div>
                         )}
@@ -546,42 +543,44 @@ export default function GuaranteePreview({ data }: Props) {
       <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
         <PageHeader />
 
-        <div className="mt-8 border-2 border-black text-[13px] font-bold">
-          <div className="grid grid-cols-2 divide-x-2 divide-black">
+        <div className="mt-8 border border-black text-[13px] font-bold">
+          <div className="grid grid-cols-2 divide-x divide-black">
             <div className="p-6 min-h-[600px] flex flex-col">
               <div className="flex-1 mt-4 space-y-16">
                 <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
-                  <div>ผู้ให้เช่าซื้อฝ่ายที่ 2 :</div>
+                  <div>ผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
                   <Highlight>{data.borrowerCompany}</Highlight>
                 </div>
-                <div className="space-y-16">
+                <div className="space-y-12">
                   {data.borrowerDirectors.split(/\s*และ\s*/).map((sig, idx) => (
                     <div key={idx} className="space-y-2">
-                      <div className="border-b border-black w-full h-12"></div>
-                      <div className="flex justify-center gap-2">
-                        <span>ชื่อ:</span>
-                        <div className="">{sig.trim()}</div>
+                      <div className="border-b border-black w-full h-8"></div>
+                      <div className="text-center w-full">
+                        ชื่อ: <Highlight>{sig.trim()}</Highlight>
                       </div>
                     </div>
                   ))}
-                </div>
 
-                <div className="text-left">
-                  <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                  <div className="font-bold"><Highlight>{data.borrowerCompany}</Highlight></div>
+                  <div className="pt-4 text-left">
+                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                    <div className="font-bold"><Highlight>{data.borrowerCompany}</Highlight></div>
+                  </div>
                 </div>
               </div>
 
               <div className="mt-auto pt-8 space-y-4">
-                <div className="font-bold">พยาน:</div>
-                <div className="flex flex-col items-center">
-                  <div className="border-b border-black w-[80%] h-12 mb-1"></div>
-                  <div className="text-center">(<span className="inline-block w-[150px]"></span>)</div>
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between px-4">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                  <span>)</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 flex flex-col min-h-[400px]">
+            {/* Right Column: Empty */}
+            <div className="p-4 space-y-12">
             </div>
           </div>
         </div>
@@ -613,7 +612,7 @@ export default function GuaranteePreview({ data }: Props) {
               </div>
 
               <div className="indent-10 mb-8 leading-[1.8]">
-                ข้าพเจ้า <Highlight>{guarantor.name}</Highlight> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(guarantor.address)}</Highlight> ("ผู้ค้ำประกัน") ขอยืนยันว่าในขณะที่ข้าพเจ้าทำนิติกรรมใดๆ กับบริษัทฯ ข้าพเจ้าไม่เป็นบุคคลล้มละลาย หรือถูกศาลพิทักษ์ทรัพย์เด็ดขาด หรือพิทักษ์ทรัพย์ชั่วคราว และข้าพเจ้าขอรับรองว่าข้าพเจ้า <span className="font-bold underline">{guarantor.isMarried ? 'ได้' : 'มิได้'}</span> ทำการสมรสโดยจดทะเบียน
+                ข้าพเจ้า <Highlight>{guarantor.name}</Highlight> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> ("ผู้ค้ำประกัน") ขอยืนยันว่าในขณะที่ข้าพเจ้าทำนิติกรรมใดๆ กับบริษัทฯ ข้าพเจ้าไม่เป็นบุคคลล้มละลาย หรือถูกศาลพิทักษ์ทรัพย์เด็ดขาด หรือพิทักษ์ทรัพย์ชั่วคราว และข้าพเจ้าขอรับรองว่าข้าพเจ้า <span className="font-bold underline">{guarantor.isMarried ? 'ได้' : 'มิได้'}</span> ทำการสมรสโดยจดทะเบียน
               </div>
 
               <div className="flex flex-col items-center gap-16 mt-32">
@@ -676,7 +675,7 @@ export default function GuaranteePreview({ data }: Props) {
 
                   <div className="leading-[1.8]">
                     <div className="indent-10">
-                      โดยหนังสือฉบับนี้ข้าพเจ้า <Highlight>{guarantor.spouseName}</Highlight> เลขประจำตัวประชาชน <Highlight>{formatThaiId(guarantor.spouseIdCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(guarantor.spouseAddress)}</Highlight> ซึ่งเป็นสามี/ภริยา ของ <Highlight>{guarantor.name}</Highlight>
+                      โดยหนังสือฉบับนี้ข้าพเจ้า <Highlight>{guarantor.spouseName}</Highlight> เลขประจำตัวประชาชน <Highlight>{formatThaiId(guarantor.spouseIdCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.spouseAddress, guarantor.spousePostalCode))}</Highlight> ซึ่งเป็นสามี/ภริยา ของ <Highlight>{guarantor.name}</Highlight>
                     </div>
                     <div className="indent-10">
                       ขอให้ความยินยอมโดยหนังสือนี้ว่าให้ <Highlight>{guarantor.name}</Highlight> สามี/ภริยา ของข้าพเจ้าทำนิติกรรม เป็นผู้ค้ำประกันการชำระหนี้ของบริษัท <Highlight>{data.refContractCompany}</Highlight> รวมถึงนิติกรรมต่างๆ กับ<Highlight>บริษัท อาไจล์ แอสเซ็ทส์ จำกัด และ บริษัท ฐิติกร จำกัด (มหาชน)</Highlight> ได้

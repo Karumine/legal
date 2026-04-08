@@ -16,6 +16,7 @@ export interface ContractData {
   // Party 1
   companyName: string;
   companyAddress: string;
+  companyPostalCode?: string;
   companyTaxId: string;
   companyDirectors: string;
 
@@ -23,6 +24,7 @@ export interface ContractData {
   customerCompany: string;
   customerDirector: string;
   customerAddress: string;
+  customerPostalCode?: string;
   customerTaxId: string;
   entityType?: 'company' | 'partnership';
 

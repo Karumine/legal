@@ -146,6 +146,7 @@ export interface BuybackData {
   vendorName: string;
   vendorDirectors: string;
   vendorAddress: string;
+  vendorPostalCode?: string;
   vendorTaxId: string;
   selectedAssetIds: string[];
   downPercentage: string;
@@ -227,10 +228,12 @@ export interface GuarantorData {
   guarantorName: string;
   guarantorIdCard: string;
   guarantorAddress: string;
+  guarantorPostalCode?: string;
   isMarried: boolean;
   spouseName: string;
   spouseIdCard: string;
   spouseAddress: string;
+  spousePostalCode?: string;
   phone?: string;
   directors?: string;
   selectedAgreementIds?: string[];

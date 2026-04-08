@@ -5,6 +5,7 @@ import { thaiBahtText } from '../utils/thaiBahtText';
 import { thaiNumberText } from '../utils/thaiNumberText';
 import { formatThaiDate } from '../utils/thaiDate';
 import { formatThaiId, getAuthorizedSignatoryText } from '../utils/formatters';
+import { formatAddressWithPostalCode } from '../utils/address';
 
 interface Props {
   data: HirePurchaseData;
@@ -181,13 +182,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.lessor1.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
+              <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.lessor2.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
+              <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor2.address, data.lessor2.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
             </div>
           </div>
           <div className="pl-6">
@@ -196,7 +197,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">3.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(customerInfo.address)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
+              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
             </div>
           </div>
         </div>
@@ -913,9 +914,8 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 {data.lessor1Signatories.split(/\s*และ\s*/).map((sig, idx) => (
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
-                    <div className="flex justify-center gap-2">
-                      <span>ชื่อ:</span>
-                      <div className="">{sig.trim()}</div>
+                    <div className="text-center w-full">
+                      ชื่อ: <Highlight>{sig.trim()}</Highlight>
                     </div>
                   </div>
                 ))}
@@ -930,9 +930,9 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="mt-auto pt-8 space-y-4">
               <div>พยาน:</div>
               <div className="border-b border-black w-full h-8"></div>
-              <div className="flex justify-between">
+              <div className="flex justify-between px-4">
                 <span>(</span>
-                <span className="flex-1 border-b border-black mx-4"></span>
+                <span className="flex-1 border-b border-black mx-4 mb-1"></span>
                 <span>)</span>
               </div>
             </div>
@@ -949,11 +949,8 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
-                    <div className="flex justify-center gap-2">
-                      <span>ชื่อ:</span>
-                      <div className="">
-                        <Highlight>{sig.trim()}</Highlight>
-                      </div>
+                    <div className="text-center w-full">
+                      ( ชื่อ: <Highlight>{sig.trim()}</Highlight> )
                     </div>
                   </div>
                 ))}
@@ -970,9 +967,9 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="mt-auto pt-8 space-y-4">
               <div>พยาน:</div>
               <div className="border-b border-black w-full h-8"></div>
-              <div className="flex justify-between">
+              <div className="flex justify-between px-4">
                 <span>(</span>
-                <span className="flex-1 border-b border-black mx-4"></span>
+                <span className="flex-1 border-b border-black mx-4 mb-1"></span>
                 <span>)</span>
               </div>
             </div>
@@ -986,20 +983,20 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
 
         <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px] font-bold">
+
           {/* Left Column: Lessor 2 */}
           <div className="border-r border-black p-4 flex flex-col h-full">
-            <div className="space-y-12">
-              <div className="font-bold underline text-left">ผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
-              <div className="font-bold text-left">{data.lessor2.name}</div>
+            <div className="flex-1 mt-4 space-y-16">
+              <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
+                <div>ผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
+                <Highlight>{data.lessor2.name}</Highlight>
+              </div>
               <div className="pt-8 space-y-12">
                 {data.lessor2Signatories.split(/\s*และ\s*/).map((sig, idx) => (
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
-                    <div className="flex justify-center gap-2">
-                      <span>ชื่อ:</span>
-                      <div className="flex-1 font-bold">
-                        {sig.trim()}
-                      </div>
+                    <div className="text-center w-full">
+                      ชื่อ: <Highlight>{sig.trim()}</Highlight>
                     </div>
                   </div>
                 ))}
@@ -1014,9 +1011,9 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="mt-auto pt-8 space-y-4">
               <div>พยาน:</div>
               <div className="border-b border-black w-full h-8"></div>
-              <div className="flex justify-between">
+              <div className="flex justify-between px-4">
                 <span>(</span>
-                <span className="flex-1 border-b border-black mx-4"></span>
+                <span className="flex-1 border-b border-black mx-4 mb-1"></span>
                 <span>)</span>
               </div>
             </div>
