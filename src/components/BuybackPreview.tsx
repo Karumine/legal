@@ -95,39 +95,39 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           </div>
         </div>
 
-        <div className="indent-10 mb-6 font-bold">
+        <div className="indent-10 mb-6">
           สัญญารับซื้อคืนฉบับนี้ ("<b>สัญญา</b>") ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> ("<b>วันที่สัญญามีผลใช้บังคับ</b>") โดยและระหว่าง:
         </div>
 
         <div className="space-y-4 mb-6">
           <div className="flex gap-2 text-justify pr-2">
-            <span className="shrink-0 w-4 font-bold">1.</span>
+            <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท ) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
+              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
             </div>
           </div>
           <div className="flex gap-2 text-justify pr-2">
-            <span className="shrink-0 w-4 font-bold">2.</span>
+            <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 2"</b>)
             </div>
           </div>
-          <div className="pl-6 italic text-gray-700">
-            (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>"บริษัทฯ ฝ่ายหนึ่ง"</b>)
+          <div className="italic">
+            (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>"บริษัทฯ"</b> ฝ่ายหนึ่ง)
           </div>
           <div id="section-vendor" className="flex gap-2 text-justify pr-2">
-            <span className="shrink-0 w-4 font-bold">3.</span>
+            <span className="shrink-0 w-4">3.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย<Highlight>{data.vendorDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานใหญ่จดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
             </div>
           </div>
-          <div className="pl-6 italic text-gray-700">
+          <div className="italic">
             (ซึ่งต่อไปในสัญญานี้แต่ละฝ่ายจะเรียกว่า <b>"คู่สัญญา"</b> และจะเรียกรวมกันว่า <b>"คู่สัญญาทุกฝ่าย"</b>)
           </div>
         </div>
 
-        <div className="mt-4">
-          ดังนั้น คู่สัญญาจึงได้ตกลงจัดทำสัญญาซื้อขายนี้ขึ้นภายใต้ข้อตกลงและเงื่อนไขดังต่อไปนี้
+        <div className="mt-4 font-bold">
+          ดังนั้น คู่สัญญาจึงได้ตกลงจัดทำสัญญาฉบับนี้ขึ้นภายใต้ข้อตกลงและเงื่อนไขดังต่อไปนี้
         </div>
 
         {renderPageFooter(1)}
@@ -239,21 +239,21 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">1.3.</span>
             <div className="flex-1">
-              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {Math.round(downPaymentPercentage)} ({thaiBahtText(Math.round(downPaymentPercentage).toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText(downPaymentAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จาก <Highlight>{customerInfo.companyName}</Highlight> (“ผู้เช่าซื้อ”) ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระ และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทุกฝ่ายตกลงให้เงินค่าชำระราคาครั้งดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
+              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {Math.round(downPaymentPercentage)} ({thaiBahtText(Math.round(downPaymentPercentage).toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText(downPaymentAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จาก <Highlight>{customerInfo.companyName}</Highlight> <b>(“ผู้เช่าซื้อ”)</b> ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระแทน และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทุกฝ่ายตกลงให้เงินค่าชำระราคาครั้งแรกดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
             </div>
           </div>
 
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">1.4.</span>
             <div className="flex-1">
-              ณ วันที่ทำสัญญาฉบับนี้ คู่สัญญากตกลงว่าเมื่อบริษัทฯ <Highlight>ชำระเงินค่าเครื่องจักรส่วนที่เหลือเป็นจำนวนทั้งสิ้น {formattedAmount(remainingAmount)} บาท ({thaiBahtText(remainingAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> ให้แก่ตัวแทนจำหน่ายและตัวแทนจำหน่ายได้รับเงินค่าเครื่องจักรส่วนที่เหลือครบถ้วนเรียบร้อยแล้ว กรรมสิทธิ์ในเครื่องจักรตกเป็นของบริษัทฯ <Highlight>ตามสัดส่วนในสัญญาเช่าซื้อ {hpData.contractNo} ฉบับลงวันที่ {formatThaiDate(hpData.contractDate)}</Highlight>
+              <b>ณ วันที่ทำสัญญาฉบับนี้ คู่สัญญากตกลงว่าเมื่อบริษัทฯ <Highlight>ชำระเงินค่าเครื่องจักรส่วนที่เหลือเป็นจำนวนทั้งสิ้น {formattedAmount(remainingAmount)} บาท ({thaiBahtText(remainingAmount.toString())})</Highlight> (รวมภาษีมูลค่าเพิ่ม)</b> ให้แก่ตัวแทนจำหน่ายและตัวแทนจำหน่ายได้รับเงินค่าเครื่องจักรส่วนที่เหลือครบถ้วนเรียบร้อยแล้ว กรรมสิทธิ์ในเครื่องจักรตกเป็นของบริษัทฯ <Highlight>ตามสัดส่วนในสัญญาเช่าซื้อ {hpData.contractNo} ฉบับลงวันที่ {formatThaiDate(hpData.contractDate)}</Highlight>
             </div>
           </div>
 
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">1.5.</span>
             <div className="flex-1">
-              คู่สัญญากตกลงว่าให้สัญญารับซื้อคืนฉบับนี้ ถือเป็นหลักประกันภายใต้เงื่อนไขตามข้อ 2.
+              คู่สัญญาตกลงว่าให้สัญญารับซื้อคืนฉบับนี้ ถือเป็นหลักประกันภายใต้เงื่อนไขตามข้อ 2.
             </div>
           </div>
 
@@ -352,7 +352,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">(ฉ)</span>
             <div className="flex-1">
-              คู่สัญญาทุกฝ่ายตกลงร่วมกันว่า วิธีการชำระเงินค่าซื้อคืนเครื่องจักร ตัวแทนจำหน่ายตกลงชำระให้แก่บริษัทฯ ณ ภูมิลำเนาของบริษัทฯ ตามที่ระบุไว้ในสัญญานี้ โดยตัวแทนจำหน่ายสามารถชำระด้วยเงินสด เช็ค ด้วยวิธีการโอนเงินเข้าบัญชีของบริษัทฯ ชื่อบัญชี บริษัท อาไจล์ แอสเซ็ทส์ จำกัด ธนาคารกสิกรไทย ประเภทออมทรัพย์ หมายเลขบัญชี 025-3-77662-5 หรือด้วยวิธีการอื่นใดที่คู่สัญญากตกลงร่วมกัน และให้ถือว่าบริษัทฯ ได้รับชำระค่ารับซื้อเครื่องจักรคืนเมื่อได้มีการขึ้นเงินและ/หรือ ได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น
+              คู่สัญญาทุกฝ่ายตกลงร่วมกันว่า วิธีการชำระเงินค่าซื้อคืนเครื่องจักร ตัวแทนจำหน่ายตกลงชำระให้แก่บริษัทฯ ณ ภูมิลำเนาของบริษัทฯ ตามที่ระบุไว้ในสัญญานี้ โดยตัวแทนจำหน่ายสามารถชำระด้วยเงินสด เช็ค ด้วยวิธีการโอนเงินเข้าบัญชีของบริษัทฯ <b>ชื่อบัญชี บริษัท อาไจล์ แอสเซ็ทส์ จำกัด ธนาคารกสิกรไทย ประเภทออมทรัพย์ หมายเลขบัญชี 025-3-77662-5</b> หรือด้วยวิธีการอื่นใดที่คู่สัญญากตกลงร่วมกัน และให้ถือว่าบริษัทฯ ได้รับชำระค่ารับซื้อเครื่องจักรคืนเมื่อได้มีการขึ้นเงินและ/หรือ ได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น
             </div>
           </div>
         </div>
@@ -654,7 +654,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
               {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, i) => (
                 <div key={i} className="flex flex-col items-center w-full pr-8">
                   <div className="border-b border-black w-full h-8"></div>
-                  <div className="mt-2 font-bold whitespace-nowrap text-center">ชื่อ: {sig}</div>
+                  <div className="mt-2 whitespace-nowrap text-center">( {sig} )</div>
                 </div>
               ))}
             </div>
@@ -684,7 +684,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
               {(data.vendorDirectors || '').split(/\s*และ\s*/).map((sig, i) => (
                 <div key={i} className="flex flex-col items-center w-full pr-8">
                   <div className="border-b border-black w-full h-8"></div>
-                  <div className="mt-2 font-bold whitespace-nowrap text-center">ชื่อ: <Highlight>{sig}</Highlight></div>
+                  <div className="mt-2whitespace-nowrap text-center">( <Highlight>{sig}</Highlight> )</div>
                 </div>
               ))}
             </div>
@@ -773,6 +773,6 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
 
         {renderPageFooter(13 + overflowPagesCount)}
       </div>
-    </div>
+    </div >
   );
 }
