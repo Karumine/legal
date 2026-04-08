@@ -43,6 +43,7 @@ interface AddressFields {
 interface Props {
   value: string;
   onChange: (address: string) => void;
+  onPostalCodeChange?: (postalCode: string) => void;
   className?: string;
 }
 
@@ -296,7 +297,7 @@ function SearchableSelect({
 }
 
 // --- Main Component ---
-export default function ThaiAddressInput({ value, onChange, className = '' }: Props) {
+export default function ThaiAddressInput({ value, onChange, onPostalCodeChange, className = '' }: Props) {
   const [fields, setFields] = useState<AddressFields>(() => parseAddress(value));
   const isInitialMount = useRef(true);
 
@@ -343,10 +344,15 @@ export default function ThaiAddressInput({ value, onChange, className = '' }: Pr
       // Emit the composed address
       const composed = composeAddress(next);
       // Use setTimeout to avoid calling onChange during render
-      setTimeout(() => onChange(composed), 0);
+      setTimeout(() => {
+        onChange(composed);
+        if (onPostalCodeChange) {
+          onPostalCodeChange(next.postalCode);
+        }
+      }, 0);
       return next;
     });
-  }, [onChange]);
+  }, [onChange, onPostalCodeChange]);
 
   // Get province code from name
   const selectedProvinceCode = (f: AddressFields): number => {
@@ -477,9 +483,8 @@ export default function ThaiAddressInput({ value, onChange, className = '' }: Pr
             type="text"
             value={fields.postalCode}
             onChange={(e) => updateField('postalCode', e.target.value)}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-gray-50"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
             placeholder="รหัสไปรษณีย์"
-            readOnly
           />
         </div>
       </div>

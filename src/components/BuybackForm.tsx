@@ -36,6 +36,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
           ...data,
           vendorName: result.companyName,
           vendorAddress: result.address,
+          vendorPostalCode: result.address.match(/\b(\d{5})\b/)?.[1] || '',
           vendorTaxId: formatThaiId(result.taxId),
         });
       } else {
@@ -214,6 +215,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
             <ThaiAddressInput
               value={data.vendorAddress}
               onChange={(val) => updateBuyback('vendorAddress', val)}
+              onPostalCodeChange={(code) => updateBuyback('vendorPostalCode', code)}
             />
           </div>
         </div>

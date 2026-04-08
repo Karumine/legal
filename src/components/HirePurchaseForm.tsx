@@ -303,10 +303,13 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
       {/* Assets */}
       <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('hp-assets')}>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-lg text-blue-700">รายการทรัพย์สิน</h3>
-          <button onClick={addAsset} className="bg-blue-600 text-white px-3 py-1 rounded text-xs">+ เพิ่มรายการ</button>
+        <div className="flex items-center justify-between mb-3 border-b border-blue-50 pb-2">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+            <h3 className="font-semibold text-lg text-blue-700">รายการทรัพย์สิน</h3>
+          </div>
         </div>
+
         <div className="space-y-4">
           {data.assets.map((asset, index) => (
             <div key={index} className="p-4 border border-gray-200 rounded relative space-y-4 bg-slate-50">
@@ -380,6 +383,15 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
               </div>
             </div>
           ))}
+
+          <button
+            type="button"
+            onClick={addAsset}
+            className="w-full py-3 border-2 border-dashed border-blue-200 rounded-lg text-blue-600 hover:bg-blue-50 hover:border-blue-300 transition-all font-bold flex items-center justify-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            เพิ่มรายการทรัพย์สิน
+          </button>
         </div>
       </section>
 

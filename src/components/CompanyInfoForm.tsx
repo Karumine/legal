@@ -26,7 +26,17 @@ function InfoFields({ label, info, onChange, showSearch, showEntityType }: {
   const [searchError, setSearchError] = useState('');
 
   const handleChange = (field: keyof CompanyInfo, value: string) => {
-    onChange({ ...info, [field]: value });
+    let updates: Partial<CompanyInfo> = { [field]: value };
+    
+    // If address changes, try to extract postal code
+    if (field === 'address') {
+      const pcMatch = value.match(/\b(\d{5})\b/);
+      if (pcMatch) {
+        updates.postalCode = pcMatch[1];
+      }
+    }
+    
+    onChange({ ...info, ...updates });
   };
 
 

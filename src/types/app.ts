@@ -10,6 +10,7 @@ export interface CompanyInfo {
   companyName: string;
   directors: string;
   address: string;
+  postalCode?: string;
   taxId: string;
   phone: string;
   email?: string;
@@ -31,6 +32,7 @@ export interface LessorInfo {
   name: string;
   taxId: string;
   address: string;
+  postalCode?: string;
   proportion: string;
 }
 
@@ -144,6 +146,7 @@ export interface BuybackData {
   vendorName: string;
   vendorDirectors: string;
   vendorAddress: string;
+  vendorPostalCode?: string;
   vendorTaxId: string;
   selectedAssetIds: string[];
   downPercentage: string;
@@ -225,13 +228,16 @@ export interface GuarantorData {
   guarantorName: string;
   guarantorIdCard: string;
   guarantorAddress: string;
+  guarantorPostalCode?: string;
   isMarried: boolean;
   spouseName: string;
   spouseIdCard: string;
   spouseAddress: string;
+  spousePostalCode?: string;
   phone?: string;
   directors?: string;
   selectedAgreementIds?: string[];
+  guarantorType?: 'person' | 'company' | 'partnership';
 }
 
 export interface Agreement {
@@ -270,7 +276,8 @@ export const initialAppData: AppData = {
   agileInfo: {
     companyName: 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด',
     directors: 'นายพรรษา เริงพิทยา และ นายกอบพงษ์ ตรีสุขี',
-    address: 'เลขที่ 20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ',
+    address: 'เลขที่ 20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ 10270',
+    postalCode: '10270',
     taxId: '0115558012195',
     phone: '02-000-9392',
     email: 'kiattikhun@agileassets.co.th',
@@ -281,7 +288,8 @@ export const initialAppData: AppData = {
   tkInfo: {
     companyName: 'บริษัท ฐิติกร จำกัด (มหาชน)',
     directors: 'นางสาวปัทมา พรประภา และ นายประพล พรประภา',
-    address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
+    address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร 10240',
+    postalCode: '10240',
     taxId: '0107546000130',
     phone: '02-310-7000',
     email: 'prapol@tk.co.th',
@@ -292,7 +300,8 @@ export const initialAppData: AppData = {
   customerInfo: {
     companyName: 'บริษัท นันทวรรณ กรีนดริ้งค์ จำกัด',
     directors: 'นางสาวรัตนา หมู่ทอง',
-    address: 'เลขที่ 39 หมู่ที่ 4 ตำบลวังจุฬา อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา',
+    address: 'เลขที่ 39 หมู่ที่ 4 ตำบลวังจุฬา อำเภอวังน้อย จังหวัดพระนครศรีอยุธยา 13170',
+    postalCode: '13170',
     taxId: '0145561001530',
     phone: '',
     entityType: 'company',
@@ -309,13 +318,15 @@ export const initialAppData: AppData = {
         lessor1: {
           name: 'บริษัท อาไจล์ แอสเซ็ทส์ จำกัด',
           taxId: '0115558012195',
-          address: '20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ',
+          address: '20 หมู่ 1 ถนนสุขุมวิท ตำบลบางเมืองใหม่ อำเภอเมืองสมุทรปราการ จังหวัดสมุทรปราการ 10270',
+          postalCode: '10270',
           proportion: '20',
         },
         lessor2: {
           name: 'บริษัท ฐิติกร จำกัด (มหาชน)',
           taxId: '0107546000130',
-          address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
+          address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร 10240',
+          postalCode: '10240',
           proportion: '80',
         },
         assets: [],

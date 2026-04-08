@@ -62,6 +62,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
       spouseIdCard: '',
       spouseAddress: '',
       selectedAgreementIds: mainAgreements.map(a => a.id), // Default to all
+      guarantorType: 'person',
     };
     onChange([...data, newGuarantor]);
   };
@@ -103,6 +104,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                 guarantorName: result.companyName,
                 guarantorAddress: result.address,
                 directors: result.directors?.join(', '),
+                guarantorType: 'company',
                 isMarried: false // Corporate guarantors aren't "married"
               }
               : g
@@ -160,7 +162,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                 <label className="block text-xs font-medium text-gray-600 mb-2">เลือกสัญญาหลักที่ค้ำประกัน</label>
                 <div className="space-y-1 border border-gray-300 rounded-md p-2 bg-slate-50/50 mt-1.5">
                   {mainAgreements.map(agreement => {
-                    const hp = agreement.data as any; // Can be any main contract data
+                    const hp = agreement.data as any;
                     const isSelected = (guarantor.selectedAgreementIds || []).includes(agreement.id);
                     return (
                       <div key={agreement.id} className="flex items-center gap-2 py-1 px-1.5 rounded hover:bg-white transition-colors">
@@ -179,6 +181,40 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                       </div>
                     );
                   })}
+                </div>
+              </div>
+
+              {/* Guarantor Type Selection */}
+              <div className="pb-4 border-b border-emerald-100/50">
+                <label className="block text-xs font-medium text-gray-600 mb-2">ประเภทผู้ค้ำประกัน</label>
+                <div className="flex gap-4">
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={guarantor.guarantorType === 'person' || !guarantor.guarantorType}
+                      onChange={() => updateGuarantor(guarantor.id, 'guarantorType', 'person')}
+                      className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">บุคคลธรรมดา</span>
+                  </label>
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={guarantor.guarantorType === 'company'}
+                      onChange={() => updateGuarantor(guarantor.id, 'guarantorType', 'company')}
+                      className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">บริษัทจำกัด</span>
+                  </label>
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={guarantor.guarantorType === 'partnership'}
+                      onChange={() => updateGuarantor(guarantor.id, 'guarantorType', 'partnership')}
+                      className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">ห้างหุ้นส่วน</span>
+                  </label>
                 </div>
               </div>
 
@@ -206,26 +242,43 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อผู้ค้ำประกัน</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  {guarantor.guarantorType === 'person' || !guarantor.guarantorType ? 'ชื่อผู้ค้ำประกัน' : 'ชื่อจดทะเบียน (บริษัท/ห้างหุ้นส่วน)'}
+                </label>
                 <input
                   type="text"
                   value={guarantor.guarantorName}
                   onChange={(e) => updateGuarantor(guarantor.id, 'guarantorName', e.target.value)}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
-                  placeholder="นาย/นาง/นางสาว ..."
+                  placeholder={guarantor.guarantorType === 'person' || !guarantor.guarantorType ? 'นาย/นาง/นางสาว ...' : 'ระบุชื่อนิติบุคคล ...'}
                 />
               </div>
 
+              {(guarantor.guarantorType === 'company' || guarantor.guarantorType === 'partnership') && (
+                <div className="animate-in fade-in slide-in-from-top-1 duration-200">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">กรรมการผู้มีอำนาจ / หุ้นส่วนผู้จัดการ</label>
+                  <textarea
+                    value={guarantor.directors || ''}
+                    onChange={(e) => updateGuarantor(guarantor.id, 'directors', e.target.value)}
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border h-16"
+                    placeholder="ระบุชื่อกรรมการผู้มีอำนาจลงนาม ..."
+                  />
+                  <p className="text-[10px] text-gray-500 mt-1 italic">หากมีหลายคนให้เว้นวรรคด้วย "และ" หรือ ","</p>
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">เลขบัตรประจำตัวประชาชน</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    {guarantor.guarantorType === 'person' || !guarantor.guarantorType ? 'เลขบัตรประจำตัวประชาชน' : 'เลขทะเบียนนิติบุคคล'}
+                  </label>
                   <div className="relative">
                     <input
                       type="text"
                       value={guarantor.guarantorIdCard}
                       onChange={(e) => updateGuarantor(guarantor.id, 'guarantorIdCard', formatThaiId(e.target.value))}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 pr-10 border"
-                      placeholder="X-XXXX-XXXXX-XX-X"
+                      placeholder={guarantor.guarantorType === 'person' || !guarantor.guarantorType ? 'X-XXXX-XXXXX-XX-X' : '0XXXXXXXXXXXX'}
                     />
                     <button
                       type="button"
@@ -259,7 +312,12 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                   <label className="block text-xs font-medium text-gray-600">ที่อยู่ผู้ค้ำประกัน</label>
                   <button
                     type="button"
-                    onClick={() => updateGuarantor(guarantor.id, 'guarantorAddress', customerInfo.address)}
+                    onClick={() => {
+                      updateGuarantor(guarantor.id, 'guarantorAddress', customerInfo.address);
+                      if (customerInfo.postalCode) {
+                        updateGuarantor(guarantor.id, 'guarantorPostalCode', customerInfo.postalCode);
+                      }
+                    }}
                     className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
                   >
                     <Copy size={12} />
@@ -269,33 +327,36 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                 <ThaiAddressInput
                   value={guarantor.guarantorAddress}
                   onChange={(address) => updateGuarantor(guarantor.id, 'guarantorAddress', address)}
+                  onPostalCodeChange={(code) => updateGuarantor(guarantor.id, 'guarantorPostalCode', code)}
                 />
               </div>
 
-              {/* Marital Status */}
-              <div className="pt-3 border-t border-emerald-100">
-                <label className="block text-xs font-medium text-gray-600 mb-2">สถานภาพสมรส</label>
-                <div className="flex gap-4">
-                  <label className="inline-flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      checked={!guarantor.isMarried}
-                      onChange={() => updateGuarantor(guarantor.id, 'isMarried', false)}
-                      className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">โสด / ไม่ได้จดทะเบียนสมรส</span>
-                  </label>
-                  <label className="inline-flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      checked={guarantor.isMarried}
-                      onChange={() => updateGuarantor(guarantor.id, 'isMarried', true)}
-                      className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">สมรสจดทะเบียน</span>
-                  </label>
+              {/* Marital Status (Only for Individuals) */}
+              {(guarantor.guarantorType === 'person' || !guarantor.guarantorType) && (
+                <div className="pt-3 border-t border-emerald-100 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <label className="block text-xs font-medium text-gray-600 mb-2">สถานภาพสมรส</label>
+                  <div className="flex gap-4">
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={!guarantor.isMarried}
+                        onChange={() => updateGuarantor(guarantor.id, 'isMarried', false)}
+                        className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">โสด / ไม่ได้จดทะเบียนสมรส</span>
+                    </label>
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={guarantor.isMarried}
+                        onChange={() => updateGuarantor(guarantor.id, 'isMarried', true)}
+                        className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">สมรสจดทะเบียน</span>
+                    </label>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {guarantor.isMarried && (
                 <div className="space-y-3 pt-3 border-t border-emerald-100 animate-in fade-in slide-in-from-top-1 duration-200">
@@ -325,7 +386,12 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                       <label className="block text-xs font-medium text-gray-600">ที่อยู่คู่สมรส</label>
                       <button
                         type="button"
-                        onClick={() => updateGuarantor(guarantor.id, 'spouseAddress', guarantor.guarantorAddress)}
+                        onClick={() => {
+                          updateGuarantor(guarantor.id, 'spouseAddress', guarantor.guarantorAddress);
+                          if (guarantor.guarantorPostalCode) {
+                            updateGuarantor(guarantor.id, 'spousePostalCode', guarantor.guarantorPostalCode);
+                          }
+                        }}
                         className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
                       >
                         <Copy size={12} />
@@ -335,6 +401,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                     <ThaiAddressInput
                       value={guarantor.spouseAddress}
                       onChange={(address) => updateGuarantor(guarantor.id, 'spouseAddress', address)}
+                      onPostalCodeChange={(code) => updateGuarantor(guarantor.id, 'spousePostalCode', code)}
                     />
                   </div>
                 </div>

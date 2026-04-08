@@ -5,6 +5,7 @@ import { CONTRACT_TYPE_LABELS } from '../types/contract';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatThaiDate } from '../utils/thaiDate';
 import { formatThaiId, getAuthorizedSignatoryText } from '../utils/formatters';
+import { formatAddressWithPostalCode } from '../utils/address';
 
 interface Props {
   data: ContractData;
@@ -15,9 +16,9 @@ export default function ContractPreview({ data }: Props) {
     const num = parseFloat(numStr.replace(/,/g, ''));
     if (isNaN(num)) return numStr;
     const isWhole = num % 1 === 0;
-    return num.toLocaleString('en-US', { 
-      minimumFractionDigits: isWhole ? 0 : 2, 
-      maximumFractionDigits: isWhole ? 0 : 2 
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: isWhole ? 0 : 2,
+      maximumFractionDigits: isWhole ? 0 : 2
     });
   };
 
@@ -50,7 +51,7 @@ export default function ContractPreview({ data }: Props) {
     const label = CONTRACT_TYPE_LABELS[item.type];
     return `${label.prefix} ${item.contractNo}`;
   });
-  
+
   const itemSummaryText = itemSummaryParts.length > 1
     ? itemSummaryParts.slice(0, -1).join(', ') + ' และ ' + itemSummaryParts[itemSummaryParts.length - 1]
     : itemSummaryParts[0] || '';
@@ -60,29 +61,27 @@ export default function ContractPreview({ data }: Props) {
       {/* Page 1 */}
       <div className="print-page relative">
         <PageHeader />
-
         <div className="text-center font-bold mb-6">
           <h2 className="text-xl">สัญญาชำระค่าธรรมเนียม</h2>
-          <div className="mt-2">
+          <div className="mt-2 text-[14px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
         </div>
-
         <div className="indent-10 mb-6">
-          สัญญาชำระค่าธรรมเนียม ("สัญญา") ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> ("วันที่สัญญามีผลใช้บังคับ") ระหว่าง
+          สัญญาชำระค่าธรรมเนียม <b>("สัญญา")</b> ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> <b>("วันที่สัญญามีผลใช้บังคับ")</b> ระหว่าง
         </div>
 
         <div className="mb-4 pr-2 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(1)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.companyName}</Highlight></b> (โดย <Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.companyAddress)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้รับค่าธรรมเนียม"</b>) และ
+            <b><Highlight>{data.companyName}</Highlight></b> (โดย <Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.companyAddress, data.companyPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้รับค่าธรรมเนียม"</b>) และ
           </div>
         </div>
 
         <div className="mb-6 pr-2 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(2)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(data.customerAddress)}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้ชำระค่าธรรมเนียม"</b>)
+            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.customerAddress, data.customerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้ชำระค่าธรรมเนียม"</b>)
           </div>
         </div>
 
@@ -103,7 +102,7 @@ export default function ContractPreview({ data }: Props) {
             <div key={item.id} className={`flex gap-2 pl-6 pr-2 text-justify ${index === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
               <span className="shrink-0 font-bold whitespace-nowrap">1.{index + 1}.</span>
               <div className="flex-1 text-justify">
-                 ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
+                ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
               </div>
             </div>
           );
