@@ -42,8 +42,9 @@ interface AddressFields {
 
 interface Props {
   value: string;
-  onChange: (address: string) => void;
+  onChange?: (address: string) => void;
   onPostalCodeChange?: (postalCode: string) => void;
+  onAddressChange?: (address: string, postalCode: string) => void;
   className?: string;
 }
 
@@ -297,7 +298,7 @@ function SearchableSelect({
 }
 
 // --- Main Component ---
-export default function ThaiAddressInput({ value, onChange, onPostalCodeChange, className = '' }: Props) {
+export default function ThaiAddressInput({ value, onChange, onPostalCodeChange, onAddressChange, className = '' }: Props) {
   const [fields, setFields] = useState<AddressFields>(() => parseAddress(value));
   const isInitialMount = useRef(true);
 
@@ -345,14 +346,19 @@ export default function ThaiAddressInput({ value, onChange, onPostalCodeChange, 
       const composed = composeAddress(next);
       // Use setTimeout to avoid calling onChange during render
       setTimeout(() => {
-        onChange(composed);
+        if (onChange) {
+          onChange(composed);
+        }
         if (onPostalCodeChange) {
           onPostalCodeChange(next.postalCode);
+        }
+        if (onAddressChange) {
+          onAddressChange(composed, next.postalCode);
         }
       }, 0);
       return next;
     });
-  }, [onChange, onPostalCodeChange]);
+  }, [onChange, onPostalCodeChange, onAddressChange]);
 
   // Get province code from name
   const selectedProvinceCode = (f: AddressFields): number => {

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { ShieldCheck, ChevronDown, ChevronUp, FileText, Plus, Trash2 } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import { ShieldCheck, ChevronDown, ChevronUp, FileText, Plus, Trash2, Copy } from 'lucide-react';
 
 import ThaiAddressInput from './ThaiAddressInput';
 import { TODAY } from '../types/app';
-import type { HirePurchaseData, LessorInfo, AssetDetail, ContractType, CompanyInfo, BuybackData } from '../types/app';
+import type { HirePurchaseData, LessorInfo, AssetDetail, ContractType, CompanyInfo, BuybackData, Agreement, CollateralAsset } from '../types/app';
+import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatCurrency } from '../utils/formatters';
 import BuybackForm from './BuybackForm';
@@ -14,12 +15,38 @@ interface Props {
   onChange: (data: HirePurchaseData) => void;
   type?: ContractType;
   customerInfo?: CompanyInfo;
-  onFocusSection?: (sectionId: string, containerId?: string) => void;
+  agreementId?: string;
+  agreements?: Agreement[];
+  onFocusSection?: (sectionId: string, tabKey?: string) => void;
   onBuybackToggled?: (buybackId: string) => void;
 }
 
-export default function HirePurchaseForm({ data, onChange, customerInfo, type = 'hirePurchase', onFocusSection, onBuybackToggled }: Props) {
+export default function HirePurchaseForm({ data, onChange, customerInfo, type = 'hirePurchase', agreementId, agreements = [], onFocusSection, onBuybackToggled }: Props) {
   const [showBuyback, setShowBuyback] = useState(true);
+  const [showCopyCollateralMenu, setShowCopyCollateralMenu] = useState(false);
+  const copyMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close copy menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (copyMenuRef.current && !copyMenuRef.current.contains(e.target as Node)) {
+        setShowCopyCollateralMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Determine if this is the first agreement (index 0 = no copy button)
+  const currentAgreementIndex = agreements.findIndex(a => a.id === agreementId);
+  const isFirstAgreement = currentAgreementIndex <= 0;
+
+  // Get other agreements that have collateral assets to copy from (only show for non-first agreements)
+  const otherAgreementsWithCollateral = isFirstAgreement ? [] : agreements.filter(a => {
+    if (a.id === agreementId) return false;
+    const d = a.data as any;
+    return d?.collateralAssets && d.collateralAssets.length > 0;
+  });
 
   const handleChange = (field: keyof HirePurchaseData, value: any) => {
     onChange({ ...data, [field]: value });
@@ -215,6 +242,28 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
   const removeAsset = (index: number) => {
     handleChange('assets', data.assets.filter((_, i) => i !== index));
+  };
+
+  const addCollateralAsset = () => {
+    const lastLandAsset = [...(data.collateralAssets || [])].reverse().find(a => a.type === 'land' && a.landDetails);
+
+    const newLandDetails = {
+      deedNo: '',
+      volume: '',
+      page: '',
+      mapSheet: lastLandAsset?.landDetails?.mapSheet || '',
+      landNo: '',
+      surveyNo: '',
+      subDistrict: lastLandAsset?.landDetails?.subDistrict || '',
+      district: lastLandAsset?.landDetails?.district || '',
+      province: lastLandAsset?.landDetails?.province || '',
+      owner: lastLandAsset?.landDetails?.owner || customerInfo?.companyName || ''
+    };
+
+    handleChange('collateralAssets', [...(data.collateralAssets || []), {
+      type: 'land',
+      landDetails: newLandDetails
+    }]);
   };
 
   return (
@@ -503,21 +552,6 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">เริ่มชำระงวดแรก</label>
-                  <input type="date" value={data.firstInstallmentDate || ''} onChange={(e) => handleChange('firstInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">ชำระทุกวันที่ [ดึงจากงวดแรก]</label>
-                  <input type="text" value={data.paymentDay || ''} onChange={(e) => handleChange('paymentDay', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">สิ้นสุดงวดสุดท้าย [คำนวณอัตโนมัติ]</label>
-                  <input type="date" value={data.lastInstallmentDate || ''} onChange={(e) => handleChange('lastInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนงวด (เดือน)</label>
                   <input
                     type="text"
@@ -534,6 +568,21 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                     readOnly
                     className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-100 text-gray-400 font-bold cursor-not-allowed"
                   />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">เริ่มชำระงวดแรก</label>
+                  <input type="date" value={data.firstInstallmentDate || ''} onChange={(e) => handleChange('firstInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">ชำระทุกวันที่ [ดึงจากงวดแรก]</label>
+                  <input type="text" value={data.paymentDay || ''} onChange={(e) => handleChange('paymentDay', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">สิ้นสุดงวดสุดท้าย [คำนวณอัตโนมัติ]</label>
+                  <input type="date" value={data.lastInstallmentDate || ''} onChange={(e) => handleChange('lastInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
                 </div>
               </div>
             </div>
@@ -605,7 +654,60 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
       {/* Collateral Section */}
       <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('hp-collateral')}>
-        <h3 className="font-semibold text-lg text-blue-700 mb-3">6. หลักประกัน</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold text-lg text-blue-700">6. หลักประกัน</h3>
+          {otherAgreementsWithCollateral.length > 0 && (
+            <div className="relative" ref={copyMenuRef}>
+              <button
+                type="button"
+                onClick={() => setShowCopyCollateralMenu(!showCopyCollateralMenu)}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100 hover:border-blue-300 transition-all shadow-sm"
+              >
+                <Copy size={13} />
+                คัดลอกจากสัญญาอื่น
+                <ChevronDown size={12} className={`transition-transform ${showCopyCollateralMenu ? 'rotate-180' : ''}`} />
+              </button>
+              {showCopyCollateralMenu && (
+                <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 min-w-[260px] animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                    เลือกสัญญาต้นทาง
+                  </div>
+                  {otherAgreementsWithCollateral.map((agreement) => {
+                    const aData = agreement.data as any;
+                    const sourceIndex = agreements.indexOf(agreement) + 1;
+                    const label = `${CONTRACT_TYPE_LABELS[agreement.type]} (${sourceIndex})`;
+                    const assetCount = aData.collateralAssets?.length || 0;
+                    return (
+                      <button
+                        key={agreement.id}
+                        onClick={() => {
+                          const copied: CollateralAsset[] = JSON.parse(JSON.stringify(aData.collateralAssets));
+                          onChange({
+                            ...data,
+                            collateralAssets: copied,
+                            collateralValue: aData.collateralValue || data.collateralValue || ''
+                          });
+                          setShowCopyCollateralMenu(false);
+                        }}
+                        className="w-full text-left px-3 py-2.5 text-xs flex items-center gap-2 transition-colors hover:bg-blue-50 text-slate-700"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                          <Copy size={11} className="text-blue-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold truncate">{label}</div>
+                          <div className="text-[10px] text-slate-400">
+                            {aData.contractNo || 'ไม่มีเลขสัญญา'} • {assetCount} รายการ
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">มูลค่ารวมหลักประกัน (6.1) (บาท)</label>
@@ -995,7 +1097,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
             <div className="mt-4">
               <button
                 type="button"
-                onClick={() => handleChange('collateralAssets', [...(data.collateralAssets || []), { type: 'land', landDetails: { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: customerInfo?.companyName || '' } }])}
+                onClick={addCollateralAsset}
                 className="w-full py-6 border-2 border-dashed border-blue-200 rounded-xl text-blue-600 hover:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 group bg-blue-50/10"
               >
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -1078,8 +1180,8 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                     handleChange('buybacks', newBuybacks);
                   }}
                   onFocusSection={(sectionId: string) => {
-                    if (onFocusSection) {
-                      onFocusSection(sectionId, 'preview-panel');
+                    if (onFocusSection && agreementId) {
+                      onFocusSection(sectionId, `buyback:${agreementId}:${bb.id}`);
                     }
                   }}
                 />

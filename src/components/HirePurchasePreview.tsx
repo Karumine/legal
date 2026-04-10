@@ -471,14 +471,14 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="flex gap-4">
-            <span className="">3.6</span>
+            <span className="w-8 shrink-0">3.6</span>
             <div className="flex-1">
               ผู้เช่าซื้อตกลงยินยอมให้ผู้ให้เช่าซื้อนำเงินที่ได้รับชำระในแต่ละงวดตามสัดส่วนในข้อ 1. นำไปหักหรือรับชำระหนี้ส่วนใด ก่อน-หลัง ได้ตามเงื่อนไขที่ผู้ให้เช่าซื้อกำหนดไว้ และผู้เช่าซื้อยินยอมให้ผู้ให้เช่าซื้อทั้งสองฝ่ายทำการปรับปรุงบัญชี และ/หรือ รายการรับชำระหนี้ได้ โดยผู้เช่าซื้อตกลงให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">3.7</span>
+            <span className="w-8 shrink-0">3.7</span>
             <div className="flex-1">
               กรณีที่มีค่าใช้จ่ายอันเกิดจากการที่เช็คสั่งจ่ายล่วงหน้าเพื่อชำระหนี้ ไม่อาจขึ้นเงินได้ไม่ว่ากรณีใดก็ตาม และ/หรือ ในกรณีที่มีค่าธรรมเนียมในการเรียกเก็บเช็คข้ามเขต และ/หรือ กรณีอื่น ๆ ที่ก่อให้เกิดค่าใช้จ่ายอันเกี่ยวกับเช็คสั่งจ่ายล่วงหน้าโดยมิใช่ความผิดของผู้ให้เช่าซื้อ ผู้เช่าซื้อตกลงชำระให้แก่ผู้ให้เช่าซื้อทั้งสองฝ่ายในสัดส่วนตามข้อ 1. ของสัญญาฉบับนี้ ภายในระยะเวลาที่ผู้ให้เช่าซื้อกำหนด
             </div>
@@ -494,7 +494,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="font-bold mb-4">4. วิธีการชำระเงิน</div>
 
           <div className="flex gap-4">
-            <span className="">4.1</span>
+            <span className="w-8 shrink-0">4.1</span>
             <div className="flex-1 space-y-4">
               <div>
                 ในกรณีที่ผู้เช่าซื้อต้องชำระเงินใด ๆ ให้แก่ผู้ให้เช่าซื้อ ผู้เช่าซื้อตกลงชำระเงินให้แก่ผู้ให้เช่าซื้อในรูปแบบเช็คธนาคารสั่งจ่ายล่วงหน้าในนามผู้ให้เช่าซื้อแต่ละราย ตามจำนวนเงินค่างวดการเช่าซื้อในแต่ละงวด <Highlight>จำนวนงวดละ {data.chequesPerInstallment} ({thaiBahtText(data.chequesPerInstallment || '0').replace('บาทถ้วน', '').trim()}) ฉบับ</Highlight> (สั่งจ่ายในนามของผู้ให้เช่าซื้อแต่ละรายตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้) <Highlight>รวมทั้งสิ้น {data.installments} งวด</Highlight> โดยให้ถือว่าเป็นการชำระค่างวดการเช่าซื้อในแต่ละงวด ต่อเมื่อได้มีการขึ้นเงินและได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น
@@ -506,21 +506,21 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="flex gap-4">
-            <span className="">4.2</span>
+            <span className="w-8 shrink-0">4.2</span>
             <div className="flex-1">
               {data.clause4_2Text}
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">4.3</span>
+            <span className="w-8 shrink-0">4.3</span>
             <div className="flex-1">
               ในกรณีที่ผู้เช่าซื้อประสงค์จะชำระหนี้ด้วยวิธีการอื่นใด และ/หรือ เนื่องจากมีเหตุผิดนัดชำระ ชำระเบี้ยปรับค่าใช้จ่ายอื่นใดที่เกี่ยวข้องกับสัญญาฉบับนี้ ให้ผู้เช่าซื้อดำเนินการชำระผ่านบัญชีธนาคาร <b>ชื่อบัญชี บริษัท อาไจล์ แอสเซ็ทส์ จำกัด ธนาคารกสิกรไทย ประเภทออมทรัพย์ หมายเลขบัญชี 025-3-77662-5</b>
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="">4.4</span>
+            <span className="w-8 shrink-0">4.4</span>
             <div className="flex-1">
               คู่สัญญาทั้งสามฝ่ายตกลงว่าถ้าวันครบกำหนดชำระเงินใด ๆ มิใช่วันทำการ ก็ให้เงินจำนวนนั้น ๆ ถึงกำหนดชำระในวันทำการ ก่อนวันถึงกำหนดชำระนั้น
             </div>
@@ -536,7 +536,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="font-bold mb-4">5. หน้าที่และความรับผิดชอบของผู้เช่าซื้อ</div>
 
           <div className="flex gap-4">
-            <span className="">5.1</span>
+            <span className="w-8 shrink-0">5.1</span>
             <div className="flex-1 space-y-4">
               <div className="underline">การใช้ทรัพย์สินที่เช่าซื้อ</div>
               <div className="flex gap-4">
@@ -561,7 +561,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="flex gap-4">
-            <span className="">5.2</span>
+            <span className="w-8 shrink-0">5.2</span>
             <div className="flex-1 space-y-2">
               <div className="underline">ค่าใช้จ่ายและค่าธรรมเนียม</div>
               <div>
@@ -578,7 +578,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
-            <span className="">5.3</span>
+            <span className="w-8 shrink-0">5.3</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การเข้าถึงข้อมูลการใช้งานและการตรวจสอบสภาพของทรัพย์สิน</div>
               <div>
@@ -588,7 +588,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="flex gap-4">
-            <span className="">5.4</span>
+            <span className="w-8 shrink-0">5.4</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การรับประกันและการบริการบำรุงรักษาทรัพย์สิน โดยผู้ผลิต</div>
               <div>
@@ -598,7 +598,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="flex gap-4">
-            <span className="">5.5</span>
+            <span className="w-8 shrink-0">5.5</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การประกันภัยทรัพย์สิน</div>
               <div>
@@ -640,7 +640,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="flex gap-4">
-            <span className="">6.3</span>
+            <span className="w-8 shrink-0">6.3</span>
             <div className="flex-1 space-y-4">
               <div>ผู้เช่าซื้อตกลงว่าบรรดาทรัพย์สินดังต่อไปนี้ <b>(“ทรัพย์สินหลักประกัน”)</b> เป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า</div>
 
@@ -939,7 +939,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
                     <div className="text-center w-full">
-                      ชื่อ: <Highlight>{sig.trim()}</Highlight>
+                      ( <Highlight>{sig.trim()}</Highlight> )
                     </div>
                   </div>
                 ))}
@@ -974,7 +974,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
                     <div className="text-center w-full">
-                      ( ชื่อ: <Highlight>{sig.trim()}</Highlight> )
+                      ( <Highlight>{sig.trim()}</Highlight> )
                     </div>
                   </div>
                 ))}
@@ -1020,7 +1020,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   <div key={idx} className="space-y-2">
                     <div className="border-b border-black w-full h-8"></div>
                     <div className="text-center w-full">
-                      ชื่อ: <Highlight>{sig.trim()}</Highlight>
+                      ( <Highlight>{sig.trim()}</Highlight> )
                     </div>
                   </div>
                 ))}

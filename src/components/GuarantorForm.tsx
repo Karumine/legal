@@ -43,9 +43,9 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
     prevAgreementsRef.current = currentIds;
   }, [mainAgreements, data, onChange]);
 
-  const updateGuarantor = (id: string, field: keyof GuarantorData, value: any) => {
+  const updateGuarantor = (id: string, updates: Partial<GuarantorData>) => {
     onChange(
-      data.map((g) => (g.id === id ? { ...g, [field]: value } : g))
+      data.map((g) => (g.id === id ? { ...g, ...updates } : g))
     );
   };
 
@@ -82,7 +82,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
       ? currentIds.filter(id => id !== agreementId)
       : [...currentIds, agreementId];
 
-    updateGuarantor(guarantorId, 'selectedAgreementIds', newIds);
+    updateGuarantor(guarantorId, { selectedAgreementIds: newIds });
   };
 
   const handleDBDSearch = async (guarantorId: string, taxId: string) => {
@@ -192,7 +192,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                     <input
                       type="radio"
                       checked={guarantor.guarantorType === 'person' || !guarantor.guarantorType}
-                      onChange={() => updateGuarantor(guarantor.id, 'guarantorType', 'person')}
+                      onChange={() => updateGuarantor(guarantor.id, { guarantorType: 'person' })}
                       className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
                     />
                     <span className="ml-2 text-sm text-gray-700">บุคคลธรรมดา</span>
@@ -201,7 +201,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                     <input
                       type="radio"
                       checked={guarantor.guarantorType === 'company'}
-                      onChange={() => updateGuarantor(guarantor.id, 'guarantorType', 'company')}
+                      onChange={() => updateGuarantor(guarantor.id, { guarantorType: 'company' })}
                       className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
                     />
                     <span className="ml-2 text-sm text-gray-700">บริษัทจำกัด</span>
@@ -210,7 +210,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                     <input
                       type="radio"
                       checked={guarantor.guarantorType === 'partnership'}
-                      onChange={() => updateGuarantor(guarantor.id, 'guarantorType', 'partnership')}
+                      onChange={() => updateGuarantor(guarantor.id, { guarantorType: 'partnership' })}
                       className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
                     />
                     <span className="ml-2 text-sm text-gray-700">ห้างหุ้นส่วน</span>
@@ -225,7 +225,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                   <input
                     type="text"
                     value={guarantor.contractNo}
-                    onChange={(e) => updateGuarantor(guarantor.id, 'contractNo', e.target.value)}
+                    onChange={(e) => updateGuarantor(guarantor.id, { contractNo: e.target.value })}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
                     placeholder="AGA/XX-SUR"
                   />
@@ -235,7 +235,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                   <input
                     type="date"
                     value={guarantor.contractDate}
-                    onChange={(e) => updateGuarantor(guarantor.id, 'contractDate', e.target.value)}
+                    onChange={(e) => updateGuarantor(guarantor.id, { contractDate: e.target.value })}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
                   />
                 </div>
@@ -248,7 +248,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                 <input
                   type="text"
                   value={guarantor.guarantorName}
-                  onChange={(e) => updateGuarantor(guarantor.id, 'guarantorName', e.target.value)}
+                  onChange={(e) => updateGuarantor(guarantor.id, { guarantorName: e.target.value })}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
                   placeholder={guarantor.guarantorType === 'person' || !guarantor.guarantorType ? 'นาย/นาง/นางสาว ...' : 'ระบุชื่อนิติบุคคล ...'}
                 />
@@ -259,7 +259,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                   <label className="block text-xs font-medium text-gray-600 mb-1">กรรมการผู้มีอำนาจ / หุ้นส่วนผู้จัดการ</label>
                   <textarea
                     value={guarantor.directors || ''}
-                    onChange={(e) => updateGuarantor(guarantor.id, 'directors', e.target.value)}
+                    onChange={(e) => updateGuarantor(guarantor.id, { directors: e.target.value })}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border h-16"
                     placeholder="ระบุชื่อกรรมการผู้มีอำนาจลงนาม ..."
                   />
@@ -276,7 +276,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                     <input
                       type="text"
                       value={guarantor.guarantorIdCard}
-                      onChange={(e) => updateGuarantor(guarantor.id, 'guarantorIdCard', formatThaiId(e.target.value))}
+                      onChange={(e) => updateGuarantor(guarantor.id, { guarantorIdCard: formatThaiId(e.target.value) })}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 pr-10 border"
                       placeholder={guarantor.guarantorType === 'person' || !guarantor.guarantorType ? 'X-XXXX-XXXXX-XX-X' : '0XXXXXXXXXXXX'}
                     />
@@ -300,7 +300,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                   <input
                     type="text"
                     value={guarantor.phone || ''}
-                    onChange={(e) => updateGuarantor(guarantor.id, 'phone', formatPhoneNumber(e.target.value))}
+                    onChange={(e) => updateGuarantor(guarantor.id, { phone: formatPhoneNumber(e.target.value) })}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
                     placeholder="08X-XXX-XXXX"
                   />
@@ -313,10 +313,10 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                   <button
                     type="button"
                     onClick={() => {
-                      updateGuarantor(guarantor.id, 'guarantorAddress', customerInfo.address);
-                      if (customerInfo.postalCode) {
-                        updateGuarantor(guarantor.id, 'guarantorPostalCode', customerInfo.postalCode);
-                      }
+                      updateGuarantor(guarantor.id, { 
+                        guarantorAddress: customerInfo.address,
+                        guarantorPostalCode: customerInfo.postalCode || ''
+                      });
                     }}
                     className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
                   >
@@ -326,8 +326,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                 </div>
                 <ThaiAddressInput
                   value={guarantor.guarantorAddress}
-                  onChange={(address) => updateGuarantor(guarantor.id, 'guarantorAddress', address)}
-                  onPostalCodeChange={(code) => updateGuarantor(guarantor.id, 'guarantorPostalCode', code)}
+                  onAddressChange={(address, code) => updateGuarantor(guarantor.id, { guarantorAddress: address, guarantorPostalCode: code })}
                 />
               </div>
 
@@ -340,7 +339,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                       <input
                         type="radio"
                         checked={!guarantor.isMarried}
-                        onChange={() => updateGuarantor(guarantor.id, 'isMarried', false)}
+                        onChange={() => updateGuarantor(guarantor.id, { isMarried: false })}
                         className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
                       />
                       <span className="ml-2 text-sm text-gray-700">โสด / ไม่ได้จดทะเบียนสมรส</span>
@@ -349,7 +348,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                       <input
                         type="radio"
                         checked={guarantor.isMarried}
-                        onChange={() => updateGuarantor(guarantor.id, 'isMarried', true)}
+                        onChange={() => updateGuarantor(guarantor.id, { isMarried: true })}
                         className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
                       />
                       <span className="ml-2 text-sm text-gray-700">สมรสจดทะเบียน</span>
@@ -365,7 +364,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                     <input
                       type="text"
                       value={guarantor.spouseName}
-                      onChange={(e) => updateGuarantor(guarantor.id, 'spouseName', e.target.value)}
+                      onChange={(e) => updateGuarantor(guarantor.id, { spouseName: e.target.value })}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
                     />
                   </div>
@@ -375,7 +374,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                       <input
                         type="text"
                         value={guarantor.spouseIdCard}
-                        onChange={(e) => updateGuarantor(guarantor.id, 'spouseIdCard', formatThaiId(e.target.value))}
+                        onChange={(e) => updateGuarantor(guarantor.id, { spouseIdCard: formatThaiId(e.target.value) })}
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
                         placeholder="X-XXXX-XXXXX-XX-X"
                       />
@@ -387,10 +386,10 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                       <button
                         type="button"
                         onClick={() => {
-                          updateGuarantor(guarantor.id, 'spouseAddress', guarantor.guarantorAddress);
-                          if (guarantor.guarantorPostalCode) {
-                            updateGuarantor(guarantor.id, 'spousePostalCode', guarantor.guarantorPostalCode);
-                          }
+                          updateGuarantor(guarantor.id, { 
+                            spouseAddress: guarantor.guarantorAddress,
+                            spousePostalCode: guarantor.guarantorPostalCode || ''
+                          });
                         }}
                         className="flex items-center gap-1 px-2 py-1 bg-emerald-50 text-emerald-700 rounded border border-emerald-200 text-[10px] font-medium hover:bg-emerald-100 active:scale-95 transition-all shadow-sm"
                       >
@@ -400,8 +399,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                     </div>
                     <ThaiAddressInput
                       value={guarantor.spouseAddress}
-                      onChange={(address) => updateGuarantor(guarantor.id, 'spouseAddress', address)}
-                      onPostalCodeChange={(code) => updateGuarantor(guarantor.id, 'spousePostalCode', code)}
+                      onAddressChange={(address, code) => updateGuarantor(guarantor.id, { spouseAddress: address, spousePostalCode: code })}
                     />
                   </div>
                 </div>

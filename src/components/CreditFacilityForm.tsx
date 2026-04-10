@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
-import type { CreditFacilityData, LessorInfo, CompanyInfo } from '../types/app';
+import React, { useEffect, useState, useRef } from 'react';
+import { Plus, Copy, ChevronDown } from 'lucide-react';
+import type { CreditFacilityData, LessorInfo, CompanyInfo, Agreement, CollateralAsset } from '../types/app';
+import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatCurrency } from '../utils/formatters';
 import ThaiLocationSelector from './ThaiLocationSelector';
@@ -7,11 +9,37 @@ import ThaiLocationSelector from './ThaiLocationSelector';
 interface Props {
   data: CreditFacilityData;
   customerInfo?: CompanyInfo;
+  agreements?: Agreement[];
+  currentAgreementId?: string;
   onChange: (data: CreditFacilityData) => void;
   onFocusSection?: (sectionId: string) => void;
 }
 
-export default function CreditFacilityForm({ data, onChange, customerInfo, onFocusSection }: Props) {
+export default function CreditFacilityForm({ data, onChange, customerInfo, agreements = [], currentAgreementId, onFocusSection }: Props) {
+  const [showCopyCollateralMenu, setShowCopyCollateralMenu] = useState(false);
+  const copyMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close copy menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (copyMenuRef.current && !copyMenuRef.current.contains(e.target as Node)) {
+        setShowCopyCollateralMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Determine if this is the first agreement (index 0 = no copy button)
+  const currentAgreementIndex = agreements.findIndex(a => a.id === currentAgreementId);
+  const isFirstAgreement = currentAgreementIndex <= 0;
+
+  // Get other agreements that have collateral assets to copy from (only show for non-first agreements)
+  const otherAgreementsWithCollateral = isFirstAgreement ? [] : agreements.filter(a => {
+    if (a.id === currentAgreementId) return false;
+    const d = a.data as any;
+    return d?.collateralAssets && d.collateralAssets.length > 0;
+  });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     onChange({ ...data, [name]: value });
@@ -21,6 +49,31 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
     onChange({
       ...data,
       [lender]: { ...data[lender], [field]: value }
+    });
+  };
+
+  const addCollateralAsset = () => {
+    const lastLandAsset = [...(data.collateralAssets || [])].reverse().find(a => a.type === 'land' && a.landDetails);
+
+    const newLandDetails = {
+      deedNo: '',
+      volume: '',
+      page: '',
+      mapSheet: lastLandAsset?.landDetails?.mapSheet || '',
+      landNo: '',
+      surveyNo: '',
+      subDistrict: lastLandAsset?.landDetails?.subDistrict || '',
+      district: lastLandAsset?.landDetails?.district || '',
+      province: lastLandAsset?.landDetails?.province || '',
+      owner: lastLandAsset?.landDetails?.owner || customerInfo?.companyName || ''
+    };
+
+    onChange({
+      ...data,
+      collateralAssets: [...(data.collateralAssets || []), {
+        type: 'land',
+        landDetails: newLandDetails
+      }]
     });
   };
 
@@ -35,8 +88,10 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
   // Auto-calculations
   useEffect(() => {
     const loanAmountRaw = parseFloat(data.loanAmount.replace(/,/g, '')) || 0;
-    const numInstallments = parseInt(data.installments) || 1;
+    const numInstallments = parseInt(data.installments) || 0;
     const interestRateRaw = parseFloat(data.interestRate) || 0;
+
+    let updates: Partial<CreditFacilityData> = {};
 
     if (loanAmountRaw > 0) {
       let monthlyAmount = 0;
@@ -44,11 +99,12 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
       if (data.interestType === 'แบบลดต้นลดดอก' && interestRateRaw > 0) {
         // Effective Rate (Amortization) Formula: P * [ i(1+i)^n ] / [ (1+i)^n – 1 ]
         const monthlyRate = (interestRateRaw / 100) / 12;
-        monthlyAmount = (loanAmountRaw * monthlyRate * Math.pow(1 + monthlyRate, numInstallments)) / 
-                       (Math.pow(1 + monthlyRate, numInstallments) - 1);
+        const n = numInstallments || 1;
+        monthlyAmount = (loanAmountRaw * monthlyRate * Math.pow(1 + monthlyRate, n)) /
+          (Math.pow(1 + monthlyRate, n) - 1);
       } else {
         // Flat Rate Formula: (Principal / n) + (Principal * annualRate / 12)
-        const principalPerMonth = loanAmountRaw / numInstallments;
+        const principalPerMonth = numInstallments > 0 ? loanAmountRaw / numInstallments : 0;
         const interestPerMonth = (loanAmountRaw * (interestRateRaw / 100)) / 12;
         monthlyAmount = principalPerMonth + interestPerMonth;
       }
@@ -59,15 +115,71 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
       });
 
       if (formattedInstallment !== data.installmentAmount) {
-        onChange({ ...data, installmentAmount: formattedInstallment });
+        updates.installmentAmount = formattedInstallment;
       }
+    }
+
+    // Date calculations
+    if (data.firstInstallmentDate && numInstallments > 0) {
+      let firstDate = new Date(data.firstInstallmentDate);
+      
+      // Handle Thai format if it somehow ends up here (DD/MM/YYYY)
+      if (typeof data.firstInstallmentDate === 'string' && data.firstInstallmentDate.includes('/')) {
+        const parts = data.firstInstallmentDate.split('/');
+        if (parts.length === 3) {
+          let year = parseInt(parts[2]);
+          if (year > 2500) year -= 543;
+          firstDate = new Date(year, parseInt(parts[1]) - 1, parseInt(parts[0]));
+        }
+      }
+
+      if (!isNaN(firstDate.getTime())) {
+        // Update payment day if different
+        const day = firstDate.getDate().toString();
+        if (data.paymentDay !== day) {
+          updates.paymentDay = day;
+        }
+
+        // Calculate last installment date (First Date + (installments - 1) months)
+        const lastDate = new Date(firstDate);
+        lastDate.setMonth(lastDate.getMonth() + (numInstallments - 1));
+
+        let lastFormattedStr = '';
+        if (typeof data.firstInstallmentDate === 'string' && data.firstInstallmentDate.includes('/')) {
+          const y = lastDate.getFullYear() + 543;
+          const m = String(lastDate.getMonth() + 1).padStart(2, '0');
+          const d = String(lastDate.getDate()).padStart(2, '0');
+          lastFormattedStr = `${d}/${m}/${y}`;
+        } else {
+          lastFormattedStr = lastDate.toISOString().split('T')[0];
+        }
+
+        if (data.lastInstallmentDate !== lastFormattedStr) {
+          updates.lastInstallmentDate = lastFormattedStr;
+        }
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      onChange({ ...data, ...updates });
     }
   }, [
     data.loanAmount,
     data.installments,
     data.interestRate,
-    data.interestType
+    data.interestType,
+    data.firstInstallmentDate
   ]);
+
+  // Auto-resize textareas for pre-disbursement conditions and purpose
+  useEffect(() => {
+    const textareas = document.querySelectorAll('.auto-resize-textarea');
+    textareas.forEach(ta => {
+      const textarea = ta as HTMLTextAreaElement;
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    });
+  }, [data.conditions32, data.businessPurpose]);
 
   return (
     <div className="space-y-6">
@@ -90,7 +202,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">วันที่เริ่มมีผลบังคับใช้</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
             <input
               type="date"
               name="effectiveDate"
@@ -126,36 +238,104 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
             </div>
           </div>
 
-          <div className="pt-2 border-t">
-            <label className="block text-xs font-medium text-gray-600 mb-1">ค่าอากรแสตมป์ (13.2) (บาท)</label>
-            <div className="flex gap-4 items-center">
-              <input
-                type="text"
-                name="stampDuty"
-                value={data.stampDuty || ''}
-                onChange={(e) => {
-                  const formatted = formatCurrency(e.target.value);
-                  onChange({ ...data, stampDuty: formatted });
-                }}
-                className="block w-64 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white font-bold text-blue-700"
-                placeholder="เช่น 767"
-              />
-              <div className="text-blue-600 text-xs font-medium">
-                {data.stampDuty ? `(${thaiBahtText(data.stampDuty)})` : '(ศูนย์บาทถ้วน)'}
-              </div>
-            </div>
+          {/* Proportions */}
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { key: 'lender1', label: 'ผู้ให้สินเชื่อฝ่ายที่ 1', limit: limit1 },
+              { key: 'lender2', label: 'ผู้ให้สินเชื่อฝ่ายที่ 2', limit: limit2 }
+            ].map(l => (
+              <section key={l.key} className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
+                <h3 className="font-semibold text-md text-blue-700 mb-3">{l.label}</h3>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-blue-600 mb-1 font-bold italic">สัดส่วน (%) *คำนวณวงเงินอัตโนมัติ*</label>
+                    <input
+                      type="text"
+                      value={(data as any)[l.key].proportion}
+                      onChange={(e) => handleLenderChange(l.key as any, 'proportion', e.target.value)}
+                      className="block w-full rounded-md border-blue-300 shadow-sm text-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">วงเงินที่ได้รับ (บาท)</label>
+                    <input
+                      type="text"
+                      value={l.limit.toLocaleString('en-US')}
+                      readOnly
+                      className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed font-bold"
+                    />
+                  </div>
+                </div>
+              </section>
+            ))}
           </div>
-
-          <div className="pt-2 border-t space-y-4">
+          <div className="pt-2 space-y-4">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">วัตถุประสงค์ (ข้อ 2)</label>
               <textarea
                 name="businessPurpose"
                 value={data.businessPurpose || ''}
                 onChange={handleChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border h-20"
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white auto-resize-textarea resize-none overflow-hidden min-h-[80px]"
                 placeholder="ระบุวัตถุประสงค์การกู้..."
               />
+            </div>
+
+            {/* Conditions 3.2 Dynamic Section */}
+            <div className="pt-2 border-t">
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-xs font-bold text-blue-700">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ (ข้อ 3.2 - เริ่มจาก ค)</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const current = data.conditions32 || [];
+                    onChange({ ...data, conditions32: [...current, ''] });
+                  }}
+                  className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-[10px] font-bold hover:bg-blue-200 transition-colors flex items-center gap-1"
+                >
+                  <Plus size={12} /> เพิ่มเงื่อนไข
+                </button>
+              </div>
+              <div className="space-y-3">
+                {(data.conditions32 || []).map((condition, idx) => (
+                  <div key={idx} className="flex gap-2 items-start">
+                    <div className="shrink-0 w-6 h-6 flex items-center justify-center bg-gray-100 rounded text-[10px] font-bold text-gray-600">
+                      {['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][idx + 2] || idx + 3}
+                    </div>
+                    <textarea
+                      value={condition}
+                      onChange={(e) => {
+                        const next = [...(data.conditions32 || [])];
+                        next[idx] = e.target.value;
+                        onChange({ ...data, conditions32: next });
+                      }}
+                      onInput={(e) => {
+                        const target = e.target as HTMLTextAreaElement;
+                        target.style.height = 'auto';
+                        target.style.height = `${target.scrollHeight}px`;
+                      }}
+                      className="flex-1 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-gray-50/50 auto-resize-textarea resize-none overflow-hidden min-h-[40px]"
+                      placeholder={`ระบุเงื่อนไข (${['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][idx + 2] || idx + 3})...`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = (data.conditions32 || []).filter((_, i) => i !== idx);
+                        onChange({ ...data, conditions32: next });
+                      }}
+                      className="p-1 text-red-400 hover:text-red-600 transition-colors"
+                      title="ลบเงื่อนไขนี้"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+                {(data.conditions32 || []).length === 0 && (
+                  <div className="text-center py-4 border-2 border-dashed border-gray-100 rounded-lg text-gray-400 text-xs">
+                    ยังไม่มีการเพิ่มเงื่อนไขเพิ่มเติม (เงื่อนไข ก. และ ข. มีอยู่แล้วในสัญญา)
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-3 gap-4">
@@ -182,6 +362,9 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
                   placeholder="เช่น 15"
                 />
               </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนงวด (เดือน) (4.3 ข)</label>
                 <input
@@ -238,46 +421,87 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
                 />
               </div>
+
+            </div>
+            <div className="pt-2">
+              <label className="block text-xs font-medium text-gray-600 mb-1">ค่าอากรแสตมป์ (13.2) (บาท)</label>
+              <div className="flex gap-4 items-center">
+                <input
+                  type="text"
+                  name="stampDuty"
+                  value={data.stampDuty || ''}
+                  onChange={(e) => {
+                    const formatted = formatCurrency(e.target.value);
+                    onChange({ ...data, stampDuty: formatted });
+                  }}
+                  className="block w-64 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white font-bold text-blue-700"
+                  placeholder="เช่น 767"
+                />
+                <div className="text-blue-600 text-xs font-medium">
+                  {data.stampDuty ? `(${thaiBahtText(data.stampDuty)})` : '(ศูนย์บาทถ้วน)'}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Proportions */}
-      <div className="grid grid-cols-2 gap-4">
-        {[
-          { key: 'lender1', label: 'ผู้ให้สินเชื่อฝ่ายที่ 1', limit: limit1 },
-          { key: 'lender2', label: 'ผู้ให้สินเชื่อฝ่ายที่ 2', limit: limit2 }
-        ].map(l => (
-          <section key={l.key} className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
-            <h3 className="font-semibold text-md text-blue-700 mb-3">{l.label}</h3>
-            <div className="space-y-3">
-              <div>
-                <label className="block text-xs font-medium text-blue-600 mb-1 font-bold italic">สัดส่วน (%) *คำนวณวงเงินอัตโนมัติ*</label>
-                <input
-                  type="text"
-                  value={(data as any)[l.key].proportion}
-                  onChange={(e) => handleLenderChange(l.key as any, 'proportion', e.target.value)}
-                  className="block w-full rounded-md border-blue-300 shadow-sm text-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">วงเงินที่ได้รับ (บาท)</label>
-                <input
-                  type="text"
-                  value={l.limit.toLocaleString('en-US')}
-                  readOnly
-                  className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed font-bold"
-                />
-              </div>
-            </div>
-          </section>
-        ))}
-      </div>
-
       {/* Collateral Section */}
       <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('cf-collateral')}>
-        <h3 className="font-semibold text-lg text-blue-700 mb-3 underline decoration-blue-200">ข้อ 7. หลักประกัน</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold text-lg text-blue-700">ข้อ 7. หลักประกัน</h3>
+          {otherAgreementsWithCollateral.length > 0 && (
+            <div className="relative" ref={copyMenuRef}>
+              <button
+                type="button"
+                onClick={() => setShowCopyCollateralMenu(!showCopyCollateralMenu)}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100 hover:border-blue-300 transition-all shadow-sm"
+              >
+                <Copy size={13} />
+                คัดลอกจากสัญญาอื่น
+                <ChevronDown size={12} className={`transition-transform ${showCopyCollateralMenu ? 'rotate-180' : ''}`} />
+              </button>
+              {showCopyCollateralMenu && (
+                <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 min-w-[260px] animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                    เลือกสัญญาต้นทาง
+                  </div>
+                  {otherAgreementsWithCollateral.map((agreement) => {
+                    const aData = agreement.data as any;
+                    const sourceIndex = agreements.indexOf(agreement) + 1;
+                    const label = `${CONTRACT_TYPE_LABELS[agreement.type]} (${sourceIndex})`;
+                    const assetCount = aData.collateralAssets?.length || 0;
+                    return (
+                      <button
+                        key={agreement.id}
+                        onClick={() => {
+                          const copied: CollateralAsset[] = JSON.parse(JSON.stringify(aData.collateralAssets));
+                          onChange({
+                            ...data,
+                            collateralAssets: copied,
+                            collateralValue: aData.collateralValue || data.collateralValue || ''
+                          });
+                          setShowCopyCollateralMenu(false);
+                        }}
+                        className="w-full text-left px-3 py-2.5 text-xs flex items-center gap-2 transition-colors hover:bg-blue-50 text-slate-700"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                          <Copy size={11} className="text-blue-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold truncate">{label}</div>
+                          <div className="text-[10px] text-slate-400">
+                            {aData.contractNo || 'ไม่มีเลขสัญญา'} • {assetCount} รายการ
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">มูลค่ารวมหลักประกัน (7.1) (บาท)</label>
@@ -295,18 +519,8 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
           </div>
 
           <div className="border-t pt-4">
-            <div className="flex justify-between items-center mb-2">
+            <div className="mb-2">
               <label className="block text-xs font-medium text-gray-600">ทรัพย์สินหลักประกัน (7.3)</label>
-              <button
-                type="button"
-                onClick={() => onChange({
-                  ...data,
-                  collateralAssets: [...(data.collateralAssets || []), { type: 'land', landDetails: { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: customerInfo?.companyName || '' } }]
-                })}
-                className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-200 hover:bg-blue-100"
-              >
-                + เพิ่มทรัพย์สิน
-              </button>
             </div>
             <div className="space-y-4">
               {(data.collateralAssets || []).map((asset, idx) => (
@@ -344,7 +558,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
                           }
                           onChange({ ...data, collateralAssets: newAssets });
                         }}
-                        className="block w-full rounded-md border-gray-300 shadow-sm text-xs p-1 border focus:ring-blue-500 focus:border-blue-500 transition-all font-medium text-blue-700 bg-blue-50/30"
+                        className="block w-full rounded-md border-gray-300 shadow-sm text-xs p-1 border focus:ring-blue-500 focus:border-blue-500 transition-all font-medium text-blue-700"
                       >
                         <option value="land">จำนองที่ดิน</option>
                         <option value="cash">เงินสด</option>
@@ -363,8 +577,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
                         { label: 'หน้า', key: 'page' },
                         { label: 'ระวาง', key: 'mapSheet' },
                         { label: 'เลขที่ดิน', key: 'landNo' },
-                        { label: 'หน้าสำรวจ', key: 'surveyNo' },
-                        { label: 'ชื่อเจ้าของ', key: 'owner' }
+                        { label: 'หน้าสำรวจ', key: 'surveyNo' }
                       ].map(field => (
                         <div key={field.key}>
                           <label className="block text-xs font-semibold text-gray-500 mb-1">{field.label}</label>
@@ -393,6 +606,19 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
                             };
                             onChange({ ...data, collateralAssets: newAssets });
                           }}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเจ้าของ</label>
+                        <input
+                          type="text"
+                          value={asset.landDetails.owner}
+                          onChange={(e) => {
+                            const newAssets = [...data.collateralAssets];
+                            newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, owner: e.target.value };
+                            onChange({ ...data, collateralAssets: newAssets });
+                          }}
+                          className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
                         />
                       </div>
                     </div>
@@ -642,6 +868,22 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
                   )}
                 </div>
               ))}
+            </div>
+
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={addCollateralAsset}
+                className="w-full py-6 border-2 border-dashed border-blue-200 rounded-xl text-blue-600 hover:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 group bg-blue-50/10"
+              >
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Plus className="w-6 h-6 text-blue-600" />
+                </div>
+                <div className="center">
+                  <p className="text-sm font-bold">เพิ่มทรัพย์สินหลักประกัน</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">เลือกประเภทหลักประกัน เช่น ที่ดิน, เครื่องจักร, เงินสด ฯลฯ</p>
+                </div>
+              </button>
             </div>
           </div>
         </div>

@@ -15,34 +15,42 @@ interface Props {
 }
 
 const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-yellow-100 px-1 rounded print:bg-transparent">
+  <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
     {children || '\u00A0'}
   </span>
 );
 
+export const THAI_INDEX = ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'];
+
+export const getThaiIndex = (index: number) => {
+  return THAI_INDEX[index] || (index + 1).toString();
+};
+
 export default function CreditFacilityPreview({ data, customerInfo, agileInfo, tkInfo, guarantors }: Props) {
-  const totalPages = 35; // As seen in the image
+  // Dynamic overflow: insert an extra page if conditions32 has more than 2 items
+  const hasConditionsOverflow = (data.conditions32 && data.conditions32.length > 2);
+  const totalPages = 35 + (hasConditionsOverflow ? 1 : 0);
 
   // Strip leading "เลขที่" from address data to prevent duplication
   // since the template text already includes the prefix
   const stripAddressPrefix = (addr: string) =>
     addr?.replace(/^เลขที่\s*/, '') || '';
 
-  const getThaiIndex = (index: number) => {
-    const symbols = ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'];
-    return symbols[index] || (index + 1).toString();
-  };
 
-  const renderPageFooter = (pageNum: number) => (
-    <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-      <div>
-        สัญญาให้สินเชื่อเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+  const renderPageFooter = (basePageNum: number) => {
+    // When overflow page is inserted after page 3, all pages from 4 onwards shift by 1
+    const actualPage = (hasConditionsOverflow && basePageNum >= 4) ? basePageNum + 1 : basePageNum;
+    return (
+      <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+        <div>
+          สัญญาให้สินเชื่อเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+        </div>
+        <div>
+          หน้า {actualPage} จาก {totalPages}
+        </div>
       </div>
-      <div>
-        หน้า {pageNum} จาก {totalPages}
-      </div>
-    </div>
-  );
+    );
+  };
 
   const loanAmt = typeof data.loanAmount === 'string' ? parseFloat(data.loanAmount.replace(/,/g, '')) : (parseFloat(data.loanAmount) || 0);
   const p1 = parseFloat(String(data.lender1?.proportion || '0')) || 0;
@@ -129,7 +137,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div>
             <div className="flex gap-2 items-center mb-4">
               <span className="font-bold">1.</span>
-              <span className="font-bold underline decoration-1 underline-offset-4">วงเงินสินเชื่อ</span>
+              <span className="font-bold">วงเงินสินเชื่อ</span>
             </div>
             <div className="flex gap-4 mb-4">
               <span>1.1</span>
@@ -178,7 +186,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div>
             <div className="flex gap-2 items-center mb-4">
               <span className="font-bold">2.</span>
-              <span className="font-bold underline decoration-1 underline-offset-4">วัตถุประสงค์</span>
+              <span className="font-bold">วัตถุประสงค์</span>
             </div>
             <div className="indent-8 text-justify">
               ผู้กู้ตกลงที่จะนำสินเชื่อที่ได้รับจากผู้ให้สินเชื่อภายใต้สัญญาฉบับนี้ ไปใช้เพื่อวัตถุประสงค์สำหรับ<Highlight>{data.businessPurpose || 'ใช้เป็นเงินทุนหมุนเวียนธุรกิจ ประกอบกิจการเกี่ยวกับโรงงานผลิตและจำหน่ายน้ำดื่มตรากรีนดริ้งค์ และรับจ้างผลิตน้ำดื่มในแบรนด์ของลูกค้าของผู้กู้'}</Highlight>
@@ -188,7 +196,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div>
             <div className="flex gap-2 items-center mb-4">
               <span className="font-bold">3.</span>
-              <span className="font-bold underline decoration-1 underline-offset-4">การเบิกใช้สินเชื่อ</span>
+              <span className="font-bold">การเบิกใช้สินเชื่อ</span>
             </div>
             <div className="flex gap-4">
               <span>3.1</span>
@@ -210,16 +218,17 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2">
             <span>3.2</span>
             <div className="flex-1 text-justify">
-              <span className="underline decoration-1 underline-offset-4 mb-2 inline-block">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ</span>
+              <span className="mb-2 inline-block">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ</span>
               <div className="mb-4">
                 ผู้กู้จะเริ่มมีสิทธิขอเบิกใช้สินเชื่อภายใต้สัญญาฉบับนี้ได้ก็ต่อเมื่อผู้กู้ได้ดำเนินการ และ/หรือ ส่งมอบเอกสารดังต่อไปนี้ครบถ้วนในวันที่ผู้กู้ยื่นหนังสือขอเบิกใช้สินเชื่อตามสัญญาฉบับนี้ หรือได้รับการยินยอมเป็นลายลักษณ์อักษรจากผู้ให้สินเชื่อให้ผู้กู้ไม่ต้องดำเนินการ และ/หรือ ส่งมอบเอกสารอย่างใดอย่างหนึ่ง หรือหลายอย่างดังกล่าว
               </div>
 
               <div className="space-y-4">
+                {/* Static conditions (ก), (ข) */}
                 <div className="flex gap-2">
                   <span>(ก)</span>
                   <div className="flex-1">
-                    ผู้ให้สินเชื่อได้รับเอกสารทุกอย่างตามที่ระบุไว้ใน <span className="underline decoration-1  font-bold">เอกสารแนบท้ายหมายเลข 1</span> (เงื่อนไขบังคับก่อน) โดยเอกสารแต่ละฉบับที่ส่งมอบจะต้องอยู่ในรูปแบบและเนื้อหาที่ผู้ให้สินเชื่อยอมรับ ทั้งนี้ ในกรณีเอกสารที่ส่งมอบนั้นเป็นสำเนาเอกสาร เอกสารดังกล่าวจะต้องได้รับการรับรองความถูกต้องโดยผู้มีอำนาจลงนามรับรองสำเนาเอกสารของผู้กู้
+                    ผู้ให้สินเชื่อได้รับเอกสารทุกอย่างตามที่ระบุไว้ใน <span className="underline decoration-1 font-bold">เอกสารแนบท้ายหมายเลข 1</span> (เงื่อนไขบังคับก่อน) โดยเอกสารแต่ละฉบับที่ส่งมอบจะต้องอยู่ในรูปแบบและเนื้อหาที่ผู้ให้สินเชื่อยอมรับ ทั้งนี้ ในกรณีเอกสารที่ส่งมอบนั้นเป็นสำเนาเอกสาร เอกสารดังกล่าวจะต้องได้รับการรับรองความถูกต้องโดยผู้มีอำนาจลงนามรับรองสำเนาเอกสารของผู้กู้
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -228,32 +237,93 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                     ผู้กู้ได้ปฏิบัติตามเงื่อนไขทุกประการที่ระบุไว้ใน <span className="underline decoration-1 font-bold">เอกสารแนบท้ายหมายเลข 1</span> (เงื่อนไขบังคับก่อน)
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <span>(ค)</span>
-                  <div className="flex-1">
-                    ผู้กู้ตกลงและยินยอมให้ผู้ให้สินเชื่อมีสิทธิในการหักเงินจากวงเงินกู้ที่จะได้รับตามสัญญาฉบับนี้ เพื่อการชำระค่าจดทะเบียนจำนองหลักประกัน ค่าอากรแสตมป์ ชำระค่าธรรมเนียมการทำสัญญา เงินดาวน์ ค่าประกันภัยเครื่องจักร ค่าจดทะเบียนกรรมสิทธิ์เครื่องจักร รวมถึงค่าใช้จ่ายอื่นๆ ทั้งตามสัญญาฉบับนี้ และสัญญาฉบับอื่นๆ ที่ผู้กู้มีหน้าที่ต้องชำระให้แก่ผู้ให้สินเชื่อ ก่อนการเบิกใชวงเงินตามสัญญาฉบับนี้
+
+                {/* Dynamic conditions (ค), (ง) on Page 3 */}
+                {(data.conditions32 || []).slice(0, 2).map((condition, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <span>({THAI_INDEX[idx + 2]})</span>
+                    <div className="flex-1">
+                      {condition}
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span>3.3</span>
-            <div className="flex-1 text-justify">
-              <span className="underline decoration-1 mb-2 inline-block">การขอเบิกใช้สินเชื่อ</span>
-              <div className="mb-4">
-                ผู้กู้ตกลงจะเบิกใช้สินเชื่อทั้งหมดในคราวเดียว ภายใต้เงื่อนไขว่าผู้กู้ต้องปฏิบัติตามเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อตามข้อ 3.2 ของสัญญาฉบับนี้
-              </div>
+          {/* Section 3.3 on Page 3 (Only if conditions <= 4 total) */}
+          {(!data.conditions32 || data.conditions32.length <= 2) && (
+            <div className="flex gap-2">
+              <span>3.3</span>
+              <div className="flex-1 text-justify">
+                <span className=" mb-2 inline-block">การขอเบิกใช้สินเชื่อ</span>
+                <div className="mb-4">
+                  ผู้กู้ตกลงจะเบิกใช้สินเชื่อทั้งหมดในคราวเดียว ภายใต้เงื่อนไขว่าผู้กู้ต้องปฏิบัติตามเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อตามข้อ 3.2 ของสัญญาฉบับนี้
+                </div>
 
-              <div className="space-y-4">
-                <div className="flex gap-2">
-                  <span>(ก)</span>
-                  <div className="flex-1 text-justify">วิธีการและเงื่อนไขในการขอเบิกใช้สินเชื่อ
-                    <div className="flex gap-2 mt-2">
-                      <span>(1)</span>
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <span>(ก)</span>
+                    <div className="flex-1 text-justify">วิธีการและเงื่อนไขในการขอเบิกใช้สินเชื่อ
+                      <div className="flex gap-2 mt-2">
+                        <span>(1)</span>
+                        <div className="flex-1">
+                          ผู้กู้จะต้องยื่นหนังสือขอเบิกใช้สินเชื่อ ซึ่งมีสาระสำคัญตามแบบที่กำหนดไว้ใน <span className="underline decoration-1 font-sans font-bold">เอกสารแนบท้ายหมายเลข 2 (แบบของหนังสือขอเบิกใช้สินเชื่อ)</span> ให้แก่ผู้ให้สินเชื่อ อย่างน้อย <span className="underline decoration-1 font-bold">3</span> วันทำการ ก่อนวันเบิกใช้สินเชื่อ โดยหนังสือขอเบิกใช้สินเชื่อจะต้องระบุวันที่เป็นวันเบิกใช้สินเชื่อ ซึ่งจะต้องเป็นวันทำการเสมอด้วย
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {renderPageFooter(3)}
+      </div>
+
+      {/* Overflow Page (New Page 4) — only rendered when conditions32 has > 2 items */}
+      {hasConditionsOverflow && (
+        <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+          <PageHeader />
+
+          <div className="space-y-6 mt-4">
+            {/* Continuation of Section 3.2 items from (จ) onwards */}
+            <div className="flex gap-2">
+              <span>3.2</span>
+              <div className="flex-1 text-justify">
+                <span className="mb-2 inline-block">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ (ต่อ)</span>
+                <div className="space-y-4">
+                  {data.conditions32!.slice(2).map((condition, idx) => (
+                    <div key={idx} className="flex gap-2">
+                      <span>({THAI_INDEX[idx + 4]})</span>
                       <div className="flex-1">
-                        ผู้กู้จะต้องยื่นหนังสือขอเบิกใช้สินเชื่อ ซึ่งมีสาระสำคัญตามแบบที่กำหนดไว้ใน <span className="underline decoration-1 font-sans font-bold">เอกสารแนบท้ายหมายเลข 2 (แบบของหนังสือขอเบิกใช้สินเชื่อ)</span> ให้แก่ผู้ให้สินเชื่อ อย่างน้อย <span className="underline decoration-1 font-bold">3</span> วันทำการ ก่อนวันเบิกใช้สินเชื่อ โดยหนังสือขอเบิกใช้สินเชื่อจะต้องระบุวันที่เป็นวันเบิกใช้สินเชื่อ ซึ่งจะต้องเป็นวันทำการเสมอด้วย
+                        {condition}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3.3 moved to this overflow page */}
+            <div className="flex gap-2">
+              <span>3.3</span>
+              <div className="flex-1 text-justify">
+                <span className=" mb-2 inline-block">การขอเบิกใช้สินเชื่อ</span>
+                <div className="mb-4">
+                  ผู้กู้ตกลงจะเบิกใช้สินเชื่อทั้งหมดในคราวเดียว ภายใต้เงื่อนไขว่าผู้กู้ต้องปฏิบัติตามเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อตามข้อ 3.2 ของสัญญาฉบับนี้
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <span>(ก)</span>
+                    <div className="flex-1 text-justify">วิธีการและเงื่อนไขในการขอเบิกใช้สินเชื่อ
+                      <div className="flex gap-2 mt-2">
+                        <span>(1)</span>
+                        <div className="flex-1">
+                          ผู้กู้จะต้องยื่นหนังสือขอเบิกใช้สินเชื่อ ซึ่งมีสาระสำคัญตามแบบที่กำหนดไว้ใน <span className="underline decoration-1 font-sans font-bold">เอกสารแนบท้ายหมายเลข 2 (แบบของหนังสือขอเบิกใช้สินเชื่อ)</span> ให้แก่ผู้ให้สินเชื่อ อย่างน้อย <span className="underline decoration-1 font-bold">3</span> วันทำการ ก่อนวันเบิกใช้สินเชื่อ โดยหนังสือขอเบิกใช้สินเชื่อจะต้องระบุวันที่เป็นวันเบิกใช้สินเชื่อ ซึ่งจะต้องเป็นวันทำการเสมอด้วย
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -261,12 +331,20 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               </div>
             </div>
           </div>
+
+          {/* This is page 4 in the overflow layout */}
+          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+            <div>
+              สัญญาให้สินเชื่อเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+            </div>
+            <div>
+              หน้า 4 จาก {totalPages}
+            </div>
+          </div>
         </div>
+      )}
 
-        {renderPageFooter(3)}
-      </div>
-
-      {/* Page 4 */}
+      {/* Page 4 (becomes Page 5 when overflow exists) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
         <PageHeader />
 
@@ -1293,21 +1371,21 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <div className="font-bold underline">ผู้ให้สินเชื่อฝ่ายที่ 1:</div>
                 <div className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></div>
 
-                  <div className="pt-8 space-y-12">
-                    {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
-                      <div key={idx} className="space-y-2">
-                        <div className="border-b border-black w-full h-8"></div>
-                        <div className="flex justify-center gap-2">
-                          <span>ชื่อ:</span>
-                          <div className="font-bold"><Highlight>{sig.trim()}</Highlight></div>
-                        </div>
+                <div className="pt-8 space-y-12">
+                  {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <div className="border-b border-black w-full h-8"></div>
+                      <div className="flex justify-center gap-2">
+                        <span>ชื่อ:</span>
+                        <div className="font-bold"><Highlight>{sig.trim()}</Highlight></div>
                       </div>
-                    ))}
-
-                    <div className="pt-4 text-left">
-                      <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                      <div className="mt-2 text-left font-bold"><Highlight>{agileInfo.companyName}</Highlight></div>
                     </div>
+                  ))}
+
+                  <div className="pt-4 text-left">
+                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                    <div className="mt-2 text-left font-bold"><Highlight>{agileInfo.companyName}</Highlight></div>
+                  </div>
                 </div>
               </div>
 
@@ -1330,25 +1408,25 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   <Highlight>{customerInfo.companyName}</Highlight>
                 </div>
 
-                  <div className="pt-8 space-y-12">
-                    {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
-                      <div key={idx} className="space-y-2">
-                        <div className="border-b border-black w-full h-8"></div>
-                        <div className="flex justify-center gap-2">
-                          <span>ชื่อ:</span>
-                          <div className="font-bold">
-                            <Highlight>{sig.trim()}</Highlight>
-                          </div>
+                <div className="pt-8 space-y-12">
+                  {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <div className="border-b border-black w-full h-8"></div>
+                      <div className="flex justify-center gap-2">
+                        <span>ชื่อ:</span>
+                        <div className="font-bold">
+                          <Highlight>{sig.trim()}</Highlight>
                         </div>
                       </div>
-                    ))}
-
-                    <div className="pt-4 text-left">
-                      <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                      <div className="mt-2 text-left font-bold">
-                        <Highlight>{customerInfo.companyName}</Highlight>
-                      </div>
                     </div>
+                  ))}
+
+                  <div className="pt-4 text-left">
+                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                    <div className="mt-2 text-left font-bold">
+                      <Highlight>{customerInfo.companyName}</Highlight>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1379,25 +1457,25 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   ผู้ให้สินเชื่อฝ่ายที่ 2: <Highlight>{tkInfo.companyName}</Highlight>
                 </div>
 
-                  <div className="pt-8 space-y-12">
-                    {(tkInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
-                      <div key={idx} className="space-y-2">
-                        <div className="border-b border-black w-full h-8"></div>
-                        <div className="flex justify-center gap-2">
-                          <span>ชื่อ:</span>
-                          <div className="font-bold">
-                            <Highlight>{sig.trim()}</Highlight>
-                          </div>
+                <div className="pt-8 space-y-12">
+                  {(tkInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <div className="border-b border-black w-full h-8"></div>
+                      <div className="flex justify-center gap-2">
+                        <span>ชื่อ:</span>
+                        <div className="font-bold">
+                          <Highlight>{sig.trim()}</Highlight>
                         </div>
                       </div>
-                    ))}
-
-                    <div className="pt-4 text-left">
-                      <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                      <div className="mt-2 text-left font-bold">
-                        <Highlight>{tkInfo.companyName}</Highlight>
-                      </div>
                     </div>
+                  ))}
+
+                  <div className="pt-4 text-left">
+                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                    <div className="mt-2 text-left font-bold">
+                      <Highlight>{tkInfo.companyName}</Highlight>
+                    </div>
+                  </div>
                 </div>
               </div>
 
