@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { Plus } from 'lucide-react';
-import type { CreditFacilityData, LessorInfo, CompanyInfo } from '../types/app';
+import React, { useEffect, useState, useRef } from 'react';
+import { Plus, Copy, ChevronDown } from 'lucide-react';
+import type { CreditFacilityData, LessorInfo, CompanyInfo, Agreement, CollateralAsset } from '../types/app';
+import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatCurrency } from '../utils/formatters';
 import ThaiLocationSelector from './ThaiLocationSelector';
@@ -8,11 +9,37 @@ import ThaiLocationSelector from './ThaiLocationSelector';
 interface Props {
   data: CreditFacilityData;
   customerInfo?: CompanyInfo;
+  agreements?: Agreement[];
+  currentAgreementId?: string;
   onChange: (data: CreditFacilityData) => void;
   onFocusSection?: (sectionId: string) => void;
 }
 
-export default function CreditFacilityForm({ data, onChange, customerInfo, onFocusSection }: Props) {
+export default function CreditFacilityForm({ data, onChange, customerInfo, agreements = [], currentAgreementId, onFocusSection }: Props) {
+  const [showCopyCollateralMenu, setShowCopyCollateralMenu] = useState(false);
+  const copyMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close copy menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (copyMenuRef.current && !copyMenuRef.current.contains(e.target as Node)) {
+        setShowCopyCollateralMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Determine if this is the first agreement (index 0 = no copy button)
+  const currentAgreementIndex = agreements.findIndex(a => a.id === currentAgreementId);
+  const isFirstAgreement = currentAgreementIndex <= 0;
+
+  // Get other agreements that have collateral assets to copy from (only show for non-first agreements)
+  const otherAgreementsWithCollateral = isFirstAgreement ? [] : agreements.filter(a => {
+    if (a.id === currentAgreementId) return false;
+    const d = a.data as any;
+    return d?.collateralAssets && d.collateralAssets.length > 0;
+  });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     onChange({ ...data, [name]: value });
@@ -61,8 +88,10 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
   // Auto-calculations
   useEffect(() => {
     const loanAmountRaw = parseFloat(data.loanAmount.replace(/,/g, '')) || 0;
-    const numInstallments = parseInt(data.installments) || 1;
+    const numInstallments = parseInt(data.installments) || 0;
     const interestRateRaw = parseFloat(data.interestRate) || 0;
+
+    let updates: Partial<CreditFacilityData> = {};
 
     if (loanAmountRaw > 0) {
       let monthlyAmount = 0;
@@ -70,11 +99,12 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
       if (data.interestType === 'แบบลดต้นลดดอก' && interestRateRaw > 0) {
         // Effective Rate (Amortization) Formula: P * [ i(1+i)^n ] / [ (1+i)^n – 1 ]
         const monthlyRate = (interestRateRaw / 100) / 12;
-        monthlyAmount = (loanAmountRaw * monthlyRate * Math.pow(1 + monthlyRate, numInstallments)) /
-          (Math.pow(1 + monthlyRate, numInstallments) - 1);
+        const n = numInstallments || 1;
+        monthlyAmount = (loanAmountRaw * monthlyRate * Math.pow(1 + monthlyRate, n)) /
+          (Math.pow(1 + monthlyRate, n) - 1);
       } else {
         // Flat Rate Formula: (Principal / n) + (Principal * annualRate / 12)
-        const principalPerMonth = loanAmountRaw / numInstallments;
+        const principalPerMonth = numInstallments > 0 ? loanAmountRaw / numInstallments : 0;
         const interestPerMonth = (loanAmountRaw * (interestRateRaw / 100)) / 12;
         monthlyAmount = principalPerMonth + interestPerMonth;
       }
@@ -85,15 +115,71 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
       });
 
       if (formattedInstallment !== data.installmentAmount) {
-        onChange({ ...data, installmentAmount: formattedInstallment });
+        updates.installmentAmount = formattedInstallment;
       }
+    }
+
+    // Date calculations
+    if (data.firstInstallmentDate && numInstallments > 0) {
+      let firstDate = new Date(data.firstInstallmentDate);
+      
+      // Handle Thai format if it somehow ends up here (DD/MM/YYYY)
+      if (typeof data.firstInstallmentDate === 'string' && data.firstInstallmentDate.includes('/')) {
+        const parts = data.firstInstallmentDate.split('/');
+        if (parts.length === 3) {
+          let year = parseInt(parts[2]);
+          if (year > 2500) year -= 543;
+          firstDate = new Date(year, parseInt(parts[1]) - 1, parseInt(parts[0]));
+        }
+      }
+
+      if (!isNaN(firstDate.getTime())) {
+        // Update payment day if different
+        const day = firstDate.getDate().toString();
+        if (data.paymentDay !== day) {
+          updates.paymentDay = day;
+        }
+
+        // Calculate last installment date (First Date + (installments - 1) months)
+        const lastDate = new Date(firstDate);
+        lastDate.setMonth(lastDate.getMonth() + (numInstallments - 1));
+
+        let lastFormattedStr = '';
+        if (typeof data.firstInstallmentDate === 'string' && data.firstInstallmentDate.includes('/')) {
+          const y = lastDate.getFullYear() + 543;
+          const m = String(lastDate.getMonth() + 1).padStart(2, '0');
+          const d = String(lastDate.getDate()).padStart(2, '0');
+          lastFormattedStr = `${d}/${m}/${y}`;
+        } else {
+          lastFormattedStr = lastDate.toISOString().split('T')[0];
+        }
+
+        if (data.lastInstallmentDate !== lastFormattedStr) {
+          updates.lastInstallmentDate = lastFormattedStr;
+        }
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      onChange({ ...data, ...updates });
     }
   }, [
     data.loanAmount,
     data.installments,
     data.interestRate,
-    data.interestType
+    data.interestType,
+    data.firstInstallmentDate
   ]);
+
+  // Auto-resize textareas for pre-disbursement conditions and purpose
+  useEffect(() => {
+    const textareas = document.querySelectorAll('.auto-resize-textarea');
+    textareas.forEach(ta => {
+      const textarea = ta as HTMLTextAreaElement;
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    });
+  }, [data.conditions32, data.businessPurpose]);
 
   return (
     <div className="space-y-6">
@@ -190,7 +276,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
                 name="businessPurpose"
                 value={data.businessPurpose || ''}
                 onChange={handleChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border h-20"
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white auto-resize-textarea resize-none overflow-hidden min-h-[80px]"
                 placeholder="ระบุวัตถุประสงค์การกู้..."
               />
             </div>
@@ -223,7 +309,12 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
                         next[idx] = e.target.value;
                         onChange({ ...data, conditions32: next });
                       }}
-                      className="flex-1 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border h-20 bg-gray-50/50"
+                      onInput={(e) => {
+                        const target = e.target as HTMLTextAreaElement;
+                        target.style.height = 'auto';
+                        target.style.height = `${target.scrollHeight}px`;
+                      }}
+                      className="flex-1 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-gray-50/50 auto-resize-textarea resize-none overflow-hidden min-h-[40px]"
                       placeholder={`ระบุเงื่อนไข (${['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][idx + 2] || idx + 3})...`}
                     />
                     <button
@@ -357,7 +448,60 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, onFoc
 
       {/* Collateral Section */}
       <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('cf-collateral')}>
-        <h3 className="font-semibold text-lg text-blue-700 mb-3">ข้อ 7. หลักประกัน</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold text-lg text-blue-700">ข้อ 7. หลักประกัน</h3>
+          {otherAgreementsWithCollateral.length > 0 && (
+            <div className="relative" ref={copyMenuRef}>
+              <button
+                type="button"
+                onClick={() => setShowCopyCollateralMenu(!showCopyCollateralMenu)}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100 hover:border-blue-300 transition-all shadow-sm"
+              >
+                <Copy size={13} />
+                คัดลอกจากสัญญาอื่น
+                <ChevronDown size={12} className={`transition-transform ${showCopyCollateralMenu ? 'rotate-180' : ''}`} />
+              </button>
+              {showCopyCollateralMenu && (
+                <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 min-w-[260px] animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                    เลือกสัญญาต้นทาง
+                  </div>
+                  {otherAgreementsWithCollateral.map((agreement) => {
+                    const aData = agreement.data as any;
+                    const sourceIndex = agreements.indexOf(agreement) + 1;
+                    const label = `${CONTRACT_TYPE_LABELS[agreement.type]} (${sourceIndex})`;
+                    const assetCount = aData.collateralAssets?.length || 0;
+                    return (
+                      <button
+                        key={agreement.id}
+                        onClick={() => {
+                          const copied: CollateralAsset[] = JSON.parse(JSON.stringify(aData.collateralAssets));
+                          onChange({
+                            ...data,
+                            collateralAssets: copied,
+                            collateralValue: aData.collateralValue || data.collateralValue || ''
+                          });
+                          setShowCopyCollateralMenu(false);
+                        }}
+                        className="w-full text-left px-3 py-2.5 text-xs flex items-center gap-2 transition-colors hover:bg-blue-50 text-slate-700"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                          <Copy size={11} className="text-blue-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold truncate">{label}</div>
+                          <div className="text-[10px] text-slate-400">
+                            {aData.contractNo || 'ไม่มีเลขสัญญา'} • {assetCount} รายการ
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">มูลค่ารวมหลักประกัน (7.1) (บาท)</label>

@@ -585,6 +585,7 @@ function App() {
                   type={activeAgreement.type}
                   customerInfo={data.customerInfo}
                   agreementId={activeAgreement.id}
+                  agreements={data.agreements}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
                   onFocusSection={(sectionId: string, tabKey?: string) => scrollToPreviewSection(sectionId, tabKey || `agreement-${activeAgreement.id}`)}
                   onBuybackToggled={(buybackId: string) => setActivePreview(`buyback:${activeAgreement.id}:${buybackId}`)}
@@ -594,6 +595,8 @@ function App() {
                 <CreditFacilityForm
                   data={activeAgreement.data}
                   customerInfo={data.customerInfo}
+                  agreements={data.agreements}
+                  currentAgreementId={activeAgreement.id}
                   onChange={(cf: any) => updateAgreementData(activeAgreement.id, cf)}
                   onFocusSection={(sectionId: string, tabKey?: string) => scrollToPreviewSection(sectionId, tabKey || `agreement-${activeAgreement.id}`)}
                 />
