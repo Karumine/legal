@@ -118,7 +118,19 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div id="section-vendor" className="flex gap-2 text-justify pr-2">
             <span className="shrink-0 w-4">3.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย<Highlight>{data.vendorDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทน) มีสำนักงานใหญ่จดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+              {data.vendorType === 'shop' ? (
+                <>
+                  ชื่อร้าน <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย <Highlight>{data.vendorDirectors}</Highlight> ผู้ประกอบกิจการ) มีที่อยู่ตามทะเบียนภาษีเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+                </>
+              ) : data.vendorType === 'person' ? (
+                <>
+                  <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> มีที่อยู่ตามทะเบียนภาษีเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+                </>
+              ) : (
+                <>
+                  <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย <Highlight>{data.vendorDirectors}</Highlight> {data.vendorType === 'partnership' ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+                </>
+              )}
             </div>
           </div>
           <div className="italic">
@@ -681,16 +693,18 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             </div>
 
             <div className="flex-1 flex flex-col justify-start space-y-16 pt-12 pb-16">
-              {(data.vendorDirectors || '').split(/\s*และ\s*/).map((sig, i) => (
+              {(data.vendorType === 'person' ? [data.vendorName] : (data.vendorDirectors || '').split(/\s*และ\s*/)).map((sig, i) => (
                 <div key={i} className="flex flex-col items-center w-full pr-8">
                   <div className="border-b border-black w-full h-8"></div>
-                  <div className="mt-2whitespace-nowrap text-center">( <Highlight>{sig}</Highlight> )</div>
+                  <div className="mt-2 whitespace-nowrap text-center">( <Highlight>{sig}</Highlight> )</div>
                 </div>
               ))}
             </div>
 
             <div className="mt-12 text-left space-y-1">
-              <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+              <div className="font-bold">
+                ตำแหน่ง: {data.vendorType === 'shop' ? 'ผู้ประกอบกิจการ' : data.vendorType === 'partnership' ? 'หุ้นส่วนผู้จัดการ' : data.vendorType === 'person' ? 'ผู้จำหน่าย' : 'กรรมการผู้มีอำนาจลงนาม'}
+              </div>
               <div className="font-bold"><Highlight>{data.vendorName}</Highlight></div>
             </div>
 

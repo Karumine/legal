@@ -243,7 +243,8 @@ function App() {
             collateralAssets: [],
             lender1Signatories: data.agileInfo.directors,
             lender2Signatories: data.tkInfo.directors,
-            borrowerSignatories: data.customerInfo.directors
+            borrowerSignatories: data.customerInfo.directors,
+            conditions32: ['ผู้กู้ตกลงและยินยอมให้ผู้ให้สินเชื่อมีสิทธิในการหักเงินจากวงเงินกู้ที่จะได้รับตามสัญญาฉบับนี้ เพื่อการชำระค่าจดทะเบียนจำนองหลักประกัน ค่าอากรแสตมป์ ชำระค่าธรรมเนียมการทำสัญญา เงินดาวน์ ค่าประกันภัยเครื่องจักร ค่าจดทะเบียนกรรมสิทธิ์เครื่องจักร รวมถึงค่าใช้จ่ายอื่นๆ ทั้งตามสัญญาฉบับนี้ และสัญญาฉบับอื่นๆ ที่ผู้กู้มีหน้าที่ต้องชำระให้แก่ผู้ให้สินเชื่อ ก่อนการเบิกใช้เงินตามสัญญาฉบับนี้']
           }
           : {}
     };
@@ -583,8 +584,9 @@ function App() {
                   data={activeAgreement.data}
                   type={activeAgreement.type}
                   customerInfo={data.customerInfo}
+                  agreementId={activeAgreement.id}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
-                  onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, `agreement-${activeAgreement.id}`)}
+                  onFocusSection={(sectionId: string, tabKey?: string) => scrollToPreviewSection(sectionId, tabKey || `agreement-${activeAgreement.id}`)}
                   onBuybackToggled={(buybackId: string) => setActivePreview(`buyback:${activeAgreement.id}:${buybackId}`)}
                 />
               )}
@@ -593,7 +595,7 @@ function App() {
                   data={activeAgreement.data}
                   customerInfo={data.customerInfo}
                   onChange={(cf: any) => updateAgreementData(activeAgreement.id, cf)}
-                  onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, `agreement-${activeAgreement.id}`)}
+                  onFocusSection={(sectionId: string, tabKey?: string) => scrollToPreviewSection(sectionId, tabKey || `agreement-${activeAgreement.id}`)}
                 />
               )}
               {activeAgreement.type !== 'hirePurchase' && activeAgreement.type !== 'hirePurchaseBack' && activeAgreement.type !== 'loan' && (

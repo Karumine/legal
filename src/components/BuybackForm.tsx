@@ -18,8 +18,8 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState('');
 
-  const updateBuyback = (field: keyof BuybackData, value: any) => {
-    onChange({ ...data, [field]: value });
+  const updateBuyback = (updates: Partial<BuybackData>) => {
+    onChange({ ...data, ...updates });
   };
 
   const handleSearch = async () => {
@@ -148,7 +148,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
               <input
                 type="text"
                 value={data.downPercentage}
-                onChange={(e) => updateBuyback('downPercentage', e.target.value)}
+                onChange={(e) => updateBuyback({ downPercentage: e.target.value })}
                 className="block w-20 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white font-bold text-orange-600 text-center"
                 placeholder="20"
               />
@@ -168,13 +168,55 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
       <div className="pt-2" onClick={() => onFocusSection?.('section-vendor')}>
         <h5 className="text-xs font-bold text-orange-700 mb-3 uppercase tracking-wider">ข้อมูลผู้ขาย / ตัวแทนจำหน่าย (คู่สัญญาฝ่ายที่ 3)</h5>
         <div className="space-y-3 bg-orange-50/30 p-4 rounded-lg border border-orange-100">
+          <div className="pb-2 border-b border-orange-100/50 mb-2">
+            <label className="block text-xs font-medium text-gray-600 mb-2">ประเภทคู่สัญญาฝ่ายที่ 3</label>
+            <div className="flex flex-wrap gap-4">
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  checked={data.vendorType === 'person'}
+                  onChange={() => updateBuyback({ vendorType: 'person' })}
+                  className="text-orange-600 border-gray-300 focus:ring-orange-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">บุคคลธรรมดา</span>
+              </label>
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  checked={data.vendorType === 'shop'}
+                  onChange={() => updateBuyback({ vendorType: 'shop' })}
+                  className="text-orange-600 border-gray-300 focus:ring-orange-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">ร้านค้า (เจ้าของคนเดียว)</span>
+              </label>
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  checked={data.vendorType === 'company' || !data.vendorType}
+                  onChange={() => updateBuyback({ vendorType: 'company' })}
+                  className="text-orange-600 border-gray-300 focus:ring-orange-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">บริษัทจำกัด</span>
+              </label>
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  checked={data.vendorType === 'partnership'}
+                  onChange={() => updateBuyback({ vendorType: 'partnership' })}
+                  className="text-orange-600 border-gray-300 focus:ring-orange-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">ห้างหุ้นส่วน</span>
+              </label>
+            </div>
+          </div>
+
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">เลข Tax ID</label>
             <div className="flex gap-2">
               <input
                 type="text"
                 value={data.vendorTaxId}
-                onChange={(e) => updateBuyback('vendorTaxId', formatThaiId(e.target.value))}
+                onChange={(e) => updateBuyback({ vendorTaxId: formatThaiId(e.target.value) })}
                 className="block flex-1 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
                 placeholder="X-XXXX-XXXXX-XX-X"
               />
@@ -191,31 +233,34 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อบริษัท</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              {data.vendorType === 'shop' ? 'ชื่อร้าน' : data.vendorType === 'person' ? 'ชื่อ-นามสกุล' : 'ชื่อบริษัท / ห้างหุ้นส่วน'}
+            </label>
             <input
               type="text"
               value={data.vendorName}
-              onChange={(e) => updateBuyback('vendorName', e.target.value)}
+              onChange={(e) => updateBuyback({ vendorName: e.target.value })}
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
-              placeholder="ชื่อบริษัทผู้ขาย / ตัวแทนจำหน่าย"
+              placeholder={data.vendorType === 'shop' ? 'ระบุชื่อร้านค้า ...' : data.vendorType === 'person' ? 'ระบุชื่อ-นามสกุล ...' : 'ระบุชื่อนิติบุคคล ...'}
             />
           </div>
 
-          <div>
-            <DirectorInput
-              label="ชื่อกรรมการ"
-              value={data.vendorDirectors}
-              onChange={(val) => updateBuyback('vendorDirectors', val)}
-              placeholder="นาย/นาง/นางสาว..."
-            />
-          </div>
+          {data.vendorType !== 'person' && (
+            <div>
+              <DirectorInput
+                label={data.vendorType === 'shop' ? 'ผู้ประกอบกิจการ' : data.vendorType === 'partnership' ? 'หุ้นส่วนผู้จัดการ' : 'ชื่อกรรมการ'}
+                value={data.vendorDirectors}
+                onChange={(val) => updateBuyback({ vendorDirectors: val })}
+                placeholder="นาย/นาง/นางสาว..."
+              />
+            </div>
+          )}
 
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่จดทะเบียน</label>
             <ThaiAddressInput
               value={data.vendorAddress}
-              onChange={(val) => updateBuyback('vendorAddress', val)}
-              onPostalCodeChange={(code) => updateBuyback('vendorPostalCode', code)}
+              onAddressChange={(addr, code) => updateBuyback({ vendorAddress: addr, vendorPostalCode: code })}
             />
           </div>
         </div>
@@ -232,7 +277,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
             ].map(m => (
               <button
                 key={m.id}
-                onClick={() => updateBuyback('buybackMode', m.id)}
+                onClick={() => updateBuyback({ buybackMode: m.id as any })}
                 className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${
                   data.buybackMode === m.id 
                     ? 'bg-orange-500 text-white shadow-sm' 

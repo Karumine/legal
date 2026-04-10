@@ -14,11 +14,12 @@ interface Props {
   onChange: (data: HirePurchaseData) => void;
   type?: ContractType;
   customerInfo?: CompanyInfo;
-  onFocusSection?: (sectionId: string, containerId?: string) => void;
+  agreementId?: string;
+  onFocusSection?: (sectionId: string, tabKey?: string) => void;
   onBuybackToggled?: (buybackId: string) => void;
 }
 
-export default function HirePurchaseForm({ data, onChange, customerInfo, type = 'hirePurchase', onFocusSection, onBuybackToggled }: Props) {
+export default function HirePurchaseForm({ data, onChange, customerInfo, type = 'hirePurchase', agreementId, onFocusSection, onBuybackToggled }: Props) {
   const [showBuyback, setShowBuyback] = useState(true);
 
   const handleChange = (field: keyof HirePurchaseData, value: any) => {
@@ -215,6 +216,28 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
   const removeAsset = (index: number) => {
     handleChange('assets', data.assets.filter((_, i) => i !== index));
+  };
+
+  const addCollateralAsset = () => {
+    const lastLandAsset = [...(data.collateralAssets || [])].reverse().find(a => a.type === 'land' && a.landDetails);
+
+    const newLandDetails = {
+      deedNo: '',
+      volume: '',
+      page: '',
+      mapSheet: lastLandAsset?.landDetails?.mapSheet || '',
+      landNo: '',
+      surveyNo: '',
+      subDistrict: lastLandAsset?.landDetails?.subDistrict || '',
+      district: lastLandAsset?.landDetails?.district || '',
+      province: lastLandAsset?.landDetails?.province || '',
+      owner: lastLandAsset?.landDetails?.owner || customerInfo?.companyName || ''
+    };
+
+    handleChange('collateralAssets', [...(data.collateralAssets || []), {
+      type: 'land',
+      landDetails: newLandDetails
+    }]);
   };
 
   return (
@@ -503,21 +526,6 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">เริ่มชำระงวดแรก</label>
-                  <input type="date" value={data.firstInstallmentDate || ''} onChange={(e) => handleChange('firstInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">ชำระทุกวันที่ [ดึงจากงวดแรก]</label>
-                  <input type="text" value={data.paymentDay || ''} onChange={(e) => handleChange('paymentDay', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">สิ้นสุดงวดสุดท้าย [คำนวณอัตโนมัติ]</label>
-                  <input type="date" value={data.lastInstallmentDate || ''} onChange={(e) => handleChange('lastInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนงวด (เดือน)</label>
                   <input
                     type="text"
@@ -534,6 +542,21 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                     readOnly
                     className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-100 text-gray-400 font-bold cursor-not-allowed"
                   />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">เริ่มชำระงวดแรก</label>
+                  <input type="date" value={data.firstInstallmentDate || ''} onChange={(e) => handleChange('firstInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">ชำระทุกวันที่ [ดึงจากงวดแรก]</label>
+                  <input type="text" value={data.paymentDay || ''} onChange={(e) => handleChange('paymentDay', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">สิ้นสุดงวดสุดท้าย [คำนวณอัตโนมัติ]</label>
+                  <input type="date" value={data.lastInstallmentDate || ''} onChange={(e) => handleChange('lastInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
                 </div>
               </div>
             </div>
@@ -995,7 +1018,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
             <div className="mt-4">
               <button
                 type="button"
-                onClick={() => handleChange('collateralAssets', [...(data.collateralAssets || []), { type: 'land', landDetails: { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: customerInfo?.companyName || '' } }])}
+                onClick={addCollateralAsset}
                 className="w-full py-6 border-2 border-dashed border-blue-200 rounded-xl text-blue-600 hover:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 group bg-blue-50/10"
               >
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -1078,8 +1101,8 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                     handleChange('buybacks', newBuybacks);
                   }}
                   onFocusSection={(sectionId: string) => {
-                    if (onFocusSection) {
-                      onFocusSection(sectionId, 'preview-panel');
+                    if (onFocusSection && agreementId) {
+                      onFocusSection(sectionId, `buyback:${agreementId}:${bb.id}`);
                     }
                   }}
                 />

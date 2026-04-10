@@ -152,6 +152,7 @@ export interface BuybackData {
   downPercentage: string;
   buybackMode: 'newOnly' | 'usedOnly' | 'all';
   buybackTable: BuybackTableEntry[];
+  vendorType?: 'person' | 'company' | 'partnership' | 'shop';
 }
 
 export interface JointVentureData {
@@ -195,6 +196,9 @@ export interface CreditFacilityData {
   lender1Signatories: string;
   lender2Signatories: string;
   borrowerSignatories: string;
+
+  // Added dynamic conditions for 3.2
+  conditions32?: string[];
 }
 
 export interface ServiceAgreementData {
