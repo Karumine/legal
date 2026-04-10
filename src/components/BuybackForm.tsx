@@ -58,9 +58,9 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
   const toggleAsset = (assetId: string) => {
     const current = data.selectedAssetIds || [];
     if (current.includes(assetId)) {
-      updateBuyback('selectedAssetIds', current.filter(id => id !== assetId));
+      updateBuyback({ selectedAssetIds: current.filter(id => id !== assetId) });
     } else {
-      updateBuyback('selectedAssetIds', [...current, assetId]);
+      updateBuyback({ selectedAssetIds: [...current, assetId] });
     }
   };
 
@@ -78,7 +78,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
           <input
             type="text"
             value={data.contractNo}
-            onChange={(e) => updateBuyback('contractNo', e.target.value)}
+            onChange={(e) => updateBuyback({ contractNo: e.target.value })}
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
             placeholder="AGA/XX-BB2025"
           />
@@ -88,7 +88,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
           <input
             type="date"
             value={data.contractDate}
-            onChange={(e) => updateBuyback('contractDate', e.target.value)}
+            onChange={(e) => updateBuyback({ contractDate: e.target.value })}
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
           />
         </div>
@@ -338,7 +338,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
         <input
           type="text"
           value={data.conditions}
-          onChange={(e) => updateBuyback('conditions', e.target.value)}
+          onChange={(e) => updateBuyback({ conditions: e.target.value })}
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
           placeholder="เงื่อนไขเพิ่มเติม (ถ้ามี)"
         />
