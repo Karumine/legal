@@ -50,8 +50,8 @@ export default function GuaranteePreview({ data }: Props) {
         </div>
 
         <div className="text-center font-bold mb-6 mt-4">
-          <h2 className="text-xl">สัญญาค้ำประกัน</h2>
-          <div className="mt-2 text-[14px]">
+          <h2 className="text-[16px]">สัญญาค้ำประกัน</h2>
+          <div className="mt-2 text-[16px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
         </div>

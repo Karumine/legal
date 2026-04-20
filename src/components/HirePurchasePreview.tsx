@@ -150,13 +150,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
         )}
         {asset.type === 'machinery' && (
-          <div className="mt-2">
-            <span className="font-bold">เครื่องจักร :</span>{' '}
-            <Highlight>{asset.machineName}</Highlight>{' '}
+          <div className="mt-2 text-justify">
+            <span className="font-bold">จำนำเครื่องจักร :</span> เครื่องจักร <Highlight>{asset.machineName}</Highlight>{' '}
             {asset.machineModel && <span className="italic text-gray-700">({asset.machineModel})</span>}{' '}
             จำนวน <Highlight>{asset.machineQuantity}</Highlight> <Highlight>{asset.machineUnit || 'ชุด'}</Highlight>{' '}
             ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
-            อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
+            อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.machineOwner}</Highlight>{' '}
+            รายละเอียดปรากฏตาม <span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 6</u></span>
           </div>
         )}
         {asset.type === 'carPledge' && asset.carPledgeDetails && (
@@ -186,12 +186,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
-          <h2 className="text-xl">
+          <h2 className="text-[16px]">
             {type === 'hirePurchase' && "สัญญาเช่าซื้อ (Hire Purchase Agreement)"}
             {type === 'hirePurchaseBack' && "สัญญาเช่าซื้อกลับ (Hire Purchase Back Agreement)"}
             {type !== 'hirePurchase' && type !== 'hirePurchaseBack' && CONTRACT_TYPE_LABELS[type]}
           </h2>
-          <div className="mt-2 text-[14px]">
+          <div className="mt-2 text-[16px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
         </div>

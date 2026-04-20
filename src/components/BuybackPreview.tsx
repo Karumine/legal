@@ -89,8 +89,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
-          <h2 className="text-xl text-balance px-12">สัญญารับซื้อคืน ({contractLabel})</h2>
-          <div className="mt-2 text-[14px]">
+          <h2 className="text-[16px] text-balance px-12">สัญญารับซื้อคืน ({contractLabel})</h2>
+          <div className="mt-2 text-[16px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
         </div>

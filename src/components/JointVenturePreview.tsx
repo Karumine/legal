@@ -241,8 +241,8 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
-          <h2 className="text-xl">สัญญาค้าร่วม (Consortium)</h2>
-          <div className="mt-2 text-[14px]">
+          <h2 className="text-[16px]">สัญญาค้าร่วม (Consortium)</h2>
+          <div className="mt-2 text-[16px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
         </div>

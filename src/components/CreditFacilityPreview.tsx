@@ -71,14 +71,14 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
-          <h2 className="text-xl">สัญญาให้สินเชื่อ</h2>
-          <div className="mt-2 text-[14px]">
+          <h2 className="text-[16px]">สัญญาให้สินเชื่อ</h2>
+          <div className="mt-2 text-[16px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
         </div>
 
-        <div className="indent-10 mb-6 font-bold">
-          สัญญาให้สินเชื่อ (“สัญญา”) ฉบับนี้ ทำขึ้นที่<Highlight>{agileInfo.companyName}</Highlight> ให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> (“วันที่สัญญามีผลใช้บังคับ”)
+        <div className="indent-10 mb-6">
+          <b>สัญญาให้สินเชื่อ</b> (“สัญญา”) ฉบับนี้ ทำขึ้นที่<Highlight>{agileInfo.companyName}</Highlight> ให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> (“วันที่สัญญามีผลใช้บังคับ”)
         </div>
 
         <div className="mb-4 mt-6">โดยและระหว่าง</div>
@@ -120,10 +120,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <span>ข.</span>
             <div className="flex-1">ผู้ให้สินเชื่อตกลงจะให้สินเชื่อแก่ผู้กู้ตามเงื่อนไขและข้อกำหนดที่ระบุไว้ในสัญญาฉบับนี้</div>
           </div>
-          <div className="flex gap-2">
-            <span>ค.</span>
-            <div className="flex-1">การให้สินเชื่อตามสัญญาฉบับนี้ เป็นการให้สินเชื่อร่วมกันระหว่างผู้ให้สินเชื่อฝ่ายที่ 1 และผู้ให้สินเชื่อฝ่ายที่ 2 โดยมีลักษณะเป็นการให้สินเชื่อร่วมกัน (Consortium Loan)</div>
-          </div>
+
         </div>
 
         {renderPageFooter(1)}
@@ -135,6 +132,19 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
 
         <div className="space-y-6 mt-4">
           <div>
+            <div className="flex gap-2">
+              <span>ค.</span>
+              <div className="flex-1 mb-4">ผู้ให้สินเชื่อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้สินเชื่อในการติดต่อประสานงานกับผู้กู้เพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ <b>("ตัวแทนสินเชื่อ")</b></div>
+            </div>
+            <div className="flex gap-2 mb-6">
+              <span>ง.</span>
+              <div className="flex-1">ผู้กู้และผู้ให้สินเชื่อฝ่ายที่ 2 ตกลงจะให้ผู้ให้สินเชื่อฝ่าย 1 ทำหน้าที่เป็นตัวแทนสินเชื่อ</div>
+            </div>
+            <div className="flex gap-2 mb-6">
+
+              <div className="flex-1 font-bold">คู่สัญญาทั้งสามฝ่ายจึงได้ตกลงเข้าทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้</div>
+            </div>
+
             <div className="flex gap-2 items-center mb-4">
               <span className="font-bold">1.</span>
               <span className="font-bold">วงเงินสินเชื่อ</span>
@@ -142,7 +152,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-4 mb-4">
               <span>1.1</span>
               <div className="flex-1 text-justify">
-                ภายใต้เงื่อนไขและข้อกำหนดที่ระบุในสัญญาฉบับนี้ ผู้ให้สินเชื่อตกลงให้สินเชื่อแก่ผู้กู้ และผู้กู้ตกลงที่จะรับสินเชื่อดังกล่าวจากผู้ให้สินเชื่อ <Highlight>เป็นจำนวนเงิน {data.loanAmount} บาท ({thaiBahtText(data.loanAmount)})</Highlight>
+                ภายใต้เงื่อนไขและข้อกำหนดที่ระบุในสัญญาฉบับนี้ ผู้ให้สินเชื่อตกลงให้สินเชื่อแก่ผู้กู้ และผู้กู้ตกลงที่จะรับสินเชื่อดังกล่าวจากผู้ให้สินเชื่อ <Highlight><b>เป็นจำนวนเงิน {data.loanAmount} บาท ({thaiBahtText(data.loanAmount)})</b></Highlight>
               </div>
             </div>
             <div className="flex gap-4 mb-4">
@@ -218,7 +228,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2">
             <span>3.2</span>
             <div className="flex-1 text-justify">
-              <span className="mb-2 inline-block">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ</span>
+              <span className="mb-2 inline-block underline">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ</span>
               <div className="mb-4">
                 ผู้กู้จะเริ่มมีสิทธิขอเบิกใช้สินเชื่อภายใต้สัญญาฉบับนี้ได้ก็ต่อเมื่อผู้กู้ได้ดำเนินการ และ/หรือ ส่งมอบเอกสารดังต่อไปนี้ครบถ้วนในวันที่ผู้กู้ยื่นหนังสือขอเบิกใช้สินเชื่อตามสัญญาฉบับนี้ หรือได้รับการยินยอมเป็นลายลักษณ์อักษรจากผู้ให้สินเชื่อให้ผู้กู้ไม่ต้องดำเนินการ และ/หรือ ส่งมอบเอกสารอย่างใดอย่างหนึ่ง หรือหลายอย่างดังกล่าว
               </div>
@@ -228,13 +238,13 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <div className="flex gap-2">
                   <span>(ก)</span>
                   <div className="flex-1">
-                    ผู้ให้สินเชื่อได้รับเอกสารทุกอย่างตามที่ระบุไว้ใน <span className="underline decoration-1 font-bold">เอกสารแนบท้ายหมายเลข 1</span> (เงื่อนไขบังคับก่อน) โดยเอกสารแต่ละฉบับที่ส่งมอบจะต้องอยู่ในรูปแบบและเนื้อหาที่ผู้ให้สินเชื่อยอมรับ ทั้งนี้ ในกรณีเอกสารที่ส่งมอบนั้นเป็นสำเนาเอกสาร เอกสารดังกล่าวจะต้องได้รับการรับรองความถูกต้องโดยผู้มีอำนาจลงนามรับรองสำเนาเอกสารของผู้กู้
+                    ผู้ให้สินเชื่อได้รับเอกสารทุกอย่างตามที่ระบุไว้ใน <span className="underline decoration-1 font-bold">เอกสารแนบท้ายหมายเลข 1</span> <i>(เงื่อนไขบังคับก่อน)</i> โดยเอกสารแต่ละฉบับที่ส่งมอบจะต้องอยู่ในรูปแบบและเนื้อหาที่ผู้ให้สินเชื่อยอมรับ ทั้งนี้ ในกรณีเอกสารที่ส่งมอบนั้นเป็นสำเนาเอกสาร เอกสารดังกล่าวจะต้องได้รับการรับรองความถูกต้องโดยผู้มีอำนาจลงนามรับรองสำเนาเอกสารของผู้กู้
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <span>(ข)</span>
                   <div className="flex-1">
-                    ผู้กู้ได้ปฏิบัติตามเงื่อนไขทุกประการที่ระบุไว้ใน <span className="underline decoration-1 font-bold">เอกสารแนบท้ายหมายเลข 1</span> (เงื่อนไขบังคับก่อน)
+                    ผู้กู้ได้ปฏิบัติตามเงื่อนไขทุกประการที่ระบุไว้ใน <span className="underline decoration-1 font-bold">เอกสารแนบท้ายหมายเลข 1</span> <i>(เงื่อนไขบังคับก่อน)</i>
                   </div>
                 </div>
 
@@ -256,7 +266,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-2">
               <span>3.3</span>
               <div className="flex-1 text-justify">
-                <span className=" mb-2 inline-block">การขอเบิกใช้สินเชื่อ</span>
+                <span className=" mb-2 inline-block underline">การขอเบิกใช้สินเชื่อ</span>
                 <div className="mb-4">
                   ผู้กู้ตกลงจะเบิกใช้สินเชื่อทั้งหมดในคราวเดียว ภายใต้เงื่อนไขว่าผู้กู้ต้องปฏิบัติตามเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อตามข้อ 3.2 ของสัญญาฉบับนี้
                 </div>
@@ -268,7 +278,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                       <div className="flex gap-2 mt-2">
                         <span>(1)</span>
                         <div className="flex-1">
-                          ผู้กู้จะต้องยื่นหนังสือขอเบิกใช้สินเชื่อ ซึ่งมีสาระสำคัญตามแบบที่กำหนดไว้ใน <span className="underline decoration-1 font-sans font-bold">เอกสารแนบท้ายหมายเลข 2 (แบบของหนังสือขอเบิกใช้สินเชื่อ)</span> ให้แก่ผู้ให้สินเชื่อ อย่างน้อย <span className="underline decoration-1 font-bold">3</span> วันทำการ ก่อนวันเบิกใช้สินเชื่อ โดยหนังสือขอเบิกใช้สินเชื่อจะต้องระบุวันที่เป็นวันเบิกใช้สินเชื่อ ซึ่งจะต้องเป็นวันทำการเสมอด้วย
+                          ผู้กู้จะต้องยื่นหนังสือขอเบิกใช้สินเชื่อ ซึ่งมีสาระสำคัญตามแบบที่กำหนดไว้ใน <span className="underline decoration-1 font-sans font-bold">เอกสารแนบท้ายหมายเลข 2</span> <i>(แบบของหนังสือขอเบิกใช้สินเชื่อ)</i> ให้แก่ผู้ให้สินเชื่อ อย่างน้อย <span className="underline decoration-1 font-bold">3</span> วันทำการ ก่อนวันเบิกใช้สินเชื่อ โดยหนังสือขอเบิกใช้สินเชื่อจะต้องระบุวันที่เป็นวันเบิกใช้สินเชื่อ ซึ่งจะต้องเป็นวันทำการเสมอด้วย
                         </div>
                       </div>
                     </div>
@@ -349,12 +359,12 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <PageHeader />
 
         <div className="space-y-6 mt-4">
-          <div className="text-justify mb-4">
-            ทั้งนี้ เพื่อมิให้เป็นที่สงสัย <span className="font-bold">“ระยะเวลาการเบิกใช้สินเชื่อ”</span> หมายถึง ระยะเวลาซึ่งเริ่มต้นนับตั้งแต่วันที่สัญญามีผลใช้บังคับและสิ้นสุดลงในวันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> และ <span className="font-bold">“วันทำการ”</span> หมายถึง วันที่ธนาคารเปิดดำเนินงานเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย
+          <div className="text-justify mb-4 ml-12">
+            ทั้งนี้ เพื่อมิให้เป็นที่สงสัย <span className="font-bold">“ระยะเวลาการเบิกใช้สินเชื่อ”</span> หมายถึง ระยะเวลาซึ่งเริ่มต้นนับตั้งแต่วันที่สัญญามีผลใช้บังคับและสิ้นสุดลงในวันที่ <Highlight>{data.lastInstallmentDate ? formatThaiDate(data.lastInstallmentDate) : '\u00A0'}</Highlight> และ <span className="font-bold">“วันทำการ”</span> หมายถึง วันที่ธนาคารเปิดดำเนินงานเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย
           </div>
 
           <div className="flex gap-2">
-            <span className="text-gray-800">(ข)</span>
+            <span>(ข)</span>
             <div className="flex-1 text-justify">
               <span className="mb-2 inline-block text-gray-800">วิธีการรับสินเชื่อและหลักฐานการรับสินเชื่อ</span>
 
@@ -362,14 +372,14 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <div className="flex gap-2">
                   <span>(1)</span>
                   <div className="flex-1 text-justify uppercase">
-                    คู่สัญญาทุกฝ่ายตกลงว่าวิธีการรับสินเชื่อตามสัญญาฉบับนี้ สามารถกระทำได้ในรูปแบบของ แคชเชียร์เช็ค (Cashier Cheque) หรือเช็คธนาคารสั่งจ่ายล่วงหน้า หรือ วิธีการอื่นใดที่คู่สัญญาทุกฝ่ายจะได้ตกลงร่วมกัน
+                    คู่สัญญาทุกฝ่ายตกลงว่าวิธีการรับสินเชื่อตามสัญญาฉบับนี้ สามารถกระทำได้ในรูปแบบของ แคชเชียร์เช็ค (Cashier Cheque) หรือเช็คธนาคารสั่งจ่ายล่วงหน้า ซึ่งออกโดยธนาคารพาณิชย์ที่กำหนดโดยผู้ให้สินเชื่อและยอมรับโดยผู้กู้ หรือ การโอนเงินเข้าบัญชีธนาคารของผู้กู้ หรือ วิธีการอื่นใดที่คู่สัญญาทุกฝ่ายจะได้ตกลงร่วมกัน โดยผู้ให้สินเชื่อจะดำเนินการส่งมอบสินเชื่อให้ผู้กู้ด้วยวิธีการที่ระบุในหนังสือขอเบิกใช้สินเชื่อในแต่ละคราว ภายใต้เงื่อนไขดังต่อไปนี้
                   </div>
                 </div>
 
                 <div className="flex gap-2 ml-12">
-                  <span className="text-gray-700">(1.1)</span>
+                  <span>(1.1)</span>
                   <div className="flex-1 text-justify">
-                    <span className="mb-2 inline-block">รูปแบบของแคชเชียร์เช็ค (Cashier Cheque)</span>
+                    <span className="mb-2 inline-block underline">รูปแบบของแคชเชียร์เช็ค (Cashier Cheque)</span>
                     <div className="mt-1">
                       ผู้ให้สินเชื่อตกลงจะส่งมอบแคชเชียร์เช็ค (Cashier Cheque) ตามจำนวนเงินที่ระบุในหนังสือขอเบิกใช้สินเชื่อจำนวน <Highlight>2 (สอง)</Highlight> ฉบับ ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ ให้ผู้กู้ ณ ที่ทำการของผู้ให้สินเชื่อภายในวันเบิกใช้สินเชื่อ และให้ถือว่าเป็นการให้สินเชื่อเมื่อผู้ให้สินเชื่อได้มีการส่งมอบแคชเชียร์เช็ค (Cashier Cheque) ให้แก่ผู้กู้
                     </div>
@@ -379,7 +389,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <div className="flex gap-2 ml-12">
                   <span className="text-gray-700">(1.2)</span>
                   <div className="flex-1 text-justify">
-                    <span className="mb-2 inline-block">รูปแบบของเช็คธนาคารสั่งจ่ายล่วงหน้า</span>
+                    <span className="mb-2 inline-block underline">รูปแบบของเช็คธนาคารสั่งจ่ายล่วงหน้า</span>
                     <div className="mt-1">
                       ผู้ให้สินเชื่อตกลงจะส่งมอบเช็คธนาคารสั่งจ่ายล่วงหน้าในนามผู้กู้ตามจำนวนเงินที่ระบุในหนังสือขอเบิกใช้เงินกู้จำนวน <Highlight>2 (สอง)</Highlight> ฉบับ ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ ให้ผู้กู้ ณ ที่ทำการของผู้ให้สินเชื่อ ก่อนหรือภายในวันเบิกใช้สินเชื่อ และให้ถือว่าเป็นการให้สินเชื่อเมื่อผู้กู้ได้รับเงินจำนวนดังกล่าวไว้ในบัญชีธนาคารเต็มจำนวนเรียบร้อยแล้ว
                     </div>
@@ -401,7 +411,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-16">
             <span className="shrink-0 w-8">(1.3)</span>
             <div className="flex-1 text-justify">
-              <span className="mb-2 inline-block">รูปแบบของการโอนเงินเข้าบัญชีธนาคารของผู้กู้</span>
+              <span className="mb-2 inline-block underline">รูปแบบของการโอนเงินเข้าบัญชีธนาคารของผู้กู้</span>
               <div className="mt-1">
                 ผู้ให้สินเชื่อตกลงจะโอนเงินตามจำนวนเงินที่ระบุในหนังสือขอเบิกใช้สินเชื่อตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ ให้แก่ผู้กู้ ไปยังบัญชีของผู้กู้ที่ระบุในหนังสือขอเบิกใช้สินเชื่อในแต่ละคราว ภายในวันที่เบิกใช้สินเชื่อ และให้ถือว่าเป็นการให้สินเชื่อเมื่อผู้กู้ได้รับเงินจำนวนดังกล่าวไว้ในบัญชีธนาคารเต็มจำนวนเรียบร้อยแล้ว
               </div>
@@ -411,7 +421,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-16">
             <span className="shrink-0 w-8">(1.4)</span>
             <div className="flex-1 text-justify">
-              <span className="mb-2 inline-block">รูปแบบอื่นใด</span>
+              <span className="mb-2 inline-block underline">รูปแบบอื่นใด</span>
               <p>
                 ผู้ให้สินเชื่อตกลงจะได้ส่งมอบสินเชื่อตามจำนวนที่ระบุในหนังสือขอเบิกใช้เงินกู้ให้แก่ผู้กู้ ตามวิธีการอื่นใดที่คู่สัญญาทุกฝ่ายจะได้ตกลงร่วมกัน ก่อนหรือภายในวันเบิกใช้สินเชื่อ และให้ถือว่าเป็นการให้สินเชื่อตามที่คู่สัญญาทุกฝ่ายจะได้ตกลงร่วมกัน
               </p>
@@ -421,7 +431,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-12">
             <span>(2)</span>
             <div className="flex-1 text-justify">
-              เมื่อผู้กู้ได้รับสินเชื่อจากผู้ให้สินเชื่อแล้ว ผู้กู้ต้องส่งมอบเอกสารการรับสินเชื่อตามจำนวนที่ได้รับจากผู้ให้สินเชื่อแต่ละราย ซึ่งมีสาระสำคัญตามแบบที่กำหนดใน <span className="underline decoration-1 font-bold">เอกสารแนบท้ายหมายเลข 3</span>(แบบของเอกสารการรับสินเชื่อ) ให้แก่ตัวแทนสินเชื่อ ในวันเดียวกับวันที่ผู้กู้ได้รับสินเชื่อตามสัญญาฉบับนี้
+              เมื่อผู้กู้ได้รับสินเชื่อจากผู้ให้สินเชื่อแล้ว ผู้กู้ต้องส่งมอบเอกสารการรับสินเชื่อตามจำนวนที่ได้รับจากผู้ให้สินเชื่อแต่ละราย ซึ่งมีสาระสำคัญตามแบบที่กำหนดใน <span className="underline decoration-1 font-bold">เอกสารแนบท้ายหมายเลข 3</span><i>(แบบของเอกสารการรับสินเชื่อ)</i> ให้แก่ตัวแทนสินเชื่อ ในวันเดียวกับวันที่ผู้กู้ได้รับสินเชื่อตามสัญญาฉบับนี้
             </div>
           </div>
 
@@ -434,9 +444,9 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-2 ml-8">
               <span>4.1</span>
               <div className="flex-1">
-                <span className="mb-2 inline-block">ระยะเวลาของดอกเบี้ย</span>
+                <span className="mb-2 inline-block underline">ระยะเวลาของดอกเบี้ย</span>
                 <div className="text-justify">
-                  ภายใต้บังคับของสัญญาฉบับนี้ ให้ระยะเวลาของงวดดอกเบี้ยสินเชื่อ มีกำหนดชำระพร้อมเงินต้นตามระยะเวลาที่กำหนดในข้อ 5 (การชำระคืนเงินต้น)
+                  ภายใต้บังคับของสัญญาฉบับนี้ ให้ระยะเวลาของงวดดอกเบี้ยสินเชื่อ มีกำหนดชำระพร้อมเงินต้นตามระยะเวลาที่กำหนดในข้อ 5 <i>(การชำระคืนเงินต้น)</i>
                 </div>
               </div>
             </div>
@@ -453,9 +463,9 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span>4.2</span>
             <div className="flex-1 text-justify">
-              <span className="mb-2 inline-block text-gray-800">อัตราดอกเบี้ย</span>
+              <span className="mb-2 inline-block underline">อัตราดอกเบี้ย</span>
               <div className="mb-4">
-                ผู้กู้ตกลงยินยอมให้ผู้ให้สินเชื่อคิดดอกเบี้ยบนเงินต้นของสินเชื่อ{data.interestType || 'แบบลดต้นลดดอก'} ในอัตราร้อยละ <Highlight>{data.interestRate} ({thaiNumberText(data.interestRate)})</Highlight> ต่อปี
+                ผู้กู้ตกลงยินยอมให้ผู้ให้สินเชื่อคิดดอกเบี้ยบนเงินต้นของสินเชื่อ<b>{data.interestType || 'เลือกประเภทดอกเบี้ย'} ในอัตราร้อยละ <Highlight>{data.interestRate} ({thaiNumberText(data.interestRate)})</Highlight> ต่อปี</b>
               </div>
               <table className="w-[60%] border-collapse border border-black text-center text-[12px] mb-6 mx-auto">
                 <thead>
@@ -477,18 +487,18 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span>4.3</span>
             <div className="flex-1 text-justify">
-              <span className=" mb-2 inline-block text-gray-800">การคำนวณและการชำระดอกเบี้ย</span>
+              <span className=" mb-2 inline-block underline">การคำนวณและการชำระดอกเบี้ย</span>
               <div className="space-y-4">
                 <div className="flex gap-2">
                   <span>(ก)</span>
                   <div className="flex-1">
-                    ให้คำนวณดอกเบี้ยตามข้อ 4 (ดอกเบี้ย) นี้เป็นรายวันตามจำนวนที่ผ่านพ้นไปจริง โดยตกลงกำหนดให้ 1 ปี มี 365 วัน โดยให้ผู้กู้ชำระดอกเบี้ยที่เกิดขึ้นเป็นรายเดือนทุกๆ เดือน โดยชำระพร้อมกับการชำระคืนเงินต้นตามระยะเวลาที่กำหนดในข้อ 5 (การชำระคืนเงินต้น)
+                    ให้คำนวณดอกเบี้ยตามข้อ 4 <i>(ดอกเบี้ย)</i> นี้เป็นรายวันตามจำนวนที่ผ่านพ้นไปจริง โดยตกลงกำหนดให้ 1 ปี มี 365 วัน โดยให้ผู้กู้ชำระดอกเบี้ยที่เกิดขึ้นเป็นรายเดือนทุกๆ เดือน โดยชำระพร้อมกับการชำระคืนเงินต้นตามระยะเวลาที่กำหนดในข้อ 5 <i>(การชำระคืนเงินต้น)</i>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <span>(ข)</span>
                   <div className="flex-1">
-                    ผู้กู้ตกลงชำระคืนเงินต้นพร้อมดอกเบี้ยภายใต้สัญญาฉบับนี้ ในรูปแบบของเช็คธนาคารสั่งจ่ายล่วงหน้า ในนามผู้ให้สินเชื่อแต่ละรายตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ โดยระบุจำนวนเงินต้นพร้อมดอกเบี้ยในแต่ละงวด ลงวันที่ที่ครบกำหนดชำระหนี้ รวมทั้งสิ้น <Highlight>{data.installments} ({thaiNumberText(data.installments)})</Highlight> งวด งวดละ 2 (สอง) ฉบับ ลงบนเช็ค <Highlight>{(parseInt(data.installments) * 2).toString()} ({(thaiNumberText((parseInt(data.installments) * 2).toString()))})</Highlight> ฉบับ และให้ถือว่าเป็นการชำระค่างวดเงินกู้ในแต่ละงวดเมื่อได้มีการขึ้นเงินและได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น ทั้งนี้ ผู้กู้ได้จัดส่งมอบเช็คสั่งจ่ายล่วงหน้าให้ไว้แก่ผู้ให้สินเชื่อ เป็นจำนวน <Highlight>{(parseInt(data.installments) * 2).toString()}</Highlight> ฉบับ ณ วันที่ทำสัญญาฉบับนี้แล้ว โดยรายละเอียดเกี่ยวกับเช็คสั่งจ่ายล่วงหน้า <span className="underline decoration-1 underline-offset-4"><span className="font-bold">เอกสารแนบท้ายหมายเลข 4</span> (หลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้าสำหรับการชำระค่างวดและดอกเบี้ย)</span> ทั้งนี้รายละเอียดการคำนวณเงินต้นพร้อมดอกเบี้ยในแต่ละงวด ปรากฏตามตารางคำนวณดอกเบี้ยเงินกู้ <span className="underline decoration-1 underline-offset-4"><span className="font-bold">เอกสารแนบท้ายหมายเลข 5</span> (รายละเอียดค่างวดแต่ละงวดและวิธีการคำนวณค่างวด)</span>
+                    ผู้กู้ตกลงชำระคืนเงินต้นพร้อมดอกเบี้ยภายใต้สัญญาฉบับนี้ ในรูปแบบของเช็คธนาคารสั่งจ่ายล่วงหน้า ในนามผู้ให้สินเชื่อแต่ละรายตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ โดยระบุจำนวนเงินต้นพร้อมดอกเบี้ยในแต่ละงวด ลงวันที่ที่ครบกำหนดชำระหนี้ รวมทั้งสิ้น <Highlight>{data.installments} ({thaiNumberText(data.installments)})</Highlight> งวด งวดละ 2 (สอง) ฉบับ ลงบนเช็ค <Highlight>{(parseInt(data.installments) * 2).toString()} ({(thaiNumberText((parseInt(data.installments) * 2).toString()))})</Highlight> ฉบับ และให้ถือว่าเป็นการชำระค่างวดเงินกู้ในแต่ละงวดเมื่อได้มีการขึ้นเงินและได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น ทั้งนี้ ผู้กู้ได้จัดส่งมอบเช็คสั่งจ่ายล่วงหน้าให้ไว้แก่ผู้ให้สินเชื่อ เป็นจำนวน <Highlight>{(parseInt(data.installments) * 2).toString()} ({(thaiNumberText((parseInt(data.installments) * 2).toString()))})</Highlight> ฉบับ ณ วันที่ทำสัญญาฉบับนี้แล้ว โดยรายละเอียดเกี่ยวกับเช็คสั่งจ่ายล่วงหน้า <span><span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 4</u></span> <i>(หลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้าสำหรับการชำระค่างวดและดอกเบี้ย)</i></span> ทั้งนี้รายละเอียดการคำนวณเงินต้นพร้อมดอกเบี้ยในแต่ละงวด ปรากฏตามตารางคำนวณดอกเบี้ยเงินกู้ <span><span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 5</u></span> <i>(รายละเอียดค่างวดแต่ละงวดและวิธีการคำนวณค่างวด)</i></span>
                   </div>
                 </div>
               </div>
@@ -510,7 +520,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           </div>
           <div className="text-justify ml-20 text-[12px]">
             <div className="mt-4">
-              ทั้งนี้การที่ผู้กู้จะใช้สิทธิชำระปิดบัญชีก่อนกำหนดนั้น ผู้กู้จะต้องได้ชำระค่างวดเรียบร้อยแล้วเป็นจำนวนทั้งสิ้นอย่างน้อย 16 (สิบหก) งวด และผู้กู้ไม่ได้ผิดสัญญาในข้อใด ผู้ให้สินเชื่ออาจใช้ดุลยพินิจอนุญาตให้ผู้กู้ชำระค่างวดที่เหลือทั้งหมดเพื่อปิดวงเงินก่อนกำหนดระยะเวลาก็ได้ โดยผู้ให้สินเชื่อสงวนสิทธิในการคิดค่าดำเนินการเพิ่มเติมในอัตราร้อยละ 5 (ห้า) โดยคำนวณจากยอดเงินต้นและดอกเบี้ยที่เหลือที่นำมาชำระทั้งหมดได้ โดยให้ถือเป็นดุลยพินิจฝ่ายเดียวของผู้ให้สินเชื่อ
+              ทั้งนี้การที่ผู้กู้จะใช้สิทธิชำระปิดบัญชีก่อนกำหนดนั้น ผู้กู้จะต้องได้ชำระค่างวดเรียบร้อยแล้วเป็นจำนวนทั้งสิ้นอย่างน้อย <Highlight>{Math.ceil((parseInt(data.installments) || 0) * 2 / 3)} ({thaiNumberText(Math.ceil((parseInt(data.installments) || 0) * 2 / 3).toString())})</Highlight> งวด และผู้กู้ไม่ได้ผิดสัญญาในข้อใด ผู้ให้สินเชื่ออาจใช้ดุลยพินิจอนุญาตให้ผู้กู้ชำระค่างวดที่เหลือทั้งหมดเพื่อปิดวงเงินก่อนกำหนดระยะเวลาก็ได้ โดยผู้ให้สินเชื่อสงวนสิทธิในการคิดค่าดำเนินการเพิ่มเติมในอัตราร้อยละ 5 (ห้า) โดยคำนวณจากยอดเงินต้นและดอกเบี้ยที่เหลือที่นำมาชำระทั้งหมดได้ โดยให้ถือเป็นดุลยพินิจฝ่ายเดียวของผู้ให้สินเชื่อ
             </div>
           </div>
 
@@ -523,7 +533,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-2 ml-8">
               <span>5.1</span>
               <div className="flex-1 text-justify">
-                ภายใต้บังคับของสัญญานี้ ผู้กู้ตกลงชำระคืนเงินต้นของสินเชื่อพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ โดยผู้กู้ตกลงชำระคืนเงินต้นภายใต้สัญญาฉบับนี้เป็นงวดพร้อมดอกเบี้ย{data.interestType || 'แบบลดต้นลดดอก'} เป็นจำนวนเงินงวดละ <Highlight>{data.installmentAmount || '63,032.64'}</Highlight> บาท (<Highlight>{thaiBahtText(data.installmentAmount || '63,032.64')}</Highlight>) รวมทั้งสิ้น <Highlight>{data.installments || '24'}</Highlight> (<Highlight>{thaiNumberText(data.installments || '24')}</Highlight>) งวด โดยชำระ 1 (หนึ่ง) เดือนต่อ 1 (หนึ่ง) งวด และตกลงจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อในงวดแรก วันที่ <Highlight>{data.firstInstallmentDate ? formatThaiDate(data.firstInstallmentDate) : '25 เมษายน 2569'}</Highlight> และจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อในแต่ละงวดทุกวันที่ <Highlight>{data.paymentDay || '25'}</Highlight> (<Highlight>{thaiNumberText(data.paymentDay || '25')}</Highlight>) ของเดือนปฏิทินนั้นๆ และในงวดสุดท้ายผู้กู้ตกลงชำระทั้งเงินต้นและดอกเบี้ยที่ยังคงค้างชำระตามสัญญานี้ให้ครบถ้วน ทั้งนี้ผู้กู้จะชำระเงินต้นสินเชื่อพร้อมดอกเบี้ยให้เสร็จสิ้นภายในวันที่ <Highlight>{data.lastInstallmentDate ? formatThaiDate(data.lastInstallmentDate) : '25 มีนาคม 2571'}</Highlight> (“วันครบกำหนดชำระเงินงวดสุดท้าย”)
+                ภายใต้บังคับของสัญญานี้ ผู้กู้ตกลงชำระคืนเงินต้นของสินเชื่อพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ <b>โดยผู้กู้ตกลงชำระคืนเงินต้นภายใต้สัญญาฉบับนี้เป็นงวดพร้อมดอกเบี้ย{data.interestType || 'แบบลดต้นลดดอก'} เป็นจำนวนเงินงวดละ <Highlight>{data.installmentAmount || '63,032.64'}</Highlight> บาท (<Highlight>{thaiBahtText(data.installmentAmount || '63,032.64')}</Highlight>) รวมทั้งสิ้น <Highlight>{data.installments || '24'}</Highlight> (<Highlight>{thaiNumberText(data.installments || '24')}</Highlight>) งวด</b> โดยชำระ 1 (หนึ่ง) เดือนต่อ 1 (หนึ่ง) งวด และตกลงจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อใน<b>งวดแรก วันที่ <Highlight>{data.firstInstallmentDate ? formatThaiDate(data.firstInstallmentDate) : '25 เมษายน 2569'}</Highlight></b> และจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อในแต่ละงวดทุกวันที่ <Highlight>{data.paymentDay || '25'}</Highlight> (<Highlight>{thaiNumberText(data.paymentDay || '25')}</Highlight>) ของเดือนปฏิทินนั้นๆ และในงวดสุดท้ายผู้กู้ตกลงชำระทั้งเงินต้นและดอกเบี้ยที่ยังคงค้างชำระตามสัญญานี้ให้ครบถ้วน <b>ทั้งนี้ ผู้กู้จะชำระเงินต้นสินเชื่อพร้อมดอกเบี้ยให้เสร็จสิ้นภายในวันที่ <Highlight>{data.lastInstallmentDate ? formatThaiDate(data.lastInstallmentDate) : '25 มีนาคม 2571'}</Highlight> (“วันครบกำหนดชำระเงินงวดสุดท้าย”)</b>
               </div>
             </div>
           </div>
@@ -544,13 +554,13 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span>5.3</span>
             <div className="flex-1 text-justify">
-              ผู้กู้ได้ส่งมอบเช็คธนาคารสั่งจ่ายล่วงหน้าให้ไว้แก่ผู้ให้สินเชื่อ เป็นจำนวนทั้งสิ้น <Highlight>{(parseInt(data.installments || '24') * 2).toString()}</Highlight> (<Highlight>{thaiNumberText((parseInt(data.installments || '24') * 2).toString())}</Highlight>) ฉบับ ณ วันที่ทำสัญญาฉบับนี้แล้ว รายละเอียดเกี่ยวกับเช็คสั่งจ่ายล่วงหน้า <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 4</span> (หลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่างวดและดอกเบี้ย) ทั้งนี้ หากคู่สัญญาตกลงจะเปลี่ยนแปลงวิธีการชำระในรูปแบบอื่น คู่สัญญาทั้งสองฝ่ายจะต้องตกลงกันเป็นลายลักษณ์อักษร โดยผู้กู้สามารถชำระด้วยเงินสด เช็ค หรือด้วยวิธีการโอนเงินเข้าบัญชีของผู้ให้สินเชื่อฝ่ายที่ 1 ชื่อบัญชี <Highlight>{agileInfo.companyName}</Highlight> ธนาคารกสิกรไทย ประเภทออมทรัพย์ หมายเลขบัญชี 025-3-77662-5
+              ผู้กู้ได้ส่งมอบเช็คธนาคารสั่งจ่ายล่วงหน้าให้ไว้แก่ผู้ให้สินเชื่อ เป็นจำนวนทั้งสิ้น <Highlight>{(parseInt(data.installments || '24') * 2).toString()}</Highlight> (<Highlight>{thaiNumberText((parseInt(data.installments || '24') * 2).toString())}</Highlight>) ฉบับ ณ วันที่ทำสัญญาฉบับนี้แล้ว รายละเอียดเกี่ยวกับเช็คสั่งจ่ายล่วงหน้า <span><u><b>เอกสารแนบท้ายหมายเลข 4</b></u></span> <i>(หลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่างวดและดอกเบี้ย)</i> ทั้งนี้ หากคู่สัญญาตกลงจะเปลี่ยนแปลงวิธีการชำระในรูปแบบอื่น คู่สัญญาทั้งสองฝ่ายจะต้องตกลงกันเป็นลายลักษณ์อักษร โดยผู้กู้สามารถชำระด้วยเงินสด เช็ค หรือด้วยวิธีการโอนเงินเข้าบัญชีของผู้ให้สินเชื่อฝ่ายที่ 1 <b>ชื่อบัญชี <Highlight>{agileInfo.companyName}</Highlight> ธนาคารกสิกรไทย ประเภทออมทรัพย์ หมายเลขบัญชี 025-3-77662-5</b>
             </div>
           </div>
           <div className="flex gap-2 ml-8">
             <span>5.4</span>
             <div className="flex-1 text-justify text-gray-800">
-              ถ้าวันครบกำหนดชำระหนี้มีใช่วันทำการ ก็ให้เงินจำนวนนั้นๆ ถึงกำหนดชำระในวันทำการก่อนวันถึงกำหนดชำระนั้น
+              ถ้าวันครบกำหนดชำระหนี้มิใช่วันทำการ ก็ให้เงินจำนวนนั้นๆ ถึงกำหนดชำระในวันทำการก่อนวันถึงกำหนดชำระนั้น
             </div>
           </div>
           <div className="flex gap-2 ml-8">
@@ -607,7 +617,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-2 ml-8">
               <span>7.2</span>
               <div className="flex-1 text-justify">
-                ในการทำสัญญาให้สินเชื่อฉบับนี้ ผู้กู้ได้ตกลงทำสัญญาค้ำประกันโดยบุคคลภายนอก (“บุคคลค้ำประกัน”)
+                ในการทำสัญญาให้สินเชื่อฉบับนี้ ผู้กู้ได้ตกลงทำสัญญาค้ำประกันโดยบุคคลภายนอก <b>(“บุคคลค้ำประกัน”)</b>
               </div>
             </div>
             <div className="flex gap-2 ml-16">
@@ -628,37 +638,37 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 {(data.collateralAssets || [])
                   .slice(0, hasLargeMachinery ? 0 : 2)
                   .map((asset, idx) => (
-                    <div key={idx} className="flex gap-2 ml-16 italic">
+                    <div key={idx} className="flex gap-2 ml-16">
                       <span>({getThaiIndex(idx)})</span>
                       <div className="flex-1 text-justify">
                         {asset.type === 'land' && asset.landDetails && (
                           <div>
-                            <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
+                            <span className="font-bold">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <b><Highlight>{asset.landDetails.owner}</Highlight></b> รายละเอียดปรากฏตาม <span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 6</u></span>
                           </div>
                         )}
                         {asset.type === 'cash' && (
                           <div>
-                            <span className="font-bold border-b border-black text-black">เงินสด</span> : จำนวนเงิน <Highlight>{asset.cashAmount}</Highlight> บาท
+                            <span className="font-bold">เงินสด</span> : จำนวนเงิน <Highlight>{asset.cashAmount}</Highlight> บาท
                           </div>
                         )}
                         {asset.type === 'machinery' && (
-                          <div className="mt-2 text-justify">
-                            <span className="font-bold border-b border-black text-black italic">เครื่องจักร</span> :{' '}
-                            <Highlight>{asset.machineName}</Highlight>{' '}
-                            {asset.machineModel && <span className="italic text-gray-700">({asset.machineModel})</span>}{' '}
+                          <div className="text-justify">
+                            <span className="font-bold">จำนำเครื่องจักร</span> : เครื่องจักร <Highlight>{asset.machineName}</Highlight>{' '}
+                            {asset.machineModel && <span>({asset.machineModel})</span>}{' '}
                             จำนวน <Highlight>{asset.machineQuantity}</Highlight> <Highlight>{asset.machineUnit || 'ชุด'}</Highlight>{' '}
                             ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
-                            อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
+                            อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <b><Highlight>{asset.machineOwner}</Highlight></b>{' '}
+                            รายละเอียดปรากฏตาม <span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 6</u></span>
                           </div>
                         )}
                         {asset.type === 'carPledge' && asset.carPledgeDetails && (
                           <div>
-                            <span className="font-bold border-b border-black text-black italic">จำนำรถ</span> : รถยนต์ยี่ห้อ <Highlight>{asset.carPledgeDetails.brand}</Highlight> รุ่น <Highlight>{asset.carPledgeDetails.model}</Highlight> ทะเบียนเลขที่ <Highlight>{asset.carPledgeDetails.plateNo}</Highlight> จังหวัด <Highlight>{asset.carPledgeDetails.province}</Highlight> เลขตัวถัง <Highlight>{asset.carPledgeDetails.chassisNo}</Highlight> เลขเครื่องยนต์ <Highlight>{asset.carPledgeDetails.engineNo}</Highlight> สี <Highlight>{asset.carPledgeDetails.color}</Highlight> โดยมี <Highlight>{asset.carPledgeDetails.owner}</Highlight> เป็นผู้ถือกรรมสิทธิ์
+                            <span className="font-bold">จำนำรถ</span> : รถยนต์ยี่ห้อ <Highlight>{asset.carPledgeDetails.brand}</Highlight> รุ่น <Highlight>{asset.carPledgeDetails.model}</Highlight> ทะเบียนเลขที่ <Highlight>{asset.carPledgeDetails.plateNo}</Highlight> จังหวัด <Highlight>{asset.carPledgeDetails.province}</Highlight> เลขตัวถัง <Highlight>{asset.carPledgeDetails.chassisNo}</Highlight> เลขเครื่องยนต์ <Highlight>{asset.carPledgeDetails.engineNo}</Highlight> สี <Highlight>{asset.carPledgeDetails.color}</Highlight> โดยมี <b><Highlight>{asset.carPledgeDetails.owner}</Highlight></b> เป็นผู้ถือกรรมสิทธิ์
                           </div>
                         )}
                         {asset.type === 'stockPledge' && asset.stockPledgeDetails && (
                           <div>
-                            <span className="font-bold border-b border-black text-black italic">จำนำหุ้น</span> : หุ้นของบริษัท <Highlight>{asset.stockPledgeDetails.companyName}</Highlight> ตามใบถือหุ้นเลขที่ <Highlight>{asset.stockPledgeDetails.certificateNo}</Highlight> จำนวน <Highlight>{asset.stockPledgeDetails.quantity}</Highlight> หุ้น มูลค่าหุ้นละ <Highlight>{asset.stockPledgeDetails.parValue}</Highlight> บาท รวมมูลค่า <Highlight>{asset.stockPledgeDetails.totalValue}</Highlight> บาท โดยมี <Highlight>{asset.stockPledgeDetails.owner}</Highlight> เป็นผู้ถือหุ้น
+                            <span className="font-bold">จำนำหุ้น</span> : หุ้นของบริษัท <Highlight>{asset.stockPledgeDetails.companyName}</Highlight> ตามใบถือหุ้นเลขที่ <Highlight>{asset.stockPledgeDetails.certificateNo}</Highlight> จำนวน <Highlight>{asset.stockPledgeDetails.quantity}</Highlight> หุ้น มูลค่าหุ้นละ <Highlight>{asset.stockPledgeDetails.parValue}</Highlight> บาท รวมมูลค่า <Highlight>{asset.stockPledgeDetails.totalValue}</Highlight> บาท โดยมี <b><Highlight>{asset.stockPledgeDetails.owner}</Highlight></b> เป็นผู้ถือหุ้น
                           </div>
                         )}
                       </div>
@@ -684,37 +694,37 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             {(data.collateralAssets || [])
               .slice(hasLargeMachinery ? 0 : 2)
               .map((asset, idx) => (
-                <div key={idx + (hasLargeMachinery ? 0 : 2)} className="flex gap-2 ml-16 italic">
+                <div key={idx + (hasLargeMachinery ? 0 : 2)} className="flex gap-2 ml-16">
                   <span>({getThaiIndex(idx + (hasLargeMachinery ? 0 : 2))})</span>
                   <div className="flex-1 text-justify">
                     {asset.type === 'land' && asset.landDetails && (
                       <div>
-                        <span className="font-bold border-b border-black text-black">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <span className="underline decoration-1 underline-offset-4">เอกสารแนบท้ายหมายเลข 6</span>
+                        <span className="font-bold">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <b><Highlight>{asset.landDetails.owner}</Highlight></b> รายละเอียดปรากฏตาม <span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 6</u></span>
                       </div>
                     )}
                     {asset.type === 'cash' && (
                       <div>
-                        <span className="font-bold border-b border-black text-black">เงินสด</span> : จำนวนเงิน <Highlight>{asset.cashAmount}</Highlight> บาท
+                        <span className="font-bold">เงินสด</span> : จำนวนเงิน <Highlight>{asset.cashAmount}</Highlight> บาท
                       </div>
                     )}
                     {asset.type === 'machinery' && (
-                      <div className="mt-2 text-justify">
-                        <span className="font-bold border-b border-black text-black italic">เครื่องจักร</span> :{' '}
-                        <Highlight>{asset.machineName}</Highlight>{' '}
-                        {asset.machineModel && <span className="italic text-gray-700">({asset.machineModel})</span>}{' '}
+                      <div className="text-justify">
+                        <span className="font-bold">จำนำเครื่องจักร</span> : เครื่องจักร <Highlight>{asset.machineName}</Highlight>{' '}
+                        {asset.machineModel && <span>({asset.machineModel})</span>}{' '}
                         จำนวน <Highlight>{asset.machineQuantity}</Highlight> <Highlight>{asset.machineUnit || 'ชุด'}</Highlight>{' '}
                         ราคา <Highlight>{asset.machinePrice}</Highlight> บาท{' '}
-                        อันเป็นทรัพย์สินของ <Highlight>{asset.machineOwner}</Highlight>
+                        อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <b><Highlight>{asset.machineOwner}</Highlight></b>{' '}
+                        รายละเอียดปรากฏตาม <span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 6</u></span>
                       </div>
                     )}
                     {asset.type === 'carPledge' && asset.carPledgeDetails && (
                       <div>
-                        <span className="font-bold border-b border-black text-black italic">จำนำรถ</span> : รถยนต์ยี่ห้อ <Highlight>{asset.carPledgeDetails.brand}</Highlight> รุ่น <Highlight>{asset.carPledgeDetails.model}</Highlight> ทะเบียนเลขที่ <Highlight>{asset.carPledgeDetails.plateNo}</Highlight> จังหวัด <Highlight>{asset.carPledgeDetails.province}</Highlight> เลขตัวถัง <Highlight>{asset.carPledgeDetails.chassisNo}</Highlight> เลขเครื่องยนต์ <Highlight>{asset.carPledgeDetails.engineNo}</Highlight> สี <Highlight>{asset.carPledgeDetails.color}</Highlight> โดยมี <Highlight>{asset.carPledgeDetails.owner}</Highlight> เป็นผู้ถือกรรมสิทธิ์
+                        <span className="font-bold">จำนำรถ</span> : รถยนต์ยี่ห้อ <Highlight>{asset.carPledgeDetails.brand}</Highlight> รุ่น <Highlight>{asset.carPledgeDetails.model}</Highlight> ทะเบียนเลขที่ <Highlight>{asset.carPledgeDetails.plateNo}</Highlight> จังหวัด <Highlight>{asset.carPledgeDetails.province}</Highlight> เลขตัวถัง <Highlight>{asset.carPledgeDetails.chassisNo}</Highlight> เลขเครื่องยนต์ <Highlight>{asset.carPledgeDetails.engineNo}</Highlight> สี <Highlight>{asset.carPledgeDetails.color}</Highlight> โดยมี <Highlight>{asset.carPledgeDetails.owner}</Highlight> เป็นผู้ถือกรรมสิทธิ์
                       </div>
                     )}
                     {asset.type === 'stockPledge' && asset.stockPledgeDetails && (
                       <div>
-                        <span className="font-bold border-b border-black text-black italic">จำนำหุ้น</span> : หุ้นของบริษัท <Highlight>{asset.stockPledgeDetails.companyName}</Highlight> ตามใบถือหุ้นเลขที่ <Highlight>{asset.stockPledgeDetails.certificateNo}</Highlight> จำนวน <Highlight>{asset.stockPledgeDetails.quantity}</Highlight> หุ้น มูลค่าหุ้นละ <Highlight>{asset.stockPledgeDetails.parValue}</Highlight> บาท รวมมูลค่า <Highlight>{asset.stockPledgeDetails.totalValue}</Highlight> บาท โดยมี <Highlight>{asset.stockPledgeDetails.owner}</Highlight> เป็นผู้ถือหุ้น
+                        <span className="font-bold">จำนำหุ้น</span> : หุ้นของบริษัท <Highlight>{asset.stockPledgeDetails.companyName}</Highlight> ตามใบถือหุ้นเลขที่ <Highlight>{asset.stockPledgeDetails.certificateNo}</Highlight> จำนวน <Highlight>{asset.stockPledgeDetails.quantity}</Highlight> หุ้น มูลค่าหุ้นละ <Highlight>{asset.stockPledgeDetails.parValue}</Highlight> บาท รวมมูลค่า <Highlight>{asset.stockPledgeDetails.totalValue}</Highlight> บาท โดยมี <Highlight>{asset.stockPledgeDetails.owner}</Highlight> เป็นผู้ถือหุ้น
                       </div>
                     )}
                   </div>
@@ -750,7 +760,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               <div className="flex gap-2 ml-8">
                 <span className="shrink-0 w-6">7.6</span>
                 <div className="flex-1 text-justify">
-                  ในกรณีที่ทรัพย์สินหลักประกันเป็นสิ่งปลูกสร้าง และ/หรือ เครื่องจักร ผู้กู้ตกลงจัดให้มีการทำประกันภัยทรัพย์สินบนสิ่งปลูกสร้าง และเครื่องจักรที่เป็นทรัพย์สินหลักประกันกับบริษัทประกันภัยที่ผู้ให้สินเชื่อยอมรับ ตลอดระยะเวลาในจนกว่าผู้กู้จะชำระหนี้ตามสัญญาฉบับนี้จนครบถ้วน โดยผู้กู้จะเป็นผู้ชำระเบี้ยประกันและค่าใช้จ่าย และให้ผู้ให้สินเชื่อเป็นผู้รับผลประโยชน์ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้
+                  ในกรณีที่ทรัพย์สินหลักประกันเป็นสิ่งปลูกสร้าง และ/หรือ เครื่องจักร ผู้กู้ตกลงจัดให้มีการทำประกันภัยทรัพย์สินบนสิ่งปลูกสร้าง และเครื่องจักรที่เป็นทรัพย์สินหลักประกันกับบริษัทประกันภัยที่ผู้ให้สินเชื่อยอมรับ ตลอดระยะเวลาจนกว่าผู้กู้จะชำระหนี้ตามสัญญาฉบับนี้จนครบถ้วน โดยผู้กู้จะเป็นผู้ชำระเบี้ยประกันและค่าใช้จ่าย และให้ผู้ให้สินเชื่อเป็นผู้รับผลประโยชน์ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้
                 </div>
               </div>
               <div className="flex gap-2 ml-8">
@@ -795,7 +805,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               <div className="flex gap-2 ml-8">
                 <span className="shrink-0 w-6">7.11</span>
                 <div className="flex-1 text-justify">
-                  ในกรณีผู้ให้สินเชื่อมีการนำทรัพย์สินหลักประกันมาเป็นหลักประกันให้แก่ผู้ให้สินเชื่อ ถ้าผู้ให้สินเชื่อบังคับหลักประกันไม่ว่าจะด้วยวิธีการ โอนสิทธิเรียกร้องในการรับชำระเงินแล้ว แต่ได้รับชำระเงินต่ำกว่าจำนวนหนี้ หรือ ขายทอดตลาดแล้ว ได้เงินสุทธิไม่พอชำระหนี้ หรือเอาทรัพย์สินหลักประกันหลุดเป็นสิทธิและราคาทรัพย์สินหลักประกันนั้น ต่ำกว่าจำนวนหนี้อยู่เท่าใด ผู้กู้ยอมชำระหนี้ที่ขาดจำนวนนั้นจากทรัพย์สินอื่นของผู้กู้ให้แก่ผู้ให้สินเชื่อตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ จนครบถ้วน
+                  ในกรณีผู้กู้มีการนำทรัพย์สินหลักประกันมาเป็นหลักประกันให้แก่ผู้ให้สินเชื่อ ถ้าผู้ให้สินเชื่อบังคับหลักประกันไม่ว่าจะด้วยวิธีการ โอนสิทธิเรียกร้องในการรับชำระเงินแล้ว แต่ได้รับชำระเงินต่ำกว่าจำนวนหนี้ หรือ ขายทอดตลาดแล้ว ได้เงินสุทธิไม่พอชำระหนี้ หรือเอาทรัพย์สินหลักประกันหลุดเป็นสิทธิและราคาทรัพย์สินหลักประกันนั้น ต่ำกว่าจำนวนหนี้อยู่เท่าใด ผู้กู้ยอมชำระหนี้ที่ขาดจำนวนนั้นจากทรัพย์สินอื่นของผู้กู้ให้แก่ผู้ให้สินเชื่อตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ จนครบถ้วน
                 </div>
               </div>
               <div className="flex gap-2 ml-8">
@@ -823,7 +833,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span className="shrink-0 w-6">7.13</span>
             <div className="flex-1 text-justify">
-              กรณีที่ผู้ให้สินเชื่อจะดำเนินการบังคับชำระหนี้จากทรัพย์สินหลักประกันตามข้อ 11.2 (ก) ของสัญญาฉบับนี้ ผู้กู้ตกลงให้ผู้ให้สินเชื่อมีสิทธิในการพิจารณาบังคับชำระหนี้จากทรัพย์สินหลักประกัน ไม่ว่าจะทั้งหมดหรือบางส่วน และไม่ว่าเป็นทรัพย์สินหลักประกันอย่างใดอย่างหนึ่งหรือหลายอย่างแต่เพียงผู้เดียว และตกลงให้การที่ผู้ให้สินเชื่อไม่บังคับชำระหนี้จากทรัพย์สินหลักประกันอย่างใดอย่างหนึ่งหรือหลายอย่างดังนั้น ไม่เป็นเหตุให้จำนวนหนี้ที่ตามสัญญาฉบับนี้ลดลงตามมูลค่าของเงินที่มีสิทธิจะได้รับจากการบังคับทรัพย์สินหลักประกันดังกล่าว
+              กรณีที่ผู้ให้สินเชื่อจะดำเนินการบังคับชำระหนี้จากทรัพย์สินหลักประกันตามข้อ 11.2 (ค) ของสัญญาฉบับนี้ ผู้กู้ตกลงให้ผู้ให้สินเชื่อมีสิทธิในการพิจารณาบังคับชำระหนี้จากทรัพย์สินหลักประกัน ไม่ว่าจะทั้งหมดหรือบางส่วน และไม่ว่าเป็นทรัพย์สินหลักประกันอย่างใดอย่างหนึ่งหรือหลายอย่างแต่เพียงผู้เดียว และตกลงให้การที่ผู้ให้สินเชื่อไม่บังคับชำระหนี้จากทรัพย์สินหลักประกันอย่างใดอย่างหนึ่งหรือหลายอย่างนั้น ไม่เป็นเหตุให้จำนวนหนี้ที่ตามสัญญาฉบับนี้ลดลงตามมูลค่าของเงินที่มีสิทธิจะได้รับจากการบังคับทรัพย์สินหลักประกันดังกล่าว
             </div>
           </div>
 
@@ -876,7 +886,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span className="shrink-0 w-6">(ข)</span>
             <div className="flex-1 text-justify">
-              <span className="font-bold">อำนาจ:</span> เอกสารจัดตั้งของผู้กู้ข้อกำหนดซึ่งให้อำนาจผู้กู้เข้าเอกสารทางธุรกรรมที่ตนเป็นคู่สัญญาและดำเนินการต่าง ๆ ตามที่ระบุไว้ หรือที่ผู้กู้ต้องทำภายใต้เอกสารทางธุรกรรมซึ่งตนเป็นคู่สัญญาและผู้กู้มีอำนาจหรือได้รับอำนาจทุกประการในส่วนของตนในการเป็นเจ้าของทรัพย์สิน ในการประกอบธุรกิจ และดำเนินการต่าง ๆ ของตนตามที่กระทำอยู่ในปัจจุบัน และเอกสารทางธุรกรรมที่ตนเป็นคู่สัญญาเป็นเอกสารที่สมบูรณ์ ถูกต้อง และมีผลใช้บังคับกับผู้กู้ตามข้อกำหนดของเอกสารทางธุรกรรมที่เกี่ยวข้องดังกล่าว
+              <span className="font-bold">อำนาจ:</span> เอกสารจัดตั้งของผู้กู้มีข้อกำหนดซึ่งให้อำนาจผู้กู้เข้าทำเอกสารทางธุรกรรมที่ตนเป็นคู่สัญญาและดำเนินการต่าง ๆ ตามที่ระบุไว้ หรือที่ผู้กู้ต้องทำภายใต้เอกสารทางธุรกรรมซึ่งตนเป็นคู่สัญญาและผู้กู้มีอำนาจหรือได้รับอำนาจทุกประการในส่วนของตนในการเป็นเจ้าของทรัพย์สิน ในการประกอบธุรกิจ และดำเนินการต่าง ๆ ของตนตามที่กระทำอยู่ในปัจจุบัน และเอกสารทางธุรกรรมที่ตนเป็นคู่สัญญาเป็นเอกสารที่สมบูรณ์ ถูกต้อง และมีผลใช้บังคับกับผู้กู้ตามข้อกำหนดของเอกสารทางธุรกรรมที่เกี่ยวข้องดังกล่าว
               <p className="mt-4"><span className="font-bold">“เอกสารทางธุรกรรม”</span> หมายถึง สัญญาให้สินเชื่อฉบับนี้ สัญญาหลักประกัน (ถ้ามี) และเอกสารอื่น ๆ ที่เกี่ยวข้อง</p>
             </div>
           </div>
@@ -886,11 +896,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               <span className="font-bold">อำนาจกระทำการ:</span> ผู้กู้ได้กระทำการที่จำเป็นทุกประการเพื่อ:
               <div className="mt-2 space-y-2">
                 <div className="flex gap-4">
-                  <span>(1)</span>
+                  <span className="shrink-0 w-4">(1)</span>
                   <span>ให้ได้รับอำนาจในการเข้าทำและดำเนินการตามเอกสารทางธุรกรรมซึ่งตนเป็นคู่สัญญา และ</span>
                 </div>
                 <div className="flex gap-4">
-                  <span>(2)</span>
+                  <span className="shrink-0 w-4">(2)</span>
                   <span>ให้เอกสารทางธุรกรรมที่ตนเป็นคู่สัญญาดังกล่าวนั้นมีผลสมบูรณ์ ผูกพัน และมีผลใช้บังคับกับคู่สัญญาแต่ละฝ่ายได้</span>
                 </div>
               </div>
@@ -1014,7 +1024,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span className="shrink-0 w-6">(ซ)</span>
             <div className="flex-1 text-justify">
-              <span className="font-bold">การไม่จำหน่ายทรัพย์สินของผู้กู้:</span> ผู้กู้ต้องไม่จำหน่าย จ่าย โอน ให้เช่า จำนำ จำนอง ก่อให้เกิดภาระติดพัน หรือยอมรับให้มีการรอนสิทธิโดยบุคคลคนหนึ่งบุคคลใดเหนือทรัพย์สินของผู้กู้ เว้นแต่ การจำหน่ายไปไม่ก่อให้เกิดผลกระทบในทางลบอย่างมีนัยสำคัญต่อผู้กู้ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ หรือ เป็นทางการค้าปกติของผู้กู้ หรือ เป็นการจำหน่ายทรัพย์สินที่เสื่อมสภาพอันเนื่องมาจากลักษณะหรือสภาพของทรัพย์สินนั้นเอง หรือ ได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้สินเชื่อ
+              <span className="font-bold">การไม่จำหน่ายทรัพย์สินของผู้กู้:</span> ผู้กู้ต้องไม่จำหน่าย จ่าย โอน ให้เช่า จำนำ จำนอง ก่อให้เกิดภาระติดพัน หรือยอมรับให้มีการรอนสิทธิโดยบุคคลหนึ่งบุคคลใดเหนือทรัพย์สินของผู้กู้ เว้นแต่ การจำหน่ายไปไม่ก่อให้เกิดผลกระทบในทางลบอย่างมีนัยสำคัญต่อผู้กู้ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ หรือ เป็นทางการค้าปกติของผู้กู้ หรือ เป็นการจำหน่ายทรัพย์สินที่เสื่อมสภาพอันเนื่องมาจากลักษณะหรือสภาพของทรัพย์สินนั้นเอง หรือ ได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้สินเชื่อ
             </div>
           </div>
           <div className="flex gap-2 ml-8">
@@ -1040,13 +1050,13 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span className="shrink-0 w-6">(ฎ)</span>
             <div className="flex-1 text-justify">
-              <span className="font-bold">การยินยอมให้ตรวจสอบข้อมูลเครดิต:</span> ผู้กู้ตกลงยินยอมและจะให้ความร่วมมือทุกประการแก่ผู้ให้สินเชื่อในการดำเนินการตรวจสอบข้อมูลเครดิต และ/หรือ ข้อมูลอื่น ๆ ที่ผู้กู้อยู่กับบริษัท ข้อมูลเครดิตแห่งชาติ จำกัด (National Credit Bureau) หรือบริษัทข้อมูลเครดิตอื่นที่ได้จัดตั้งขึ้นและได้รับอนุญาตให้ประกอบธุรกิจภายใต้กฎหมายว่าด้วยการประกอบธุรกิจข้อมูลเครดิต และ/หรือ นิติบุคคลอื่น
+              <span className="font-bold">การยินยอมให้ตรวจสอบข้อมูลเครดิต:</span> ผู้กู้ตกลงยินยอมและจะให้ความร่วมมือทุกประการแก่ผู้ให้สินเชื่อในการดำเนินการตรวจสอบข้อมูลเครดิต และ/หรือ ข้อมูลอื่น ๆ ที่ผู้กู้มีอยู่กับบริษัท ข้อมูลเครดิตแห่งชาติ จำกัด (National Credit Bureau) หรือบริษัทข้อมูลเครดิตอื่นที่ได้จัดตั้งขึ้นและได้รับอนุญาตให้ประกอบธุรกิจภายใต้กฎหมายว่าด้วยการประกอบธุรกิจข้อมูลเครดิต และ/หรือ นิติบุคคลอื่น
             </div>
           </div>
           <div className="flex gap-2 ml-8">
             <span className="shrink-0 w-6">(ฏ)</span>
             <div className="flex-1 text-justify">
-              <span className="font-bold">หน้าที่กระทำการอื่นใด:</span> ผู้กู้จะต้องกระทำการ หรือปฏิบัติตามคำร้องขอของผู้ให้สินเชื่อใดเพิ่มเติม เพื่อให้การดำเนินการ หรือปฏิบัติตามสัญญานี้ของคู่สัญญาทุกฝ่ายสำเร็จลุล่วงไปได้ด้วยดี
+              <span className="font-bold">หน้าที่กระทำการอื่นใด:</span> ผู้กู้จะต้องกระทำการ หรือปฏิบัติตามคำร้องขอของผู้ให้สินเชื่ออื่นใดเพิ่มเติม เพื่อให้การดำเนินการ หรือปฏิบัติตามสัญญานี้ของคู่สัญญาทุกฝ่ายสำเร็จลุล่วงไปได้ด้วยดี
             </div>
           </div>
           <div className="flex gap-2 ml-8">
@@ -1094,7 +1104,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span className="shrink-0 w-6">(ค)</span>
             <div className="flex-1 text-justify">
-              <span className="font-bold">การผิดคำรับรอง:</span> ผู้กู้ผิดคำรับรองและยืนยันใด ๆ ที่ให้ไว้ในสัญญาฉบัับนี้ในสาระสำคัญ ไม่ว่าจะทั้งหมดหรือบางส่วน และ/หรือ คำรับรองและยืนยันใด ๆ ที่ให้ไว้ในสัญญาฉบับนี้เป็นคำรับรองและยืนยันที่ไม่เป็นความจริง หรือพิสูจน์ได้ว่าไม่เป็นความจริง ไม่ถูกต้อง หรืออาจจะก่อให้เกิดความเข้าใจผิดในสาระสำคัญ
+              <span className="font-bold">การผิดคำรับรอง:</span> ผู้กู้ผิดคำรับรองและยืนยันใด ๆ ที่ให้ไว้ในสัญญาฉบับนี้ในสาระสำคัญ ไม่ว่าจะทั้งหมดหรือบางส่วน และ/หรือ คำรับรองและยืนยันใด ๆ ที่ให้ไว้ในสัญญาฉบับนี้เป็นคำรับรองและยืนยันที่ไม่เป็นความจริง หรือพิสูจน์ได้ว่าไม่เป็นความจริง ไม่ถูกต้อง หรืออาจจะก่อให้เกิดความเข้าใจผิดในสาระสำคัญ
             </div>
           </div>
           <div className="flex gap-2 ml-8">
@@ -1106,7 +1116,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span className="shrink-0 w-6">(จ)</span>
             <div className="flex-1 text-justify">
-              <span className="font-bold">การใช้สิทธิเหนือทรัพย์สินหลักประกัน:</span> เมื่อบุคคลใดดำเนินการฟ้องร้องเพื่อบังคับคดีเหนือทรัพย์สินหลักประกันของผู้กู้ที่ผู้กู้ได้ไว้สำหรับความรับผิดของตนเอง หรือของบุคคลอื่น
+              <span className="font-bold">การใช้สิทธิเหนือทรัพย์สินหลักประกัน:</span> เมื่อบุคคลใดดำเนินการฟ้องร้องเพื่อบังคับคดีเหนือทรัพย์สินหลักประกันของผู้กู้ที่ผู้กู้ไห้ไว้สำหรับความรับผิดของตนเอง หรือของบุคคลอื่น
             </div>
           </div>
         </div>
@@ -1120,7 +1130,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-2 ml-8">
             <span className="shrink-0 w-6">(ฉ)</span>
             <div className="flex-1 text-justify">
-              <span className="font-bold">การแต่งตั้งเจ้าพนักงานบังคับคดี หรือการดำเนินการทางคดี:</span> เมื่อเจ้าพนักงานบังคับคดี ผู้ทำแผน ผู้บริหารแผน หรือเจ้าพนักงานในลักษณะอื่นใดที่คล้ายคลึงกัน ได้รับการแต่งตั้งเพื่อจัดการกับธุรกิจ ฟื้นฟูกิจการ หรือทรัพย์สินของผู้กู้ ไม่ว่าทั้งหมดหรือแต่บางส่วน หรือเมื่อมีคำสั่งในทางบังคับซึ่งบังคับเอากับทรัพย์สินของผู้กู้ หรือมีการบังคับหลักประกันเอากับทรัพย์สินใดๆ ของผู้กู้
+              <span className="font-bold">การแต่งตั้งเจ้าพนักงานบังคับคดี หรือการดำเนินการทางคดี:</span> เมื่อเจ้าพนักงานบังคับคดี ผู้ทำแผน ผู้บริหารแผน หรือเจ้าพนักงานในลักษณะอื่นใดที่คล้ายคลึงกัน ได้รับการแต่งตั้งเพื่อจัดการกับธุรกิจ ฟื้นฟูกิจการ หรือทรัพย์สินของผู้กู้ ไม่ว่าทั้งหมดหรือแต่บางส่วน หรือเมื่อมีคำสั่งในทางบังคับคดีซึ่งบังคับเอากับทรัพย์สินของผู้กู้ หรือมีการบังคับหลักประกันเอากับทรัพย์สินใดๆ ของผู้กู้
             </div>
           </div>
           <div className="flex gap-2 ml-8">
@@ -1140,7 +1150,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <span>11.2 <span className="underline">การดำเนินการเมื่อมีเหตุผิดนัดเกิดขึ้น</span></span>
           </div>
           <div className="ml-8 text-justify">
-            เมื่อมีเหตุผิดนัดเกิดขึ้น และเหตุผิดนัดดังกล่าวนั้นยังคงดำเนินอยู่ ผู้ให้สินเชื่อมีสิทธิส่งคำบอกกล่าวระงับสิทธิการเบิกใช้เงินกู้ รวมทั้งมีสิทธิดำเนินการอย่างใดอย่างหนึ่งหรือหลายอย่างดังต่อไปนี้ทันที
+            เมื่อมีเหตุผิดนัดเกิดขึ้น และเหตุผิดนัดดังกล่าวนั้นยังคงดำเนินอยู่ ผู้ให้สินเชื่อมีสิทธิส่งคำบอกกล่าวเหตุผิดนัด รวมทั้งมีสิทธิดำเนินการอย่างใดอย่างหนึ่งหรือหลายอย่างดังต่อไปนี้ทันที
           </div>
           <div className="flex gap-2 ml-8">
             <span className="shrink-0 w-6">(ก)</span>
@@ -1219,7 +1229,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           </div>
           <div className="ml-16 text-justify">
             <p>
-              <span className="font-bold">ผู้ที่มีหน้าที่ต้องชำระค่าอากรแสตมป์สำหรับการทำสัญญาฉบับนี้ <Highlight>เป็นจำนวนทั้งสิ้น {data.stampDuty || '0'} บาท ({thaiBahtText(data.stampDuty || '0')}บาทถ้วน)</Highlight> โดยตกลงชำระ ณ วันที่ทำสัญญาฉบับนี้</span> และมีหน้าที่ต้องชำระค่าภาษีอากรอื่น ๆ ในทำนองเดียวกันที่เกี่ยวข้องกับสัญญาฉบับนี้ แต่เพียงผู้เดียว (เว้นแต่ ค่าอากรแสตมป์ และค่าภาษีอากรอื่น ๆ ที่เกี่ยวข้องกับหนังสือโอนสิทธิ และ/หรือ หน้าที่ของผู้ให้สินเชื่อตามสัญญาฉบับนี้ (หากมี)) และหากผู้ให้สินเชื่อได้ชำระค่าอากรแสตมป์ หรือค่าภาษีอากรอื่น ๆ ไปแทนผู้กู้อันเนื่องมาจากการที่ผู้กู้ชำระล่าช้าหรือไม่ชำระเงินค่าอากรดังกล่าว ผู้กู้ต้องชดใช้เงินจำนวนดังกล่าวคืนให้แก่ผู้ให้สินเชื่อเต็มจำนวน
+              <span className="font-bold">ผู้กู้ที่มีหน้าที่ต้องชำระค่าอากรแสตมป์สำหรับการทำสัญญาฉบับนี้ <Highlight>เป็นจำนวนทั้งสิ้น {data.stampDuty || '0'} บาท ({thaiBahtText(data.stampDuty || '0')}บาทถ้วน)</Highlight> โดยตกลงชำระ ณ วันที่ทำสัญญาฉบับนี้</span> และมีหน้าที่ต้องชำระค่าภาษีอากรอื่น ๆ ในทำนองเดียวกันที่เกี่ยวข้องกับสัญญาฉบับนี้ แต่เพียงผู้เดียว (เว้นแต่ ค่าอากรแสตมป์ และค่าภาษีอากรอื่น ๆ ที่เกี่ยวข้องกับหนังสือโอนสิทธิ และ/หรือ หน้าที่ของผู้ให้สินเชื่อตามสัญญาฉบับนี้ (หากมี)) และหากผู้ให้สินเชื่อได้ชำระค่าอากรแสตมป์ หรือค่าภาษีอากรอื่น ๆ ไปแทนผู้กู้อันเนื่องมาจากการที่ผู้กู้ชำระล่าช้าหรือไม่ชำระเงินค่าอากรดังกล่าว ผู้กู้ต้องชดใช้เงินจำนวนดังกล่าวคืนให้แก่ผู้ให้สินเชื่อเต็มจำนวน
             </p>
           </div>
 
@@ -1283,7 +1293,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex-1 text-justify underline">การส่งหนังสือบอกกล่าว</div>
           </div>
           <div className="ml-24 text-justify">
-            หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นภายใต้หรือเกี่ยวเนื่องกับสัญญานี้ จะต้องทำเป็นหนังสือหรือส่งโดยทางโทรสาร และลงลายมือชื่อของคู่สัญญาฝ่ายที่จัดทำเอกสารดังกล่าว และให้ถือว่าหนังสือบอกกล่าวถอนนั้นได้ส่งโดยชอบแล้วเมื่อได้ดำเนินการดังต่อไปนี้
+            หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นภายใต้หรือเกี่ยวเนื่องกับสัญญานี้ จะต้องทำเป็นหนังสือหรือส่งโดยทางโทรสาร และลงลายมือชื่อของคู่สัญญาฝ่ายที่จัดทำเอกสารดังกล่าว และให้ถือว่าหนังสือบอกกล่าวนั้นได้ส่งโดยชอบแล้ว เมื่อได้ดำเนินการดังต่อไปนี้
           </div>
           <div className="flex gap-2 ml-24">
             <span className="shrink-0 w-6">(1)</span>
@@ -1295,12 +1305,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           </div>
           <div className="flex gap-2 ml-24">
             <span className="shrink-0 w-6">(3)</span>
-            <div className="flex-1 text-justify">ในกรณีที่ส่งทางโทรสาร ให้มีผลเมื่อครบกำหนด 1 (หนึ่ง) วัน นับแต่วันที่ส่งหนังสือบอกกล่าว</div>
+            <div className="flex-1 text-justify">ในกรณีที่ส่งทางโทรสาร ให้มีผลเมื่อครบกำหนด 1 (หนึ่ง) วัน นับแต่วันที่ส่งหนังสือบอกกล่าว
+              หรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่วันที่ทำการส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มีผลนั้นมิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้วในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป
+            </div>
           </div>
-          <div className="flex gap-2 ml-24">
-            <span className="shrink-0 w-6">(3)</span>
-            <div className="flex-1 text-justify">หรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่วันที่ทำการส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มีผลนั้นมิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้วในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป</div>
-          </div>
+
         </div>
         {renderPageFooter(23)}
       </div>
@@ -1346,7 +1355,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <span className="underline">กฎหมายที่ใช้บังคับ</span>
           </div>
           <div className="ml-20 text-justify">
-            สัญญาฉบับนี้ให้ใช้บังคับและตีความตามกฎหมายไทย ข้อพิพาท ข้อโต้แย้ง หรือสิทธิเรียกร้องใด ๆ ที่เกิดขึ้นหรือที่เกี่ยวกับสัญญาฉบับนี้ซึ่งไม่สามารถตกลงกันได้ระหว่างคู่สัญญาให้นำเสนอต่อศาลไทยที่มีเขตอำนาจ
+            สัญญาฉบับนี้ให้ใช้บังคับและตีความตามกฎหมายไทย ข้อพิพาท ข้อโต้แย้ง หรือสิทธิเรียกร้องใด ๆ ที่เกิดจากหรือที่เกี่ยวกับสัญญาฉบับนี้ซึ่งไม่สามารถตกลงกันได้ระหว่างคู่สัญญาให้นำเสนอต่อศาลไทยที่มีเขตอำนาจ
           </div>
 
           <div className="text-center mt-12 italic">
@@ -1360,17 +1369,15 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
         <div className="space-y-6 pt-4">
-          <div className="text-justify leading-relaxed">
-            สัญญาฉบับนี้ทำขึ้นมา 3 (สาม) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
+          <div className="text-justify leading-relaxed indent-12">
+            สัญญาฉบับนี้ มีข้อความถูกต้องตรงกันทุกฉบับ คู่สัญญาทุกฝ่ายได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
           </div>
 
           <div className="mt-4 grid grid-cols-2 border border-black min-h-[600px] text-[12px] font-bold">
             {/* Left Column: Lender 1 */}
             <div className="border-r border-black p-4 flex flex-col h-full">
               <div className="space-y-12">
-                <div className="font-bold underline">ผู้ให้สินเชื่อฝ่ายที่ 1:</div>
-                <div className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></div>
-
+                <div className="font-bold">ผู้ให้สินเชื่อฝ่ายที่ 1: <Highlight>{agileInfo.companyName}</Highlight></div>
                 <div className="pt-8 space-y-12">
                   {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
                     <div key={idx} className="space-y-2">
@@ -1403,11 +1410,8 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             {/* Right Column: Borrower */}
             <div className="p-4 flex flex-col h-full">
               <div className="space-y-12">
-                <div className="font-bold underline">ผู้กู้:</div>
-                <div className="font-bold">
-                  <Highlight>{customerInfo.companyName}</Highlight>
+                <div className="font-bold">ผู้กู้: <Highlight>{customerInfo.companyName}</Highlight>
                 </div>
-
                 <div className="pt-8 space-y-12">
                   {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
                     <div key={idx} className="space-y-2">
@@ -1453,7 +1457,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             {/* Left Column: Lender 2 */}
             <div className="border-r border-black p-4 flex flex-col h-full">
               <div className="space-y-12">
-                <div className="font-bold underline">
+                <div className="font-bold">
                   ผู้ให้สินเชื่อฝ่ายที่ 2: <Highlight>{tkInfo.companyName}</Highlight>
                 </div>
 
@@ -1504,7 +1508,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <div className="space-y-6 pt-4 text-[12px]">
           <div className="text-center font-bold">
             <div>เอกสารแนบท้ายหมายเลข 1</div>
-            <div className="underline decoration-1 underline-offset-4">เงื่อนไขบังคับก่อน</div>
+            <div className="underline">เงื่อนไขบังคับก่อน</div>
           </div>
 
           <div className="text-justify leading-relaxed">
@@ -1519,14 +1523,14 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               <div className="flex gap-2 text-justify">
                 <span className="shrink-0 w-6">(ก)</span>
                 <div className="flex-1">
-                  หนังสือรับรองบริษัทของผู้กู้จากนายทะเบียนหุ้นส่วนบริษัท กระทรวงพาณิชย์ ลงวันที่รับรองไม่เกิน <Highlight>30 (สามสิบ) วัน</Highlight> ก่อนวันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อ
+                  หนังสือรับรองบริษัทของผู้กู้จากนายทะเบียนหุ้นส่วนบริษัท กระทรวงพาณิชย์ ลงวันที่รับรองไม่เกิน 30 (สามสิบ) วัน ก่อนวันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อ
                 </div>
               </div>
 
               <div className="flex gap-2 text-justify">
                 <span className="shrink-0 w-6">(ข)</span>
                 <div className="flex-1">
-                  สำเนาเอกสารเกี่ยวกับผู้กู้ ซึ่งรับรองโดยนายทะเบียนหุ้นส่วนบริษัท กระทรวงพาณิชย์ ลงวันที่รับรองไม่เกิน <Highlight>30 (สามสิบ) วัน</Highlight> ก่อนวันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อ ดังต่อไปนี้
+                  สำเนาเอกสารเกี่ยวกับผู้กู้ ซึ่งรับรองโดยนายทะเบียนหุ้นส่วนบริษัท กระทรวงพาณิชย์ ลงวันที่รับรองไม่เกิน 30 (สามสิบ) วัน ก่อนวันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อ ดังต่อไปนี้
                   <div className="mt-2 space-y-2">
                     <div className="flex gap-4">
                       <span>(1)</span>
@@ -1618,33 +1622,18 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               <div className="flex gap-2 text-justify">
                 <span className="shrink-0 w-8">(ง)</span>
                 <div className="flex-1">
-                  บรรดาคำรับรองและยืนยันที่ผู้กู้ได้ให้ไว้ในข้อ 9. ของสัญญาฉบับนี้ เป็นความจริง และถูกต้องเสมือนว่าได้ทำขึ้น หรือให้ไว้ใน วันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อครั้งแรก
+                  บรรดาคำรับรองและยืนยันที่ผู้กู้ได้ให้ไว้ในข้อ 9. ของสัญญาฉบับนี้ เป็นความจริง และถูกต้องเสมือนว่าได้ทำขึ้น หรือให้ไว้ ณ วันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อครั้งแรก
                 </div>
               </div>
 
               <div className="flex gap-2 text-justify">
                 <span className="shrink-0 w-8">(จ)</span>
                 <div className="flex-1">
-                  ผู้กู้ได้ปฏิบัติตามข้อตกลงกระทำการที่ระบุในข้อ 10. ของสัญญาฉบับนี้ หรือตามเงื่อนไขที่ให้ไว้ใน
+                  ผู้กู้ได้ปฏิบัติตามข้อตกลงกระทำการที่ระบุในข้อ 10. ของสัญญาฉบับนี้ หรือตามเงื่อนไขที่ให้ไว้ในเอกสารที่เกี่ยวข้องตามสัญญาอื่น ๆ ตามกำหนดเวลาที่ระบุไว้และไม่มีเหตุผิดนัด หรือกรณีที่จะเป็น เหตุผิดนัดใด ๆ เกิดขึ้น หรืออาจเกิดขึ้นเมื่อมีการใช้สินเชื่อตามสัญญาฉบับนี้
                 </div>
               </div>
-
               <div className="flex gap-2 text-justify">
                 <span className="shrink-0 w-8">(ฉ)</span>
-                <div className="flex-1">
-                  เอกสารที่เกี่ยวข้องตามสัญญาอื่น ๆ ตามกำหนดเวลาที่ระบุไว้และไม่มีเหตุผิดนัด หรือกรณีที่จะเป็น
-                </div>
-              </div>
-
-              <div className="flex gap-2 text-justify">
-                <span className="shrink-0 w-8">(ช)</span>
-                <div className="flex-1">
-                  เหตุผิดนัดใด ๆ เกิดขึ้น หรืออาจเกิดขึ้นเมื่อมีการใช้สินเชื่อตามสัญญาฉบับนี้
-                </div>
-              </div>
-
-              <div className="flex gap-2 text-justify">
-                <span className="shrink-0 w-8">(ซ)</span>
                 <div className="flex-1">
                   ผู้กู้ได้จดทะเบียนทรัพย์สินหลักประกันกับหน่วยงานราชการที่เกี่ยวข้อง ตามข้อกำหนดและเงื่อนไขที่ระบุในสัญญาฉบับนี้ (ถ้ามี)
                 </div>
@@ -1661,7 +1650,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <div className="space-y-4 pt-4 text-[12px]">
           <div className="text-center font-bold">
             <div>เอกสารแนบท้ายหมายเลข 2</div>
-            <div className="underline decoration-1 underline-offset-4">หนังสือขอเบิกใช้สินเชื่อ</div>
+            <div className="underline">หนังสือขอเบิกใช้สินเชื่อ</div>
           </div>
 
           <div className="flex justify-end">
@@ -1683,7 +1672,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-4">1.</span>
               <div className="flex-1">
-                ข้าพเจ้าบริษัท <Highlight>{customerInfo.companyName}</Highlight> ขออ้างถึงสัญญาให้สินเชื่อ และให้คำจำกัดความต่าง ๆ ที่ใช้ในสัญญาให้สินเชื่อ ให้มีความหมายเช่นเดียวกันกับการใช้ในคำขอเบิกใช้สินเชื่อนี้
+                ข้าพเจ้า <Highlight>{customerInfo.companyName}</Highlight> ขออ้างถึงสัญญาให้สินเชื่อ และให้คำจำกัดความต่าง ๆ ที่ใช้ในสัญญาให้สินเชื่อ ให้มีความหมายเช่นเดียวกันกับการใช้ในคำขอเบิกใช้สินเชื่อนี้
               </div>
             </div>
 
@@ -1755,7 +1744,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                       <Highlight>{customerInfo.directors}</Highlight>
                     </div>
                     <div>กรรมการผู้มีอำนาจลงนาม</div>
-                    <div>บริษัท <Highlight>{customerInfo.companyName}</Highlight></div>
+                    <div><Highlight>{customerInfo.companyName}</Highlight></div>
                   </div>
                 </div>
               </div>
@@ -1793,7 +1782,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-4">1.</span>
               <div className="flex-1">
-                ข้าพเจ้าบริษัท <Highlight>{customerInfo.companyName}</Highlight> ขออ้างถึงสัญญาให้สินเชื่อ และให้คำจำกัดความต่าง ๆ ที่ใช้ในสัญญาให้สินเชื่อ ให้มีความหมายเช่นเดียวกันกับการใช้ในคำขอเบิกใช้สินเชื่อนี้
+                ข้าพเจ้า <Highlight>{customerInfo.companyName}</Highlight> ขออ้างถึงสัญญาให้สินเชื่อ และให้คำจำกัดความต่าง ๆ ที่ใช้ในสัญญาให้สินเชื่อ ให้มีความหมายเช่นเดียวกันกับการใช้ในคำขอเบิกใช้สินเชื่อนี้
               </div>
             </div>
 
@@ -1865,7 +1854,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                       <Highlight>{customerInfo.directors}</Highlight>
                     </div>
                     <div>กรรมการผู้มีอำนาจลงนาม</div>
-                    <div>บริษัท <Highlight>{customerInfo.companyName}</Highlight></div>
+                    <div><Highlight>{customerInfo.companyName}</Highlight></div>
                   </div>
                 </div>
               </div>
@@ -1881,7 +1870,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <div className="space-y-6 pt-4 text-[12px]">
           <div className="text-center font-bold">
             <div>เอกสารแนบท้ายหมายเลข 3</div>
-            <div className="underline decoration-1 underline-offset-4">เอกสารการรับสินเชื่อ</div>
+            <div className="underline">เอกสารการรับสินเชื่อ</div>
           </div>
 
           <div className="flex justify-end pr-8">
@@ -1904,11 +1893,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
 
           <div className="space-y-6 mt-12 pb-12">
             <div className="text-justify indent-16 leading-[2.2]">
-              ตามที่ข้าพเจ้าบริษัท <Highlight>{customerInfo.companyName}</Highlight> ได้ขอเบิกสินเชื่อต่อบริษัท <Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 เป็นจำนวน <Highlight>{limit1.toLocaleString()}</Highlight> บาท ดังรายละเอียดปรากฏตามหนังสือขอเบิกใช้สินเชื่อ ฉบับลงวันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight>
+              ตามที่ข้าพเจ้า <Highlight>{customerInfo.companyName}</Highlight> ได้ขอเบิกสินเชื่อต่อ <Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 เป็นจำนวน <Highlight>{limit1.toLocaleString()}</Highlight> บาท ดังรายละเอียดปรากฏตามหนังสือขอเบิกใช้สินเชื่อ ฉบับลงวันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight>
             </div>
 
             <div className="text-left indent-16 leading-[2.2]">
-              ในวันที่<span className="inline-block border-b border-dotted border-black w-40 h-4 mx-1"></span>ข้าพเจ้าได้รับสินเชื่อตามสัญญาให้สินเชื่อเป็นจำนวนเงิน<span className="inline-block border-b border-dotted border-black w-48 h-4 mx-1"></span>บาท จาก<Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 ไว้ถูกต้องครบถ้วนเรียบร้อยแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ ณ วัน เดือน ปี ที่กล่าวข้างต้น
+              ในวันที่<span className="inline-block border-b border-dotted border-black w-25 h-4 mx-1"></span>ข้าพเจ้าได้รับสินเชื่อตามสัญญาให้สินเชื่อเป็นจำนวนเงิน<span className="inline-block border-b border-dotted border-black w-30 h-4 mx-1"></span>บาท จาก <Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 ไว้ถูกต้องครบถ้วนเรียบร้อยแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ ณ วัน เดือน ปี ที่กล่าวข้างต้น
             </div>
           </div>
 
@@ -1931,7 +1920,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                       <Highlight>{customerInfo.directors}</Highlight>
                     </div>
                     <div>กรรมการผู้มีอำนาจลงนาม</div>
-                    <div>บริษัท <Highlight>{customerInfo.companyName}</Highlight></div>
+                    <div><Highlight>{customerInfo.companyName}</Highlight></div>
                   </div>
                 </div>
               </div>
@@ -1947,7 +1936,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <div className="space-y-6 pt-4 text-[12px]">
           <div className="text-center font-bold">
 
-            <div className="underline decoration-1 underline-offset-4">เอกสารการรับสินเชื่อ</div>
+            <div className="underline">เอกสารการรับสินเชื่อ</div>
           </div>
 
           <div className="flex justify-end pr-8">
@@ -1970,11 +1959,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
 
           <div className="space-y-6 mt-12 pb-12">
             <div className="text-justify indent-16 leading-[2.2]">
-              ตามที่ข้าพเจ้าบริษัท <Highlight>{customerInfo.companyName}</Highlight> ได้ขอเบิกสินเชื่อต่อบริษัท <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2 เป็นจำนวน <Highlight>{limit2.toLocaleString()}</Highlight> บาท ดังรายละเอียดปรากฏตามหนังสือขอเบิกใช้สินเชื่อ ฉบับลงวันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight>
+              ตามที่ข้าพเจ้า <Highlight>{customerInfo.companyName}</Highlight> ได้ขอเบิกสินเชื่อต่อ <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2 เป็นจำนวน <Highlight>{limit2.toLocaleString()}</Highlight> บาท ดังรายละเอียดปรากฏตามหนังสือขอเบิกใช้สินเชื่อ ฉบับลงวันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight>
             </div>
 
             <div className="text-left indent-16 leading-[2.2]">
-              ในวันที่<span className="inline-block border-b border-dotted border-black w-40 h-4 mx-1"></span>ข้าพเจ้าได้รับสินเชื่อตามสัญญาให้สินเชื่อเป็นจำนวนเงิน<span className="inline-block border-b border-dotted border-black w-48 h-4 mx-1"></span>บาท จากบริษัท <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2 ไว้ถูกต้องครบถ้วนเรียบร้อยแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ ณ วัน เดือน ปี ที่กล่าวข้างต้น
+              ในวันที่<span className="inline-block border-b border-dotted border-black w-25 h-4 mx-1"></span>ข้าพเจ้าได้รับสินเชื่อตามสัญญาให้สินเชื่อเป็นจำนวนเงิน<span className="inline-block border-b border-dotted border-black w-30 h-4 mx-1"></span>บาท จาก <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2 ไว้ถูกต้องครบถ้วนเรียบร้อยแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ ณ วัน เดือน ปี ที่กล่าวข้างต้น
             </div>
           </div>
 
@@ -1997,7 +1986,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                       <Highlight>{customerInfo.directors}</Highlight>
                     </div>
                     <div>กรรมการผู้มีอำนาจลงนาม</div>
-                    <div>บริษัท <Highlight>{customerInfo.companyName}</Highlight></div>
+                    <div><Highlight>{customerInfo.companyName}</Highlight></div>
                   </div>
                 </div>
               </div>
@@ -2038,14 +2027,14 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-4">3.</span>
               <div className="flex-1">
-                <span className="font-bold">การยืนยันรายละเอียดและสำนาภาพถ่ายเช็ค :</span> คู่สัญญาทุกฝ่ายตกลงให้ถือว่า "ใบรับเช็ค" หรือ "สำเนาภาพถ่ายเช็คทั้งหมด" ที่มีการลงนามรับมอบโดยผู้ให้สินเชื่อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
+                <span className="font-bold">การยืนยันรายละเอียดและสำเนาภาพถ่ายเช็ค :</span> คู่สัญญาทุกฝ่ายตกลงให้ถือว่า "ใบรับเช็ค" หรือ "สำเนาภาพถ่ายเช็คทั้งหมด" ที่มีการลงนามรับมอบโดยผู้ให้สินเชื่อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
               </div>
             </div>
 
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-4">4.</span>
               <div className="flex-1">
-                <span className="font-bold">ความรับผิดทางอาญา :</span> ผู้กู้ยืนยันและรับรองว่าเช็คทุกฉบับที่ส่งมอบเป็นเช็คที่ออกโดยชอบด้วยกฎหมาย เพื่อชำระหนี้ที่มีอยู่จริงและบังคับได้ตามกฎหมาย หากเช็คฉบับใดถูกธนาคารปฏิเสธการจ่ายเงินไม่ว่าด้วยเหตุใดๆ ผู้กู้ยอมรับว่าตนมีเจตนาหรืออาจเล็งเห็นผลที่จะไม่ให้มีการใช้เงินตามเช็คไม้นั้น และยินยอมให้ผู้ให้สินเชื่อดำเนินคดีตาม <span className="font-bold underline">พระราชบัญญัติว่าด้วยความผิดอันเกิดจากการใช้เช็ค พ.ศ. 2534</span> และที่แก้ไขเพิ่มเติม รวมถึงความรับผิดทางแพ่งและทางอาญาในส่วนอื่นๆที่เกี่ยวข้องโดยพลัน
+                <span className="font-bold">ความรับผิดทางอาญา :</span> ผู้กู้ยืนยันและรับรองว่าเช็คทุกฉบับที่ส่งมอบเป็นเช็คที่ออกโดยชอบด้วยกฎหมาย เพื่อชำระหนี้ที่มีอยู่จริงและบังคับได้ตามกฎหมาย หากเช็คฉบับใดถูกธนาคารปฏิเสธการจ่ายเงินไม่ว่าด้วยเหตุใดๆ ผู้กู้ยอมรับว่าตนมีเจตนาหรืออาจเล็งเห็นผลที่จะไม่ให้มีการใช้เงินตามเช็คนั้น และยินยอมให้ผู้ให้สินเชื่อดำเนินคดีตาม <span className="font-bold underline">พระราชบัญญัติว่าด้วยความผิดอันเกิดจากการใช้เช็ค พ.ศ. 2534</span> และที่แก้ไขเพิ่มเติม รวมถึงความรับผิดทางแพ่งและทางอาญาในส่วนอื่นๆที่เกี่ยวข้องโดยพลัน
               </div>
             </div>
 

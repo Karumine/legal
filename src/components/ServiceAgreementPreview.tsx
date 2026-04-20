@@ -257,7 +257,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
-          <h2 className="text-xl">สัญญาจ้างบริการ</h2>
+          <h2 className="text-[16px]">สัญญาจ้างบริการ</h2>
         </div>
 
         <div className="text-center mb-10">
