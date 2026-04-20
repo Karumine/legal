@@ -99,5 +99,5 @@ export const getAuthorizedSignatoryText = (company?: { entityType?: 'company' | 
   if (!company) return 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท';
   return company.entityType === 'partnership'
     ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ'
-    : 'กรรมการผู้มีอำนาจลงนาม';
+    : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท';
 };

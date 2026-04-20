@@ -62,8 +62,8 @@ export default function ContractPreview({ data }: Props) {
       <div className="print-page relative">
         <PageHeader />
         <div className="text-center font-bold mb-6">
-          <h2 className="text-xl">สัญญาชำระค่าธรรมเนียม</h2>
-          <div className="mt-2 text-[14px]">
+          <h2 className="text-[16px]">สัญญาชำระค่าธรรมเนียม</h2>
+          <div className="mt-2 text-[16px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
         </div>
