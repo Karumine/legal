@@ -126,4 +126,23 @@
 }
 .animate-in {
   animation: dropdown-in 0.15s ease-out forwards;
-}
+}
+@layer base {
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 1px #3b82f6 !important;
+  }
+}
+
+@layer base {
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 1px #3b82f6 !important;
+  }
+}
