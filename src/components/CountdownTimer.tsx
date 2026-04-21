@@ -239,7 +239,7 @@ export default function CountdownTimer() {
     return () => clearInterval(timer);
   }, [hasFired]);
 
-  const triggerTest = useCallback(() => {
+  const handleOpenPopup = useCallback(() => {
     setShowSurprise(true);
   }, []);
 
@@ -254,7 +254,7 @@ export default function CountdownTimer() {
         {isExpired ? (
           /* After expiry: permanent credit badge that can reopen the popup */
           <button
-            onClick={triggerTest}
+            onClick={handleOpenPopup}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-blue-50 to-purple-50 text-slate-600 border border-blue-200/60 hover:border-purple-300 hover:from-blue-100 hover:to-purple-100 transition-all cursor-pointer"
             title="สร้างโดย พี่กาย — คลิกเพื่อดูข้อความ"
           >
@@ -272,15 +272,6 @@ export default function CountdownTimer() {
                 {pad(timeLeft.seconds)}
               </span>
             </div>
-
-            {/* Test button — only show before expiry */}
-            <button
-              onClick={triggerTest}
-              className="px-2 py-1.5 rounded-md bg-purple-50 text-purple-600 border border-purple-200 hover:bg-purple-100 hover:border-purple-300 transition-all text-[10px] font-bold"
-              title="ทดสอบ Surprise Popup"
-            >
-              🎁 เทส
-            </button>
           </>
         )}
       </div>
