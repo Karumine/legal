@@ -3,6 +3,7 @@ import type { BuybackData, CompanyInfo, HirePurchaseData, ContractType } from '.
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatThaiDate } from '../utils/thaiDate';
 import { formatThaiId } from '../utils/formatters';
+import { Highlight, GreenHighlight } from './Highlight';
 import { formatAddressWithPostalCode } from '../utils/address';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 
@@ -22,17 +23,6 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
   // since the template text already includes the prefix
   const stripAddressPrefix = (addr: string) =>
     addr?.replace(/^เลขที่\s*/, '') || '';
-  const Highlight = ({ children }: { children: React.ReactNode }) => (
-    <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
-      {children || '\u00A0'}
-    </span>
-  );
-
-  const GreenHighlight = ({ children }: { children: React.ReactNode }) => (
-    <span className="bg-[#00FF00] font-bold print:bg-transparent rounded inline break-words">
-      {children || '\u00A0'}
-    </span>
-  );
 
   const assets = (hpData.assets || []).filter(a => data.selectedAssetIds?.includes(a.id));
 
@@ -69,7 +59,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
   const renderPageFooter = (page: number) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
       <div className="flex flex-col">
-        <span className="bg-[#FFFF00] print:bg-transparent font-bold rounded shadow-sm">สัญญารับซื้อคืนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight></span>
+        <span className="bg-yellow-100 print:bg-transparent font-bold rounded shadow-sm">สัญญารับซื้อคืนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight></span>
       </div>
       <div className="text-gray-400">หน้า {page} จาก {totalPages}</div>
     </div>
@@ -100,13 +90,13 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         </div>
 
         <div className="space-y-4 mb-6">
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
             </div>
           </div>
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 2"</b>)
@@ -115,7 +105,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="italic">
             (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>"บริษัทฯ"</b> ฝ่ายหนึ่ง)
           </div>
-          <div id="section-vendor" className="flex gap-2 text-justify pr-2">
+          <div id="section-vendor" className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">3.</span>
             <div className="flex-1">
               {data.vendorType === 'shop' ? (
@@ -329,12 +319,12 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             <table className="mx-auto border-collapse border border-black text-center min-w-[300px]">
               <thead>
                 <tr>
-                  <th className="border border-black px-4 py-1 bg-[#FFFF00] print:bg-transparent font-bold">ปี</th>
+                  <th className="border border-black px-4 py-1 bg-yellow-100 print:bg-transparent font-bold">ปี</th>
                   {(data.buybackMode === 'all' || data.buybackMode === 'newOnly') && (
-                    <th className="border border-black px-4 py-1 bg-[#FFFF00] print:bg-transparent font-bold">มือ 1</th>
+                    <th className="border border-black px-4 py-1 bg-yellow-100 print:bg-transparent font-bold">มือ 1</th>
                   )}
                   {(data.buybackMode === 'all' || data.buybackMode === 'usedOnly') && (
-                    <th className="border border-black px-4 py-1 bg-[#FFFF00] print:bg-transparent font-bold">มือ 2</th>
+                    <th className="border border-black px-4 py-1 bg-yellow-100 print:bg-transparent font-bold">มือ 2</th>
                   )}
                 </tr>
               </thead>

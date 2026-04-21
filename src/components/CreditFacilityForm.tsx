@@ -19,11 +19,17 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
   const [showCopyCollateralMenu, setShowCopyCollateralMenu] = useState(false);
   const copyMenuRef = useRef<HTMLDivElement>(null);
 
+  const [showCopyLocationMenu, setShowCopyLocationMenu] = useState(false);
+  const copyLocationMenuRef = useRef<HTMLDivElement>(null);
+
   // Close copy menu on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (copyMenuRef.current && !copyMenuRef.current.contains(e.target as Node)) {
         setShowCopyCollateralMenu(false);
+      }
+      if (copyLocationMenuRef.current && !copyLocationMenuRef.current.contains(e.target as Node)) {
+        setShowCopyLocationMenu(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -40,6 +46,13 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
     const d = a.data as any;
     return d?.collateralAssets && d.collateralAssets.length > 0;
   });
+
+  const otherAgreementsWithLocation = isFirstAgreement ? [] : agreements.filter(a => {
+    if (a.id === currentAgreementId) return false;
+    const d = a.data as any;
+    return d?.businessPurpose;
+  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     onChange({ ...data, [name]: value });
@@ -122,7 +135,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
     // Date calculations
     if (data.firstInstallmentDate && numInstallments > 0) {
       let firstDate = new Date(data.firstInstallmentDate);
-      
+
       // Handle Thai format if it somehow ends up here (DD/MM/YYYY)
       if (typeof data.firstInstallmentDate === 'string' && data.firstInstallmentDate.includes('/')) {
         const parts = data.firstInstallmentDate.split('/');
@@ -271,7 +284,57 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
           </div>
           <div className="pt-2 space-y-4">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">วัตถุประสงค์ (ข้อ 2)</label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-xs font-medium text-gray-600">วัตถุประสงค์ (ข้อ 2)</label>
+                {otherAgreementsWithLocation.length > 0 && (
+                  <div className="relative" ref={copyLocationMenuRef}>
+                    <button
+                      type="button"
+                      onClick={() => setShowCopyLocationMenu(!showCopyLocationMenu)}
+                      className="flex items-center gap-1.5 px-2 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded flex-shrink-0 text-[10px] font-bold hover:bg-blue-100 hover:border-blue-300 transition-all shadow-sm"
+                    >
+                      <Copy size={11} />
+                      คัดลอกจากสัญญาอื่น
+                      <ChevronDown size={10} className={`transition-transform ${showCopyLocationMenu ? 'rotate-180' : ''}`} />
+                    </button>
+                    {showCopyLocationMenu && (
+                      <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 min-w-[260px] animate-in fade-in slide-in-from-top-1 duration-150">
+                        <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                          เลือกสัญญาต้นทาง
+                        </div>
+                        {otherAgreementsWithLocation.map((agreement) => {
+                          const aData = agreement.data as any;
+                          const sourceIndex = agreements.indexOf(agreement) + 1;
+                          const label = `${CONTRACT_TYPE_LABELS[agreement.type]} (${sourceIndex})`;
+                          return (
+                            <button
+                              key={agreement.id}
+                              onClick={() => {
+                                onChange({
+                                  ...data,
+                                  businessPurpose: aData.businessPurpose || data.businessPurpose || ''
+                                });
+                                setShowCopyLocationMenu(false);
+                              }}
+                              className="w-full text-left px-3 py-2.5 text-xs flex items-center gap-2 transition-colors hover:bg-blue-50 text-slate-700"
+                            >
+                              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                                <Copy size={11} className="text-blue-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="font-semibold truncate">{label}</div>
+                                <div className="text-[10px] text-slate-400">
+                                  {aData.contractNo || 'ไม่มีเลขสัญญา'}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
               <textarea
                 name="businessPurpose"
                 value={data.businessPurpose || ''}
@@ -282,7 +345,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
             </div>
 
             {/* Conditions 3.2 Dynamic Section */}
-            <div className="pt-2 border-t">
+            <div className="pt-2 border-t border-blue-200">
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-xs font-bold text-blue-700">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ (ข้อ 3.2 - เริ่มจาก ค)</label>
                 <button
@@ -518,13 +581,13 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
             />
           </div>
 
-          <div className="border-t pt-4">
+          <div className="border-t border-blue-200 pt-4">
             <div className="mb-2">
               <label className="block text-xs font-medium text-gray-600">ทรัพย์สินหลักประกัน (7.3)</label>
             </div>
             <div className="space-y-4">
               {(data.collateralAssets || []).map((asset, idx) => (
-                <div key={idx} className="p-3 border rounded-md bg-gray-50 space-y-3 relative">
+                <div key={idx} className="p-3 border rounded-md bg-gray-50 space-y-3 relative border-blue-200">
                   <button
                     type="button"
                     onClick={() => {

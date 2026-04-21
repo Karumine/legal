@@ -6,6 +6,7 @@ import { thaiNumberText } from '../utils/thaiNumberText';
 import { formatThaiDate } from '../utils/thaiDate';
 import { formatThaiId, getAuthorizedSignatoryText } from '../utils/formatters';
 import { formatAddressWithPostalCode } from '../utils/address';
+import { Highlight, GreenHighlight } from './Highlight';
 
 interface Props {
   data: HirePurchaseData;
@@ -14,17 +15,6 @@ interface Props {
   type?: ContractType;
 }
 
-const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
-    {children || '\u00A0'}
-  </span>
-);
-
-const GreenHighlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-green-400 font-bold print:bg-transparent px-1 rounded inline break-words">
-    {children || '\u00A0'}
-  </span>
-);
 
 export default function HirePurchasePreview({ data, customerInfo, guarantors = [], type = 'hirePurchase' }: Props) {
 
@@ -141,7 +131,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="flex-1">
         {asset.type === 'land' && asset.landDetails && (
           <div>
-            <span className="font-bold">การจำนองที่ดิน :</span> ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตามเอกสารแนบท้ายหมายเลข 6
+            <span className="font-bold">การจำนองที่ดิน :</span> ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <Highlight>{asset.landDetails.owner}</Highlight> รายละเอียดปรากฏตาม <b><u>เอกสารแนบท้ายหมายเลข 6</u></b>
           </div>
         )}
         {asset.type === 'cash' && (
@@ -150,7 +140,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
         )}
         {asset.type === 'machinery' && (
-          <div className="mt-2 text-justify">
+          <div className="text-justify">
             <span className="font-bold">จำนำเครื่องจักร :</span> เครื่องจักร <Highlight>{asset.machineName}</Highlight>{' '}
             {asset.machineModel && <span className="italic text-gray-700">({asset.machineModel})</span>}{' '}
             จำนวน <Highlight>{asset.machineQuantity}</Highlight> <Highlight>{asset.machineUnit || 'ชุด'}</Highlight>{' '}
@@ -201,13 +191,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         </div>
 
         <div className="space-y-4 mb-6">
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-8">1.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
             </div>
           </div>
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-8">2.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor2.address, data.lessor2.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
@@ -216,7 +206,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="pl-6">
             (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
           </div>
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-8">3.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
@@ -649,7 +639,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
               {/* Show summary text on Page 9 ONLY if there is no overflow at all (1-3 assets) */}
               {(data.collateralAssets || []).length > 0 && (data.collateralAssets || []).length <= 3 && (
-                <div className="mt-4 text-justify italic">
+                <div className="mt-4 text-justify">
                   นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
                 </div>
               )}
@@ -672,7 +662,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                     .slice(3)
                     .map((asset, idx) => renderCollateralAsset(asset, idx + 3))}
 
-                  <div className="mt-4 text-justify italic">
+                  <div className="mt-4 text-justify">
                     นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
                   </div>
                 </div>

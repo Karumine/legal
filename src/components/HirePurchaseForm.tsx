@@ -26,11 +26,17 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
   const [showCopyCollateralMenu, setShowCopyCollateralMenu] = useState(false);
   const copyMenuRef = useRef<HTMLDivElement>(null);
 
-  // Close copy menu on outside click
+  const [showCopyLocationMenu, setShowCopyLocationMenu] = useState(false);
+  const copyLocationMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close menus on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (copyMenuRef.current && !copyMenuRef.current.contains(e.target as Node)) {
         setShowCopyCollateralMenu(false);
+      }
+      if (copyLocationMenuRef.current && !copyLocationMenuRef.current.contains(e.target as Node)) {
+        setShowCopyLocationMenu(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -46,6 +52,12 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
     if (a.id === agreementId) return false;
     const d = a.data as any;
     return d?.collateralAssets && d.collateralAssets.length > 0;
+  });
+
+  const otherAgreementsWithLocation = isFirstAgreement ? [] : agreements.filter(a => {
+    if (a.id === agreementId) return false;
+    const d = a.data as any;
+    return d?.businessPurpose || d?.installationLocation;
   });
 
   const handleChange = (field: keyof HirePurchaseData, value: any) => {
@@ -446,7 +458,58 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
       {/* Purpose and Location */}
       <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('hp-purpose')}>
-        <h3 className="font-semibold text-lg text-blue-700 mb-3">วัตถุประสงค์และสถานที่ตั้ง</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold text-lg text-blue-700">วัตถุประสงค์และสถานที่ตั้ง</h3>
+          {otherAgreementsWithLocation.length > 0 && (
+            <div className="relative" ref={copyLocationMenuRef}>
+              <button
+                type="button"
+                onClick={() => setShowCopyLocationMenu(!showCopyLocationMenu)}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100 hover:border-blue-300 transition-all shadow-sm"
+              >
+                <Copy size={13} />
+                คัดลอกจากสัญญาอื่น
+                <ChevronDown size={12} className={`transition-transform ${showCopyLocationMenu ? 'rotate-180' : ''}`} />
+              </button>
+              {showCopyLocationMenu && (
+                <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 min-w-[260px] animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                    เลือกสัญญาต้นทาง
+                  </div>
+                  {otherAgreementsWithLocation.map((agreement) => {
+                    const aData = agreement.data as any;
+                    const sourceIndex = agreements.indexOf(agreement) + 1;
+                    const label = `${CONTRACT_TYPE_LABELS[agreement.type]} (${sourceIndex})`;
+                    return (
+                      <button
+                        key={agreement.id}
+                        onClick={() => {
+                          onChange({
+                            ...data,
+                            businessPurpose: aData.businessPurpose || data.businessPurpose || '',
+                            installationLocation: aData.installationLocation || data.installationLocation || ''
+                          });
+                          setShowCopyLocationMenu(false);
+                        }}
+                        className="w-full text-left px-3 py-2.5 text-xs flex items-center gap-2 transition-colors hover:bg-blue-50 text-slate-700"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                          <Copy size={11} className="text-blue-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold truncate">{label}</div>
+                          <div className="text-[10px] text-slate-400">
+                            {aData.contractNo || 'ไม่มีเลขสัญญา'}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">วัตถุประสงค์ในการเช่าซื้อ (ข้อ 2.2)</label>
@@ -721,13 +784,13 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
 
 
-          <div className="border-t pt-4">
+          <div className="border-t border-blue-200 pt-4">
             <div className="mb-2">
               <label className="block text-xs font-medium text-gray-600">ทรัพย์สินหลักประกัน (6.3)</label>
             </div>
             <div className="space-y-4">
               {(data.collateralAssets || []).map((asset, idx) => (
-                <div key={idx} className="p-3 border rounded-md bg-gray-50 space-y-3 relative">
+                <div key={idx} className="p-3 border rounded-md bg-gray-50 space-y-3 relative border-blue-200">
                   <button
                     type="button"
                     onClick={() => {
@@ -747,18 +810,18 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                           const newType = e.target.value as any;
                           const newAssets = [...data.collateralAssets];
                           newAssets[idx] = { ...newAssets[idx], type: newType };
-                           if (newType === 'land' && !newAssets[idx].landDetails) {
-                             newAssets[idx].landDetails = { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: customerInfo?.companyName || '' };
-                           }
-                           if (newType === 'carPledge' && !newAssets[idx].carPledgeDetails) {
-                             newAssets[idx].carPledgeDetails = { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: customerInfo?.companyName || '' };
-                           }
-                           if (newType === 'stockPledge' && !newAssets[idx].stockPledgeDetails) {
-                             newAssets[idx].stockPledgeDetails = { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: customerInfo?.companyName || '' };
-                           }
-                           if (newType === 'machinery' && !newAssets[idx].machineName) {
-                             newAssets[idx] = { ...newAssets[idx], machineName: '', machineModel: '', machineQuantity: '1', machineUnit: 'ชุด', machinePrice: '0', machineOwner: customerInfo?.companyName || '' };
-                           }
+                          if (newType === 'land' && !newAssets[idx].landDetails) {
+                            newAssets[idx].landDetails = { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: customerInfo?.companyName || '' };
+                          }
+                          if (newType === 'carPledge' && !newAssets[idx].carPledgeDetails) {
+                            newAssets[idx].carPledgeDetails = { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: customerInfo?.companyName || '' };
+                          }
+                          if (newType === 'stockPledge' && !newAssets[idx].stockPledgeDetails) {
+                            newAssets[idx].stockPledgeDetails = { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: customerInfo?.companyName || '' };
+                          }
+                          if (newType === 'machinery' && !newAssets[idx].machineName) {
+                            newAssets[idx] = { ...newAssets[idx], machineName: '', machineModel: '', machineQuantity: '1', machineUnit: 'ชุด', machinePrice: '0', machineOwner: customerInfo?.companyName || '' };
+                          }
                           handleChange('collateralAssets', newAssets);
                         }}
                         className="block w-full rounded-md border-gray-300 shadow-sm text-xs p-1 border"
