@@ -5,6 +5,7 @@ import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiNumberText } from '../utils/thaiNumberText';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 import { formatAddressWithPostalCode } from '../utils/address';
+import { Highlight } from './Highlight';
 
 interface Props {
   data: JointVentureData;
@@ -14,11 +15,6 @@ interface Props {
   appData: AppData;
 }
 
-const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
-    {children || '\u00A0'}
-  </span>
-);
 
 export default function JointVenturePreview({ data, agileInfo, tkInfo, agreements, appData }: Props) {
   // Strip leading "เลขที่" from address data to prevent duplication
@@ -251,13 +247,13 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           สัญญาค้าร่วม <b>(“สัญญา”)</b> ฉบับนี้ ทำขึ้นที่ <Highlight>{agileInfo.companyName}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง
         </div>
         <div className="space-y-4 mb-6">
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 1”</b>) และ
             </div>
           </div>
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 2”</b>)

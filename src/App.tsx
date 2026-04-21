@@ -20,10 +20,12 @@ import CreditFacilityPreview from './components/CreditFacilityPreview';
 import type { GuaranteeData } from './types/guarantee';
 import type { ContractData } from './types/contract';
 import { thaiBahtText } from './utils/thaiBahtText';
+import { useHighlight } from './contexts/HighlightContext';
 
 type PreviewTab = string;
 
 function App() {
+  const { printMode, setPrintMode } = useHighlight();
   const [data, setData] = useState<AppData>(() => {
     const saved = localStorage.getItem('legalAppData');
     if (saved) {
@@ -501,12 +503,30 @@ function App() {
               >
                 <RotateCcw size={15} /> รีเซ็ต
               </button>
-              <button
-                onClick={handlePrint}
-                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm"
-              >
-                <Printer size={16} /> Print
-              </button>
+              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-md border border-slate-200 h-10">
+                <button
+                  onClick={() => { setPrintMode('review'); setTimeout(handlePrint, 100); }}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all text-sm h-full ${
+                    printMode === 'review' 
+                      ? 'bg-blue-600 text-white shadow-sm' 
+                      : 'bg-transparent text-slate-600 hover:bg-slate-200'
+                  }`}
+                  title="พิมพ์แบบมีไฮไลต์จาง สำหรับตรวจทาน"
+                >
+                  <Printer size={14} /> ตรวจ
+                </button>
+                <button
+                  onClick={() => { setPrintMode('final'); setTimeout(handlePrint, 100); }}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all text-sm h-full ${
+                    printMode === 'final' 
+                      ? 'bg-slate-800 text-white shadow-sm' 
+                      : 'bg-transparent text-slate-600 hover:bg-slate-200'
+                  }`}
+                  title="พิมพ์แบบตัวอักษรธรรมดา สำหรับเอาไปทำสัญญา"
+                >
+                  <Printer size={14} /> ทำสัญญา
+                </button>
+              </div>
             </div>
           </div>
         </div>

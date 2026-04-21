@@ -5,6 +5,7 @@ import { formatThaiId, getAuthorizedSignatoryText } from '../utils/formatters';
 import { formatAddressWithPostalCode } from '../utils/address';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { thaiNumberText } from '../utils/thaiNumberText';
+import { Highlight } from './Highlight';
 
 interface Props {
   data: CreditFacilityData;
@@ -14,11 +15,6 @@ interface Props {
   guarantors: GuarantorData[];
 }
 
-const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
-    {children || '\u00A0'}
-  </span>
-);
 
 export const THAI_INDEX = ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'];
 
@@ -84,14 +80,14 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <div className="mb-4 mt-6">โดยและระหว่าง</div>
 
         <div className="space-y-4 mb-6">
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">1)</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 1”</b>)
             </div>
           </div>
 
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">2)</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย <Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 2”</b>)
@@ -102,7 +98,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้สินเชื่อ”</b>) และ
           </div>
 
-          <div className="flex gap-2 text-justify pr-2">
+          <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">3)</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
@@ -730,7 +726,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   </div>
                 </div>
               ))}
-            <div className="ml-16 mt-4 text-justify italic">
+            <div className="ml-16 mt-4 text-justify">
               นอกจากนี้ ผู้ให้สินเชื่อมีสิทธิกำหนดให้ผู้กู้จัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้สินเชื่อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้กู้ที่มีต่อผู้ให้สินเชื่อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
             </div>
           </div>

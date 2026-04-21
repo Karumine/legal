@@ -6,6 +6,7 @@ import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatThaiDate } from '../utils/thaiDate';
 import { formatThaiId, getAuthorizedSignatoryText } from '../utils/formatters';
 import { formatAddressWithPostalCode } from '../utils/address';
+import { Highlight } from './Highlight';
 
 interface Props {
   data: ContractData;
@@ -27,11 +28,6 @@ export default function ContractPreview({ data }: Props) {
     return addr.replace(/^(เลขที่\s*|ที่อยู่:\s*เลขที่\s*|ที่อยู่\s*)/, '');
   };
 
-  const Highlight = ({ children }: { children: React.ReactNode }) => (
-    <span className="bg-yellow-200 print:bg-transparent rounded inline break-words">
-      {children || '\u00A0'}
-    </span>
-  );
 
   const totalPages = 2;
 
@@ -71,14 +67,14 @@ export default function ContractPreview({ data }: Props) {
           สัญญาชำระค่าธรรมเนียม <b>("สัญญา")</b> ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> <b>("วันที่สัญญามีผลใช้บังคับ")</b> ระหว่าง
         </div>
 
-        <div className="mb-4 pr-2 flex gap-2 text-justify">
+        <div className="mb-4 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(1)</span>
           <div className="flex-1 text-justify">
             <b><Highlight>{data.companyName}</Highlight></b> (โดย <Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.companyAddress, data.companyPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้รับค่าธรรมเนียม"</b>) และ
           </div>
         </div>
 
-        <div className="mb-6 pr-2 flex gap-2 text-justify">
+        <div className="mb-6 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(2)</span>
           <div className="flex-1 text-justify">
             <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.customerAddress, data.customerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้ชำระค่าธรรมเนียม"</b>)
@@ -89,7 +85,7 @@ export default function ContractPreview({ data }: Props) {
           คู่สัญญาทั้งสองฝ่ายได้ตกลงเข้าทำสัญญาฉบับนี้ขึ้นโดยมีข้อความดังต่อไปนี้
         </div>
 
-        <div className="mb-4 flex gap-2 pr-2 text-justify">
+        <div className="mb-4 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">1.</span>
           <div className="flex-1 text-justify">
             ผู้รับค่าธรรมเนียม รับหน้าที่ในการจัดหาสินเชื่อตาม{itemSummaryText} ผ่านวิธีการคัดกรองความสามารถของผู้ชำระค่าธรรมเนียม ประเมินความเสี่ยง และจัดทำสัญญาต่างๆ ผู้ชำระค่าธรรมเนียมจึงตกลงและยินยอมชำระค่า Origination Fee (ค่าธรรมเนียม) เพื่อการทำสัญญาในอัตราร้อยละ <Highlight>{data.items[0]?.rate ? Number(data.items[0].rate) : 3}</Highlight> ของวงเงินสินเชื่อ
@@ -99,7 +95,7 @@ export default function ContractPreview({ data }: Props) {
         {data.items.map((item, index) => {
           const label = CONTRACT_TYPE_LABELS[item.type];
           return (
-            <div key={item.id} className={`flex gap-2 pl-6 pr-2 text-justify ${index === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
+            <div key={item.id} className={`flex gap-2 pl-6 text-justify ${index === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
               <span className="shrink-0 font-bold whitespace-nowrap">1.{index + 1}.</span>
               <div className="flex-1 text-justify">
                 ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
@@ -119,7 +115,7 @@ export default function ContractPreview({ data }: Props) {
       <div className="print-page relative">
         <PageHeader />
 
-        <div className="mb-6 mt-8 flex gap-2 pr-2 text-justify">
+        <div className="mb-6 mt-8 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">2.</span>
           <div className="flex-1 text-justify">
             <span className="font-bold">ความไม่สมบูรณ์ของข้อสัญญา</span>
