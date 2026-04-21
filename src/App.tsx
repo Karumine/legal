@@ -21,6 +21,7 @@ import type { GuaranteeData } from './types/guarantee';
 import type { ContractData } from './types/contract';
 import { thaiBahtText } from './utils/thaiBahtText';
 import { useHighlight } from './contexts/HighlightContext';
+import CountdownTimer from './components/CountdownTimer';
 
 type PreviewTab = string;
 
@@ -477,7 +478,10 @@ function App() {
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-3 z-20 shadow-sm">
           <div className="flex justify-between items-center">
-            <h1 className="text-xl font-bold tracking-tight text-slate-800">Control Panel</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl font-bold tracking-tight text-slate-800">Control Panel</h1>
+              <CountdownTimer />
+            </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setPreviewVisible(!previewVisible)}
