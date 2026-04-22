@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Cloud, CloudUpload, CheckCircle2, Loader2, Share2 } from 'lucide-react';
+import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Cloud, CloudUpload, Loader2, Share2 } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
@@ -47,7 +47,6 @@ function App() {
 
   const [draftId, setDraftId] = useState<string | null>(null);
   const [isCloudSaving, setIsCloudSaving] = useState(false);
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   // Load draft from Supabase if draftId is in URL
   useEffect(() => {
@@ -60,7 +59,6 @@ function App() {
           const draft = await getDraft(dId);
           if (draft && draft.data) {
             setData(draft.data);
-            setLastSaved(new Date(draft.updated_at || draft.created_at));
           }
         } catch (e) {
           console.error('Failed to load cloud draft', e);
@@ -76,7 +74,6 @@ function App() {
       const result = await saveDraft(data, draftId || undefined);
       if (result) {
         setDraftId(result.id);
-        setLastSaved(new Date());
         // Update URL without refreshing
         const newUrl = `${window.location.pathname}?draftId=${result.id}`;
         window.history.pushState({ path: newUrl }, '', newUrl);
