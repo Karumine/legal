@@ -47,6 +47,7 @@ export interface LandCollateral {
   district: string;
   province: string;
   owner: string;
+  landType?: 'empty' | 'building';
 }
 
 export interface MachineDetail {

@@ -633,7 +633,44 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
                   </div>
 
                   {asset.type === 'land' && asset.landDetails && (
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-3 mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-3 mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm transition-all">
+                      <div className="col-span-2 mb-2 p-3 bg-blue-50/50 rounded-lg border border-blue-100 flex items-center justify-between">
+                        <label className="text-xs font-bold text-blue-800 uppercase tracking-tight">ประเภทการจำนอง:</label>
+                        <div className="flex gap-6">
+                          <label className="inline-flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="radio"
+                              checked={!asset.landDetails.landType || asset.landDetails.landType === 'empty'}
+                              onChange={() => {
+                                const newAssets = [...data.collateralAssets];
+                                newAssets[idx] = {
+                                  ...newAssets[idx],
+                                  landDetails: { ...newAssets[idx].landDetails!, landType: 'empty' }
+                                };
+                                onChange({ ...data, collateralAssets: newAssets });
+                              }}
+                              className="w-4 h-4 text-blue-600 border-blue-300 focus:ring-blue-500 transition-all cursor-pointer"
+                            />
+                            <span className="text-xs font-semibold text-slate-700 group-hover:text-blue-700 transition-colors">ที่ดินเปล่า</span>
+                          </label>
+                          <label className="inline-flex items-center gap-2 cursor-pointer group">
+                            <input
+                              type="radio"
+                              checked={asset.landDetails.landType === 'building'}
+                              onChange={() => {
+                                const newAssets = [...data.collateralAssets];
+                                newAssets[idx] = {
+                                  ...newAssets[idx],
+                                  landDetails: { ...newAssets[idx].landDetails!, landType: 'building' }
+                                };
+                                onChange({ ...data, collateralAssets: newAssets });
+                              }}
+                              className="w-4 h-4 text-blue-600 border-blue-300 focus:ring-blue-500 transition-all cursor-pointer"
+                            />
+                            <span className="text-xs font-semibold text-slate-700 group-hover:text-blue-700 transition-colors">ที่ดินพร้อมสิ่งปลูกสร้าง</span>
+                          </label>
+                        </div>
+                      </div>
                       {[
                         { label: 'โฉนดเลขที่', key: 'deedNo' },
                         { label: 'เล่ม', key: 'volume' },

@@ -258,7 +258,7 @@ export default function CountdownTimer() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-blue-50 to-purple-50 text-slate-600 border border-blue-200/60 hover:border-purple-300 hover:from-blue-100 hover:to-purple-100 transition-all cursor-pointer"
             title="สร้างโดย พี่กาย — คลิกเพื่อดูข้อความ"
           >
-            <span>สร้างโดย พี่กาย 💙</span>
+            <span>สร้างโดย พี่กาย</span>
           </button>
         ) : (
           <>

@@ -249,7 +249,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   <div key={idx} className="flex gap-2">
                     <span>({THAI_INDEX[idx + 2]})</span>
                     <div className="flex-1">
-                      {condition}
+                      <Highlight>{condition}</Highlight>
                     </div>
                   </div>
                 ))}
@@ -304,7 +304,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                     <div key={idx} className="flex gap-2">
                       <span>({THAI_INDEX[idx + 4]})</span>
                       <div className="flex-1">
-                        {condition}
+                        <Highlight>{condition}</Highlight>
                       </div>
                     </div>
                   ))}
@@ -639,7 +639,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                       <div className="flex-1 text-justify">
                         {asset.type === 'land' && asset.landDetails && (
                           <div>
-                            <span className="font-bold">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <b><Highlight>{asset.landDetails.owner}</Highlight></b> รายละเอียดปรากฏตาม <span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 6</u></span>
+                            <span className="font-bold">การจำนองที่ดิน</span> : {asset.landDetails.landType === 'building' ? 'ที่ดินพร้อมสิ่งปลูกสร้าง' : 'ที่ดินเปล่า'} โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <b><Highlight>{asset.landDetails.owner}</Highlight></b> รายละเอียดปรากฏตาม <span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 6</u></span>
                           </div>
                         )}
                         {asset.type === 'cash' && (
@@ -695,7 +695,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   <div className="flex-1 text-justify">
                     {asset.type === 'land' && asset.landDetails && (
                       <div>
-                        <span className="font-bold">การจำนองที่ดิน</span> : ที่ดินเปล่า โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <b><Highlight>{asset.landDetails.owner}</Highlight></b> รายละเอียดปรากฏตาม <span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 6</u></span>
+                        <span className="font-bold">การจำนองที่ดิน</span> : {asset.landDetails.landType === 'building' ? 'ที่ดินพร้อมสิ่งปลูกสร้าง' : 'ที่ดินเปล่า'} โฉนดที่ดินเลขที่ <Highlight>{asset.landDetails.deedNo}</Highlight> เล่ม <Highlight>{asset.landDetails.volume}</Highlight> หน้า <Highlight>{asset.landDetails.page}</Highlight> ระวาง <Highlight>{asset.landDetails.mapSheet}</Highlight> เลขที่ดิน <Highlight>{asset.landDetails.landNo}</Highlight> หน้าสำรวจ <Highlight>{asset.landDetails.surveyNo}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'แขวง' : 'ตำบล'} <Highlight>{asset.landDetails.subDistrict}</Highlight> {asset.landDetails.province === 'กรุงเทพมหานคร' ? 'เขต' : 'อำเภอ'} <Highlight>{asset.landDetails.district}</Highlight> จังหวัด <Highlight>{asset.landDetails.province}</Highlight> อันเป็นทรัพย์สินที่ไม่มีภาระผูกพันของ <b><Highlight>{asset.landDetails.owner}</Highlight></b> รายละเอียดปรากฏตาม <span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 6</u></span>
                       </div>
                     )}
                     {asset.type === 'cash' && (
