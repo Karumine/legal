@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw } from 'lucide-react';
+import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Cloud, CloudUpload, Loader2, Share2 } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
@@ -22,6 +22,7 @@ import type { ContractData } from './types/contract';
 import { thaiBahtText } from './utils/thaiBahtText';
 import { useHighlight } from './contexts/HighlightContext';
 import CountdownTimer from './components/CountdownTimer';
+import { saveDraft, getDraft } from './services/supabase';
 
 type PreviewTab = string;
 
@@ -43,6 +44,49 @@ function App() {
   useEffect(() => {
     localStorage.setItem('legalAppData', JSON.stringify(data));
   }, [data]);
+
+  const [draftId, setDraftId] = useState<string | null>(null);
+  const [isCloudSaving, setIsCloudSaving] = useState(false);
+
+  // Load draft from Supabase if draftId is in URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('draftId');
+    if (id) {
+      setDraftId(id);
+      const loadDraft = async (dId: string) => {
+        try {
+          const draft = await getDraft(dId);
+          if (draft && draft.data) {
+            setData(draft.data);
+          }
+        } catch (e) {
+          console.error('Failed to load cloud draft', e);
+        }
+      };
+      loadDraft(id);
+    }
+  }, []);
+
+  const handleSaveCloudDraft = async () => {
+    setIsCloudSaving(true);
+    try {
+      const result = await saveDraft(data, draftId || undefined);
+      if (result) {
+        setDraftId(result.id);
+        // Update URL without refreshing
+        const newUrl = `${window.location.pathname}?draftId=${result.id}`;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+        // Copy link to clipboard
+        navigator.clipboard.writeText(window.location.href);
+      }
+    } catch (e) {
+      console.error('Failed to save cloud draft', e);
+      alert('เกิดข้อผิดพลาดในการบันทึกร่าง: กรุณาตรวจสอบว่าคุณได้ใส่ VITE_SUPABASE_ANON_KEY ใน .env.local แล้วหรือยัง');
+    } finally {
+      setIsCloudSaving(false);
+    }
+  };
   const [activePreview, setActivePreview] = useState<PreviewTab>('agreement-initial-hp');
 
   // Panel resize & toggle
@@ -483,6 +527,44 @@ function App() {
               <CountdownTimer />
             </div>
             <div className="flex items-center gap-2">
+              <button
+                onClick={handleSaveCloudDraft}
+                disabled={isCloudSaving}
+                className={`flex items-center gap-2 px-3 py-2 rounded-md font-bold transition-all text-sm border shadow-sm ${
+                  isCloudSaving
+                    ? 'bg-gray-100 text-gray-400 border-gray-200'
+                    : draftId 
+                      ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
+                      : 'bg-blue-600 text-white border-blue-700 hover:bg-blue-700'
+                }`}
+                title={draftId ? 'อัปเดตร่างบน Cloud' : 'บันทึกร่างลง Cloud'}
+              >
+                {isCloudSaving ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : draftId ? (
+                  <CloudUpload size={16} />
+                ) : (
+                  <Cloud size={16} />
+                )}
+                {isCloudSaving ? 'กำลังบันทึก...' : draftId ? 'อัปเดตร่าง (Cloud)' : 'บันทึกร่างลง Cloud'}
+              </button>
+
+              {draftId && (
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('คัดลอกลิงก์เรียบร้อย! คุณสามารถส่งลิงก์นี้ให้เพื่อนร่วมงานทำต่อได้เลย');
+                  }}
+                  className="flex items-center gap-2 px-3 py-2 rounded-md font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all text-sm shadow-sm"
+                  title="คัดลอกลิงก์สำหรับส่งต่อ"
+                >
+                  <Share2 size={16} />
+                  แชร์ลิงก์
+                </button>
+              )}
+
+              <div className="w-px h-6 bg-gray-200 mx-1" />
+
               <button
                 onClick={() => setPreviewVisible(!previewVisible)}
                 className={`flex items-center gap-2 px-3 py-2 rounded-md font-medium transition-all text-sm border ${
