@@ -1254,7 +1254,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                   <h4 className="text-sm font-bold text-gray-700">สัญญารับซื้อคืน ชุดที่ {idx + 1}</h4>
                   <div className="flex items-center gap-4 text-[10px] text-orange-600 italic">
                     <ShieldCheck size={12} className="inline mr-1" />
-                    เชื่อมโยงข้อมูลจาก {data.contractNo} ({data.contractDate})
+                    เชื่อมโยงกับ {CONTRACT_TYPE_LABELS[type]} {data.contractNo ? `เลขที่ ${data.contractNo}` : ''}
                     <button
                       onClick={() => {
                         const newBuybacks = data.buybacks?.filter(b => b.id !== bb.id);
