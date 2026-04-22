@@ -1,13 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
+// Debug for checking if keys are reaching the client
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase credentials missing. Draft saving/loading will not work until VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in .env.local');
+  console.warn('Supabase credentials missing. Draft saving/loading will not work.');
 }
 
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
+export const supabase = (supabaseUrl && supabaseAnonKey) 
+  ? createClient(supabaseUrl, supabaseAnonKey) 
+  : null;
 
 export interface Draft {
   id: string;
@@ -17,7 +20,10 @@ export interface Draft {
 }
 
 export async function saveDraft(data: any, id?: string) {
-  if (!supabaseUrl || !supabaseAnonKey) return null;
+  if (!supabase) {
+    alert('ระบบฐานข้อมูลยังไม่พร้อมใช้งาน (กรุณาตรวจสอบ Environment Variables ใน Vercel)');
+    return null;
+  }
 
   if (id) {
     // Update existing
@@ -44,7 +50,7 @@ export async function saveDraft(data: any, id?: string) {
 }
 
 export async function getDraft(id: string) {
-  if (!supabaseUrl || !supabaseAnonKey) return null;
+  if (!supabase) return null;
 
   const { data, error } = await supabase
     .from('drafts')
