@@ -21,7 +21,6 @@ export interface Draft {
 
 export async function saveDraft(data: any, id?: string) {
   if (!supabase) {
-    alert('ระบบฐานข้อมูลยังไม่พร้อมใช้งาน (กรุณาตรวจสอบ Environment Variables ใน Vercel)');
     return null;
   }
 

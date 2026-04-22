@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Cloud, CloudUpload, Loader2, Share2 } from 'lucide-react';
+import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Save, Loader2, Share2 } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
@@ -21,6 +21,8 @@ import type { GuaranteeData } from './types/guarantee';
 import type { ContractData } from './types/contract';
 import { thaiBahtText } from './utils/thaiBahtText';
 import { useHighlight } from './contexts/HighlightContext';
+import { useNotification } from './contexts/NotificationContext';
+import { NotificationContainer } from './components/Notification';
 import CountdownTimer from './components/CountdownTimer';
 import { saveDraft, getDraft } from './services/supabase';
 
@@ -28,6 +30,7 @@ type PreviewTab = string;
 
 function App() {
   const { printMode, setPrintMode } = useHighlight();
+  const { notify } = useNotification();
   const [data, setData] = useState<AppData>(() => {
     const saved = localStorage.getItem('legalAppData');
     if (saved) {
@@ -79,10 +82,11 @@ function App() {
         window.history.pushState({ path: newUrl }, '', newUrl);
         // Copy link to clipboard
         navigator.clipboard.writeText(window.location.href);
+        notify('บันทึกร่างและคัดลอกลิงก์เรียบร้อยแล้ว!', 'success');
       }
     } catch (e) {
       console.error('Failed to save cloud draft', e);
-      alert('เกิดข้อผิดพลาดในการบันทึกร่าง: กรุณาตรวจสอบว่าคุณได้ใส่ VITE_SUPABASE_ANON_KEY ใน .env.local แล้วหรือยัง');
+      notify('เกิดข้อผิดพลาดในการบันทึกร่าง: กรุณาตรวจสอบการตั้งค่า Supabase', 'error');
     } finally {
       setIsCloudSaving(false);
     }
@@ -530,7 +534,7 @@ function App() {
               <button
                 onClick={handleSaveCloudDraft}
                 disabled={isCloudSaving}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md font-bold transition-all text-sm border shadow-sm ${
+                className={`flex items-center justify-center p-2 rounded-md font-bold transition-all border shadow-sm ${
                   isCloudSaving
                     ? 'bg-gray-100 text-gray-400 border-gray-200'
                     : draftId 
@@ -540,20 +544,17 @@ function App() {
                 title={draftId ? 'อัปเดตร่างบน Cloud' : 'บันทึกร่างลง Cloud'}
               >
                 {isCloudSaving ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : draftId ? (
-                  <CloudUpload size={16} />
+                  <Loader2 size={18} className="animate-spin" />
                 ) : (
-                  <Cloud size={16} />
+                  <Save size={18} />
                 )}
-                {isCloudSaving ? 'กำลังบันทึก...' : draftId ? 'อัปเดตร่าง (Cloud)' : 'บันทึกร่างลง Cloud'}
               </button>
 
               {draftId && (
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(window.location.href);
-                    alert('คัดลอกลิงก์เรียบร้อย! คุณสามารถส่งลิงก์นี้ให้เพื่อนร่วมงานทำต่อได้เลย');
+                    notify('คัดลอกลิงก์เรียบร้อย! คุณสามารถส่งลิงก์นี้ให้เพื่อนร่วมงานทำต่อได้เลย', 'success');
                   }}
                   className="flex items-center gap-2 px-3 py-2 rounded-md font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all text-sm shadow-sm"
                   title="คัดลอกลิงก์สำหรับส่งต่อ"
@@ -923,6 +924,7 @@ function App() {
         </div>
       </div>
       )}
+      <NotificationContainer />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 import { searchCompanyByTaxId } from '../services/dbdService';
 import ThaiAddressInput from './ThaiAddressInput';
+import { useNotification } from '../contexts/NotificationContext';
 
 interface Props {
   data: GuarantorData[];
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export default function GuarantorForm({ data, onChange, agreements, customerInfo }: Props) {
+  const { notify } = useNotification();
   const prevAgreementsRef = useRef<string[]>([]);
   const mainAgreements = agreements; // Show all main contracts as requested
   const [searchingId, setSearchingId] = useState<string | null>(null);
@@ -88,7 +90,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
   const handleDBDSearch = async (guarantorId: string, taxId: string) => {
     const cleanTaxId = taxId.replace(/-/g, '').trim();
     if (cleanTaxId.length !== 13) {
-      alert('กรุณากรอกเลขทะเบียนนิติบุคคลให้ครบ 13 หลัก');
+      notify('กรุณากรอกเลขทะเบียนนิติบุคคลให้ครบ 13 หลัก', 'error');
       return;
     }
 
@@ -111,11 +113,11 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
           )
         );
       } else {
-        alert('ไม่พบข้อมูลนิติบุคคลนี้ในระบบ DBD');
+        notify('ไม่พบข้อมูลนิติบุคคลนี้ในระบบ DBD', 'error');
       }
     } catch (error) {
       console.error(error);
-      alert('เกิดข้อผิดพลาดในการดึงข้อมูลจาก DBD');
+      notify('เกิดข้อผิดพลาดในการดึงข้อมูลจาก DBD', 'error');
     } finally {
       setSearchingId(null);
     }
