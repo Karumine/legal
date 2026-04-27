@@ -615,9 +615,9 @@ export default function GuaranteePreview({ data }: Props) {
                 {/* Guarantor Signature Row */}
                 <div className="flex flex-col items-center">
                   <div className="flex items-end w-fit">
-                    <span className="w-32 text-right whitespace-nowrap">ลงชื่อ</span>
-                    <div className="border-b border-black border-dotted w-72 mx-1 mb-[2px]"></div>
-                    <span className="w-32 text-left whitespace-nowrap">ผู้ค้ำประกัน</span>
+                    <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                    <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
+                    <span className="shrink-0 whitespace-nowrap pl-1">ผู้ค้ำประกัน</span>
                   </div>
                   <div className="mt-4">( <Highlight>{guarantor.name}</Highlight> )</div>
                 </div>
@@ -625,9 +625,9 @@ export default function GuaranteePreview({ data }: Props) {
                 {/* Witness 1 Signature Row */}
                 <div className="flex flex-col items-center">
                   <div className="flex items-end w-fit">
-                    <span className="w-32 text-right whitespace-nowrap">ลงชื่อ</span>
-                    <div className="border-b border-black border-dotted w-72 mx-1 mb-[2px]"></div>
-                    <span className="w-32 text-left whitespace-nowrap">พยาน</span>
+                    <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                    <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
+                    <span className="shrink-0 whitespace-nowrap pl-1">พยาน</span>
                   </div>
                   <div className="mt-4 text-center w-full">(........................................................)</div>
                 </div>
@@ -635,9 +635,9 @@ export default function GuaranteePreview({ data }: Props) {
                 {/* Witness 2 Signature Row */}
                 <div className="flex flex-col items-center">
                   <div className="flex items-end w-fit">
-                    <span className="w-32 text-right whitespace-nowrap">ลงชื่อ</span>
-                    <div className="border-b border-black border-dotted w-72 mx-1 mb-[2px]"></div>
-                    <span className="w-32 text-left whitespace-nowrap">พยาน</span>
+                    <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                    <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
+                    <span className="shrink-0 whitespace-nowrap pl-1">พยาน</span>
                   </div>
                   <div className="mt-4 text-center w-full">(........................................................)</div>
                 </div>
@@ -688,9 +688,9 @@ export default function GuaranteePreview({ data }: Props) {
                     {/* Spouse Signature Row */}
                     <div className="flex flex-col items-center">
                       <div className="flex items-end w-fit">
-                        <span className="w-56 text-right whitespace-nowrap">ลงชื่อ</span>
-                        <div className="border-b border-black border-dotted w-72 mx-1 mb-[2px]"></div>
-                        <span className="w-56 text-left whitespace-nowrap text-[11px]">สามี/ภริยา ผู้ให้ความยินยอม</span>
+                        <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                        <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
+                        <span className="shrink-0 whitespace-nowrap pl-1 text-[11px]">สามี/ภริยา ผู้ให้ความยินยอม</span>
                       </div>
                       <div className="mt-4">( <Highlight>{guarantor.spouseName}</Highlight> )</div>
                     </div>
@@ -698,9 +698,9 @@ export default function GuaranteePreview({ data }: Props) {
                     {/* Witness 1 Signature Row */}
                     <div className="flex flex-col items-center">
                       <div className="flex items-end w-fit">
-                        <span className="w-56 text-right whitespace-nowrap">ลงชื่อ</span>
-                        <div className="border-b border-black border-dotted w-72 mx-1 mb-[2px]"></div>
-                        <span className="w-56 text-left whitespace-nowrap">พยาน</span>
+                        <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                        <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
+                        <span className="shrink-0 whitespace-nowrap pl-1">พยาน</span>
                       </div>
                       <div className="mt-4 text-center w-full">(........................................................)</div>
                     </div>
@@ -708,9 +708,9 @@ export default function GuaranteePreview({ data }: Props) {
                     {/* Witness 2 Signature Row */}
                     <div className="flex flex-col items-center">
                       <div className="flex items-end w-fit">
-                        <span className="w-56 text-right whitespace-nowrap">ลงชื่อ</span>
-                        <div className="border-b border-black border-dotted w-72 mx-1 mb-[2px]"></div>
-                        <span className="w-56 text-left whitespace-nowrap">พยาน</span>
+                        <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                        <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
+                        <span className="shrink-0 whitespace-nowrap pl-1">พยาน</span>
                       </div>
                       <div className="mt-4 text-center w-full">(........................................................)</div>
                     </div>

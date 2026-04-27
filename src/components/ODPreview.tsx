@@ -97,7 +97,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 1 จาก 24
+            หน้า 1 จาก 26
           </div>
         </div>
       </div>
@@ -204,7 +204,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 2 จาก 24
+            หน้า 2 จาก 26
           </div>
         </div>
       </div>
@@ -268,7 +268,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 3 จาก 24
+            หน้า 3 จาก 26
           </div>
         </div>
       </div>
@@ -325,7 +325,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 4 จาก 24
+            หน้า 4 จาก 26
           </div>
         </div>
       </div>
@@ -415,7 +415,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 5 จาก 24
+            หน้า 5 จาก 26
           </div>
         </div>
       </div>
@@ -466,7 +466,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 6 จาก 24
+            หน้า 6 จาก 26
           </div>
         </div>
       </div>
@@ -537,7 +537,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 7 จาก 24
+            หน้า 7 จาก 26
           </div>
         </div>
       </div>
@@ -608,7 +608,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 8 จาก 24
+            หน้า 8 จาก 26
           </div>
         </div>
       </div>
@@ -673,7 +673,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 9 จาก 24
+            หน้า 9 จาก 26
           </div>
         </div>
       </div>
@@ -734,7 +734,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 10 จาก 24
+            หน้า 10 จาก 26
           </div>
         </div>
       </div>
@@ -795,7 +795,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 11 จาก 24
+            หน้า 11 จาก 26
           </div>
         </div>
       </div>
@@ -848,7 +848,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 12 จาก 24
+            หน้า 12 จาก 26
           </div>
         </div>
       </div>
@@ -903,7 +903,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 13 จาก 24
+            หน้า 13 จาก 26
           </div>
         </div>
       </div>
@@ -950,7 +950,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 14 จาก 24
+            หน้า 14 จาก 26
           </div>
         </div>
       </div>
@@ -1004,7 +1004,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 15 จาก 24
+            หน้า 15 จาก 26
           </div>
         </div>
       </div>
@@ -1082,7 +1082,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 16 จาก 24
+            หน้า 16 จาก 26
           </div>
         </div>
       </div>
@@ -1143,7 +1143,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 17 จาก 24
+            หน้า 17 จาก 26
           </div>
         </div>
       </div>
@@ -1188,7 +1188,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 18 จาก 24
+            หน้า 18 จาก 26
           </div>
         </div>
       </div>
@@ -1247,7 +1247,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 19 จาก 24
+            หน้า 19 จาก 26
           </div>
         </div>
       </div>
@@ -1303,7 +1303,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
             </div>
             <div>
-              หน้า 20 จาก 24
+              หน้า 20 จาก 26
             </div>
           </div>
         </div>
@@ -1360,7 +1360,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
             </div>
             <div>
-              หน้า 21 จาก 24
+              หน้า 21 จาก 26
             </div>
           </div>
         </div>
@@ -1409,7 +1409,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
             </div>
             <div>
-              หน้า 22 จาก 24
+              หน้า 22 จาก 26
             </div>
           </div>
         </div>
@@ -1478,7 +1478,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 23 จาก 24
+            หน้า 23 จาก 26
           </div>
         </div>
       </div>
@@ -1548,7 +1548,146 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 24 จาก 24
+            หน้า 24 จาก 26
+          </div>
+        </div>
+      </div>
+      {/* Page 25 */}
+      <div data-section-id="od-indemnity" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+
+        <div className="space-y-6 mt-4">
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8"></span>
+            <div className="flex-1">
+              <div className="space-y-6">
+                <div className="flex gap-2">
+                  <span className="shrink-0 w-8">(ค)</span>
+                  <div className="flex-1 text-justify">
+                    บังคับชำระหนี้จากทรัพย์สินหลักประกัน ไม่ว่าจะทั้งหมดหรือบางส่วน และไม่ว่าจะเป็นทรัพย์สินหลักประกันอย่างใดอย่างหนึ่งหรือหลายอย่าง ตามวิธีการของกฎหมายเกี่ยวกับหลักประกันนั้น และ/หรือ
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <span className="shrink-0 w-8">(ง)</span>
+                  <div className="flex-1 text-justify">
+                    ใช้สิทธิ อำนาจ หรือการเยียวยาอื่นใดที่ผู้กู้มีอยู่ภายใต้กฎหมายหรือภายใต้สัญญาฉบับนี้
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2 items-center pt-4">
+            <span className="font-bold shrink-0 w-8">12.</span>
+            <span className="font-bold">การชดใช้ค่าเสียหาย</span>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8"></span>
+            <div className="flex-1 text-justify">
+              ผู้กู้จะต้องชดใช้ความเสียหายให้แก่ผู้ให้สินเชื่อ สำหรับค่าใช้จ่าย ความสูญเสีย ความเสียหาย หรือความรับผิดใดๆ ซึ่งผู้ให้สินเชื่อต้องเสียไป หรือได้รับจากเหตุการณ์ใดเหตุการณ์หนึ่งที่ถือว่าเป็นเหตุผิดนัดตามสัญญาฉบับนี้ ทันทีที่ผู้ให้สินเชื่อมีการเรียกร้องเอากับผู้กู้ การที่ผู้กู้ต้องชดใช้ความเสียหายดังกล่าวให้รวมถึง การชดใช้สำหรับค่าใช้จ่าย หรือความสูญเสียที่อาจเกิดขึ้นจากการที่ผู้ให้สินเชื่อได้รับชำระหนี้ช้ากว่ากำหนดเวลาชำระที่ตกลงกันไว้ ความสูญเสียใด ๆ ที่เกิดขึ้นจากค่าธรรมเนียม ดอกเบี้ย หรือจำนวนเงินอื่นใดที่ผู้ให้สินเชื่อต้องเสียไปเพื่อชำระหนี้ใด ๆ ที่ผู้ให้สินเชื่อไปกู้ยืมมาเพื่อนำมาให้เป็นสินเชื่อตามสัญญาฉบับนี้ (ถ้ามี)
+            </div>
+          </div>
+
+          <div className="flex gap-2 items-center pt-4">
+            <span className="font-bold shrink-0 w-8">13.</span>
+            <span className="font-bold">ค่าใช้จ่ายอื่น ๆ</span>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">13.1</span>
+            <div className="flex-1">
+              <span className="underline">ค่าใช้จ่าย</span>
+              <div className="mt-4 text-justify">
+                ผู้กู้ต้องชำระค่าใช้จ่ายทั้งหมดที่เกิดขึ้นดังต่อไปนี้ให้แก่ผู้ให้สินเชื่อ เมื่อผู้ให้สินเชื่อทวงถาม
+              </div>
+
+              <div className="mt-6 space-y-6">
+                <div className="flex gap-2">
+                  <span className="shrink-0 w-8">(ก)</span>
+                  <div className="flex-1 text-justify">
+                    บรรดาค่าใช้จ่ายต่าง ๆ ค่าใช้จ่ายทางด้านเอกสาร และค่าใช้จ่ายต่าง ๆ ที่ผู้ให้สินเชื่อได้มีการจ่ายไปใด ๆ ซึ่งเกิดขึ้นจากการเจรจา การจัดเตรียมเอกสาร และการเข้าทำสัญญาฉบับนี้ และ
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 25 จาก 26
+          </div>
+        </div>
+      </div>
+      {/* Page 26 */}
+      <div data-section-id="od-expenses-cont" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+
+        <div className="space-y-6 mt-4">
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8"></span>
+            <div className="flex-1">
+              <div className="space-y-6">
+                <div className="flex gap-2">
+                  <span className="shrink-0 w-8">(ข)</span>
+                  <div className="flex-1 text-justify">
+                    บรรดาค่าใช้จ่าย ค่าใช้จ่ายทางศาลในการฟ้องร้องดำเนินคดี และค่าใช้จ่ายต่างๆ ที่ผู้ให้สินเชื่อได้มีการจ่ายไปใด ๆ ที่เกิดขึ้นจากการแก้ไข เปลี่ยนแปลง ให้ความยินยอม หรือให้อนุญาตที่เกี่ยวข้องกับสัญญาฉบับนี้ หรือเอกสารที่เกี่ยวข้องใด ๆ หรือที่เกี่ยวข้องกับการป้องกันสิทธิหรือการใช้สิทธิบังคับ หรือความพยายามที่จะป้องกันหรือที่จะใช้สิทธิบังคับของผู้ให้สินเชื่อใด ๆ ที่มีอยู่ภายใต้สัญญาฉบับนี้ หรือเอกสารที่เกี่ยวข้องใด ๆ
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2 items-center pt-4">
+            <span className="shrink-0 w-8 font-bold">13.2</span>
+            <span className="font-bold underline">ค่าอากรแสตมป์</span>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8"></span>
+            <div className="flex-1 text-justify">
+              ผู้กู้มีหน้าที่ต้องชำระค่าอากรแสตมป์สำหรับการทำสัญญาฉบับนี้ เป็นจำนวนทั้งสิ้น <Highlight>{data.stampDuty || '0'}</Highlight> บาท (<Highlight>{data.stampDuty ? thaiBahtText(data.stampDuty) : 'ศูนย์บาทถ้วน'}</Highlight>) โดยตกลงชำระ ณ วันที่ทำสัญญาฉบับนี้ และมีหน้าที่ต้องชำระค่าภาษีอากรอื่น ๆ ในทำนองเดียวกันที่เกี่ยวข้องกับสัญญาฉบับนี้ แต่เพียงผู้เดียว (เว้นแต่ ค่าอากรแสตมป์ และค่าภาษีอากรอื่น ๆ ที่เกี่ยวข้องกับหนังสือโอนสิทธิ และ/หรือ หน้าที่ของผู้ให้สินเชื่อตามสัญญาฉบับนี้ (หากมี)) และหากผู้ให้สินเชื่อได้ชำระค่าอากรแสตมป์ หรือค่าภาษีอากรอื่น ๆ ไปแทนผู้กู้อันเนื่องมาจากการที่ผู้กู้ชำระล่าช้าหรือไม่ชำระเงินค่าอากรดังกล่าว ผู้กู้ต้องชดใช้เงินจำนวนดังกล่าวคืนให้แก่ผู้ให้สินเชื่อเต็มจำนวน
+            </div>
+          </div>
+
+          <div className="flex gap-2 items-center pt-4">
+            <span className="shrink-0 w-8 font-bold">13.3</span>
+            <span className="font-bold underline">ค่าบริการอันเกี่ยวข้องกับสัญญาฉบับนี้</span>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8"></span>
+            <div className="flex-1 text-justify">
+              ผู้กู้ตกลงยินยอมชำระค่าบริการในการจดทะเบียนจำนองทรัพย์สินหลักประกันกับหน่วยงานราชการที่เกี่ยวข้อง และค่าบริการในการจดทะเบียนกรรมสิทธิ์เครื่องจักร (ถ้ามี) ให้แก่ผู้ให้สินเชื่อ โดยตกลงชำระ ณ วันที่ทำสัญญาฉบับนี้
+            </div>
+          </div>
+
+          <div className="flex gap-2 items-center pt-4">
+            <span className="shrink-0 w-8 font-bold">13.4</span>
+            <span className="font-bold underline">ค่าธรรมเนียมการจดทะเบียนหลักประกัน หรือ กรรมสิทธิ์เครื่องจักร</span>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8"></span>
+            <div className="flex-1 text-justify">
+              ผู้กู้ตกลงยินยอมรับผิดชอบบรรดาค่าธรรมเนียมและค่าใช้จ่ายอื่นใดเกี่ยวกับการจดทะเบียนจำนองทรัพย์สินหลักประกัน หรือ จดทะเบียนกรรมสิทธิ์เครื่องจักร (ถ้ามี)
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 26 จาก 26
           </div>
         </div>
       </div>
