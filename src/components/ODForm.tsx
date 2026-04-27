@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Plus, Copy, ChevronDown } from 'lucide-react';
-import type { ODData, LessorInfo, CompanyInfo, Agreement, CollateralAsset } from '../types/app';
+import { Copy, ChevronDown } from 'lucide-react';
+import type { ODData, LessorInfo, CompanyInfo, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatCurrency } from '../utils/formatters';
@@ -280,321 +280,67 @@ export default function ODForm({ data, onChange, customerInfo, agreements = [], 
           </div>
         </div>
       </section>
-
-      {/* Collateral Section */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('od-collateral')}>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-lg text-blue-700">หลักประกัน</h3>
-          {otherAgreementsWithCollateral.length > 0 && (
-            <div className="relative" ref={copyMenuRef}>
-              <button
-                type="button"
-                onClick={() => setShowCopyCollateralMenu(!showCopyCollateralMenu)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100 hover:border-blue-300 transition-all shadow-sm"
-              >
-                <Copy size={13} />
-                คัดลอกจากสัญญาอื่น
-                <ChevronDown size={12} className={`transition-transform ${showCopyCollateralMenu ? 'rotate-180' : ''}`} />
-              </button>
-              {showCopyCollateralMenu && (
-                <div className="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 min-w-[260px] animate-in fade-in slide-in-from-top-1 duration-150">
-                  <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
-                    เลือกสัญญาต้นทาง
-                  </div>
-                  {otherAgreementsWithCollateral.map((agreement) => {
-                    const aData = agreement.data as any;
-                    const sourceIndex = agreements.indexOf(agreement) + 1;
-                    const label = `${CONTRACT_TYPE_LABELS[agreement.type]} (${sourceIndex})`;
-                    const assetCount = aData.collateralAssets?.length || 0;
-                    return (
-                      <button
-                        key={agreement.id}
-                        onClick={() => {
-                          const copied: CollateralAsset[] = JSON.parse(JSON.stringify(aData.collateralAssets));
-                          onChange({
-                            ...data,
-                            collateralAssets: copied,
-                            collateralValue: aData.collateralValue || data.collateralValue || ''
-                          });
-                          setShowCopyCollateralMenu(false);
-                        }}
-                        className="w-full text-left px-3 py-2.5 text-xs flex items-center gap-2 transition-colors hover:bg-blue-50 text-slate-700"
-                      >
-                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                          <Copy size={11} className="text-blue-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-semibold truncate">{label}</div>
-                          <div className="text-[10px] text-slate-400">
-                            {aData.contractNo || 'ไม่มีเลขสัญญา'} • {assetCount} รายการ
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          )}
+      {/* Annex 4 Details */}
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('od-annex4')}>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+          <h3 className="font-semibold text-lg text-blue-700">เอกสารแนบท้าย 4 (แจ้งเปลี่ยนช่องทางรับเงิน)</h3>
         </div>
         <div className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">มูลค่ารวมหลักประกัน (บาท)</label>
-            <input
-              type="text"
-              name="collateralValue"
-              value={data.collateralValue || ''}
-              onChange={(e) => {
-                const formatted = formatCurrency(e.target.value);
-                onChange({ ...data, collateralValue: formatted });
-              }}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-              placeholder="0"
-            />
-          </div>
-
-          <div className="border-t border-blue-200 pt-4">
-            <div className="mb-2">
-              <label className="block text-xs font-medium text-gray-600">ทรัพย์สินหลักประกัน</label>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่ใบสั่งซื้อ (PO No.)</label>
+              <input
+                type="text"
+                name="annex4PONo"
+                value={data.annex4PONo || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                placeholder="ระบุเลขที่ใบสั่งซื้อ"
+              />
             </div>
-            <div className="space-y-4">
-              {(data.collateralAssets || []).map((asset, idx) => (
-                <div key={idx} className="p-3 border rounded-md bg-gray-50 space-y-3 relative border-blue-200">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newAssets = data.collateralAssets.filter((_, i) => i !== idx);
-                      onChange({ ...data, collateralAssets: newAssets });
-                    }}
-                    className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                  >
-                    ✕
-                  </button>
-                  <div className="grid grid-cols-2 gap-4 mr-6">
-                    <div>
-                      <label className="block text-[10px] font-medium text-gray-500 mb-1">ประเภท</label>
-                      <select
-                        value={asset.type}
-                        onChange={(e) => {
-                          const newType = e.target.value as any;
-                          const newAssets = [...data.collateralAssets];
-                          newAssets[idx] = { ...newAssets[idx], type: newType };
-                          if (newType === 'land' && !newAssets[idx].landDetails) {
-                            newAssets[idx].landDetails = { deedNo: '', volume: '', page: '', mapSheet: '', landNo: '', surveyNo: '', subDistrict: '', district: '', province: '', owner: customerInfo?.companyName || '' };
-                          }
-                          if (newType === 'carPledge' && !newAssets[idx].carPledgeDetails) {
-                            newAssets[idx].carPledgeDetails = { brand: '', model: '', plateNo: '', province: '', chassisNo: '', engineNo: '', color: '', owner: customerInfo?.companyName || '' };
-                          }
-                          if (newType === 'stockPledge' && !newAssets[idx].stockPledgeDetails) {
-                            newAssets[idx].stockPledgeDetails = { companyName: '', certificateNo: '', quantity: '', parValue: '', totalValue: '', owner: customerInfo?.companyName || '' };
-                          }
-                          if (newType === 'machinery' && !newAssets[idx].machineName) {
-                            newAssets[idx] = { ...newAssets[idx], machineName: '', machineModel: '', machineQuantity: '1', machineUnit: 'ชุด', machinePrice: '0', machineOwner: customerInfo?.companyName || '' };
-                          }
-                          onChange({ ...data, collateralAssets: newAssets });
-                        }}
-                        className="block w-full rounded-md border-gray-300 shadow-sm text-xs p-1 border focus:ring-blue-500 focus:border-blue-500 transition-all font-medium text-blue-700"
-                      >
-                        <option value="land">จำนองที่ดิน</option>
-                        <option value="cash">เงินสด</option>
-                        <option value="machinery">เครื่องจักร</option>
-                        <option value="carPledge">จำนำรถ</option>
-                        <option value="stockPledge">จำนำหุ้น</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {asset.type === 'land' && asset.landDetails && (
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-3 mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm transition-all">
-                      <div className="col-span-2 mb-2 p-3 bg-blue-50/50 rounded-lg border border-blue-100 flex items-center justify-between">
-                        <label className="text-xs font-bold text-blue-800 uppercase tracking-tight">ประเภทการจำนอง:</label>
-                        <div className="flex gap-6">
-                          <label className="inline-flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="radio"
-                              checked={!asset.landDetails.landType || asset.landDetails.landType === 'empty'}
-                              onChange={() => {
-                                const newAssets = [...data.collateralAssets];
-                                newAssets[idx] = {
-                                  ...newAssets[idx],
-                                  landDetails: { ...newAssets[idx].landDetails!, landType: 'empty' }
-                                };
-                                onChange({ ...data, collateralAssets: newAssets });
-                              }}
-                              className="w-4 h-4 text-blue-600 border-blue-300 focus:ring-blue-500 transition-all cursor-pointer"
-                            />
-                            <span className="text-xs font-semibold text-slate-700 group-hover:text-blue-700 transition-colors">ที่ดินเปล่า</span>
-                          </label>
-                          <label className="inline-flex items-center gap-2 cursor-pointer group">
-                            <input
-                              type="radio"
-                              checked={asset.landDetails.landType === 'building'}
-                              onChange={() => {
-                                const newAssets = [...data.collateralAssets];
-                                newAssets[idx] = {
-                                  ...newAssets[idx],
-                                  landDetails: { ...newAssets[idx].landDetails!, landType: 'building' }
-                                };
-                                onChange({ ...data, collateralAssets: newAssets });
-                              }}
-                              className="w-4 h-4 text-blue-600 border-blue-300 focus:ring-blue-500 transition-all cursor-pointer"
-                            />
-                            <span className="text-xs font-semibold text-slate-700 group-hover:text-blue-700 transition-colors">ที่ดินพร้อมสิ่งปลูกสร้าง</span>
-                          </label>
-                        </div>
-                      </div>
-                      {[
-                        { label: 'โฉนดเลขที่', key: 'deedNo' },
-                        { label: 'เล่ม', key: 'volume' },
-                        { label: 'หน้า', key: 'page' },
-                        { label: 'ระวาง', key: 'mapSheet' },
-                        { label: 'เลขที่ดิน', key: 'landNo' },
-                        { label: 'หน้าสำรวจ', key: 'surveyNo' }
-                      ].map(field => (
-                        <div key={field.key}>
-                          <label className="block text-xs font-semibold text-gray-500 mb-1">{field.label}</label>
-                          <input
-                            type="text"
-                            value={(asset.landDetails as any)[field.key]}
-                            onChange={(e) => {
-                              const newAssets = [...data.collateralAssets];
-                              newAssets[idx].landDetails = { ...newAssets[idx].landDetails!, [field.key]: e.target.value };
-                              onChange({ ...data, collateralAssets: newAssets });
-                            }}
-                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
-                          />
-                        </div>
-                      ))}
-                      <div className="col-span-2 mt-2 pt-2 border-t border-gray-100">
-                        <ThaiLocationSelector
-                          province={asset.landDetails.province}
-                          district={asset.landDetails.district}
-                          subDistrict={asset.landDetails.subDistrict}
-                          onChange={(updates) => {
-                            const newAssets = [...data.collateralAssets];
-                            newAssets[idx].landDetails = {
-                              ...newAssets[idx].landDetails!,
-                              ...updates as any
-                            };
-                            onChange({ ...data, collateralAssets: newAssets });
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {asset.type === 'machinery' && (
-                    <div className="mt-3 bg-white p-4 rounded-md border border-gray-100 shadow-sm space-y-4">
-                      <div>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเจ้าของเครื่องจักร (Owner)</label>
-                        <input
-                          type="text"
-                          value={asset.machineOwner || ''}
-                          onChange={(e) => {
-                            const newAssets = [...data.collateralAssets];
-                            newAssets[idx] = { ...newAssets[idx], machineOwner: e.target.value };
-                            onChange({ ...data, collateralAssets: newAssets });
-                          }}
-                          className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
-                        />
-                      </div>
-                      <div className="grid grid-cols-12 gap-4">
-                        <div className="col-span-12">
-                          <label className="block text-xs font-semibold text-gray-500 mb-1">ชื่อเครื่องจักร (Asset Name)</label>
-                          <input
-                            type="text"
-                            value={asset.machineName || ''}
-                            onChange={(e) => {
-                              const newAssets = [...data.collateralAssets];
-                              newAssets[idx] = { ...newAssets[idx], machineName: e.target.value };
-                              onChange({ ...data, collateralAssets: newAssets });
-                            }}
-                            className="block w-full rounded border-gray-300 text-sm p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all"
-                          />
-                        </div>
-                        <div className="col-span-4">
-                          <label className="block text-xs font-semibold text-gray-500 mb-1">จำนวน</label>
-                          <input
-                            type="text"
-                            value={asset.machineQuantity || ''}
-                            onChange={(e) => {
-                              const newAssets = [...data.collateralAssets];
-                              newAssets[idx] = { ...newAssets[idx], machineQuantity: e.target.value };
-                              onChange({ ...data, collateralAssets: newAssets });
-                            }}
-                            className="block w-full rounded border-gray-300 text-md p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-left"
-                          />
-                        </div>
-                        <div className="col-span-4">
-                          <label className="block text-xs font-semibold text-gray-500 mb-1">ราคารวม (บาท)</label>
-                          <input
-                            type="text"
-                            value={asset.machinePrice || ''}
-                            onChange={(e) => {
-                              const formatted = formatCurrency(e.target.value);
-                              const newAssets = [...data.collateralAssets];
-                              newAssets[idx] = { ...newAssets[idx], machinePrice: formatted };
-                              onChange({ ...data, collateralAssets: newAssets });
-                            }}
-                            className="block w-full rounded border-gray-300 text-md p-2 border focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-all text-left font-bold text-blue-600"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="mt-4">
-              <button
-                type="button"
-                onClick={addCollateralAsset}
-                className="w-full py-6 border-2 border-dashed border-blue-200 rounded-xl text-blue-600 hover:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 group bg-blue-50/10"
-              >
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Plus className="w-6 h-6 text-blue-600" />
-                </div>
-                <div className="center">
-                  <p className="text-sm font-bold">เพิ่มทรัพย์สินหลักประกัน</p>
-                </div>
-              </button>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">ลงวันที่ใบสั่งซื้อ</label>
+              <input
+                type="date"
+                name="annex4PODate"
+                value={data.annex4PODate || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+              />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Signatories Section */}
-      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('od-signatories')}>
-        <h3 className="font-semibold text-md text-blue-700 mb-3">ผู้ลงนาม</h3>
-        <div className="space-y-3">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">ผู้ให้สินเชื่อฝ่ายที่ 1 (Agile)</label>
-            <input
-              type="text"
-              name="lender1Signatories"
-              value={data.lender1Signatories || ''}
-              onChange={handleChange}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่ใบวางบิล (Bill No.)</label>
+              <input
+                type="text"
+                name="annex4BillNo"
+                value={data.annex4BillNo || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                placeholder="ระบุเลขที่ใบวางบิล"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">ลงวันที่ใบวางบิล</label>
+              <input
+                type="date"
+                name="annex4BillDate"
+                value={data.annex4BillDate || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+              />
+            </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">ผู้ให้สินเชื่อฝ่ายที่ 2 (TK)</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">กำหนดส่งคืนเอกสาร (ภายในวันที่)</label>
             <input
-              type="text"
-              name="lender2Signatories"
-              value={data.lender2Signatories || ''}
+              type="date"
+              name="annex4ReturnDate"
+              value={data.annex4ReturnDate || ''}
               onChange={handleChange}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">ผู้กู้ (ลูกค้า)</label>
-            <input
-              type="text"
-              name="borrowerSignatories"
-              value={data.borrowerSignatories || ''}
-              onChange={handleChange}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
             />
           </div>
         </div>

@@ -108,10 +108,7 @@
   border-radius: 4px;
 }
 
-/* Smooth scroll for preview panel */
-#preview-panel {
-  scroll-behavior: smooth;
-}
+/* Smooth scroll is handled via JS scrollTo behavior when needed */
 
 /* Resize handle */
 .resize-handle {

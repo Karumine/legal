@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Save, Loader2, Share2 } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
@@ -106,36 +106,20 @@ function App() {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Preview scroll persistence
   const scrollPositionsRef = useRef<Record<string, number>>({});
-  const currentTabRef = useRef(activePreview);
   const isInternalScrollRef = useRef(false);
+  const previewPanelRef = useRef<HTMLDivElement>(null);
 
-  // Sync currentTabRef for the scroll listener
-  useEffect(() => {
-    currentTabRef.current = activePreview;
-  }, [activePreview]);
-
-  // Scroll Observer: Capture scroll position in real-time
-  useEffect(() => {
-    const previewPanel = document.getElementById('preview-panel');
-    if (!previewPanel) return;
-
-    const handleScroll = () => {
-      // Don't save if this scroll was triggered by our restoration or section sync
-      if (isInternalScrollRef.current) return;
-
-      if (currentTabRef.current) {
-        scrollPositionsRef.current[currentTabRef.current] = previewPanel.scrollTop;
-      }
-    };
-
-    previewPanel.addEventListener('scroll', handleScroll, { passive: true });
-    return () => previewPanel.removeEventListener('scroll', handleScroll);
-  }, []);
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (isInternalScrollRef.current) return;
+    scrollPositionsRef.current[activePreview] = e.currentTarget.scrollTop;
+  };
 
   // ── Preview Scaling Logic ──
   const [previewScale, setPreviewScale] = useState(1);
+  const [contentHeight, setContentHeight] = useState(0);
+  const previewContentRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const panel = document.getElementById('preview-panel');
     if (!panel) return;
@@ -150,6 +134,15 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!previewContentRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      setContentHeight(entries[0].contentRect.height);
+    });
+    observer.observe(previewContentRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   // Preview scroll sync: switches to the correct preview tab and scrolls to the matching section
   const lastFocusSectionRef = useRef<string>('');
   const scrollToPreviewSection = useCallback((sectionId: string, previewTabKey?: string) => {
@@ -159,7 +152,11 @@ function App() {
 
     // Switch to the correct preview tab if provided
     if (previewTabKey && previewTabKey !== activePreview) {
-      isInternalScrollRef.current = true; // Block restoration scroll
+      // Only block restoration if we actually have a sectionId to scroll to.
+      // If no sectionId, we want the standard restoration logic to run.
+      if (sectionId) {
+        isInternalScrollRef.current = true;
+      }
       setActivePreview(previewTabKey);
     }
 
@@ -234,30 +231,42 @@ function App() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Scroll Restoration: Restore position when tab changes manually
-  useEffect(() => {
-    // If this change was triggered by scrollToPreviewSection, skip restoration
-    if (isInternalScrollRef.current) {
-      // isInternalScrollRef might be reset by the section scroll timer, 
-      // but we need to ensure it's not permanently stuck if sectionId was empty
-      return;
-    }
+  // ── Scroll Management (Memory per tab) ──
+  useLayoutEffect(() => {
+    const panel = previewPanelRef.current;
+    if (!panel) return;
 
-    const lastPos = scrollPositionsRef.current[activePreview] || 0;
+    // 1. Immediately block saving for the new tab
+    isInternalScrollRef.current = true;
+    
+    const targetPos = scrollPositionsRef.current[activePreview] || 0;
+    
+    // 2. Initial restoration attempt
+    panel.scrollTop = targetPos;
 
-    // Tiny delay to allow Content components to mount and get their layout height
+    // 3. Keep blocking for a bit to swallow residual scroll events
     const timer = setTimeout(() => {
-      const previewPanel = document.getElementById('preview-panel');
-      if (previewPanel) {
-        isInternalScrollRef.current = true;
-        previewPanel.scrollTo({ top: lastPos });
-        // Release the flag quickly for restoration as it's an instant scroll
-        setTimeout(() => { isInternalScrollRef.current = false; }, 50);
-      }
-    }, 50);
+      isInternalScrollRef.current = false;
+    }, 200);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      isInternalScrollRef.current = false;
+    };
   }, [activePreview]);
+
+  // Handle document growth (long docs) during a tab switch or while editing
+  useEffect(() => {
+    if (isInternalScrollRef.current) {
+      const panel = previewPanelRef.current;
+      if (panel) {
+        const targetPos = scrollPositionsRef.current[activePreview] || 0;
+        if (panel.scrollTop < targetPos) {
+          panel.scrollTop = targetPos;
+        }
+      }
+    }
+  }, [contentHeight, activePreview]);
 
   const handlePrint = () => {
     const rightPanel = document.getElementById('preview-panel');
@@ -867,7 +876,12 @@ function App() {
 
       {/* Right Panel: Preview */}
       {previewVisible && (
-        <div id="preview-panel" className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col transform-gpu">
+        <div 
+          id="preview-panel" 
+          ref={previewPanelRef}
+          onScroll={handleScroll}
+          className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col transform-gpu"
+        >
           <div className="sticky top-0 z-10 bg-slate-200 px-4 pt-3 pb-2 print:hidden flex justify-center">
             <div className="w-[210mm] max-w-full">
               <div className="bg-white rounded-t-lg border border-b-0 border-slate-200 px-3 py-2 flex items-center gap-2" ref={dropdownRef}>
@@ -952,11 +966,12 @@ function App() {
           <div className="flex-1 p-6 print:p-0 flex flex-col items-center overflow-x-hidden">
             <div
               id="preview-content-container"
+              ref={previewContentRef}
               className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0 origin-top transition-all duration-200"
               style={{
                 transform: previewScale < 1 ? `scale(${previewScale})` : 'none',
-                height: previewScale < 1 ? 'max-content' : 'auto',
-                marginBottom: previewScale < 1 ? `calc(-100% * ${1 - previewScale})` : '0'
+                height: 'auto',
+                marginBottom: previewScale < 1 ? `${(previewScale - 1) * contentHeight}px` : '0'
               }}
             >
               {activePreview.startsWith('agreement-') && (
