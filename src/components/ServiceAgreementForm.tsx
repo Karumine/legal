@@ -263,19 +263,19 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                         <div className="text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1 rounded-sm border border-teal-100">1. Origination Fee</div>
 
                         {/* Rate % */}
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap">อัตราค่าตอบแทน (Rate) %:</label>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">อัตราค่าตอบแทน (Rate) %</label>
                           <input
                             type="text"
                             value={data.originationFeeRate}
                             onChange={(e) => handleChange('originationFeeRate', e.target.value)}
-                            className="block w-32 rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border bg-white"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border bg-white h-[38px]"
                           />
                         </div>
 
                         {/* Periods */}
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">จำนวนงวด:</label>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนงวด</label>
                           <input
                             type="text"
                             value={data.agreementOriginationFeePeriods?.[agreement.id] || ''}
@@ -285,13 +285,13 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                               handleChange('agreementOriginationFeePeriods', newPeriods);
                             }}
                             placeholder="0"
-                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border bg-white"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border bg-white h-[38px]"
                           />
                         </div>
 
                         {/* First Date */}
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">วันที่งวดแรก:</label>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">วันที่งวดแรก</label>
                           <input
                             type="date"
                             value={data.agreementFirstDates?.[agreement.id] || ''}
@@ -299,18 +299,18 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                               const newDates = { ...data.agreementFirstDates, [agreement.id]: e.target.value };
                               handleChange('agreementFirstDates', newDates);
                             }}
-                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border h-[38px]"
                           />
                         </div>
 
                         {/* Installment Amount Cal */}
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">ชำระงวดละ (คำนวณ):</label>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">ชำระงวดละ (คำนวณ)</label>
                           <input
                             type="text"
                             value={data.agreementInstallmentAmounts?.[agreement.id] || ''}
                             readOnly
-                            className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-100 text-gray-400 cursor-not-allowed"
+                            className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-100 text-gray-400 cursor-not-allowed h-[38px]"
                           />
                         </div>
 
@@ -354,19 +354,19 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                         <div className="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-sm border border-amber-100">2. Service Fee</div>
 
                         {/* Rate % */}
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap">อัตราค่าตอบแทน (Rate) %:</label>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">อัตราค่าตอบแทน (Rate) %</label>
                           <input
                             type="text"
                             value={data.serviceFeeRate}
                             onChange={(e) => handleChange('serviceFeeRate', e.target.value)}
-                            className="block w-32 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white h-[38px]"
                           />
                         </div>
 
                         {/* Periods */}
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">จำนวนงวด:</label>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนงวด</label>
                           <input
                             type="text"
                             value={data.agreementServiceFeePeriods?.[agreement.id] || ''}
@@ -376,13 +376,13 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                               handleChange('agreementServiceFeePeriods', newPeriods);
                             }}
                             placeholder="0"
-                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white h-[38px]"
                           />
                         </div>
 
                         {/* First Date */}
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">วันที่งวดแรก:</label>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">วันที่งวดแรก</label>
                           <input
                             type="date"
                             value={data.agreementServiceFeeFirstDates?.[agreement.id] || ''}
@@ -390,18 +390,18 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
                               const newDates = { ...data.agreementServiceFeeFirstDates, [agreement.id]: e.target.value };
                               handleChange('agreementServiceFeeFirstDates', newDates);
                             }}
-                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border h-[38px]"
                           />
                         </div>
 
                         {/* Installment Amount Cal */}
-                        <div className="flex items-center gap-3">
-                          <label className="text-sm font-medium text-gray-700 whitespace-nowrap w-32">ค่างวด (คำนวณ):</label>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">ค่างวด (คำนวณ)</label>
                           <input
                             type="text"
                             value={data.agreementServiceFeeAmounts?.[agreement.id] || ''}
                             readOnly
-                            className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-100 text-gray-400 cursor-not-allowed"
+                            className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-100 text-gray-400 cursor-not-allowed h-[38px]"
                           />
                         </div>
 

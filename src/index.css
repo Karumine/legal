@@ -70,6 +70,14 @@
   .print-page:last-of-type {
     page-break-after: auto;
   }
+
+  /* Reset Preview Scaling for Print */
+  #preview-content-container {
+    transform: none !important;
+    margin-bottom: 0 !important;
+    height: auto !important;
+    width: 210mm !important;
+  }
 }
 
 /* Screen styles for preview */

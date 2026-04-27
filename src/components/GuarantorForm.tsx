@@ -125,17 +125,9 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
 
   return (
     <section className="bg-white p-4 rounded-lg shadow-sm border border-emerald-200">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-          <h3 className="font-semibold text-lg text-emerald-700">สัญญาค้ำประกัน (ผู้ค้ำ)</h3>
-        </div>
-        <button
-          onClick={addGuarantor}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-md text-xs font-medium hover:bg-emerald-100 border border-emerald-200 transition-colors"
-        >
-          <UserPlus size={14} /> เพิ่มผู้ค้ำประกัน
-        </button>
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+        <h3 className="font-semibold text-lg text-emerald-700">สัญญาค้ำประกัน (ผู้ค้ำ)</h3>
       </div>
 
       <div className="space-y-6">
@@ -411,16 +403,18 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
         ))}
       </div>
 
-      {data.length > 2 && (
-        <div className="mt-4 flex justify-center">
-          <button
-            onClick={addGuarantor}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md text-sm font-bold hover:bg-emerald-700 shadow-sm transition-colors"
-          >
-            <Plus size={18} /> เพิ่มผู้ค้ำประกันอีกคน
-          </button>
+      <button
+        onClick={addGuarantor}
+        className="mt-6 w-full py-10 border-2 border-dashed border-emerald-200 rounded-xl bg-emerald-50/30 hover:bg-emerald-50 hover:border-emerald-400 transition-all group flex flex-col items-center justify-center gap-3"
+      >
+        <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+          <Plus size={28} strokeWidth={2.5} />
         </div>
-      )}
+        <div className="text-center">
+          <p className="text-emerald-700 font-bold text-base">เพิ่มผู้ค้ำประกัน</p>
+          <p className="text-xs text-emerald-600/70 mt-1">ระบุข้อมูลบุคคลหรือนิติบุคคลเพิ่มเติมเพื่อร่วมค้ำประกันสัญญาหลัก</p>
+        </div>
+      </button>
     </section>
   );
 }

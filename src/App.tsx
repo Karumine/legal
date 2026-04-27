@@ -124,7 +124,7 @@ function App() {
     const handleScroll = () => {
       // Don't save if this scroll was triggered by our restoration or section sync
       if (isInternalScrollRef.current) return;
-      
+
       if (currentTabRef.current) {
         scrollPositionsRef.current[currentTabRef.current] = previewPanel.scrollTop;
       }
@@ -132,6 +132,22 @@ function App() {
 
     previewPanel.addEventListener('scroll', handleScroll, { passive: true });
     return () => previewPanel.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // ── Preview Scaling Logic ──
+  const [previewScale, setPreviewScale] = useState(1);
+  useEffect(() => {
+    const panel = document.getElementById('preview-panel');
+    if (!panel) return;
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[0].contentRect.width;
+      const padding = 48; // p-6 (24px * 2)
+      const available = width - padding;
+      const target = 820; // 210mm (~794px) + small buffer
+      setPreviewScale(Math.min(1, available / target));
+    });
+    observer.observe(panel);
+    return () => observer.disconnect();
   }, []);
 
   // Preview scroll sync: switches to the correct preview tab and scrolls to the matching section
@@ -165,7 +181,7 @@ function App() {
           // Brief highlight flash on the target element
           target.classList.add('preview-highlight-flash');
           setTimeout(() => target.classList.remove('preview-highlight-flash'), 1500);
-          
+
           // Reset internal scroll flag after smooth animation finishes
           setTimeout(() => { isInternalScrollRef.current = false; }, 1000);
         } else {
@@ -228,7 +244,7 @@ function App() {
     }
 
     const lastPos = scrollPositionsRef.current[activePreview] || 0;
-    
+
     // Tiny delay to allow Content components to mount and get their layout height
     const timer = setTimeout(() => {
       const previewPanel = document.getElementById('preview-panel');
@@ -399,8 +415,16 @@ function App() {
       .filter((a): a is Agreement => !!a);
 
     const totalAmount = selectedAgreements.reduce((sum, a) => {
-      const amountStr = (a.data as any).totalAmount?.toString() || '0';
-      return sum + (parseFloat(amountStr.replace(/,/g, '')) || 0);
+      if (a.type === 'hirePurchase' || a.type === 'hirePurchaseBack') {
+        // HP: deduct down payment from total amount
+        const total = parseFloat(((a.data as any).totalAmount || '0').toString().replace(/,/g, '')) || 0;
+        const down = parseFloat(((a.data as any).downPayment || '0').toString().replace(/,/g, '')) || 0;
+        return sum + (total - down);
+      } else {
+        // Loan / OD: use loanAmount directly (no down payment concept)
+        const loanAmt = parseFloat(((a.data as any).loanAmount || (a.data as any).totalAmount || '0').toString().replace(/,/g, '')) || 0;
+        return sum + loanAmt;
+      }
     }, 0);
 
     return {
@@ -577,89 +601,96 @@ function App() {
               <CountdownTimer />
             </div>
             <div className="flex items-center gap-2">
-              <button
-                onClick={handleSaveCloudDraft}
-                disabled={isCloudSaving}
-                className={`flex items-center justify-center p-2 rounded-md font-bold transition-all border shadow-sm ${
-                  isCloudSaving
-                    ? 'bg-gray-100 text-gray-400 border-gray-200'
-                    : draftId 
-                      ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
-                      : 'bg-blue-600 text-white border-blue-700 hover:bg-blue-700'
-                }`}
-                title={draftId ? 'อัปเดตร่างบน Cloud' : 'บันทึกร่างลง Cloud'}
-              >
-                {isCloudSaving ? (
-                  <Loader2 size={18} className="animate-spin" />
-                ) : (
-                  <Save size={18} />
-                )}
-              </button>
+              {/* Compact mode logic: hide text if form is too narrow */}
+              {(() => {
+                const showText = !previewVisible || formWidth > 750;
+                return (
+                  <>
+                    <button
+                      onClick={handleSaveCloudDraft}
+                      disabled={isCloudSaving}
+                      className={`flex items-center justify-center p-2 rounded-md font-bold transition-all border shadow-sm ${isCloudSaving
+                        ? 'bg-gray-100 text-gray-400 border-gray-200'
+                        : draftId
+                          ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
+                          : 'bg-blue-600 text-white border-blue-700 hover:bg-blue-700'
+                        }`}
+                      title={draftId ? 'อัปเดตร่างบน Cloud' : 'บันทึกร่างลง Cloud'}
+                    >
+                      {isCloudSaving ? (
+                        <Loader2 size={18} className="animate-spin" />
+                      ) : (
+                        <Save size={18} />
+                      )}
+                    </button>
 
-              {draftId && (
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    notify('คัดลอกลิงก์เรียบร้อย! คุณสามารถส่งลิงก์นี้ให้เพื่อนร่วมงานทำต่อได้เลย', 'success');
-                  }}
-                  className="flex items-center gap-2 px-3 py-2 rounded-md font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all text-sm shadow-sm"
-                  title="คัดลอกลิงก์สำหรับส่งต่อ"
-                >
-                  <Share2 size={16} />
-                  แชร์ลิงก์
-                </button>
-              )}
+                    {draftId && (
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(window.location.href);
+                          notify('คัดลอกลิงก์เรียบร้อย! คุณสามารถส่งลิงก์นี้ให้เพื่อนร่วมงานทำต่อได้เลย', 'success');
+                        }}
+                        className="flex items-center gap-2 px-3 py-2 rounded-md font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all text-sm shadow-sm"
+                        title="คัดลอกลิงก์สำหรับส่งต่อ"
+                      >
+                        <Share2 size={16} />
+                        {showText && <span>แชร์ลิงก์</span>}
+                      </button>
+                    )}
 
-              <div className="w-px h-6 bg-gray-200 mx-1" />
+                    <div className="w-px h-6 bg-gray-200 mx-1" />
 
-              <button
-                onClick={() => setPreviewVisible(!previewVisible)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md font-medium transition-all text-sm border ${
-                  previewVisible
-                    ? 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
-                    : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
-                }`}
-                title={previewVisible ? 'ซ่อน Preview' : 'แสดง Preview'}
-              >
-                {previewVisible ? <EyeOff size={15} /> : <Eye size={15} />}
-                {previewVisible ? 'ซ่อน' : 'แสดง Preview'}
-              </button>
-              <button
-                onClick={() => {
-                  if (window.confirm('คุณต้องการรีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นหรือไม่? ข้อมูลเก่าจะหายไปทั้งหมด')) {
-                    localStorage.removeItem('legalAppData');
-                    window.location.reload();
-                  }
-                }}
-                className="flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3 py-2 rounded-md font-medium transition-colors text-sm"
-                title="ล้างข้อมูลเริ่มต้นใหม่"
-              >
-                <RotateCcw size={15} /> รีเซ็ต
-              </button>
-              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-md border border-slate-200 h-10">
-                <button
-                  onClick={() => { setPrintMode('review'); setTimeout(handlePrint, 100); }}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all text-sm h-full ${
-                    printMode === 'review' 
-                      ? 'bg-blue-600 text-white shadow-sm' 
-                      : 'bg-transparent text-slate-600 hover:bg-slate-200'
-                  }`}
-                  title="พิมพ์แบบมีไฮไลต์จาง สำหรับตรวจทาน"
-                >
-                  <Printer size={14} /> ตรวจ
-                </button>
-                <button
-                  onClick={() => { setPrintMode('final'); setTimeout(handlePrint, 100); }}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all text-sm h-full ${
-                    printMode === 'final' 
-                      ? 'bg-slate-800 text-white shadow-sm' 
-                      : 'bg-transparent text-slate-600 hover:bg-slate-200'
-                  }`}
-                  title="พิมพ์แบบตัวอักษรธรรมดา สำหรับเอาไปทำสัญญา"
-                >
-                  <Printer size={14} /> ทำสัญญา
-                </button>
-              </div>
+                    <button
+                      onClick={() => setPreviewVisible(!previewVisible)}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md font-medium transition-all text-sm border ${previewVisible
+                        ? 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
+                        : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+                        }`}
+                      title={previewVisible ? 'ซ่อน Preview' : 'แสดง Preview'}
+                    >
+                      {previewVisible ? <EyeOff size={15} /> : <Eye size={15} />}
+                      {showText && <span>{previewVisible ? 'ซ่อน' : 'แสดง Preview'}</span>}
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (window.confirm('คุณต้องการรีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นหรือไม่? ข้อมูลเก่าจะหายไปทั้งหมด')) {
+                          localStorage.removeItem('legalAppData');
+                          window.location.reload();
+                        }
+                      }}
+                      className="flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3 py-2 rounded-md font-medium transition-colors text-sm"
+                      title="ล้างข้อมูลเริ่มต้นใหม่"
+                    >
+                      <RotateCcw size={15} />
+                      {showText && <span>รีเซ็ต</span>}
+                    </button>
+                    <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-md border border-slate-200 h-10">
+                      <button
+                        onClick={() => { setPrintMode('review'); setTimeout(handlePrint, 100); }}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all text-sm h-full ${printMode === 'review'
+                          ? 'bg-blue-600 text-white shadow-sm'
+                          : 'bg-transparent text-slate-600 hover:bg-slate-200'
+                          }`}
+                        title="พิมพ์แบบมีไฮไลต์จาง สำหรับตรวจทาน"
+                      >
+                        <Printer size={14} />
+                        {showText && <span>ตรวจ</span>}
+                      </button>
+                      <button
+                        onClick={() => { setPrintMode('final'); setTimeout(handlePrint, 100); }}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all text-sm h-full ${printMode === 'final'
+                          ? 'bg-slate-800 text-white shadow-sm'
+                          : 'bg-transparent text-slate-600 hover:bg-slate-200'
+                          }`}
+                        title="พิมพ์แบบตัวอักษรธรรมดา สำหรับเอาไปทำสัญญา"
+                      >
+                        <Printer size={14} />
+                        {showText && <span>ทำสัญญา</span>}
+                      </button>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>
@@ -836,149 +867,152 @@ function App() {
 
       {/* Right Panel: Preview */}
       {previewVisible && (
-      <div id="preview-panel" className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col transform-gpu">
-        <div className="sticky top-0 z-10 bg-slate-200 px-4 pt-3 pb-2 print:hidden flex justify-center">
-          <div className="w-[210mm] max-w-full">
-          <div className="bg-white rounded-t-lg border border-b-0 border-slate-200 px-3 py-2 flex items-center gap-2" ref={dropdownRef}>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">สัญญาหลัก</span>
-            <div className="flex gap-1.5 flex-wrap">
-              {mainContractGroups.map((group) => {
-                const activeBuyback = group.buybacks.find(b => b.key === activePreview);
-                const isActive = activePreview === group.key || !!activeBuyback;
-                const hasBuybacks = group.buybacks.length > 0;
-                return (
-                  <div key={group.id} className="relative">
-                    <button
-                      onClick={() => {
-                        if (hasBuybacks) {
-                          setOpenDropdownId(openDropdownId === group.id ? null : group.id);
-                        }
-                        if (!hasBuybacks) {
-                          setActivePreview(group.key);
-                        }
-                      }}
-                      className={`flex items-center gap-1.5 py-1.5 px-3 text-xs font-semibold rounded-md transition-all whitespace-nowrap ${
-                        isActive
-                          ? 'bg-slate-800 text-white shadow-md'
-                          : 'text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200'
-                      }`}
-                    >
-                      <FileText size={13} className={isActive ? 'text-white' : 'text-slate-400'} />
-                      <span>{activeBuyback ? activeBuyback.label : group.label}</span>
-                      {group.contractNo && <span className={`text-[10px] ${isActive ? 'text-slate-300' : 'text-slate-400'}`}>({group.contractNo})</span>}
-                      {hasBuybacks && <ChevronDown size={12} className={`ml-0.5 transition-transform ${openDropdownId === group.id ? 'rotate-180' : ''}`} />}
-                    </button>
-                    {/* Dropdown for buybacks */}
-                    {hasBuybacks && openDropdownId === group.id && (
-                      <div className="absolute top-full left-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 min-w-[200px] animate-in fade-in slide-in-from-top-1 duration-150">
-                        <button
-                          onClick={() => { setActivePreview(group.key); setOpenDropdownId(null); }}
-                          className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors ${
-                            activePreview === group.key ? 'bg-slate-100 font-bold text-slate-800' : 'text-slate-600 hover:bg-slate-50'
-                          }`}
-                        >
-                          <FileText size={12} /> {group.label}
-                        </button>
-                        <div className="border-t border-slate-100 my-1" />
-                        {group.buybacks.map(bb => (
-                          <button
-                            key={bb.key}
-                            onClick={() => { setActivePreview(bb.key); setOpenDropdownId(null); }}
-                            className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors ${
-                              activePreview === bb.key ? 'bg-orange-50 font-bold text-orange-700' : 'text-slate-600 hover:bg-slate-50'
-                            }`}
-                          >
-                            <ChevronRight size={12} className="text-orange-400" /> {bb.label}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* ── Row 2: Supplementary Tabs ── */}
-          <div className="bg-white rounded-b-lg border border-t-0 border-slate-200 shadow-sm px-3 py-2 flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">สัญญาเสริม</span>
-            <div className="flex gap-1 flex-wrap">
-              {supplementaryTabs.map(tab => (
-                <button
-                  key={tab.key}
-                  onClick={() => setActivePreview(tab.key)}
-                  className={`flex items-center gap-1.5 py-1.5 px-3 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
-                    activePreview === tab.key
-                      ? 'bg-blue-600 text-white shadow-sm'
-                      : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
-                  }`}
-                >
-                  {suppIcon(tab.icon)}
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
-          </div>
-        </div>
-
-        {/* Preview Content */}
-        <div className="flex-1 p-6 print:p-0 flex flex-col items-center">
-          <div className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0">
-            {activePreview.startsWith('agreement-') && (
-              data.agreements.find(a => `agreement-${a.id}` === activePreview) &&
-              renderContractPreview(data.agreements.find(a => `agreement-${a.id}` === activePreview)!)
-            )}
-
-            {activePreview.startsWith('buyback:') && (
-              (() => {
-                const parts = activePreview.split(':');
-                const agreementId = parts[1];
-                const buybackId = parts[2];
-                const agreement = data.agreements.find(a => a.id === agreementId);
-                if (agreement && (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')) {
-                  const hp = agreement.data as HirePurchaseData;
-                  const buyback = hp.buybacks?.find(b => b.id === buybackId);
-                  if (hp.hasBuyback && buyback) {
+        <div id="preview-panel" className="flex-1 overflow-y-auto bg-slate-200 print:p-0 print:bg-white print:overflow-visible flex flex-col transform-gpu">
+          <div className="sticky top-0 z-10 bg-slate-200 px-4 pt-3 pb-2 print:hidden flex justify-center">
+            <div className="w-[210mm] max-w-full">
+              <div className="bg-white rounded-t-lg border border-b-0 border-slate-200 px-3 py-2 flex items-center gap-2" ref={dropdownRef}>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">สัญญาหลัก</span>
+                <div className="flex gap-1.5 flex-wrap">
+                  {mainContractGroups.map((group) => {
+                    const activeBuyback = group.buybacks.find(b => b.key === activePreview);
+                    const isActive = activePreview === group.key || !!activeBuyback;
+                    const hasBuybacks = group.buybacks.length > 0;
                     return (
-                      <BuybackPreview
-                        data={buyback}
-                        agileInfo={data.agileInfo}
-                        tkInfo={data.tkInfo}
-                        hpData={hp}
-                        customerInfo={data.customerInfo}
-                        mainContractType={agreement.type}
-                      />
+                      <div key={group.id} className="relative">
+                        <button
+                          onClick={() => {
+                            if (hasBuybacks) {
+                              setOpenDropdownId(openDropdownId === group.id ? null : group.id);
+                            }
+                            if (!hasBuybacks) {
+                              setActivePreview(group.key);
+                            }
+                          }}
+                          className={`flex items-center gap-1.5 py-1.5 px-3 text-xs font-semibold rounded-md transition-all whitespace-nowrap ${isActive
+                            ? 'bg-slate-800 text-white shadow-md'
+                            : 'text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200'
+                            }`}
+                        >
+                          <FileText size={13} className={isActive ? 'text-white' : 'text-slate-400'} />
+                          <span>{activeBuyback ? activeBuyback.label : group.label}</span>
+                          {group.contractNo && <span className={`text-[10px] ${isActive ? 'text-slate-300' : 'text-slate-400'}`}>({group.contractNo})</span>}
+                          {hasBuybacks && <ChevronDown size={12} className={`ml-0.5 transition-transform ${openDropdownId === group.id ? 'rotate-180' : ''}`} />}
+                        </button>
+                        {/* Dropdown for buybacks */}
+                        {hasBuybacks && openDropdownId === group.id && (
+                          <div className="absolute top-full left-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 min-w-[200px] animate-in fade-in slide-in-from-top-1 duration-150">
+                            <button
+                              onClick={() => { setActivePreview(group.key); setOpenDropdownId(null); }}
+                              className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors ${activePreview === group.key ? 'bg-slate-100 font-bold text-slate-800' : 'text-slate-600 hover:bg-slate-50'
+                                }`}
+                            >
+                              <FileText size={12} /> {group.label}
+                            </button>
+                            <div className="border-t border-slate-100 my-1" />
+                            {group.buybacks.map(bb => (
+                              <button
+                                key={bb.key}
+                                onClick={() => { setActivePreview(bb.key); setOpenDropdownId(null); }}
+                                className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors ${activePreview === bb.key ? 'bg-orange-50 font-bold text-orange-700' : 'text-slate-600 hover:bg-slate-50'
+                                  }`}
+                              >
+                                <ChevronRight size={12} className="text-orange-400" /> {bb.label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     );
+                  })}
+                </div>
+              </div>
+
+              {/* ── Row 2: Supplementary Tabs ── */}
+              <div className="bg-white rounded-b-lg border border-t-0 border-slate-200 shadow-sm px-3 py-2 flex items-center gap-2">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">สัญญาเสริม</span>
+                <div className="flex gap-1 flex-wrap">
+                  {supplementaryTabs.map(tab => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setActivePreview(tab.key)}
+                      className={`flex items-center gap-1.5 py-1.5 px-3 text-xs font-medium rounded-md transition-all whitespace-nowrap ${activePreview === tab.key
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                        }`}
+                    >
+                      {suppIcon(tab.icon)}
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1 p-6 print:p-0 flex flex-col items-center overflow-x-hidden">
+            <div
+              id="preview-content-container"
+              className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0 origin-top transition-all duration-200"
+              style={{
+                transform: previewScale < 1 ? `scale(${previewScale})` : 'none',
+                height: previewScale < 1 ? 'max-content' : 'auto',
+                marginBottom: previewScale < 1 ? `calc(-100% * ${1 - previewScale})` : '0'
+              }}
+            >
+              {activePreview.startsWith('agreement-') && (
+                data.agreements.find(a => `agreement-${a.id}` === activePreview) &&
+                renderContractPreview(data.agreements.find(a => `agreement-${a.id}` === activePreview)!)
+              )}
+
+              {activePreview.startsWith('buyback:') && (
+                (() => {
+                  const parts = activePreview.split(':');
+                  const agreementId = parts[1];
+                  const buybackId = parts[2];
+                  const agreement = data.agreements.find(a => a.id === agreementId);
+                  if (agreement && (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack')) {
+                    const hp = agreement.data as HirePurchaseData;
+                    const buyback = hp.buybacks?.find(b => b.id === buybackId);
+                    if (hp.hasBuyback && buyback) {
+                      return (
+                        <BuybackPreview
+                          data={buyback}
+                          agileInfo={data.agileInfo}
+                          tkInfo={data.tkInfo}
+                          hpData={hp}
+                          customerInfo={data.customerInfo}
+                          mainContractType={agreement.type}
+                        />
+                      );
+                    }
                   }
-                }
-                return null;
-              })()
-            )}
-            {activePreview === 'guarantee' && data.guarantors.length > 0 && (
-              <GuaranteePreview data={buildGuaranteeData(data.guarantors)} />
-            )}
-            {activePreview === 'jointVenture' && (
-              <JointVenturePreview
-                data={data.jointVentureData}
-                agileInfo={data.agileInfo}
-                tkInfo={data.tkInfo}
-                agreements={data.agreements}
-                appData={data}
-              />
-            )}
-            {activePreview === 'serviceAgreement' && (
-              <ServiceAgreementPreview
-                data={data.serviceAgreementData}
-                appData={data}
-              />
-            )}
-            {activePreview === 'feePayment' && (
-              <ContractPreview data={buildFeeContractData()} />
-            )}
+                  return null;
+                })()
+              )}
+              {activePreview === 'guarantee' && data.guarantors.length > 0 && (
+                <GuaranteePreview data={buildGuaranteeData(data.guarantors)} />
+              )}
+              {activePreview === 'jointVenture' && (
+                <JointVenturePreview
+                  data={data.jointVentureData}
+                  agileInfo={data.agileInfo}
+                  tkInfo={data.tkInfo}
+                  agreements={data.agreements}
+                  appData={data}
+                />
+              )}
+              {activePreview === 'serviceAgreement' && (
+                <ServiceAgreementPreview
+                  data={data.serviceAgreementData}
+                  appData={data}
+                />
+              )}
+              {activePreview === 'feePayment' && (
+                <ContractPreview data={buildFeeContractData()} />
+              )}
+            </div>
           </div>
         </div>
-      </div>
       )}
       <NotificationContainer />
     </div>

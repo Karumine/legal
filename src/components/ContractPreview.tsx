@@ -29,7 +29,7 @@ export default function ContractPreview({ data }: Props) {
   };
 
 
-  const totalPages = 2;
+  const totalPages = data.items.length > 2 ? 3 : 2;
 
   const PageFooter = ({ pageNum }: { pageNum: number }) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
@@ -92,10 +92,10 @@ export default function ContractPreview({ data }: Props) {
           </div>
         </div>
 
-        {data.items.map((item, index) => {
+        {data.items.slice(0, 2).map((item, index) => {
           const label = CONTRACT_TYPE_LABELS[item.type];
           return (
-            <div key={item.id} className={`flex gap-2 pl-6 text-justify ${index === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
+            <div key={item.id} className={`flex gap-2 pl-6 text-justify ${index === 1 || index === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
               <span className="shrink-0 font-bold whitespace-nowrap">1.{index + 1}.</span>
               <div className="flex-1 text-justify">
                 ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
@@ -104,17 +104,43 @@ export default function ContractPreview({ data }: Props) {
           );
         })}
 
-        <div className="pl-12 mb-6 ">
-          โดยตกลงชำระค่าธรรมเนียมตามข้อ 1. ในคราวเดียว ณ วันที่ทำสัญญาเช่าซื้อดังกล่าว
-        </div>
+        {data.items.length <= 2 && (
+          <div className="pl-12 mb-6 ">
+            โดยตกลงชำระค่าธรรมเนียมตามข้อ 1. ในคราวเดียว ณ วันที่ทำสัญญาเช่าซื้อดังกล่าว
+          </div>
+        )}
 
         <PageFooter pageNum={1} />
       </div>
 
-      {/* Page 2 */}
+      {/* Page 2 (Items 1.3+ if any) */}
+      {data.items.length > 2 && (
+        <div className="print-page relative">
+          <PageHeader />
+          <div className="mt-8">
+            {data.items.slice(2).map((item, index) => {
+              const actualIndex = index + 2;
+              const label = CONTRACT_TYPE_LABELS[item.type];
+              return (
+                <div key={item.id} className={`flex gap-2 pl-6 text-justify ${actualIndex === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
+                  <span className="shrink-0 font-bold whitespace-nowrap">1.{actualIndex + 1}.</span>
+                  <div className="flex-1 text-justify">
+                    ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
+                  </div>
+                </div>
+              );
+            })}
+            <div className="pl-12 mb-6 ">
+              โดยตกลงชำระค่าธรรมเนียมตามข้อ 1. ในคราวเดียว ณ วันที่ทำสัญญาเช่าซื้อดังกล่าว
+            </div>
+          </div>
+          <PageFooter pageNum={2} />
+        </div>
+      )}
+
+      {/* Final Page (Page 2 or 3) */}
       <div className="print-page relative">
         <PageHeader />
-
         <div className="mb-6 mt-8 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">2.</span>
           <div className="flex-1 text-justify">
@@ -131,7 +157,7 @@ export default function ContractPreview({ data }: Props) {
 
         <SignatureSection data={data} />
 
-        <PageFooter pageNum={2} />
+        <PageFooter pageNum={totalPages} />
       </div>
     </div>
   );
