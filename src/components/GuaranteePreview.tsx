@@ -53,26 +53,26 @@ export default function GuaranteePreview({ data }: Props) {
         </div>
 
         <div className="indent-10 mb-6">
-          สัญญาค้ำประกัน <b>("สัญญา")</b> ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> (<b>"วันที่สัญญาค้ำประกันมีผลบังคับ"</b>) โดยและระหว่าง
+          สัญญาค้ำประกัน <b>(“สัญญา”)</b> ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> (<b>“วันที่สัญญาค้ำประกันมีผลบังคับ”</b>) โดยและระหว่าง
         </div>
 
         <div className="space-y-4 mb-6">
           <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-6">(1)</span>
             <div className="flex-1">
-              <b><Highlight>{data.lenderCompany}</Highlight></b> (โดย<Highlight>{data.lenderDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lenderAddress, data.lenderPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lenderTaxId)}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 1"</b>)
+              <b><Highlight>{data.lenderCompany}</Highlight></b> (โดย<Highlight>{data.lenderDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lenderAddress, data.lenderPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lenderTaxId)}</Highlight> (<b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
             </div>
           </div>
 
           <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-6">(2)</span>
             <div className="flex-1">
-              <b><Highlight>{data.borrowerCompany}</Highlight></b> (โดย<Highlight>{data.borrowerDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.borrowerAddress, data.borrowerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.borrowerTaxId)}</Highlight> (<b>"ผู้ให้เช่าซื้อฝ่ายที่ 2"</b>)
+              <b><Highlight>{data.borrowerCompany}</Highlight></b> (โดย<Highlight>{data.borrowerDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.borrowerAddress, data.borrowerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.borrowerTaxId)}</Highlight> (<b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
             </div>
           </div>
 
           <div className="indent-10 mb-6">
-            ซึ่ง (1) และ (2) จะเรียกรวมกันว่า <b>"ผู้ให้เช่าซื้อ"</b> ฝ่ายหนึ่ง
+            ซึ่ง (1) และ (2) จะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b> ฝ่ายหนึ่ง
           </div>
 
           {data.guarantors.map((guarantor, idx) => {
@@ -84,11 +84,11 @@ export default function GuaranteePreview({ data }: Props) {
                 <div className="flex-1">
                   {isCorporate ? (
                     <>
-                      <b><Highlight>{guarantor.name}</Highlight></b> (โดย<Highlight>{guarantor.directors}</Highlight> {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                      <b><Highlight>{guarantor.name}</Highlight></b> (โดย<Highlight>{guarantor.directors}</Highlight> {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> (<b>“ผู้ค้ำประกันคนที่ {idx + 1}”</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
                     </>
                   ) : (
                     <>
-                      <b><Highlight>{guarantor.name}</Highlight></b> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (<b>"ผู้ค้ำประกันคนที่ {idx + 1}"</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                      <b><Highlight>{guarantor.name}</Highlight></b> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (<b>“ผู้ค้ำประกันคนที่ {idx + 1}”</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
                     </>
                   )}
                 </div>
@@ -608,7 +608,7 @@ export default function GuaranteePreview({ data }: Props) {
               </div>
 
               <div className="indent-10 mb-8 leading-[1.8]">
-                ข้าพเจ้า <Highlight>{guarantor.name}</Highlight> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> ("ผู้ค้ำประกัน") ขอยืนยันว่าในขณะที่ข้าพเจ้าทำนิติกรรมใดๆ กับบริษัทฯ ข้าพเจ้าไม่เป็นบุคคลล้มละลาย หรือถูกศาลพิทักษ์ทรัพย์เด็ดขาด หรือพิทักษ์ทรัพย์ชั่วคราว และข้าพเจ้าขอรับรองว่าข้าพเจ้า <span className="font-bold underline">{guarantor.isMarried ? 'ได้' : 'มิได้'}</span> ทำการสมรสโดยจดทะเบียน
+                ข้าพเจ้า <Highlight>{guarantor.name}</Highlight> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (“ผู้ค้ำประกัน”) ขอยืนยันว่าในขณะที่ข้าพเจ้าทำนิติกรรมใดๆ กับบริษัทฯ ข้าพเจ้าไม่เป็นบุคคลล้มละลาย หรือถูกศาลพิทักษ์ทรัพย์เด็ดขาด หรือพิทักษ์ทรัพย์ชั่วคราว และข้าพเจ้าขอรับรองว่าข้าพเจ้า <span className="font-bold underline">{guarantor.isMarried ? 'ได้' : 'มิได้'}</span> ทำการสมรสโดยจดทะเบียน
               </div>
 
               <div className="flex flex-col items-center gap-16 mt-32">

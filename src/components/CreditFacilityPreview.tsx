@@ -80,26 +80,26 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <div className="mb-4 mt-6">โดยและระหว่าง</div>
 
         <div className="space-y-4 mb-6">
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-4">1)</span>
+          <div className="flex gap-4 text-justify">
+            <span className="shrink-0 w-6">1)</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 1”</b>)
             </div>
           </div>
 
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-4">2)</span>
+          <div className="flex gap-4 text-justify">
+            <span className="shrink-0 w-6">2)</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย <Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 2”</b>)
             </div>
           </div>
 
-          <div className="pl-6">
+          <div className="pl-10">
             (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้สินเชื่อ”</b>) และ
           </div>
 
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-4">3)</span>
+          <div className="flex gap-4 text-justify">
+            <span className="shrink-0 w-6">3)</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
             </div>
@@ -130,7 +130,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div>
             <div className="flex gap-2">
               <span>ค.</span>
-              <div className="flex-1 mb-4">ผู้ให้สินเชื่อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้สินเชื่อในการติดต่อประสานงานกับผู้กู้เพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ <b>("ตัวแทนสินเชื่อ")</b></div>
+              <div className="flex-1 mb-4">ผู้ให้สินเชื่อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้สินเชื่อในการติดต่อประสานงานกับผู้กู้เพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ <b>(“ตัวแทนสินเชื่อ”)</b></div>
             </div>
             <div className="flex gap-2 mb-6">
               <span>ง.</span>
@@ -2016,14 +2016,14 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-4">2.</span>
               <div className="flex-1">
-                <span className="font-bold">รายละเอียดการชำระ :</span> เช็คแต่ละฉบับจะถูกสั่งจ่ายในนามผู้ให้สินเชื่อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ "<span className="underline">รายละเอียดค่างวดแต่ละงวดและวิธีการคำนวณค่างวด</span>" ตามเอกสารแนบท้ายหมายเลข 5 ของสัญญาให้สินเชื่อฉบับนี้
+                <span className="font-bold">รายละเอียดการชำระ :</span> เช็คแต่ละฉบับจะถูกสั่งจ่ายในนามผู้ให้สินเชื่อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ “<span className="underline">รายละเอียดค่างวดแต่ละงวดและวิธีการคำนวณค่างวด</span>” ตามเอกสารแนบท้ายหมายเลข 5 ของสัญญาให้สินเชื่อฉบับนี้
               </div>
             </div>
 
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-4">3.</span>
               <div className="flex-1">
-                <span className="font-bold">การยืนยันรายละเอียดและสำเนาภาพถ่ายเช็ค :</span> คู่สัญญาทุกฝ่ายตกลงให้ถือว่า "ใบรับเช็ค" หรือ "สำเนาภาพถ่ายเช็คทั้งหมด" ที่มีการลงนามรับมอบโดยผู้ให้สินเชื่อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
+                <span className="font-bold">การยืนยันรายละเอียดและสำเนาภาพถ่ายเช็ค :</span> คู่สัญญาทุกฝ่ายตกลงให้ถือว่า “ใบรับเช็ค” หรือ “สำเนาภาพถ่ายเช็คทั้งหมด” ที่มีการลงนามรับมอบโดยผู้ให้สินเชื่อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
               </div>
             </div>
 

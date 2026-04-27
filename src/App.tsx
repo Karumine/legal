@@ -17,6 +17,8 @@ import FeePaymentForm from './components/FeePaymentForm';
 import ContractPreview from './components/ContractPreview';
 import CreditFacilityForm from './components/CreditFacilityForm';
 import CreditFacilityPreview from './components/CreditFacilityPreview';
+import ODForm from './components/ODForm';
+import ODPreview from './components/ODPreview';
 import type { GuaranteeData } from './types/guarantee';
 import type { ContractData } from './types/contract';
 import { thaiBahtText } from './utils/thaiBahtText';
@@ -297,7 +299,32 @@ function App() {
             borrowerSignatories: data.customerInfo.directors,
             conditions32: ['ผู้กู้ตกลงและยินยอมให้ผู้ให้สินเชื่อมีสิทธิในการหักเงินจากวงเงินกู้ที่จะได้รับตามสัญญาฉบับนี้ เพื่อการชำระค่าจดทะเบียนจำนองหลักประกัน ค่าอากรแสตมป์ ชำระค่าธรรมเนียมการทำสัญญา เงินดาวน์ ค่าประกันภัยเครื่องจักร ค่าจดทะเบียนกรรมสิทธิ์เครื่องจักร รวมถึงค่าใช้จ่ายอื่นๆ ทั้งตามสัญญาฉบับนี้ และสัญญาฉบับอื่นๆ ที่ผู้กู้มีหน้าที่ต้องชำระให้แก่ผู้ให้สินเชื่อ ก่อนการเบิกใช้เงินตามสัญญาฉบับนี้']
           }
-          : {}
+          : (type === 'od')
+            ? {
+              contractNo: '',
+              contractDate: TODAY,
+              madeAt: data.agileInfo.companyName,
+              effectiveDate: TODAY,
+              lender1: { name: data.agileInfo.companyName, taxId: data.agileInfo.taxId, address: data.agileInfo.address, proportion: '20' },
+              lender2: { name: data.tkInfo.companyName, taxId: data.tkInfo.taxId, address: data.tkInfo.address, proportion: '80' },
+              loanAmount: '0',
+              installments: '',
+              installmentAmount: '',
+              interestRate: '15',
+              interestType: 'แบบลดต้นลดดอก',
+              businessPurpose: '',
+              firstInstallmentDate: '',
+              paymentDay: '',
+              lastInstallmentDate: '',
+              collateralValue: '0',
+              collateralAssets: [],
+              stampDuty: '',
+              lender1Signatories: data.agileInfo.directors,
+              lender2Signatories: data.tkInfo.directors,
+              borrowerSignatories: data.customerInfo.directors,
+              conditions32: ['ผู้กู้ตกลงและยินยอมให้ผู้ให้สินเชื่อมีสิทธิในการหักเงินจากวงเงินกู้ที่จะได้รับตามสัญญาฉบับนี้ เพื่อการชำระค่าจดทะเบียนจำนองหลักประกัน ค่าอากรแสตมป์ ชำระค่าธรรมเนียมการทำสัญญา เงินดาวน์ ค่าประกันภัยเครื่องจักร ค่าจดทะเบียนกรรมสิทธิ์เครื่องจักร รวมถึงค่าใช้จ่ายอื่นๆ ทั้งตามสัญญาฉบับนี้ และสัญญาฉบับอื่นๆ ที่ผู้กู้มีหน้าที่ต้องชำระให้แก่ผู้ให้สินเชื่อ ก่อนการเบิกใช้เงินตามสัญญาฉบับนี้']
+            }
+            : {}
     };
     setData(prev => ({
       ...prev,
@@ -333,6 +360,9 @@ function App() {
         if (a.type === 'loan') {
           return { ...a, data: { ...a.data, lender1: { ...a.data.lender1, name: info.companyName, taxId: info.taxId, address: info.address, postalCode: info.postalCode }, lender1Signatories: info.directors } };
         }
+        if (a.type === 'od') {
+          return { ...a, data: { ...a.data, lender1: { ...a.data.lender1, name: info.companyName, taxId: info.taxId, address: info.address, postalCode: info.postalCode }, lender1Signatories: info.directors } };
+        }
         return a;
       })
     }));
@@ -347,6 +377,9 @@ function App() {
           return { ...a, data: { ...a.data, lessor2: { ...a.data.lessor2, name: info.companyName, taxId: info.taxId, address: info.address, postalCode: info.postalCode }, lessor2Signatories: info.directors } };
         }
         if (a.type === 'loan') {
+          return { ...a, data: { ...a.data, lender2: { ...a.data.lender2, name: info.companyName, taxId: info.taxId, address: info.address, postalCode: info.postalCode }, lender2Signatories: info.directors } };
+        }
+        if (a.type === 'od') {
           return { ...a, data: { ...a.data, lender2: { ...a.data.lender2, name: info.companyName, taxId: info.taxId, address: info.address, postalCode: info.postalCode }, lender2Signatories: info.directors } };
         }
         return a;
@@ -464,12 +497,14 @@ function App() {
 
 
   const renderContractPreview = (agreement: Agreement) => {
+    const filteredGuarantors = data.guarantors.filter(g => g.selectedAgreementIds?.includes(agreement.id));
+
     if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
       return (
         <HirePurchasePreview
           data={agreement.data}
           customerInfo={data.customerInfo}
-          guarantors={data.guarantors}
+          guarantors={filteredGuarantors}
           type={agreement.type}
         />
       );
@@ -481,7 +516,18 @@ function App() {
           customerInfo={data.customerInfo}
           agileInfo={data.agileInfo}
           tkInfo={data.tkInfo}
-          guarantors={data.guarantors}
+          guarantors={filteredGuarantors}
+        />
+      );
+    }
+    if (agreement.type === 'od') {
+      return (
+        <ODPreview
+          data={agreement.data}
+          customerInfo={data.customerInfo}
+          agileInfo={data.agileInfo}
+          tkInfo={data.tkInfo}
+          guarantors={filteredGuarantors}
         />
       );
     }
@@ -708,7 +754,17 @@ function App() {
                   onFocusSection={(sectionId: string, tabKey?: string) => scrollToPreviewSection(sectionId, tabKey || `agreement-${activeAgreement.id}`)}
                 />
               )}
-              {activeAgreement.type !== 'hirePurchase' && activeAgreement.type !== 'hirePurchaseBack' && activeAgreement.type !== 'loan' && (
+              {activeAgreement.type === 'od' && (
+                <ODForm
+                  data={activeAgreement.data}
+                  customerInfo={data.customerInfo}
+                  agreements={data.agreements}
+                  currentAgreementId={activeAgreement.id}
+                  onChange={(od: any) => updateAgreementData(activeAgreement.id, od)}
+                  onFocusSection={(sectionId: string, tabKey?: string) => scrollToPreviewSection(sectionId, tabKey || `agreement-${activeAgreement.id}`)}
+                />
+              )}
+              {activeAgreement.type !== 'hirePurchase' && activeAgreement.type !== 'hirePurchaseBack' && activeAgreement.type !== 'loan' && activeAgreement.type !== 'od' && (
                 <section className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
                   <div className="text-center py-8 text-slate-400">
                     <FileText size={32} className="mx-auto mb-2 opacity-50" />

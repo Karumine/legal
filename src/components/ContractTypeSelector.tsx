@@ -30,7 +30,7 @@ const contractTypes: { key: ContractType; label: string; icon: React.ReactNode; 
   },
   {
     key: 'od',
-    label: 'OD',
+    label: 'สินเชื่อหมุนเวียน (OD)',
     icon: <CreditCard size={20} />,
     color: 'border-slate-200 hover:border-amber-300',
     activeColor: 'border-amber-500 bg-amber-50',

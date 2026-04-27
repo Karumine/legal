@@ -86,45 +86,45 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         </div>
 
         <div className="indent-10 mb-6">
-          สัญญารับซื้อคืนฉบับนี้ ("<b>สัญญา</b>") ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> ("<b>วันที่สัญญามีผลใช้บังคับ</b>") โดยและระหว่าง:
+          สัญญารับซื้อคืนฉบับนี้ (<b>“สัญญา”</b>) ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> (<b>“วันที่สัญญามีผลใช้บังคับ”</b>) โดยและระหว่าง:
         </div>
 
         <div className="space-y-4 mb-6">
           <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 1"</b>)
+              <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>“บริษัทฝ่ายที่ 1”</b>)
             </div>
           </div>
           <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
-              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>"บริษัทฝ่ายที่ 2"</b>)
+              <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>“บริษัทฝ่ายที่ 2”</b>)
             </div>
           </div>
           <div className="italic">
-            (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>"บริษัทฯ"</b> ฝ่ายหนึ่ง)
+            (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>“บริษัทฯ”</b> ฝ่ายหนึ่ง)
           </div>
           <div id="section-vendor" className="flex gap-2 text-justify">
             <span className="shrink-0 w-4">3.</span>
             <div className="flex-1">
               {data.vendorType === 'shop' ? (
                 <>
-                  ชื่อร้าน <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย <Highlight>{data.vendorDirectors}</Highlight> ผู้ประกอบกิจการ) มีที่อยู่ตามทะเบียนภาษีเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+                  ชื่อร้าน <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย <Highlight>{data.vendorDirectors}</Highlight> ผู้ประกอบกิจการ) มีที่อยู่ตามทะเบียนภาษีเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>“ตัวแทนจำหน่าย”</b>) อีกฝ่ายหนึ่ง
                 </>
               ) : data.vendorType === 'person' ? (
                 <>
-                  <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> มีที่อยู่ตามทะเบียนภาษีเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+                  <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> มีที่อยู่ตามทะเบียนภาษีเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>“ตัวแทนจำหน่าย”</b>) อีกฝ่ายหนึ่ง
                 </>
               ) : (
                 <>
-                  <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย <Highlight>{data.vendorDirectors}</Highlight> {data.vendorType === 'partnership' ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>"ตัวแทนจำหน่าย"</b>) อีกฝ่ายหนึ่ง
+                  <span className="font-bold"><Highlight>{data.vendorName}</Highlight></span> (โดย <Highlight>{data.vendorDirectors}</Highlight> {data.vendorType === 'partnership' ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.vendorAddress, data.vendorPostalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(data.vendorTaxId)}</Highlight> (<b>“ตัวแทนจำหน่าย”</b>) อีกฝ่ายหนึ่ง
                 </>
               )}
             </div>
           </div>
           <div className="italic">
-            (ซึ่งต่อไปในสัญญานี้แต่ละฝ่ายจะเรียกว่า <b>"คู่สัญญา"</b> และจะเรียกรวมกันว่า <b>"คู่สัญญาทุกฝ่าย"</b>)
+            (ซึ่งต่อไปในสัญญานี้แต่ละฝ่ายจะเรียกว่า <b>“คู่สัญญา”</b> และจะเรียกรวมกันว่า <b>“คู่สัญญาทุกฝ่าย”</b>)
           </div>
         </div>
 

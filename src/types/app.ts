@@ -202,6 +202,46 @@ export interface CreditFacilityData {
   conditions32?: string[];
 }
 
+export interface ODData {
+  contractNo: string;
+  contractDate: string;
+  madeAt: string;
+  effectiveDate: string;
+
+  // Lenders
+  lender1: LessorInfo;
+  lender2: LessorInfo;
+
+  // Borrower is customerInfo from AppData
+
+  // Terms
+  loanAmount: string;
+  interestRate: string;
+  interestType: 'แบบคงที่' | 'แบบลดต้นลดดอก';
+  businessPurpose: string;
+
+  // Add these for parity with CF form
+  installments: string;
+  installmentAmount: string;
+  firstInstallmentDate: string;
+  paymentDay: string;
+  lastInstallmentDate: string;
+
+  // Collateral
+  collateralAssets: CollateralAsset[];
+  collateralValue: string;
+
+  stampDuty: string;
+
+  // Signatories
+  lender1Signatories: string;
+  lender2Signatories: string;
+  borrowerSignatories: string;
+
+  // Dynamic conditions (same as CF for consistency)
+  conditions32?: string[];
+}
+
 export interface ServiceAgreementData {
   contractNo: string;
   contractDate: string;
@@ -248,7 +288,7 @@ export interface GuarantorData {
 export interface Agreement {
   id: string;
   type: ContractType;
-  data: HirePurchaseData | any;
+  data: HirePurchaseData | CreditFacilityData | ODData | any;
 }
 
 export interface AppData {
@@ -272,7 +312,7 @@ export const CONTRACT_TYPE_LABELS: Record<ContractType, string> = {
   hirePurchase: 'สัญญาเช่าซื้อ',
   hirePurchaseBack: 'สัญญาเช่าซื้อกลับ',
   loan: 'สัญญาให้สินเชื่อ',
-  od: 'OD',
+  od: 'สัญญาให้สินเชื่อหมุนเวียน แบบมีเงื่อนไข',
 };
 
 export const initialAppData: AppData = {
