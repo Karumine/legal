@@ -963,7 +963,7 @@ function App() {
             </div>
           </div>
 
-          <div className="flex-1 p-6 print:p-0 flex flex-col items-center overflow-x-hidden">
+          <div className="flex-1 p-6 print:p-0 flex flex-col items-center overflow-x-hidden print:overflow-visible">
             <div
               id="preview-content-container"
               ref={previewContentRef}
