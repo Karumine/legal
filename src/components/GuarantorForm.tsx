@@ -12,9 +12,10 @@ interface Props {
   onChange: (data: GuarantorData[]) => void;
   agreements: Agreement[];
   customerInfo: CompanyInfo;
+  onFocusSection?: (sectionId: string) => void;
 }
 
-export default function GuarantorForm({ data, onChange, agreements, customerInfo }: Props) {
+export default function GuarantorForm({ data, onChange, agreements, customerInfo, onFocusSection }: Props) {
   const { notify } = useNotification();
   const prevAgreementsRef = useRef<string[]>([]);
   const mainAgreements = agreements; // Show all main contracts as requested
@@ -124,7 +125,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
   };
 
   return (
-    <section className="bg-white p-4 rounded-lg shadow-sm border border-emerald-200">
+    <section className="bg-white p-4 rounded-lg shadow-sm border border-emerald-200" onFocusCapture={() => onFocusSection?.('guarantee-parties')}>
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
         <h3 className="font-semibold text-lg text-emerald-700">สัญญาค้ำประกัน (ผู้ค้ำ)</h3>

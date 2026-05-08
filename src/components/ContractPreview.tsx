@@ -55,7 +55,7 @@ export default function ContractPreview({ data }: Props) {
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line">
       {/* Page 1 */}
-      <div className="print-page relative">
+      <div data-section-id="fp-general" className="print-page relative">
         <PageHeader />
         <div className="text-center font-bold mb-6">
           <h2 className="text-[16px]">สัญญาชำระค่าธรรมเนียม</h2>
@@ -139,7 +139,7 @@ export default function ContractPreview({ data }: Props) {
       )}
 
       {/* Final Page (Page 2 or 3) */}
-      <div className="print-page relative">
+      <div data-section-id="fp-signature" className="print-page relative">
         <PageHeader />
         <div className="mb-6 mt-8 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">2.</span>

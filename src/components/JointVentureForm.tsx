@@ -3,9 +3,10 @@ import type { JointVentureData } from '../types/app';
 interface Props {
   data: JointVentureData;
   onChange: (data: JointVentureData) => void;
+  onFocusSection?: (sectionId: string) => void;
 }
 
-export default function JointVentureForm({ data, onChange }: Props) {
+export default function JointVentureForm({ data, onChange, onFocusSection }: Props) {
   const handleChange = (field: keyof JointVentureData, value: any) => {
     onChange({ ...data, [field]: value });
   };
@@ -18,7 +19,7 @@ export default function JointVentureForm({ data, onChange }: Props) {
         <h3 className="font-semibold text-lg text-amber-700">สัญญาค้าร่วม</h3>
       </div>
       <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4" onFocusCapture={() => onFocusSection?.('jv-general')}>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญา</label>
             <input
@@ -40,7 +41,7 @@ export default function JointVentureForm({ data, onChange }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 border-t border-gray-100 pt-4">
+        <div className="grid grid-cols-2 gap-4 border-t border-gray-100 pt-4" onFocusCapture={() => onFocusSection?.('jv-proportions')}>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">สัดส่วน คู่สัญญาฝ่ายที่ 1 (%)</label>
             <input

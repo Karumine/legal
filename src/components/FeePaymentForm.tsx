@@ -8,9 +8,10 @@ interface Props {
   data: FeePaymentData;
   onChange: (data: FeePaymentData) => void;
   agreements: Agreement[];
+  onFocusSection?: (sectionId: string) => void;
 }
 
-export default function FeePaymentForm({ data, onChange, agreements }: Props) {
+export default function FeePaymentForm({ data, onChange, agreements, onFocusSection }: Props) {
   const prevAgreementsRef = useRef<string[]>([]);
 
   // Synchronize items with main agreements in real-time
@@ -162,7 +163,7 @@ export default function FeePaymentForm({ data, onChange, agreements }: Props) {
   };
 
   return (
-    <section className="bg-white p-4 rounded-lg shadow-sm border border-rose-200">
+    <section className="bg-white p-4 rounded-lg shadow-sm border border-rose-200" onFocusCapture={() => onFocusSection?.('fp-general')}>
       <div className="flex items-center gap-2 mb-3">
         <div className="w-2 h-2 rounded-full bg-rose-500"></div>
         <h3 className="font-semibold text-lg text-rose-700">สัญญาชำระค่าธรรมเนียม</h3>

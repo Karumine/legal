@@ -6,9 +6,10 @@ interface Props {
   data: ServiceAgreementData;
   appData: AppData;
   onChange: (data: ServiceAgreementData) => void;
+  onFocusSection?: (sectionId: string) => void;
 }
 
-export default function ServiceAgreementForm({ data, appData, onChange }: Props) {
+export default function ServiceAgreementForm({ data, appData, onChange, onFocusSection }: Props) {
   const prevAgreementsRef = useRef<string[]>([]);
 
   // Auto-select ONLY newly added agreements from appData
@@ -216,7 +217,7 @@ export default function ServiceAgreementForm({ data, appData, onChange }: Props)
         <h3 className="font-semibold text-lg text-teal-700">สัญญาจ้างบริการ</h3>
       </div>
       <div className="space-y-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4" onFocusCapture={() => onFocusSection?.('sa-general')}>
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">เลขที่สัญญา</label>
             <input

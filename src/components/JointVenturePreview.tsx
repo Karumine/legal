@@ -233,7 +233,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
+      <div data-section-id="jv-general" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
@@ -290,7 +290,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
       <div className="hidden print:block page-break"></div>
 
       {/* Page 2 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      <div data-section-id="jv-proportions" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="space-y-6 mt-8">

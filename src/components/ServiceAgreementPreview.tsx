@@ -249,7 +249,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
+      <div data-section-id="sa-general" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
@@ -302,7 +302,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
       </div>
 
       {/* Page 2 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      <div data-section-id="sa-clause-3" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="space-y-6 font-normal">
@@ -386,7 +386,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
       </div>
 
       {/* Page 3: Annex Pt. 1 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      <div data-section-id="sa-annex-1" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="text-center font-bold mb-8">
@@ -460,7 +460,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
       </div>
 
       {/* Page 4: Annex Pt. 2 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      <div data-section-id="sa-annex-1-pt2" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="space-y-4 font-normal">
@@ -528,7 +528,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
       </div>
 
       {/* Page 5: Annex Pt. 3 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      <div data-section-id="sa-annex-1-pt3" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
         <div className="space-y-4">
           <div className="font-bold">3. ข้อตกลงกระทำการของผู้รับจ้าง (“ผู้ให้บริการ”)</div>
@@ -604,7 +604,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
       ))}
 
       {/* Page 8: Annex No. 2 Item 2 (Service Fee) */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
+      <div data-section-id="sa-annex-2-service" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
         <div className="space-y-6 font-normal">

@@ -823,6 +823,7 @@ function App() {
               onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
               agreements={data.agreements}
               customerInfo={data.customerInfo}
+              onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, 'guarantee')}
             />
           </div>
 
@@ -837,6 +838,7 @@ function App() {
                 <JointVentureForm
                   data={data.jointVentureData}
                   onChange={(jv: JointVentureData) => updateField('jointVentureData', jv)}
+                  onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, 'jointVenture')}
                 />
               </div>
 
@@ -846,6 +848,7 @@ function App() {
                   data={data.serviceAgreementData}
                   appData={data}
                   onChange={(sa: ServiceAgreementData) => updateField('serviceAgreementData', sa)}
+                  onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, 'serviceAgreement')}
                 />
               </div>
 
@@ -855,6 +858,7 @@ function App() {
                   data={data.feePaymentData}
                   agreements={data.agreements}
                   onChange={(fp: FeePaymentData) => updateField('feePaymentData', fp)}
+                  onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, 'feePayment')}
                 />
               </div>
             </div>

@@ -37,7 +37,7 @@ export default function GuaranteePreview({ data }: Props) {
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
-      <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
+      <div data-section-id="guarantee-parties" className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
         <PageHeader />
 
         {/* Hand-written text space (มีคู่สมรส) */}
@@ -119,7 +119,7 @@ export default function GuaranteePreview({ data }: Props) {
       <div className="hidden print:block page-break"></div>
 
       {/* Page 2 */}
-      <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
+      <div data-section-id="guarantee-clause-2" className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
         <PageHeader />
 
         <div className="mt-8">
@@ -183,7 +183,7 @@ export default function GuaranteePreview({ data }: Props) {
       <div className="hidden print:block page-break"></div>
 
       {/* Page 3 */}
-      <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
+      <div data-section-id="guarantee-clause-7" className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
         <PageHeader />
 
         <div className="mt-8 text-justify">
@@ -261,7 +261,7 @@ export default function GuaranteePreview({ data }: Props) {
       <div className="hidden print:block page-break"></div>
 
       {/* Page 4 */}
-      <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
+      <div data-section-id="guarantee-clause-11" className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
         <PageHeader />
 
         <div className="mt-8">
@@ -335,7 +335,7 @@ export default function GuaranteePreview({ data }: Props) {
       <div className="hidden print:block page-break"></div>
 
       {/* Page 5 */}
-      <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
+      <div data-section-id="guarantee-contact" className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
         <PageHeader />
 
         <div className="mt-8">
@@ -403,7 +403,7 @@ export default function GuaranteePreview({ data }: Props) {
       <div className="hidden print:block page-break"></div>
 
       {/* Page 6 */}
-      <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
+      <div data-section-id="guarantee-clause-19" className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
         <PageHeader />
 
         <div className="mt-8">
@@ -429,7 +429,7 @@ export default function GuaranteePreview({ data }: Props) {
       <div className="hidden print:block page-break"></div>
 
       {/* Page 7 - Signature Page 1 */}
-      <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
+      <div data-section-id="guarantee-signature" className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
         <PageHeader />
 
         <div className="mt-4">
@@ -536,7 +536,7 @@ export default function GuaranteePreview({ data }: Props) {
       <div className="hidden print:block page-break"></div>
 
       {/* Page 8 - Signature Page 2 (Lessor 2) */}
-      <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
+      <div data-section-id="guarantee-signature-2" className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
         <PageHeader />
 
         <div className="mt-8 border border-black text-[13px] font-bold">
