@@ -1,23 +1,23 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Copy, ChevronDown } from 'lucide-react';
-import type { ODData, LessorInfo, CompanyInfo, Agreement } from '../types/app';
+import type { ODData, LessorInfo, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
 import { formatCurrency } from '../utils/formatters';
-import ThaiLocationSelector from './ThaiLocationSelector';
+
 
 interface Props {
   data: ODData;
-  customerInfo?: CompanyInfo;
+
   agreements?: Agreement[];
   currentAgreementId?: string;
   onChange: (data: ODData) => void;
   onFocusSection?: (sectionId: string) => void;
 }
 
-export default function ODForm({ data, onChange, customerInfo, agreements = [], currentAgreementId, onFocusSection }: Props) {
-  const [showCopyCollateralMenu, setShowCopyCollateralMenu] = useState(false);
-  const copyMenuRef = useRef<HTMLDivElement>(null);
+export default function ODForm({ data, onChange, agreements = [], currentAgreementId, onFocusSection }: Props) {
+
+
 
   const [showCopyLocationMenu, setShowCopyLocationMenu] = useState(false);
   const copyLocationMenuRef = useRef<HTMLDivElement>(null);
@@ -25,9 +25,6 @@ export default function ODForm({ data, onChange, customerInfo, agreements = [], 
   // Close copy menu on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (copyMenuRef.current && !copyMenuRef.current.contains(e.target as Node)) {
-        setShowCopyCollateralMenu(false);
-      }
       if (copyLocationMenuRef.current && !copyLocationMenuRef.current.contains(e.target as Node)) {
         setShowCopyLocationMenu(false);
       }
@@ -41,11 +38,7 @@ export default function ODForm({ data, onChange, customerInfo, agreements = [], 
   const isFirstAgreement = currentAgreementIndex <= 0;
 
   // Get other agreements that have collateral assets to copy from
-  const otherAgreementsWithCollateral = isFirstAgreement ? [] : agreements.filter(a => {
-    if (a.id === currentAgreementId) return false;
-    const d = a.data as any;
-    return d?.collateralAssets && d.collateralAssets.length > 0;
-  });
+
 
   const otherAgreementsWithLocation = isFirstAgreement ? [] : agreements.filter(a => {
     if (a.id === currentAgreementId) return false;
@@ -65,30 +58,7 @@ export default function ODForm({ data, onChange, customerInfo, agreements = [], 
     });
   };
 
-  const addCollateralAsset = () => {
-    const lastLandAsset = [...(data.collateralAssets || [])].reverse().find(a => a.type === 'land' && a.landDetails);
 
-    const newLandDetails = {
-      deedNo: '',
-      volume: '',
-      page: '',
-      mapSheet: lastLandAsset?.landDetails?.mapSheet || '',
-      landNo: '',
-      surveyNo: '',
-      subDistrict: lastLandAsset?.landDetails?.subDistrict || '',
-      district: lastLandAsset?.landDetails?.district || '',
-      province: lastLandAsset?.landDetails?.province || '',
-      owner: lastLandAsset?.landDetails?.owner || customerInfo?.companyName || ''
-    };
-
-    onChange({
-      ...data,
-      collateralAssets: [...(data.collateralAssets || []), {
-        type: 'land',
-        landDetails: newLandDetails
-      }]
-    });
-  };
 
   // Calculated Credit Limits
   const loanAmt = parseFloat(data.loanAmount?.replace(/,/g, '') || '0') || 0;

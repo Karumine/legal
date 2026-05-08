@@ -797,7 +797,6 @@ function App() {
               {activeAgreement.type === 'od' && (
                 <ODForm
                   data={activeAgreement.data}
-                  customerInfo={data.customerInfo}
                   agreements={data.agreements}
                   currentAgreementId={activeAgreement.id}
                   onChange={(od: any) => updateAgreementData(activeAgreement.id, od)}

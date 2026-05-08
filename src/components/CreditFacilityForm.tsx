@@ -410,8 +410,8 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
                   onChange={(e) => onChange({ ...data, interestType: e.target.value as any })}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
                 >
-                  <option value="แบบคงที่">แบบคงที่ (Flat Rate)</option>
-                  <option value="แบบลดต้นลดดอก">แบบลดต้นลดดอก (Effective Rate)</option>
+                  <option value="แบบคงที่">แบบคงที่ (Flat Interest Rate)</option>
+                  <option value="แบบลดต้นลดดอก">แบบลดต้นลดดอก (Effective Interest Rate)</option>
                 </select>
               </div>
               <div>

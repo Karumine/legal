@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Copy, Plus, Search, Trash2, UserPlus, Loader2 } from 'lucide-react';
+import { Copy, Plus, Search, Trash2, Loader2 } from 'lucide-react';
 import type { GuarantorData, Agreement, CompanyInfo } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';

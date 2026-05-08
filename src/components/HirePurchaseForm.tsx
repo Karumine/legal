@@ -603,8 +603,8 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                     onChange={(e) => handleChange('interestType', e.target.value)}
                     className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border"
                   >
-                    <option value="แบบคงที่">แบบคงที่ (Flat Rate)</option>
-                    <option value="แบบลดต้นลดดอก">แบบลดต้นลดดอก (Effective Rate)</option>
+                    <option value="แบบคงที่">แบบคงที่ (Flat Interest Rate)</option>
+                    <option value="แบบลดต้นลดดอก">แบบลดต้นลดดอก (Effective Interest Rate)</option>
                   </select>
                 </div>
                 <div>
