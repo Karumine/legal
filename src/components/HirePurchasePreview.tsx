@@ -409,7 +409,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <div className="flex gap-4">
                 <span className="w-8 shrink-0 whitespace-nowrap">{type === 'hirePurchaseBack' ? '(ก)' : '(ข)'}</span>
                 <div className="flex-1">
-                  ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อ{type === 'hirePurchaseBack' ? 'เป็นงวด' : 'ที่เหลือทั้งหมด (จำนวนค่าเช่าซื้อที่หักด้วยเงินดาวน์)'} ให้แก่ผู้ให้เช่าซื้อ<b>เป็นจำนวนเงินทั้งสิ้น <Highlight>{remainingAmount}</Highlight> บาท (<Highlight>{remainingAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) โดยคิดดอกเบี้ย<Highlight>{data.interestType}</Highlight> ที่อัตราร้อยละ <Highlight>{data.interestRate}</Highlight> ต่อปี โดยผ่อนชำระค่าเช่าซื้อเป็นงวด งวดละ <Highlight>{installmentAmountText}</Highlight> บาท (<Highlight>{installmentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> (โดยแต่ละงวดเรียกว่า <b>“ค่างวดการเช่าซื้อ”</b>)
+                  ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อ{type === 'hirePurchaseBack' ? 'เป็นงวด' : 'ที่เหลือทั้งหมด (จำนวนค่าเช่าซื้อที่หักด้วยเงินดาวน์)'} ให้แก่ผู้ให้เช่าซื้อ<b>เป็นจำนวนเงินทั้งสิ้น <Highlight>{remainingAmount}</Highlight> บาท (<Highlight>{remainingAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) โดยคิดดอกเบี้ย<Highlight>{(data.interestType === 'แบบคงที่' ? 'แบบคงที่ (Flat Interest Rate)' : 'แบบลดต้นลดดอก (Effective Interest Rate)')}</Highlight> ที่อัตราร้อยละ <Highlight>{data.interestRate}</Highlight> ต่อปี โดยผ่อนชำระค่าเช่าซื้อเป็นงวด งวดละ <Highlight>{installmentAmountText}</Highlight> บาท (<Highlight>{installmentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> (โดยแต่ละงวดเรียกว่า <b>“ค่างวดการเช่าซื้อ”</b>)
                 </div>
               </div>
               <div className="flex gap-4">

@@ -461,7 +461,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex-1 text-justify">
               <span className="mb-2 inline-block underline">อัตราดอกเบี้ย</span>
               <div className="mb-4">
-                ผู้กู้ตกลงยินยอมให้ผู้ให้สินเชื่อคิดดอกเบี้ยบนเงินต้นของสินเชื่อ<b>{data.interestType || 'เลือกประเภทดอกเบี้ย'} ในอัตราร้อยละ <Highlight>{data.interestRate} ({thaiNumberText(data.interestRate)})</Highlight> ต่อปี</b>
+                ผู้กู้ตกลงยินยอมให้ผู้ให้สินเชื่อคิดดอกเบี้ยบนเงินต้นของสินเชื่อ<b>{(data.interestType === 'แบบคงที่' ? 'แบบคงที่ (Flat Interest Rate)' : 'แบบลดต้นลดดอก (Effective Interest Rate)')} ในอัตราร้อยละ <Highlight>{data.interestRate} ({thaiNumberText(data.interestRate)})</Highlight> ต่อปี</b>
               </div>
               <table className="w-[60%] border-collapse border border-black text-center text-[12px] mb-6 mx-auto">
                 <thead>
@@ -473,7 +473,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <tbody>
                   <tr>
                     <td className="border border-black p-2">1-<Highlight>{data.installments}</Highlight></td>
-                    <td className="border border-black p-2"><Highlight>{data.interestRate}</Highlight> ต่อปี ({data.interestType || 'ลดต้นลดดอก'})</td>
+                    <td className="border border-black p-2"><Highlight>{data.interestRate}</Highlight> ต่อปี ({(data.interestType === 'แบบคงที่' ? 'แบบคงที่ (Flat Interest Rate)' : 'แบบลดต้นลดดอก (Effective Interest Rate)')})</td>
                   </tr>
                 </tbody>
               </table>
@@ -529,7 +529,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-2 ml-8">
               <span>5.1</span>
               <div className="flex-1 text-justify">
-                ภายใต้บังคับของสัญญานี้ ผู้กู้ตกลงชำระคืนเงินต้นของสินเชื่อพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ <b>โดยผู้กู้ตกลงชำระคืนเงินต้นภายใต้สัญญาฉบับนี้เป็นงวดพร้อมดอกเบี้ย{data.interestType || 'แบบลดต้นลดดอก'} เป็นจำนวนเงินงวดละ <Highlight>{data.installmentAmount || '63,032.64'}</Highlight> บาท (<Highlight>{thaiBahtText(data.installmentAmount || '63,032.64')}</Highlight>) รวมทั้งสิ้น <Highlight>{data.installments || '24'}</Highlight> (<Highlight>{thaiNumberText(data.installments || '24')}</Highlight>) งวด</b> โดยชำระ 1 (หนึ่ง) เดือนต่อ 1 (หนึ่ง) งวด และตกลงจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อใน<b>งวดแรก วันที่ <Highlight>{data.firstInstallmentDate ? formatThaiDate(data.firstInstallmentDate) : '25 เมษายน 2569'}</Highlight></b> และจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อในแต่ละงวดทุกวันที่ <Highlight>{data.paymentDay || '25'}</Highlight> (<Highlight>{thaiNumberText(data.paymentDay || '25')}</Highlight>) ของเดือนปฏิทินนั้นๆ และในงวดสุดท้ายผู้กู้ตกลงชำระทั้งเงินต้นและดอกเบี้ยที่ยังคงค้างชำระตามสัญญานี้ให้ครบถ้วน <b>ทั้งนี้ ผู้กู้จะชำระเงินต้นสินเชื่อพร้อมดอกเบี้ยให้เสร็จสิ้นภายในวันที่ <Highlight>{data.lastInstallmentDate ? formatThaiDate(data.lastInstallmentDate) : '25 มีนาคม 2571'}</Highlight> (“วันครบกำหนดชำระเงินงวดสุดท้าย”)</b>
+                ภายใต้บังคับของสัญญานี้ ผู้กู้ตกลงชำระคืนเงินต้นของสินเชื่อพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ <b>โดยผู้กู้ตกลงชำระคืนเงินต้นภายใต้สัญญาฉบับนี้เป็นงวดพร้อมดอกเบี้ย{(data.interestType === 'แบบคงที่' ? 'แบบคงที่ (Flat Interest Rate)' : 'แบบลดต้นลดดอก (Effective Interest Rate)')} เป็นจำนวนเงินงวดละ <Highlight>{data.installmentAmount || '63,032.64'}</Highlight> บาท (<Highlight>{thaiBahtText(data.installmentAmount || '63,032.64')}</Highlight>) รวมทั้งสิ้น <Highlight>{data.installments || '24'}</Highlight> (<Highlight>{thaiNumberText(data.installments || '24')}</Highlight>) งวด</b> โดยชำระ 1 (หนึ่ง) เดือนต่อ 1 (หนึ่ง) งวด และตกลงจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อใน<b>งวดแรก วันที่ <Highlight>{data.firstInstallmentDate ? formatThaiDate(data.firstInstallmentDate) : '25 เมษายน 2569'}</Highlight></b> และจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อในแต่ละงวดทุกวันที่ <Highlight>{data.paymentDay || '25'}</Highlight> (<Highlight>{thaiNumberText(data.paymentDay || '25')}</Highlight>) ของเดือนปฏิทินนั้นๆ และในงวดสุดท้ายผู้กู้ตกลงชำระทั้งเงินต้นและดอกเบี้ยที่ยังคงค้างชำระตามสัญญานี้ให้ครบถ้วน <b>ทั้งนี้ ผู้กู้จะชำระเงินต้นสินเชื่อพร้อมดอกเบี้ยให้เสร็จสิ้นภายในวันที่ <Highlight>{data.lastInstallmentDate ? formatThaiDate(data.lastInstallmentDate) : '25 มีนาคม 2571'}</Highlight> (“วันครบกำหนดชำระเงินงวดสุดท้าย”)</b>
               </div>
             </div>
           </div>

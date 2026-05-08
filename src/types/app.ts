@@ -240,6 +240,13 @@ export interface ODData {
 
   // Dynamic conditions (same as CF for consistency)
   conditions32?: string[];
+
+  // Annex 4: Payment Change Letter details
+  annex4PONo?: string;
+  annex4PODate?: string;
+  annex4BillNo?: string;
+  annex4BillDate?: string;
+  annex4ReturnDate?: string;
 }
 
 export interface ServiceAgreementData {

@@ -92,12 +92,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 1 จาก 26
+            หน้า 1 จาก 47
           </div>
         </div>
       </div>
@@ -199,12 +199,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 2 จาก 26
+            หน้า 2 จาก 47
           </div>
         </div>
       </div>
@@ -263,12 +263,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 3 จาก 26
+            หน้า 3 จาก 47
           </div>
         </div>
       </div>
@@ -320,12 +320,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 4 จาก 26
+            หน้า 4 จาก 47
           </div>
         </div>
       </div>
@@ -410,12 +410,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 5 จาก 26
+            หน้า 5 จาก 47
           </div>
         </div>
       </div>
@@ -461,12 +461,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 6 จาก 26
+            หน้า 6 จาก 47
           </div>
         </div>
       </div>
@@ -532,12 +532,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 7 จาก 26
+            หน้า 7 จาก 47
           </div>
         </div>
       </div>
@@ -603,12 +603,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 8 จาก 26
+            หน้า 8 จาก 47
           </div>
         </div>
       </div>
@@ -639,7 +639,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               <div className="flex-1 text-justify">
                 <span className="underline">อัตราดอกเบี้ย</span>
                 <div className="mt-2">
-                  ผู้กู้ตกลงยินยอมให้ผู้ให้สินเชื่อคิดดอกเบี้ยบนเงินต้นที่ยังไม่ได้ชำระคืนในอัตราร้อยละ <Highlight>1.25 ต่อเดือน</Highlight> ในรูปแบบดอกเบี้ยคงที่ (Flat Rate) โดยการคำนวณดอกเบี้ยให้เป็นไปตามธรรมเนียมปฏิบัติของผู้ให้สินเชื่อและภายใต้กฎหมายที่เกี่ยวข้อง นับแต่วันเบิกใช้สินเชื่อจนกว่าผู้กู้จะชำระคืนเงินตามข้อ 5.1 ของสัญญาฉบับนี้
+                  ผู้กู้ตกลงยินยอมให้ผู้ให้สินเชื่อคิดดอกเบี้ยบนเงินต้นที่ยังไม่ได้ชำระคืนในอัตราร้อยละ <Highlight>1.25 ต่อเดือน</Highlight> ในรูปแบบดอกเบี้ยแบบคงที่ (Flat Interest Rate) โดยการคำนวณดอกเบี้ยให้เป็นไปตามธรรมเนียมปฏิบัติของผู้ให้สินเชื่อและภายใต้กฎหมายที่เกี่ยวข้อง นับแต่วันเบิกใช้สินเชื่อจนกว่าผู้กู้จะชำระคืนเงินตามข้อ 5.1 ของสัญญาฉบับนี้
                 </div>
               </div>
             </div>
@@ -668,12 +668,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 9 จาก 26
+            หน้า 9 จาก 47
           </div>
         </div>
       </div>
@@ -729,12 +729,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 10 จาก 26
+            หน้า 10 จาก 47
           </div>
         </div>
       </div>
@@ -790,12 +790,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 11 จาก 26
+            หน้า 11 จาก 47
           </div>
         </div>
       </div>
@@ -843,12 +843,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 12 จาก 26
+            หน้า 12 จาก 47
           </div>
         </div>
       </div>
@@ -898,12 +898,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 13 จาก 26
+            หน้า 13 จาก 47
           </div>
         </div>
       </div>
@@ -945,12 +945,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 14 จาก 26
+            หน้า 14 จาก 47
           </div>
         </div>
       </div>
@@ -999,12 +999,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 15 จาก 26
+            หน้า 15 จาก 47
           </div>
         </div>
       </div>
@@ -1077,12 +1077,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 16 จาก 26
+            หน้า 16 จาก 47
           </div>
         </div>
       </div>
@@ -1138,12 +1138,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 17 จาก 26
+            หน้า 17 จาก 47
           </div>
         </div>
       </div>
@@ -1183,12 +1183,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 18 จาก 26
+            หน้า 18 จาก 47
           </div>
         </div>
       </div>
@@ -1242,12 +1242,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 19 จาก 26
+            หน้า 19 จาก 47
           </div>
         </div>
       </div>
@@ -1298,12 +1298,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
 
           {/* Footer info for print */}
-          <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
             <div>
               สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
             </div>
             <div>
-              หน้า 20 จาก 26
+              หน้า 20 จาก 47
             </div>
           </div>
         </div>
@@ -1355,12 +1355,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
 
           {/* Footer info for print */}
-          <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
             <div>
               สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
             </div>
             <div>
-              หน้า 21 จาก 26
+              หน้า 21 จาก 47
             </div>
           </div>
         </div>
@@ -1404,12 +1404,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
 
           {/* Footer info for print */}
-          <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
             <div>
               สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
             </div>
             <div>
-              หน้า 22 จาก 26
+              หน้า 22 จาก 47
             </div>
           </div>
         </div>
@@ -1473,12 +1473,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 23 จาก 26
+            หน้า 23 จาก 47
           </div>
         </div>
       </div>
@@ -1543,12 +1543,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 24 จาก 26
+            หน้า 24 จาก 47
           </div>
         </div>
       </div>
@@ -1616,12 +1616,12 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 25 จาก 26
+            หน้า 25 จาก 47
           </div>
         </div>
       </div>
@@ -1645,8 +1645,8 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
 
           <div className="flex gap-2 items-center pt-4">
-            <span className="shrink-0 w-8 font-bold">13.2</span>
-            <span className="font-bold underline">ค่าอากรแสตมป์</span>
+            <span className="shrink-0 w-8">13.2</span>
+            <span className="underline">ค่าอากรแสตมป์</span>
           </div>
 
           <div className="flex gap-2">
@@ -1657,8 +1657,8 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
 
           <div className="flex gap-2 items-center pt-4">
-            <span className="shrink-0 w-8 font-bold">13.3</span>
-            <span className="font-bold underline">ค่าบริการอันเกี่ยวข้องกับสัญญาฉบับนี้</span>
+            <span className="shrink-0 w-8">13.3</span>
+            <span className="underline">ค่าบริการอันเกี่ยวข้องกับสัญญาฉบับนี้</span>
           </div>
 
           <div className="flex gap-2">
@@ -1669,8 +1669,8 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
 
           <div className="flex gap-2 items-center pt-4">
-            <span className="shrink-0 w-8 font-bold">13.4</span>
-            <span className="font-bold underline">ค่าธรรมเนียมการจดทะเบียนหลักประกัน หรือ กรรมสิทธิ์เครื่องจักร</span>
+            <span className="shrink-0 w-8">13.4</span>
+            <span className="underline">ค่าธรรมเนียมการจดทะเบียนหลักประกัน หรือ กรรมสิทธิ์เครื่องจักร</span>
           </div>
 
           <div className="flex gap-2">
@@ -1682,12 +1682,1391 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         {/* Footer info for print */}
-        <div className="absolute bottom-10 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-400 font-sans">
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
           <div>
             สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
           </div>
           <div>
-            หน้า 26 จาก 26
+            หน้า 26 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 27 */}
+      <div data-section-id="od-misc" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+
+        <div className="space-y-6 mt-4">
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">13.5</span>
+            <div className="flex-1 text-justify">
+              กรณีที่มีค่าใช้จ่ายอันเกิดจากการดำเนินการใด ๆ เพื่อชำระหนี้ด้วยวิธีการตามข้อ 6. ของสัญญาฉบับนี้ โดยมิใช่ความผิดของผู้ให้สินเชื่อ ผู้กู้ตกลงชำระให้แก่ผู้ให้สินเชื่อทั้งสองฝ่ายในสัดส่วนตามข้อ 1.2 ของสัญญาฉบับนี้ ภายในในระยะเวลาที่ผู้ให้สินเชื่อกำหนด
+            </div>
+          </div>
+
+          <div className="flex gap-2 items-center pt-4">
+            <span className="font-bold shrink-0 w-8">14.</span>
+            <span className="font-bold">เบ็ดเตล็ด</span>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">14.1</span>
+            <div className="flex-1">
+              <span className="underline">การสั่งจ่าย / ถอนเงินที่คงเหลือในบัญชีธนาคารให้แก่ผู้กู้</span>
+              <div className="mt-4 text-justify">
+                ภายหลังจากที่ผู้ให้สินเชื่อได้รับชำระเงินตามวิธีการชำระเงินที่กำหนดในข้อ 6. ของสัญญาฉบับนี้จนครบถ้วนแล้ว ผู้ให้สินเชื่อตกลงจะให้ตัวแทนของผู้ให้สินเชื่อซึ่งเป็นผู้มีอำนาจลงนามสั่งจ่าย / ถอนเงินหรือทำธุรกรรมของบัญชีธนาคารตามที่ระบุในข้อ 3.2 (ค) (1) ของสัญญาฉบับนี้ ดำเนินการสั่งจ่าย / ถอนเงินที่คงเหลือในบัญชีธนาคารดังกล่าว ตามแต่ละโครงการ และส่งมอบให้แก่ผู้กู้ด้วยวิธีการตามที่คู่สัญญาทุกฝ่ายตกลงร่วมกันภายใน 7 (เจ็ด) วันทำการ นับแต่วันที่ผู้ให้สินเชื่อได้ตัด / หัก / ถอนเงินจากบัญชีธนาคารดังกล่าวเพื่อนำมาชำระคืนเงินต้น ดอกเบี้ย และค่าใช้จ่ายอื่น ๆ ที่เกิดขึ้นหรือเกี่ยวข้องกับสัญญาฉบับนี้ ตามแต่ละโครงการ ให้แก่ผู้ให้สินเชื่อ
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">14.2</span>
+            <div className="flex-1">
+              <span className="underline">การยกเลิกวงเงินสินเชื่อ</span>
+              <div className="mt-4 text-justify space-y-4">
+                <div>
+                  เว้นแต่กรณีที่เกิดเหตุการณ์ใดเหตุการณ์หนึ่งตามข้อ 11.1 ของสัญญาฉบับนี้ หากผู้กู้ได้ชำระเงินใด ๆ ที่เกิดขึ้นหรือเกี่ยวข้องกับสัญญาฉบับนี้ให้แก่ผู้ให้สินเชื่อจนครบถ้วนแล้ว และผู้กู้มีความประสงค์จะยกเลิกวงเงินสินเชื่อของสัญญาฉบับนี้ ผู้กู้จะต้องแจ้งให้ตัวแทนสินเชื่อทราบเป็นลายลักษณ์อักษรไม่น้อยกว่า 30 (สามสิบ) วัน ก่อนวันยกเลิกวงเงินสินเชื่อ โดยหลังจากที่ผู้กู้ได้แจ้งการยกเลิกวงเงินสินเชื่อดังกล่าวเป็นหนังสือไปยังตัวแทนสินเชื่อแล้ว คำบอกกล่าวขอยกเลิกวงเงินสินเชื่อจะเพิกถอนไม่ได้
+                </div>
+                <div>
+                  ทั้งนี้ เมื่อผู้กู้ได้มีการแจ้งให้ตัวแทนสินเชื่อทราบเป็นลายลักษณ์อักษรแล้ว ให้ถือว่าผู้ให้สินเชื่อยินยอมให้ผู้กู้เปลี่ยนแปลงผู้มีอำนาจลงนามสั่งจ่าย / ถอนเงินหรือทำธุรกรรมของบัญชีธนาคารตามที่ระบุในข้อ 3.2 (ค) (1) ของสัญญาฉบับนี้ และผู้ให้สินเชื่อจะส่งคืนสมุดบัญชีธนาคารตามที่ระบุในข้อ 3.2 (ค) (1) ของสัญญาฉบับนี้คืนให้แก่ผู้กู้ภายในระยะเวลาอันสมควร
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 27 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 28 */}
+      <div data-section-id="od-misc-cont" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+
+        <div className="space-y-6 mt-4">
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">14.3</span>
+            <div className="flex-1 text-justify">
+              <span className="underline">การแก้ไขหรือยกเว้นข้อกำหนดหรือเงื่อนไขในสัญญา</span>
+              <div className="mt-4">
+                การแก้ไขสัญญานี้ การสละสิทธิ ให้การยกเว้น หรือให้ความยินยอมใด ๆ ภายใต้สัญญานี้ จะต้องเป็นการตกลงร่วมกันระหว่างคู่สัญญาทั้งสามฝ่ายเป็นลายลักษณ์อักษร เว้นแต่สัญญาฉบับนี้จะกำหนดไว้เป็นอย่างอื่น
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">14.4</span>
+            <div className="flex-1 text-justify">
+              <span className="underline">การที่สิทธิไม่ระงับและการสละสิทธิ</span>
+              <div className="mt-4">
+                ผู้ให้สินเชื่อสามารถใช้สิทธิต่าง ๆ ภายใต้สัญญาฉบับนี้ได้ตามที่เห็นสมควร และสิทธิดังกล่าวเป็นสิทธิที่เพิ่มเติมจากสิทธิต่าง ๆ ที่ผู้ให้สินเชื่อทั้งสองฝ่ายมีอยู่ตามกฎหมาย นอกจากนี้ การไม่ใช้สิทธิหรือความล่าช้าในการใช้สิทธิ ไม่ถือเป็นการสละสิทธิในเรื่องดังกล่าว และการใช้สิทธิแต่เพียงบางส่วน หรือการใช้สิทธิโดยบกพร่อง ไม่เป็นการตัดสิทธิในอันที่จะใช้สิทธิอื่นหรือสิทธิเดิมนั้นอีก
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">14.5</span>
+            <div className="flex-1">
+              <span className="underline">หนังสือบอกกล่าว</span>
+              <div className="mt-4 space-y-6">
+                <div className="flex gap-2">
+                  <span className="shrink-0 w-8">(ก)</span>
+                  <div className="flex-1 text-justify">
+                    <span className="underline">การส่งหนังสือบอกกล่าว</span>
+                    <div className="mt-4">
+                      หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นภายใต้หรือเนื่องด้วยกับสัญญานี้ จะต้องทำเป็นหนังสือหรือส่งโดยทางโทรสาร และลงลายมือชื่อของคู่สัญญาฝ่ายที่จัดทำเอกสารดังกล่าว และให้ถือว่าหนังสือบอกกล่าวนั้นได้ส่งโดยชอบแล้วเมื่อได้ดำเนินการดังต่อไปนี้
+                    </div>
+
+                    <div className="mt-6 space-y-4">
+                      <div className="flex gap-2">
+                        <span className="shrink-0 w-8">(1)</span>
+                        <div className="flex-1">
+                          ในกรณีที่ส่งโดยบุคคล (By Hand) ให้มีผลเมื่อได้จัดส่งหนังสือบอกกล่าว
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="shrink-0 w-8">(2)</span>
+                        <div className="flex-1">
+                          ในกรณีที่ส่งทางไปรษณีย์ลงทะเบียน ให้มีผลภายในวันที่กำหนดในใบตอบรับทางไปรษณีย์หรือใบรับที่เป็นลายลักษณ์อักษรอื่น
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 28 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 29 */}
+      <div data-section-id="od-notices-cont" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+
+        <div className="space-y-6 mt-4">
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8"></span>
+            <div className="flex-1">
+              <div className="flex gap-2">
+                <span className="shrink-0 w-8"></span>
+                <div className="flex-1 text-justify">
+                  <div className="flex gap-2">
+                    <span className="shrink-0 w-8">(3)</span>
+                    <div className="flex-1">
+                      ในกรณีที่ส่งทางโทรสาร ให้มีผลเมื่อครบกำหนด 1 (หนึ่ง) วัน นับแต่วันที่ส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่วันที่การส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มีผลนั้นมิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้วในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    หากคู่สัญญาฝ่ายหนึ่งฝ่ายใดต้องการเปลี่ยนสถานที่อยู่ คู่สัญญาฝ่ายนั้นจะต้องแจ้งให้คู่สัญญาอีกฝ่ายทราบล่วงหน้าเป็นลายลักษณ์อักษรไม่น้อยกว่า 5 (ห้า) วันทำการก่อนวันที่ย้ายหรือเปลี่ยนแปลงสถานที่อยู่ ในกรณีเช่นนี้คู่สัญญาฝ่ายที่ได้รับแจ้งการเปลี่ยนแปลงสถานที่อยู่จะส่งคำบอกกล่าวให้แก่คู่สัญญาฝ่ายที่แจ้งเปลี่ยนแปลงสถานที่อยู่ตามรายละเอียดที่ได้รับแจ้งดังกล่าว
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-6">
+                <span className="shrink-0 w-8">(ข)</span>
+                <div className="flex-1">
+                  <span className="underline">การติดต่อทางอิเล็กทรอนิกส์</span>
+                  <div className="mt-4 text-justify">
+                    การติดต่อระหว่างผู้ให้สินเชื่อกับผู้กู้ภายใต้สัญญาฉบับนี้ สามารถทำได้โดยวิธีส่งจดหมายอิเล็กทรอนิกส์หรือวิธีการอื่นใดทางอิเล็กทรอนิกส์ หากผู้ให้สินเชื่อกับผู้กู้
+                  </div>
+
+                  <div className="mt-6 space-y-4">
+                    <div className="flex gap-2">
+                      <span className="shrink-0 w-8">(1)</span>
+                      <div className="flex-1 text-justify">
+                        ตกลงและยอมรับว่าการติดต่อดังกล่าวเป็นรูปแบบในการติดต่อระหว่างผู้ให้สินเชื่อทั้งสองฝ่ายกับผู้กู้ เว้นแต่หรือจนกว่าจะมีการแจ้งเป็นอย่างอื่น
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="shrink-0 w-8">(2)</span>
+                      <div className="flex-1 text-justify">
+                        ได้แจ้งแก่คู่สัญญาอีกฝ่ายหนึ่งเป็นหนังสือ ถึงที่อยู่ของจดหมายอิเล็กทรอนิกส์ของตน และ/หรือ ข้อมูลอื่นใดที่จำเป็นต่อการรับส่งข้อมูลด้วยวิธีดังกล่าว และ
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="shrink-0 w-8">(3)</span>
+                      <div className="flex-1 text-justify">
+                        ได้แจ้งให้คู่สัญญาอีกฝ่ายหนึ่งทราบ กรณีมีการเปลี่ยนแปลงที่อยู่ของจดหมายอิเล็กทรอนิกส์หรือข้อมูลอื่นใดที่ได้ให้ไว้แก่คู่สัญญาอีกฝ่ายหนึ่ง
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 29 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 30 */}
+      <div data-section-id="od-validity" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+
+        <div className="space-y-6 mt-4">
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">14.6</span>
+            <div className="flex-1 text-justify">
+              <span className="underline">ความไม่สมบูรณ์ของข้อสัญญา</span>
+              <div className="mt-4">
+                หากข้อสัญญาหรือข้อกำหนดข้อใดข้อหนึ่งภายใต้สัญญานี้ไม่สมบูรณ์ เป็นโมฆะ ขัดต่อกฎหมาย หรือไม่อาจบังคับได้ตามกฎหมาย ไม่ว่าในกรณีใด ๆ ให้ถือว่าข้อสัญญาหรือข้อกำหนดอื่นในสัญญานี้ ยังคงมีผลใช้บังคับได้ตามกฎหมาย
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">14.7</span>
+            <div className="flex-1 text-justify">
+              <span className="underline">กฎหมายที่ใช้บังคับ</span>
+              <div className="mt-4">
+                สัญญาฉบับนี้ให้ใช้บังคับและตีความตามกฎหมายไทย ข้อพิพาท ข้อโต้แย้ง หรือสิทธิเรียกร้องใด ๆ ที่เกิดขึ้นจากหรือเกี่ยวกับสัญญาฉบับนี้ซึ่งไม่สามารถตกลงกันได้ระหว่างคู่สัญญาให้นำเสนอต่อศาลไทยที่มีเขตอำนาจ
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center italic text-gray-500">
+            (คู่สัญญาลงนามในหน้าถัดไป)
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 30 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 31 (Signatories: Agile Assets & Borrower) */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 pt-4">
+          <div className="text-justify indent-12">
+            สัญญาฉบับนี้ทำขึ้นมา 4 (สี่) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาทั้งสามฝ่ายได้อ่านข้อความในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาทั้งสามฝ่ายได้ลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 border border-black min-h-[600px] text-[12px] font-bold">
+            {/* Left Column: Lender 1 */}
+            <div className="border-r border-black p-4 flex flex-col h-full">
+              <div className="space-y-12">
+                <div className="font-bold">
+                  ผู้ให้สินเชื่อฝ่ายที่ 1: <Highlight>{agileInfo.companyName}</Highlight>
+                </div>
+
+                <div className="pt-8 space-y-12">
+                  {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <div className="border-b border-black w-full h-8"></div>
+                      <div className="flex justify-center gap-2">
+                        <span>ชื่อ:</span>
+                        <div className="font-bold">
+                          <Highlight>{sig.trim()}</Highlight>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="pt-4 text-left">
+                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                    <div className="mt-2 text-left font-bold">
+                      <Highlight>{agileInfo.companyName}</Highlight>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-auto pt-8 space-y-4">
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4"></span>
+                  <span>)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Borrower */}
+            <div className="p-4 flex flex-col h-full">
+              <div className="space-y-12">
+                <div className="font-bold">ผู้กู้: <Highlight>{customerInfo.companyName}</Highlight>
+                </div>
+                <div className="pt-8 space-y-12">
+                  {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <div className="border-b border-black w-full h-8"></div>
+                      <div className="flex justify-center gap-2">
+                        <span>ชื่อ:</span>
+                        <div className="font-bold">
+                          <Highlight>{sig.trim()}</Highlight>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="pt-4 text-left">
+                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                    <div className="mt-2 text-left font-bold">
+                      <Highlight>{customerInfo.companyName}</Highlight>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-auto pt-8 space-y-4">
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4"></span>
+                  <span>)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 31 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 32 (Signatories: TK Assets) */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 pt-4">
+          <div className="mt-4 grid grid-cols-2 border border-black min-h-[600px] text-[12px] font-bold">
+            {/* Left Column: Lender 2 */}
+            <div className="border-r border-black p-4 flex flex-col h-full">
+              <div className="space-y-12">
+                <div className="font-bold">
+                  ผู้ให้สินเชื่อฝ่ายที่ 2: <Highlight>{tkInfo.companyName}</Highlight>
+                </div>
+
+                <div className="pt-8 space-y-12">
+                  {(tkInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <div className="border-b border-black w-full h-8"></div>
+                      <div className="flex justify-center gap-2">
+                        <span>ชื่อ:</span>
+                        <div className="font-bold">
+                          <Highlight>{sig.trim()}</Highlight>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="pt-4 text-left">
+                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                    <div className="mt-2 text-left font-bold">
+                      <Highlight>{tkInfo.companyName}</Highlight>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-auto pt-8 space-y-4">
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4"></span>
+                  <span>)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Empty */}
+            <div className="p-4 flex flex-col h-full">
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 32 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 33 (Annex 1: Conditions Precedent) */}
+      <div data-section-id="od-annex-1" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 pt-4 text-[13px]">
+          <div className="text-center font-bold">
+            <div>เอกสารแนบท้ายหมายเลข 1</div>
+            <div className="underline">เงื่อนไขบังคับก่อน</div>
+          </div>
+
+          <div className="text-justify leading-relaxed">
+            ผู้กู้ตกลงส่งเอกสารตามที่ได้กำหนดไว้ในข้อ (ก) ทุกประการก่อนการเบิกใช้สินเชื่อ และตกลงปฏิบัติตามที่กำหนดไว้ในข้อ (ข) ทุกประการก่อนการเบิกใช้สินเชื่อ ซึ่งได้มีการจัดเตรียมในรูปแบบและสาระสำคัญที่ผู้ให้สินเชื่อแต่ละรายเห็นสมควรภายในกำหนดเวลาในข้อ 3 ของสัญญาฉบับนี้ให้แก่ตัวแทนสินเชื่อ
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">1.</span>
+              <div className="flex-1 space-y-4">
+                <div>เอกสารที่เป็นเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อภายใต้สัญญานี้</div>
+
+                <div>
+                  ผู้ให้สินเชื่อจะต้องได้รับเอกสารต่าง ๆ ดังต่อไปนี้ตามรูปแบบและสาระสำคัญที่ผู้ให้สินเชื่อเห็นสมควร
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ก)</span>
+                    <div className="flex-1">
+                      หนังสือรับรองบริษัทของผู้กู้จากนายทะเบียนหุ้นส่วนบริษัท กระทรวงพาณิชย์ ลงวันที่รับรองไม่เกิน 30 (สามสิบ) วัน ก่อนวันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อ
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ข)</span>
+                    <div className="flex-1">
+                      สำเนาเอกสารเกี่ยวกับผู้กู้ ซึ่งรับรองโดยนายทะเบียนหุ้นส่วนบริษัท กระทรวงพาณิชย์ ลงวันที่รับรองไม่เกิน 30 (สามสิบ) วัน ก่อนวันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อ ดังต่อไปนี้
+                      <div className="mt-2 space-y-2">
+                        <div className="flex gap-2">
+                          <span className="shrink-0 w-8">(1)</span>
+                          <span>หนังสือบริคณห์สนธิ</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <span className="shrink-0 w-8">(2)</span>
+                          <span>ข้อบังคับของบริษัท</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <span className="shrink-0 w-8">(3)</span>
+                          <span>สำเนาบัญชีรายชื่อผู้ถือหุ้น</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ค)</span>
+                    <div className="flex-1">
+                      สำเนามติที่ประชุมของคณะกรรมการและสำเนามติที่ประชุมของผู้ถือหุ้นของผู้กู้ (ในกรณีที่จะต้องได้รับมติจากผู้ถือหุ้น) ซึ่งรับรองความถูกต้องโดยกรรมการผู้มีอำนาจของผู้กู้ อนุมัติให้ลงนามและปฏิบัติตามสัญญาฉบับนี้และเอกสารทางธุรกรรมตามสัญญาฉบับนี้
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ง)</span>
+                    <div className="flex-1">
+                      ตัวอย่างลายมือชื่อของกรรมการผู้มีอำนาจ และ/หรือ เจ้าหน้าที่ผู้มีอำนาจ ตามข้อ 1 (ฉ) (ถ้ามี) ของผู้กู้
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 33 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 34 (Annex 1: Conditions Precedent - Cont.) */}
+      <div data-section-id="od-annex-1-cont" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 pt-4 text-[13px]">
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8"></span>
+              <div className="flex-1 space-y-4">
+                <div className="space-y-4">
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(จ)</span>
+                    <div className="flex-1">
+                      สำเนาบัตรประจำตัวประชาชนและสำเนาทะเบียนบ้านของกรรมการผู้มีอำนาจ และ/หรือ เจ้าหน้าที่ผู้มีอำนาจตามข้อ 1 (ฉ) (ถ้ามี) ของผู้กู้
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ฉ)</span>
+                    <div className="flex-1">
+                      หนังสือมอบอำนาจแต่งตั้งเจ้าหน้าที่ผู้มีอำนาจของผู้กู้ (ในกรณีที่มีการมอบอำนาจให้บุคคลซึ่งไม่ใช่กรรมการผู้มีอำนาจของผู้กู้กระทำการแทน)
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ช)</span>
+                    <div className="flex-1">
+                      เอกสารที่เกี่ยวข้องกับหลักประกันตามที่ผู้ให้สินเชื่อกำหนด
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">2.</span>
+              <div className="flex-1 space-y-4">
+                <div>ข้อปฏิบัติที่เป็นเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อภายใต้สัญญานี้</div>
+
+                <div className="space-y-4">
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ก)</span>
+                    <div className="flex-1">
+                      สัญญาให้สินเชื่อและเอกสารทางธุรกรรม ได้ทำขึ้นถูกต้องครบถ้วนและลงนามโดยผู้มีอำนาจลงนามตามเงื่อนไขที่กำหนดไว้ในสัญญานี้ และมีผลสมบูรณ์
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ข)</span>
+                    <div className="flex-1">
+                      ผู้กู้ได้ชำระค่าธรรมเนียม เงินใด ๆ ที่ถึงกำหนดต้องชำระตามสัญญานี้ (รวมทั้งค่าใช้จ่ายต่าง ๆ ที่เกิดขึ้นตามสัญญานี้) ครบถ้วนแล้วก่อนหรือภายในวันเบิกใช้สินเชื่อ
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ค)</span>
+                    <div className="flex-1">
+                      ไม่มีการเปลี่ยนแปลงอย่างมีนัยสำคัญ ซึ่งในความเห็นของผู้ให้สินเชื่ออาจมีผลกระทบในทางลบต่อฐานะในทางการเงินของผู้กู้
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ง)</span>
+                    <div className="flex-1">
+                      บรรดาคำรับรองและยืนยันที่ผู้กู้ให้ไว้ในข้อ 9. ของสัญญาฉบับนี้ เป็นความจริง และถูกต้องเสมือนว่าได้ทำขึ้น หรือให้ไว้ ณ วันที่กำหนดให้เป็นวันใช้สินเชื่อครั้งแรก
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(จ)</span>
+                    <div className="flex-1">
+                      ผู้กู้ได้ปฏิบัติตามข้อตกลงกระทำการที่ระบุในข้อ 10. ของสัญญาฉบับนี้ หรือตามเงื่อนไขที่ให้ไว้ในเอกสารที่เกี่ยวข้องตามสัญญาอื่น ๆ ตามกำหนดเวลาที่ระบุไว้และไม่มีเหตุผิดนัด หรือกรณีที่จะเป็นเหตุผิดนัดใด ๆ เกิดขึ้น หรืออาจเกิดขึ้นเมื่อมีการใช้สินเชื่อตามสัญญาฉบับนี้
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-justify">
+                    <span className="shrink-0 w-8">(ฉ)</span>
+                    <div className="flex-1">
+                      ผู้กู้ได้จดทะเบียนทรัพย์สินหลักประกันกับหน่วยงานราชการที่เกี่ยวข้องตามข้อกำหนดและเงื่อนไขที่ระบุในสัญญาฉบับนี้ (ถ้ามี)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 34 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 35 (Annex 2) */}
+      <div data-section-id="od-annex-2" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 text-[13px]">
+          <div className="text-center font-bold">
+            <div>เอกสารแนบท้ายหมายเลข 2</div>
+            <div>สำเนาเอกสารคำสั่งซื้อของลูกค้าของผู้กู้และสำเนาเอกสารวางบิลของผู้กู้</div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 35 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 36 (Annex 3) */}
+      <div data-section-id="od-annex-3" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 text-[13px]">
+          <div className="text-center font-bold">
+            <div>เอกสารแนบท้ายหมายเลข 3</div>
+            <div>ตารางแสดงใบคำสั่งซื้อและจำนวนเงินที่ผู้ให้สินเชื่อมีสิทธิหักเพื่อชำระคืนเงินในแต่ละรายการ</div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 36 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 37 (Annex 4) */}
+      <div data-section-id="od-annex-4" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 text-[13px]">
+          <div className="text-center font-bold">
+            <div>เอกสารแนบท้ายหมายเลข 4</div>
+            <div>แบบของหนังสือแจ้งเปลี่ยนแปลงช่องทางการชำระเงิน</div>
+          </div>
+
+          <div className="flex justify-end pt-4">
+            <div>วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight></div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <span className="shrink-0 w-12">เรื่อง</span>
+              <span>ขอเปลี่ยนแปลงวิธีการรับชำระเงิน</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="shrink-0 w-12">เรียน</span>
+              <span><Highlight>{customerInfo.companyName}</Highlight></span>
+            </div>
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed">
+            ตามที่ท่านได้ทำการ[สั่งให้ข้าพเจ้าผลิตสินค้า และ/หรือ ให้บริการ และ/หรือ ว่าจ้างให้ข้าพเจ้าผลิตสินค้า และ/หรือ ให้บริการ] ภายใต้เลขที่ใบสั่งซื้อ <Highlight>{data.annex4PONo || '[หมายเลขใบสั่งซื้อ]'}</Highlight> ลงวันที่ <Highlight>{formatThaiDate(data.annex4PODate || '') || '[วันที่สั่งซื้อ]'}</Highlight> และข้าพเจ้าได้วางบิล <Highlight>{data.annex4BillNo || '[หมายเลขใบวางบิล]'}</Highlight> ลงวันที่ <Highlight>{formatThaiDate(data.annex4BillDate || '') || '[วันที่ของบิล]'}</Highlight> นั้น ข้าพเจ้ามีความประสงค์ขอเปลี่ยนแปลงวิธีการชำระเงินสำหรับการ[สั่งให้ผลิตสินค้า และ/หรือ ให้บริการ และ/หรือ ว่าจ้างให้ผลิตสินค้า และ/หรือ ให้บริการ] ดังกล่าวจากวิธีการเดิม เป็นการโอนเงินเข้าบัญชีธนาคาร บริษัท โปรเทคฟิลด์ จำกัด ประเภทออมทรัพย์ สาขาเพชรบุรีตัดใหม่ หมายเลขบัญชี 207-8-43222-8 สำหรับการชำระเงินที่จะเกิดขึ้นหลังจากวันที่ของหนังสือฉบับนี้เป็นต้นไป
+          </div>
+
+          <div className="indent-12">
+            หากมีข้อสงสัยประการใด โปรดติดต่อ ..................... โทร .....................
+          </div>
+
+          <div className="flex flex-col items-end pt-8 space-y-12 pr-12">
+            <div className="text-center space-y-4">
+              <div>ขอแสดงความนับถือ</div>
+              <div className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></div>
+            </div>
+          </div>
+
+          <div className="flex justify-between pt-8 px-12">
+            <div className="text-[10px] text-gray-400 italic whitespace-nowrap pb-10">ประทับตราบริษัท (ถ้ามี)</div>
+            <div className="w-1/2 space-y-4 pt-4 border-t border-gray-400">
+              <div className="flex items-end gap-2">
+                <span>ชื่อ:</span>
+                <div className="flex-1 border-b border-dotted border-gray-400"></div>
+              </div>
+              <div className="flex items-end gap-2">
+                <span>ตำแหน่ง:</span>
+                <div className="flex-1">กรรมการผู้มีอำนาจลงนาม</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 37 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 38 (Annex 4 Acknowledgement) */}
+      <div data-section-id="od-annex-4-ack" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 text-[13px] pt-8">
+          <div className="text-justify indent-12 leading-relaxed">
+            ข้าพเจ้ารับทราบและจะดำเนินการเปลี่ยนแปลงวิธีการชำระเงินเป็นการโอนเงินเข้าบัญชีธนาคารตามรายละเอียดที่ท่านได้แจ้งในหนังสือฉบับนี้ สำหรับการชำระเงินที่จะเกิดขึ้นหลังจากวันที่ของหนังสือฉบับนี้เป็นต้นไป
+          </div>
+
+          <div className="flex flex-col items-end pt-8 space-y-12 pr-12">
+            <div className="text-center space-y-4">
+              <div>ขอแสดงความนับถือ</div>
+              <div className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></div>
+            </div>
+          </div>
+
+          <div className="flex justify-between pt-8 px-12">
+            <div className="text-[10px] text-gray-400 italic whitespace-nowrap pb-10">ประทับตราบริษัท (ถ้ามี)</div>
+            <div className="w-1/2 space-y-4 pt-4 border-t border-gray-400">
+              <div className="flex items-end gap-2">
+                <span>ชื่อ:</span>
+                <div className="flex-1 border-b border-dotted border-gray-400"></div>
+              </div>
+              <div className="flex items-end gap-2">
+                <span>ตำแหน่ง:</span>
+                <div className="flex-1">กรรมการผู้มีอำนาจลงนาม</div>
+              </div>
+              <div className="flex items-end gap-2">
+                <span>วันที่:</span>
+                <div className="flex-1 border-b border-dotted border-gray-400"></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-8 space-y-4">
+            <div className="text-justify leading-relaxed">
+              ทั้งนี้ ขอให้ท่านกรุณาดำเนินการลงนามยืนยันในหนังสือฉบับนี้ จำนวน 2 (สอง) ฉบับ โดยภายหลังจากจากการลงนามโปรดจัดเก็บหนังสือฉบับนี้จำนวน 1 ฉบับไว้กับท่าน และส่งหนังสือฉบับนี้จำนวน 1 ฉบับ พร้อมด้วยเอกสารประกอบการลงนามตามรายการด้านล่างจำนวนอย่างละ 1 ฉบับให้แก่ข้าพเจ้า ภายในวันที่ <Highlight>{formatThaiDate(data.annex4ReturnDate || '') || '[•]'}</Highlight> ตามรายละเอียดผู้ติดต่อดังนี้
+            </div>
+
+            <div className="space-y-1 pt-4">
+              <div className="flex gap-2">
+                <span className="shrink-0">เรียน</span>
+                <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span>
+              </div>
+              <div className="pl-10">
+                <Highlight>{customerInfo.address}</Highlight>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-8 space-y-4">
+            <div className="font-bold underline">รายการของเอกสารประกอบการลงนาม</div>
+            <div className="space-y-2">
+              <div className="flex gap-4">
+                <span className="shrink-0 w-6">1)</span>
+                <span>สำเนาหนังสือรับรองบริษัท</span>
+              </div>
+              <div className="flex gap-4">
+                <span className="shrink-0 w-6">2)</span>
+                <span>สำเนาบัตรประจำตัวประชาชน/หนังสือเดินทางของกรรมการผู้มีอำนาจ</span>
+              </div>
+              <div className="flex gap-4">
+                <span className="shrink-0 w-6">3)</span>
+                <div className="flex-1">
+                  สำเนาหนังสือมอบอำนาจ พร้อมสำเนาบัตรประจำตัวประชาชน/หนังสือเดินทางของผู้มอบอำนาจ (ถ้ามี) ในกรณีที่มีการมอบอำนาจ
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 38 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 39 (Annex 5) */}
+      <div data-section-id="od-annex-5" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 text-[13px]">
+          <div className="text-center font-bold">
+            <div>เอกสารแนบท้ายหมายเลข 5</div>
+            <div>แบบของหนังสือบอกกล่าวการโอนสิทธิการรับชำระเงิน แบบมีเงื่อนไข</div>
+          </div>
+
+          <div className="flex justify-end pt-4">
+            <div>วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight></div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <span className="shrink-0 w-12">เรื่อง</span>
+              <span>การโอนสิทธิการรับชำระเงิน แบบมีเงื่อนไข</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="shrink-0 w-12">เรียน</span>
+              <span><Highlight>{customerInfo.companyName}</Highlight></span>
+            </div>
+            <div className="flex gap-2 pl-14">
+              <span><Highlight>{customerInfo.companyName}</Highlight></span>
+            </div>
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed">
+            ตามที่ท่านได้ทำการ[สั่งให้ข้าพเจ้าผลิตสินค้า และ/หรือ ให้บริการ และ/หรือ ว่าจ้างให้ข้าพเจ้าผลิตสินค้า และ/หรือ ให้บริการ] ภายใต้เลขที่ใบสั่งซื้อ <Highlight>{data.annex4PONo || '[หมายเลขใบสั่งซื้อ]'}</Highlight> ลงวันที่ <Highlight>{formatThaiDate(data.annex4PODate || '') || '[วันที่สั่งซื้อ]'}</Highlight> และข้าพเจ้าได้วางบิล <Highlight>{data.annex4BillNo || '[หมายเลขใบวางบิล]'}</Highlight> ลงวันที่ <Highlight>{formatThaiDate(data.annex4BillDate || '') || '[วันที่ของบิล]'}</Highlight> นั้น (“เอกสารที่เกี่ยวข้อง”) ข้าพเจ้าขอแจ้งให้ท่านทราบว่าข้าพเจ้าได้โอนสิทธิเรียกร้องแบบมีเงื่อนไขในการรับชำระเงินตามมูลหนี้ที่เกิดขึ้นทั้งที่มีอยู่ในปัจจุบัน และที่จะเกิดขึ้นในอนาคตตามเอกสารที่เกี่ยวข้อง และไม่อาจเพิกถอนได้ให้แก่บริษัท อาไจล์ แอสเซ็ทส์ จำกัด และ บริษัท ฐิติกร จำกัด (มหาชน) (รวมเรียกว่า “ผู้รับโอนสิทธิ”) เพื่อเป็นประกันการชำระหนี้ของข้าพเจ้าที่มีต่อผู้รับโอนสิทธิ
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed">
+            ข้าพเจ้าขอเรียนให้ท่านทราบว่าการโอนสิทธิเรียกร้องในการรับชำระเงินข้างต้นเป็นการโอนสิทธิแบบมีเงื่อนไขและไม่อาจเพิกถอนได้ โดยการโอนสิทธิรับชำระเงินนี้จะมีผลบังคับตามกฎหมายก็ต่อเมื่อผู้รับโอนสิทธิได้ส่ง “หนังสือแจ้งการโอนสิทธิการรับชำระเงินมีผลบังคับใช้” ให้ท่าน เพื่อให้ท่านทราบว่าการโอนสิทธิเรียกร้องในการรับชำระเงินดังกล่าวมีผลบังคับใช้ตามกฎหมายและตามที่ข้าพเจ้าได้ตกลงกับผู้รับโอนสิทธิ
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed">
+            ทั้งนี้ ข้าพเจ้ายังคงมีหน้าที่ต่อท่านตามเอกสารที่เกี่ยวข้อง ไม่ว่าการโอนสิทธิเรียกร้องในการรับชำระเงินนี้จะมีผลบังคับตามกฎหมายแล้วหรือไม่ก็ตาม
+          </div>
+
+          <div className="indent-12">
+            หากมีข้อสงสัยประการใด โปรดติดต่อ ..................... โทร .....................
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 39 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 40 (Annex 5 Signature & Acknowledgement) */}
+      <div data-section-id="od-annex-5-ack" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 text-[13px] pt-4">
+          {/* Borrower Signature Section */}
+          <div className="flex flex-col items-end space-y-12 pr-12">
+            <div className="text-center space-y-4">
+              <div>ขอแสดงความนับถือ</div>
+              <div className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></div>
+            </div>
+          </div>
+
+          <div className="flex justify-between px-12">
+            <div className="text-[10px] text-gray-400 italic whitespace-nowrap pb-10">ประทับตราบริษัท (ถ้ามี)</div>
+            <div className="w-1/2 space-y-4 pt-4 border-t border-black">
+              <div className="flex items-end gap-2">
+                <span>ชื่อ:</span>
+                <div className="flex-1 border-b border-dotted border-black"></div>
+              </div>
+              <div className="flex items-end gap-2">
+                <span>ตำแหน่ง:</span>
+                <div className="flex-1">กรรมการผู้มีอำนาจลงนาม</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t-2 border-black my-8"></div>
+
+          {/* Acknowledgement Text */}
+          <div className="text-justify leading-relaxed">
+            ข้าพเจ้ารับทราบและยินยอมอย่างเพิกถอนไม่ได้ในการโอนสิทธิเรียกร้องในการรับชำระเงินของท่านตามรายละเอียดที่ท่านได้แจ้งในหนังสือฉบับนี้
+          </div>
+
+          {/* Customer Signature Section */}
+          <div className="flex flex-col items-end space-y-12 pr-12 pt-4">
+            <div className="text-center space-y-4">
+              <div>ขอแสดงความนับถือ</div>
+              <div className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></div>
+            </div>
+          </div>
+
+          <div className="flex justify-between px-12">
+            <div className="text-[10px] text-gray-400 italic whitespace-nowrap pb-10">ประทับตราบริษัท (ถ้ามี)</div>
+            <div className="w-1/2 space-y-4 pt-4 border-t border-black">
+              <div className="flex items-end gap-2">
+                <span>ชื่อ:</span>
+                <div className="flex-1 border-b border-dotted border-black"></div>
+              </div>
+              <div className="flex items-end gap-2">
+                <span>ตำแหน่ง:</span>
+                <div className="flex-1">กรรมการผู้มีอำนาจลงนาม</div>
+              </div>
+              <div className="flex items-end gap-2">
+                <span>วันที่:</span>
+                <div className="flex-1 border-b border-dotted border-black"></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-black my-8"></div>
+
+          <div className="text-justify leading-relaxed">
+            ทั้งนี้ ขอให้ท่านกรุณาดำเนินการลงนามยืนยันในหนังสือฉบับนี้ จำนวน 2 (สอง) ฉบับ โดยภายหลังจากจากการลงนามโปรดจัดเก็บหนังสือฉบับนี้จำนวน 1 ฉบับไว้กับท่าน และส่งหนังสือฉบับนี้จำนวน 1 ฉบับ พร้อมด้วยเอกสารประกอบการลงนามตามรายการด้านล่างจำนวนอย่างละ 1 ฉบับให้แก่ข้าพเจ้า ภายในวันที่ <Highlight>{formatThaiDate(data.annex4ReturnDate || '') || '[•]'}</Highlight>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 40 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 41 (Annex 5 Documents List) */}
+      <div data-section-id="od-annex-5-docs" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-8 text-[13px] pt-8">
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <span className="shrink-0 w-12">เรียน</span>
+              <span className="font-bold">บริษัท <Highlight>{customerInfo.companyName}</Highlight></span>
+            </div>
+            <div className="pl-14">
+              <Highlight>{customerInfo.address}</Highlight>
+            </div>
+          </div>
+
+          <div className="pt-8 space-y-6">
+            <div className="font-bold underline underline-offset-4">รายการของเอกสารประกอบการลงนาม</div>
+            <div className="space-y-6">
+              <div className="flex gap-6">
+                <span className="shrink-0 w-6 text-center">1)</span>
+                <span>สำเนาหนังสือรับรองบริษัท</span>
+              </div>
+              <div className="flex gap-6">
+                <span className="shrink-0 w-6 text-center">2)</span>
+                <span>สำเนาบัตรประจำตัวประชาชน/หนังสือเดินทางของกรรมการผู้มีอำนาจ</span>
+              </div>
+              <div className="flex gap-6">
+                <span className="shrink-0 w-6 text-center">3)</span>
+                <div className="flex-1">
+                  สำเนาหนังสือมอบอำนาจ พร้อมสำเนาบัตรประจำตัวประชาชน/หนังสือเดินทางของผู้มอบอำนาจ (ถ้ามี) ในกรณีที่มีการมอบอำนาจ
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 41 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 42 (Annex 6 - Credit Drawdown Request Form) */}
+      <div data-section-id="od-annex-6-drawdown" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 text-[13px]">
+          <div className="text-center font-bold">
+            <div className="text-[13px]">เอกสารแนบท้ายหมายเลข 6</div>
+            <div className="text-[13px]">แบบของหนังสือขอเบิกใช้สินเชื่อ ครั้งที่____ใบที่____/____</div>
+          </div>
+
+          {/* Date */}
+          <div className="flex justify-end">
+            <div>วันที่ <span className="inline-block w-48 border-b border-black"></span></div>
+          </div>
+
+          {/* Subject */}
+          <div className="flex gap-2">
+            <span className="shrink-0">เรื่อง</span>
+            <div className="flex-1 text-justify indent-4">
+              การเบิกสินเชื่อตามสัญญาให้สินเชื่อหมุนเวียน แบบมีเงื่อนไข สัญญาเลขที่ <Highlight>{data.contractNo || '[•]'}</Highlight> ("สัญญาให้สินเชื่อ")
+            </div>
+          </div>
+
+          {/* To */}
+          <div>
+            <div className="flex gap-2">
+              <span className="shrink-0">เรียน</span>
+              <div className="flex-1">
+                <Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 และ
+              </div>
+            </div>
+            <div className="pl-10">
+              <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2
+            </div>
+          </div>
+
+          {/* Clause 1 */}
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">1.</span>
+            <div className="flex-1 text-justify">
+              ข้าพเจ้า<Highlight>บริษัท {customerInfo.companyName}</Highlight> ขออ้างถึงสัญญาให้สินเชื่อ และให้คำจำกัดความต่าง ๆ ที่ใช้ในสัญญาให้สินเชื่อ ให้มีความหมายเช่นเดียวกันกับการใช้ในคำขอเบิกใช้สินเชื่อนี้
+            </div>
+          </div>
+
+          {/* Clause 2 */}
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">2.</span>
+            <div className="flex-1">
+              ข้าพเจ้ามีความประสงค์จะเบิกสินเชื่อ ดังรายละเอียดต่อไปนี้
+            </div>
+          </div>
+
+          <div className="pl-10 space-y-1">
+            {/* (ก) */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">(ก)</span>
+              <span className="shrink-0">วันที่เบิกใช้สินเชื่อ:</span>
+              <div className="flex-1 border-b border-black"></div>
+            </div>
+
+            {/* (ข) */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">(ข)</span>
+              <span className="shrink-0">จำนวนเงิน:</span>
+              <div className="flex-1 border-b border-black"></div>
+              <span className="shrink-0">บาท (ไม่รวมภาษีมูลค่าเพิ่ม)</span>
+            </div>
+
+            {/* (ค) */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">(ค)</span>
+              <span className="shrink-0">ค่าธรรมเนียมในอัตราร้อยละ 0.5 ของการเบิกใช้วงเงินในครั้งนี้:</span>
+              <div className="flex-1 border-b border-black"></div>
+              <span className="shrink-0">บาท</span>
+            </div>
+
+            {/* (ง) */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">(ง)</span>
+              <span className="shrink-0">วัตถุประสงค์การใช้สินเชื่อ:</span>
+              <div className="flex-1 border-b border-black"></div>
+            </div>
+
+            {/* (จ) */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">(จ)</span>
+              <div className="flex-1">
+                <div className="mb-2">ส่งมอบเงินโดย (วิธีการใดวิธีการหนึ่ง)</div>
+
+                <div className="space-y-2 pl-4">
+                  {/* Cashier Cheque */}
+                  <div className="flex gap-2">
+                    <span className="inline-block w-4 h-4 border border-black shrink-0 mt-[2px]"></span>
+                    <span className="shrink-0">แคชเชียร์เช็ค (Cashier Cheque): ธนาคาร</span>
+                    <div className="flex-1 border-b border-black"></div>
+                    <span className="shrink-0">, สั่งจ่ายชื่อ</span>
+                    <div className="flex-1 border-b border-black"></div>
+                  </div>
+
+                  {/* Bank Cheque */}
+                  <div className="flex gap-2">
+                    <span className="inline-block w-4 h-4 border border-black shrink-0 mt-[2px]"></span>
+                    <span className="shrink-0">เช็คธนาคารสั่งจ่ายล่วงหน้า: ธนาคาร</span>
+                    <div className="flex-1 border-b border-black"></div>
+                    <span className="shrink-0">, สั่งจ่ายชื่อ</span>
+                    <div className="flex-1 border-b border-black"></div>
+                  </div>
+
+                  {/* Bank Transfer */}
+                  <div className="flex gap-2">
+                    <span className="inline-block w-4 h-4 border border-black shrink-0 mt-[2px]"></span>
+                    <span className="shrink-0">โอนเงินไปที่บัญชี: ธนาคาร</span>
+                    <div className="flex-1 border-b border-black"></div>
+                    <span className="shrink-0">, เลขที่บัญชี</span>
+                    <div className="flex-1 border-b border-black"></div>
+                  </div>
+
+                  {/* Other */}
+                  <div className="flex gap-2">
+                    <span className="inline-block w-4 h-4 border border-black shrink-0 mt-[2px]"></span>
+                    <span className="shrink-0">วิธีการอื่นใด:</span>
+                    <div className="flex-1 border-b border-black"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* (ฉ) */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">(ฉ)</span>
+              <div className="flex-1">
+                อัตราดอกเบี้ย: ร้อยละ <Highlight>1.25</Highlight> ต่อเดือน
+              </div>
+            </div>
+
+            {/* (ช) */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">(ช)</span>
+              <div className="flex-1">
+                ระยะเวลาชำระดอกเบี้ย: ชำระทั้งจำนวนเมื่อครบกำหนดชำระคืนเงินต้น
+              </div>
+            </div>
+
+            {/* (ซ) */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">(ซ)</span>
+              <span className="shrink-0">ระยะเวลาชำระคืนเงินต้น: วันที่</span>
+              <div className="flex-1 border-b border-black"></div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 42 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 43 (Annex 6 - Credit Drawdown Request Form - Cont.) */}
+      <div data-section-id="od-annex-6-drawdown-cont" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-4 text-[13px] pt-6">
+          <div className="pl-10 space-y-3">
+            {/* (ฌ) */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">(ฌ)</span>
+              <div className="flex-1 text-justify">
+                เอกสารที่เกี่ยวข้องกับลูกค้าของผู้กู้ที่ผู้กู้ส่งมอบให้แก่ผู้ให้สินเชื่อ ซึ่งเป็นเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อในครั้งนี้ ได้แก่เอกสารระหว่างผู้กู้และบริษัท<span className="inline-block w-48 border-b border-black mx-1"></span>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-justify pl-10">
+            โดยให้ถือว่าข้าพเจ้าได้รับสินเชื่อโดยชอบด้วยกฎหมายแล้วทันทีเมื่อเป็นไปตามเงื่อนไขที่กำหนดในข้อ 3. ของสัญญาให้สินเชื่อ
+          </div>
+
+          {/* Clause 3 */}
+          <div className="flex gap-2">
+            <span className="shrink-0 w-8">3.</span>
+            <div className="flex-1 text-justify">
+              ข้าพเจ้าขอยืนยันว่า คำรับรองและยืนยันตามที่ระบุไว้ในข้อ 9. ของสัญญาให้สินเชื่อ เป็นความจริงและถูกต้อง ณ วันที่ที่ระบุไว้ในคำขอเบิกใช้สินเชื่อนี้เสมือนหนึ่งว่าคำรับรองและยืนยันดังกล่าวได้กระทำขึ้นโดยคำนึงถึงข้อเท็จจริง และเหตุการณ์ที่เกิดขึ้น หรือที่เป็นอยู่จริง ณ ขณะนี้ และไม่มีกรณีเหตุผิดนัด และเหตุการณ์ที่อาจจะนำไปสู่เหตุผิดนัดเกิดขึ้น หรือกำลังจะเกิดขึ้น หรือจะมีเหตุผิดนัดหรือเหตุการณ์ที่อาจจะนำไปสู่เหตุผิดนัดเกิดขึ้นเนื่องมาจากการเบิกใช้สินเชื่อที่ให้ในครั้งนี้
+            </div>
+          </div>
+
+          {/* Signature Section */}
+          <div className="flex flex-col items-end pt-8 space-y-12 pr-12">
+            <div className="text-center space-y-4">
+              <div>ขอแสดงความนับถือ</div>
+              <div className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></div>
+            </div>
+          </div>
+
+          <div className="flex justify-between pt-8 px-12">
+            <div className="text-[10px] text-gray-400 italic whitespace-nowrap pb-10">ประทับตราบริษัท (ถ้ามี)</div>
+            <div className="w-1/2 space-y-4 pt-4 border-t border-black">
+              <div className="flex items-end gap-2">
+                <span>ชื่อ:</span>
+                <div className="flex-1 border-b border-dotted border-black"></div>
+              </div>
+              <div className="flex items-end gap-2">
+                <span>ตำแหน่ง:</span>
+                <div className="flex-1">กรรมการผู้มีอำนาจลงนาม</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 43 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 44 (Annex 7 - Receipt of Credit Facility) */}
+      <div data-section-id="od-annex-7" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 text-[13px]">
+          <div className="text-center font-bold">
+            <div className="text-[13px]">เอกสารแนบท้ายหมายเลข 7</div>
+            <div className="text-[13px]">แบบของเอกสารการรับสินเชื่อ</div>
+          </div>
+
+          <div className="flex justify-end pt-4">
+            <div>วันที่ <Highlight>{formatThaiDate(data.effectiveDate) || '[•]'}</Highlight></div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <span className="shrink-0 w-12">เรื่อง</span>
+              <span className="flex-1 text-justify">
+                การรับสินเชื่อตามสัญญาให้สินเชื่อหมุนเวียน แบบมีเงื่อนไข สัญญาเลขที่ <Highlight>{data.contractNo || 'AGA/17-PL112025'}</Highlight> <b>(“สัญญาให้สินเชื่อ”)</b>
+              </span>
+            </div>
+
+            <div className="flex gap-2">
+              <span className="shrink-0 w-12">เรียน</span>
+              <div className="flex-1">
+                <Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 และ<br />
+                <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2
+              </div>
+            </div>
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed pt-2">
+            ตามที่ข้าพเจ้า<Highlight>{customerInfo.companyName}</Highlight> ได้ขอเบิกสินเชื่อต่อ [<Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 / <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2] เป็นจำนวน <span className="inline-block w-30 border-b border-black"></span> บาท ดังรายละเอียดปรากฏตามหนังสือขอเบิกใช้สินเชื่อ ฉบับลงวันที่ <span className="inline-block w-30 border-b border-black"></span>
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed">
+            ในวันที่ <span className="inline-block w-23 border-b border-black"></span>ข้าพเจ้าได้รับสินเชื่อตามสัญญาให้สินเชื่อเป็นจำนวนเงิน <span className="inline-block w-30 border-b border-black"></span> บาท จาก [<Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 / <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2] ไว้ถูกต้องเรียบร้อยแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ ณ วัน เดือน ปี ที่กล่าวข้างต้น
+          </div>
+
+          <div className="flex flex-col items-end pt-5 space-y-12 pr-12">
+            <div className="text-center">
+              <div>ขอแสดงความนับถือ</div>
+              <div className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></div>
+            </div>
+          </div>
+
+          <div className="flex justify-between pt-8 px-12">
+            <div className="text-[10px] text-gray-400 italic whitespace-nowrap pb-10">ประทับตราบริษัท (ถ้ามี)</div>
+            <div className="w-1/2 space-y-4 pt-4">
+              <div className="border-t border-black mb-2"></div>
+              <div className="flex items-end gap-2">
+                <span>ชื่อ:</span>
+                <div className="flex-1 border-b border-dotted border-black"></div>
+              </div>
+              <div className="flex items-end gap-2">
+                <span>ตำแหน่ง:</span>
+                <div className="flex-1 text-center font-bold">กรรมการผู้มีอำนาจลงนาม</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 44 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 45 (Annex 8) */}
+      <div data-section-id="od-annex-8" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="flex flex-col items-center text-[13px]">
+          <div className="font-bold">เอกสารแนบท้ายหมายเลข 8</div>
+          <div className="font-bold underline text-center uppercase">
+            รายละเอียดเกี่ยวกับหลักประกัน
+          </div>
+        </div>
+
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 45 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 46 (Annex 9) */}
+      <div data-section-id="od-annex-9" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        <div className="space-y-6 text-[13px]">
+          <div className="text-center font-bold">
+            <div className="text-[13px]">เอกสารแนบท้ายหมายเลข 9</div>
+            <div className="text-[13px]">แบบของหนังสือแจ้งการโอนสิทธิการรับชำระเงินมีผลบังคับใช้</div>
+          </div>
+
+          <div className="flex justify-end pt-4">
+            <div>วันที่ <Highlight>{formatThaiDate(data.effectiveDate) || '[•]'}</Highlight></div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <span className="shrink-0 w-12">เรื่อง</span>
+              <span className="flex-1 text-justify">
+                แจ้งการโอนสิทธิการรับชำระเงินมีผลบังคับใช้
+              </span>
+            </div>
+
+            <div className="flex gap-2">
+              <span className="shrink-0 w-12">เรียน</span>
+              <div className="flex-1">
+                <Highlight>[•]</Highlight>
+              </div>
+            </div>
+            <div className="pl-14">
+              บริษัท <Highlight>[ชื่อของลูกค้าของผู้กู้]</Highlight>
+            </div>
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed pt-2">
+            ตามที่ <Highlight>{customerInfo.companyName || '[ชื่อของผู้กู้]'}</Highlight> <b>(“ผู้โอนสิทธิ”)</b> ได้มีการแจ้งการโอนสิทธิเรียกร้องในการรับชำระเงินให้ท่านทราบ ดังรายละเอียดปรากฏตามหนังสือบอกกล่าวการโอนสิทธิการรับชำระเงิน แบบมีเงื่อนไข ฉบับลงวันที่ <span className="inline-block w-30 border-b border-dotted border-black"></span> <b>(“หนังสือบอกกล่าว”)</b> นั้น
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed">
+            โดยหนังสือฉบับนี้ ข้าพเจ้า<Highlight>{agileInfo.companyName}</Highlight> และ <Highlight> {tkInfo.companyName}</Highlight> <b>(“ผู้รับโอนสิทธิ”)</b> ขอส่งหนังสือแจ้งการโอนสิทธิการรับชำระเงินมีผลบังคับใช้ เพื่อแจ้งให้ท่านทราบว่าการโอนสิทธิเรียกร้องในการรับชำระเงินดังกล่าวมีผลบังคับใช้ตามกฎหมายและตามที่ข้าพเจ้าได้ตกลงกับผู้โอนสิทธิ ตั้งแต่วันที่ท่านได้รับหนังสือฉบับนี้เป็นต้นไป <b>(“วันบังคับโอนสิทธิ”)</b> ดังนั้น ตั้งแต่วันบังคับโอนสิทธิ สิทธิเรียกร้องในการรับเงินทุกประการตามเอกสารที่เกี่ยวข้องตามที่ระบุในหนังสือบอกกล่าวจะตกเป็นของผู้รับโอนสิทธิ และผู้โอนสิทธิไม่มีสิทธิรับเงินใด ๆ ตามเอกสารที่เกี่ยวข้องตามที่ระบุในหนังสือบอกกล่าวอีกต่อไป
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed">
+            จึงเรียนมาเพื่อทราบ และขอความกรุณาให้ท่านให้ความร่วมมือกับผู้รับโอนสิทธิหรือตัวแทนของผู้รับโอนสิทธิในการดำเนินการต่าง ๆ ต่อไปทุกประการด้วย จักขอบพระคุณยิ่ง
+          </div>
+
+          <div className="text-justify indent-12 leading-relaxed pt-4">
+            หากมีข้อสงสัยประการใด โปรดติดต่อ <span className="inline-block w-32 border-b border-dotted border-black"></span> โทร <span className="inline-block w-32 border-b border-dotted border-black"></span>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 46 จาก 47
+          </div>
+        </div>
+      </div>
+
+      {/* Page 47 (Annex 9 - Signature) */}
+      <div data-section-id="od-annex-9-sig" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+        <PageHeader />
+        
+        <div className="pt-20 text-[13px]">
+          <div className="text-center mb-16">
+            ขอแสดงความนับถือ
+          </div>
+
+          <div className="grid grid-cols-2 gap-16 px-12">
+            {/* Agile Assets Sig */}
+            <div className="flex flex-col items-center">
+              <div className="mb-24"><Highlight>{agileInfo.companyName}</Highlight></div>
+              <div className="w-full space-y-3">
+                <div className="border-t border-black w-full mb-2"></div>
+                <div className="flex items-end gap-2">
+                  <span className="shrink-0">ชื่อ:</span>
+                  <div className="flex-1 border-b border-dotted border-black"></div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="shrink-0">ตำแหน่ง:</span>
+                  <div className="flex-1 text-center">กรรมการผู้มีอำนาจลงนาม</div>
+                </div>
+                <div className="text-center text-gray-600 pt-8">
+                  ประทับตราบริษัท (ถ้ามี)
+                </div>
+              </div>
+            </div>
+
+            {/* TK Sig */}
+            <div className="flex flex-col items-center">
+              <div className="mb-24"><Highlight>{tkInfo.companyName}</Highlight></div>
+              <div className="w-full space-y-3">
+                <div className="border-t border-black w-full mb-2"></div>
+                <div className="flex items-end gap-2">
+                  <span className="shrink-0">ชื่อ:</span>
+                  <div className="flex-1 border-b border-dotted border-black"></div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="shrink-0">ตำแหน่ง:</span>
+                  <div className="flex-1 text-center">กรรมการผู้มีอำนาจลงนาม</div>
+                </div>
+                <div className="text-center text-gray-600 pt-8">
+                  ประทับตราบริษัท (ถ้ามี)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer info for print */}
+        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+          <div>
+            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+          </div>
+          <div>
+            หน้า 47 จาก 47
           </div>
         </div>
       </div>
