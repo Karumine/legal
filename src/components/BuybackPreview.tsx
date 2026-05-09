@@ -58,8 +58,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
 
   const renderPageFooter = (page: number) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-      <div className="flex flex-col">
-        <span className="bg-yellow-100 print:bg-transparent font-bold rounded shadow-sm">สัญญารับซื้อคืนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight></span>
+      <div>
+        สัญญารับซื้อคืนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
       </div>
       <div className="text-gray-400">หน้า {page} จาก {totalPages}</div>
     </div>
