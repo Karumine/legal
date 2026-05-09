@@ -88,7 +88,7 @@ export default function GuaranteePreview({ data }: Props) {
                     </>
                   ) : (
                     <>
-                      <b><Highlight>{guarantor.name}</Highlight></b> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (<b>“ผู้ค้ำประกันคนที่ {idx + 1}”</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                      <b><Highlight>{guarantor.name}</Highlight></b> {guarantor.nationality === 'foreigner' ? 'ผู้ถือหนังสือเดินทางเลขที่' : 'ผู้ถือบัตรประจำตัวประชาชนเลขที่'} <Highlight>{guarantor.nationality === 'foreigner' ? guarantor.idCard : formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (<b>“ผู้ค้ำประกันคนที่ {idx + 1}”</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
                     </>
                   )}
                 </div>
@@ -608,7 +608,7 @@ export default function GuaranteePreview({ data }: Props) {
               </div>
 
               <div className="indent-10 mb-8 leading-[1.8]">
-                ข้าพเจ้า <Highlight>{guarantor.name}</Highlight> ผู้ถือบัตรประจำตัวประชาชนเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (“ผู้ค้ำประกัน”) ขอยืนยันว่าในขณะที่ข้าพเจ้าทำนิติกรรมใดๆ กับบริษัทฯ ข้าพเจ้าไม่เป็นบุคคลล้มละลาย หรือถูกศาลพิทักษ์ทรัพย์เด็ดขาด หรือพิทักษ์ทรัพย์ชั่วคราว และข้าพเจ้าขอรับรองว่าข้าพเจ้า <span className="font-bold underline">{guarantor.isMarried ? 'ได้' : 'มิได้'}</span> ทำการสมรสโดยจดทะเบียน
+                ข้าพเจ้า <Highlight>{guarantor.name}</Highlight> {guarantor.nationality === 'foreigner' ? 'ผู้ถือหนังสือเดินทางเลขที่' : 'ผู้ถือบัตรประจำตัวประชาชนเลขที่'} <Highlight>{guarantor.nationality === 'foreigner' ? guarantor.idCard : formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (“ผู้ค้ำประกัน”) ขอยืนยันว่าในขณะที่ข้าพเจ้าทำนิติกรรมใดๆ กับบริษัทฯ ข้าพเจ้าไม่เป็นบุคคลล้มละลาย หรือถูกศาลพิทักษ์ทรัพย์เด็ดขาด หรือพิทักษ์ทรัพย์ชั่วคราว และข้าพเจ้าขอรับรองว่าข้าพเจ้า <span className="font-bold underline">{guarantor.isMarried ? 'ได้' : 'มิได้'}</span> ทำการสมรสโดยจดทะเบียน
               </div>
 
               <div className="flex flex-col items-center gap-16 mt-32">
@@ -671,7 +671,7 @@ export default function GuaranteePreview({ data }: Props) {
 
                   <div className="leading-[1.8]">
                     <div className="indent-10">
-                      โดยหนังสือฉบับนี้ข้าพเจ้า <Highlight>{guarantor.spouseName}</Highlight> เลขประจำตัวประชาชน <Highlight>{formatThaiId(guarantor.spouseIdCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.spouseAddress, guarantor.spousePostalCode))}</Highlight> ซึ่งเป็นสามี/ภริยา ของ <Highlight>{guarantor.name}</Highlight>
+                      โดยหนังสือฉบับนี้ข้าพเจ้า <Highlight>{guarantor.spouseName}</Highlight> {guarantor.spouseNationality === 'foreigner' ? 'ผู้ถือหนังสือเดินทางเลขที่' : 'เลขประจำตัวประชาชน'} <Highlight>{guarantor.spouseNationality === 'foreigner' ? guarantor.spouseIdCard : formatThaiId(guarantor.spouseIdCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.spouseAddress, guarantor.spousePostalCode))}</Highlight> ซึ่งเป็นสามี/ภริยา ของ <Highlight>{guarantor.name}</Highlight>
                     </div>
                     <div className="indent-10">
                       ขอให้ความยินยอมโดยหนังสือนี้ว่าให้ <Highlight>{guarantor.name}</Highlight> สามี/ภริยา ของข้าพเจ้าทำนิติกรรม เป็นผู้ค้ำประกันการชำระหนี้ของบริษัท <Highlight>{data.refContractCompany}</Highlight> รวมถึงนิติกรรมต่างๆ กับ<Highlight>บริษัท อาไจล์ แอสเซ็ทส์ จำกัด และ บริษัท ฐิติกร จำกัด (มหาชน)</Highlight> ได้

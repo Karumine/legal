@@ -11,6 +11,8 @@ export interface GuarantorInfo {
   spousePostalCode?: string;
   type?: 'person' | 'company' | 'partnership';
   directors?: string;
+  nationality?: 'thai' | 'foreigner';
+  spouseNationality?: 'thai' | 'foreigner';
 }
 
 export interface GuaranteeData {

@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
-import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Save, Loader2, Share2 } from 'lucide-react';
+import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Save, Loader2, Share2, Plus, Trash2 } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
@@ -37,7 +37,21 @@ function App() {
     const saved = localStorage.getItem('legalAppData');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Migration for guaranteeAgreements
+        if (!parsed.guaranteeAgreements) {
+          if (parsed.guarantors && parsed.guarantors.length > 0) {
+            parsed.guaranteeAgreements = [
+              {
+                id: 'ga-legacy-' + Date.now(),
+                guarantors: parsed.guarantors
+              }
+            ];
+          } else {
+            parsed.guaranteeAgreements = [];
+          }
+        }
+        return parsed;
       } catch (e) {
         console.error('Failed to parse saved data', e);
       }
@@ -108,10 +122,11 @@ function App() {
 
   const scrollPositionsRef = useRef<Record<string, number>>({});
   const isInternalScrollRef = useRef(false);
+  const isSectionScrollingRef = useRef(false);
   const previewPanelRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    if (isInternalScrollRef.current) return;
+    if (isInternalScrollRef.current || isSectionScrollingRef.current) return;
     scrollPositionsRef.current[activePreview] = e.currentTarget.scrollTop;
   };
 
@@ -146,43 +161,51 @@ function App() {
   // Preview scroll sync: switches to the correct preview tab and scrolls to the matching section
   const lastFocusSectionRef = useRef<string>('');
   const scrollToPreviewSection = useCallback((sectionId: string, previewTabKey?: string) => {
+    console.log(`[scrollToPreviewSection] called with sectionId: "${sectionId}", previewTabKey: "${previewTabKey}", activePreview: "${activePreview}"`);
     const key = `${previewTabKey || ''}::${sectionId}`;
-    if (key === lastFocusSectionRef.current) return; // Skip if already on this section
+    const isNewSection = key !== lastFocusSectionRef.current;
     lastFocusSectionRef.current = key;
 
     // Switch to the correct preview tab if provided
     if (previewTabKey && previewTabKey !== activePreview) {
+      console.log(`[scrollToPreviewSection] switching tab to: ${previewTabKey}`);
       // Only block restoration if we actually have a sectionId to scroll to.
       // If no sectionId, we want the standard restoration logic to run.
       if (sectionId) {
-        isInternalScrollRef.current = true;
+        isSectionScrollingRef.current = true;
       }
       setActivePreview(previewTabKey);
     }
 
     // If no sectionId, just switch the tab (for supplementary contracts)
-    if (!sectionId) return;
+    if (!sectionId) {
+       console.log(`[scrollToPreviewSection] no sectionId, returning early`);
+       return;
+    }
 
     // Wait for render to complete, then scroll to the section
     requestAnimationFrame(() => {
       setTimeout(() => {
         const previewPanel = document.getElementById('preview-panel');
         const target = previewPanel?.querySelector(`[data-section-id="${sectionId}"]`);
+        console.log(`[scrollToPreviewSection] looking for [data-section-id="${sectionId}"]... panel: ${!!previewPanel}, target: ${!!target}`);
+        
         if (target && previewPanel) {
-          isInternalScrollRef.current = true;
-          const panelRect = previewPanel.getBoundingClientRect();
-          const targetRect = target.getBoundingClientRect();
-          const scrollOffset = targetRect.top - panelRect.top + previewPanel.scrollTop - 80;
-          previewPanel.scrollTo({ top: scrollOffset, behavior: 'smooth' });
+          isSectionScrollingRef.current = true;
+          console.log(`[scrollToPreviewSection] scrolling target into view`);
+          
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-          // Brief highlight flash on the target element
-          target.classList.add('preview-highlight-flash');
-          setTimeout(() => target.classList.remove('preview-highlight-flash'), 1500);
+          // Brief highlight flash on the target element only if it's a new section or it was not previously flashing
+          if (isNewSection) {
+            target.classList.add('preview-highlight-flash');
+            setTimeout(() => target.classList.remove('preview-highlight-flash'), 1500);
+          }
 
           // Reset internal scroll flag after smooth animation finishes
-          setTimeout(() => { isInternalScrollRef.current = false; }, 1000);
+          setTimeout(() => { isSectionScrollingRef.current = false; }, 1000);
         } else {
-          isInternalScrollRef.current = false;
+          isSectionScrollingRef.current = false;
         }
       }, 50);
     });
@@ -261,6 +284,7 @@ function App() {
       const panel = previewPanelRef.current;
       if (panel) {
         const targetPos = scrollPositionsRef.current[activePreview] || 0;
+        console.log(`[useEffect] contentHeight changed or tab switched. Restoring scroll to ${targetPos}`);
         if (panel.scrollTop < targetPos) {
           panel.scrollTop = targetPos;
         }
@@ -469,6 +493,8 @@ function App() {
         spousePostalCode: g.spousePostalCode,
         type: g.guarantorType,
         directors: g.directors,
+        nationality: g.nationality,
+        spouseNationality: g.spouseNationality,
       })),
 
       refContractCompany: data.customerInfo.companyName,
@@ -510,8 +536,18 @@ function App() {
 
   // Supplementary tabs
   const supplementaryTabs: { key: string; label: string; icon: 'shield' | 'handshake' | 'wrench' | 'receipt' }[] = [];
-  if (data.guarantors && data.guarantors.length > 0) {
-    supplementaryTabs.push({ key: 'guarantee', label: 'ค้ำประกัน', icon: 'shield' });
+  if (data.guaranteeAgreements && data.guaranteeAgreements.length > 0) {
+    data.guaranteeAgreements.forEach((ga, idx) => {
+      if (ga.guarantors && ga.guarantors.length > 0) {
+        supplementaryTabs.push({ 
+          key: `guarantee-${ga.id}`, 
+          label: `ค้ำประกัน${data.guaranteeAgreements!.length > 1 ? ` (${idx + 1})` : ''}`, 
+          icon: 'shield' 
+        });
+      }
+    });
+  } else if (data.guarantors && data.guarantors.length > 0) { // Fallback for safety
+    supplementaryTabs.push({ key: 'guarantee-legacy', label: 'ค้ำประกัน', icon: 'shield' });
   }
   supplementaryTabs.push({ key: 'jointVenture', label: 'ค้าร่วม', icon: 'handshake' });
   supplementaryTabs.push({ key: 'serviceAgreement', label: 'จ้างบริการ', icon: 'wrench' });
@@ -815,16 +851,82 @@ function App() {
             </div>
           )}
           {/* Step 5: Global Layout (Guarantors, etc.) */}
-          <div className="space-y-5 border-t-2 border-slate-100 pt-5 mt-5" onFocusCapture={() => scrollToPreviewSection('', 'guarantee')}>
+          <div className="space-y-5 border-t-2 border-slate-100 pt-5 mt-5">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest px-1">ข้อมูลประกอบและสัญญาพ่วง</h3>
 
-            <GuarantorForm
-              data={data.guarantors}
-              onChange={(g: GuarantorData[]) => updateField('guarantors', g)}
-              agreements={data.agreements}
-              customerInfo={data.customerInfo}
-              onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, 'guarantee')}
-            />
+            {data.guaranteeAgreements?.map((ga, idx) => (
+              <div key={ga.id} className="relative group" onFocusCapture={() => scrollToPreviewSection('', `guarantee-${ga.id}`)}>
+                {data.guaranteeAgreements!.length > 1 && (
+                  <button
+                    onClick={() => {
+                      if (window.confirm('คุณต้องการลบสัญญาค้ำประกันฉบับนี้หรือไม่?')) {
+                        updateField('guaranteeAgreements', data.guaranteeAgreements!.filter(g => g.id !== ga.id));
+                      }
+                    }}
+                    className="absolute -right-3 -top-3 z-10 bg-red-100 text-red-600 p-2 rounded-full hover:bg-red-200 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                    title="ลบสัญญาค้ำประกันฉบับนี้"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                )}
+                <GuarantorForm
+                  title={`สัญญาค้ำประกัน (ผู้ค้ำ)${data.guaranteeAgreements!.length > 1 ? ` ฉบับที่ ${idx + 1}` : ''}`}
+                  data={ga.guarantors}
+                  onChange={(g) => {
+                    const newGa = [...data.guaranteeAgreements!];
+                    newGa[idx] = { ...newGa[idx], guarantors: g };
+                    updateField('guaranteeAgreements', newGa);
+                  }}
+                  agreements={data.agreements}
+                  customerInfo={data.customerInfo}
+                  onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, `guarantee-${ga.id}`)}
+                />
+              </div>
+            ))}
+            
+            {/* Legacy fallback */}
+            {(!data.guaranteeAgreements || data.guaranteeAgreements.length === 0) && data.guarantors && data.guarantors.length > 0 && (
+               <div onFocusCapture={() => scrollToPreviewSection('', 'guarantee-legacy')}>
+                  <GuarantorForm
+                    title="สัญญาค้ำประกัน (ผู้ค้ำ)"
+                    data={data.guarantors}
+                    onChange={(g) => updateField('guarantors', g)}
+                    agreements={data.agreements}
+                    customerInfo={data.customerInfo}
+                    onFocusSection={(sectionId: string) => scrollToPreviewSection(sectionId, 'guarantee-legacy')}
+                  />
+               </div>
+            )}
+
+            <button
+              onClick={() => {
+                const newId = 'ga-' + Date.now();
+                const newGa = {
+                  id: newId,
+                  guarantors: [
+                    {
+                      id: Date.now().toString(),
+                      contractNo: 'AGA/XX-SUR',
+                      contractDate: TODAY,
+                      guarantorName: '',
+                      guarantorIdCard: '',
+                      guarantorAddress: '',
+                      isMarried: false,
+                      spouseName: '',
+                      spouseIdCard: '',
+                      spouseAddress: '',
+                      selectedAgreementIds: data.agreements.map(a => a.id),
+                      guarantorType: 'person' as const,
+                    }
+                  ]
+                };
+                updateField('guaranteeAgreements', [...(data.guaranteeAgreements || []), newGa]);
+              }}
+              className="w-full py-3 border-2 border-dashed border-emerald-200 rounded-lg text-emerald-600 hover:bg-emerald-50 hover:border-emerald-300 transition-all font-bold flex items-center justify-center gap-2"
+            >
+              <Plus size={18} />
+              เพิ่มสัญญาค้ำประกันฉบับใหม่
+            </button>
           </div>
 
 
@@ -1007,8 +1109,18 @@ function App() {
                   return null;
                 })()
               )}
-              {activePreview === 'guarantee' && data.guarantors.length > 0 && (
-                <GuaranteePreview data={buildGuaranteeData(data.guarantors)} />
+              {activePreview.startsWith('guarantee-') && (
+                (() => {
+                  if (activePreview === 'guarantee-legacy' && data.guarantors && data.guarantors.length > 0) {
+                    return <GuaranteePreview data={buildGuaranteeData(data.guarantors)} />;
+                  }
+                  const gaId = activePreview.replace('guarantee-', '');
+                  const ga = data.guaranteeAgreements?.find(g => g.id === gaId);
+                  if (ga && ga.guarantors && ga.guarantors.length > 0) {
+                    return <GuaranteePreview data={buildGuaranteeData(ga.guarantors)} />;
+                  }
+                  return null;
+                })()
               )}
               {activePreview === 'jointVenture' && (
                 <JointVenturePreview

@@ -290,12 +290,19 @@ export interface GuarantorData {
   directors?: string;
   selectedAgreementIds?: string[];
   guarantorType?: 'person' | 'company' | 'partnership';
+  nationality?: 'thai' | 'foreigner';
+  spouseNationality?: 'thai' | 'foreigner';
 }
 
 export interface Agreement {
   id: string;
   type: ContractType;
   data: HirePurchaseData | CreditFacilityData | ODData | any;
+}
+
+export interface GuaranteeAgreementData {
+  id: string;
+  guarantors: GuarantorData[];
 }
 
 export interface AppData {
@@ -305,7 +312,8 @@ export interface AppData {
   customerInfo: CompanyInfo;
   agreements: Agreement[];
   activeAgreementId: string | null;
-  guarantors: GuarantorData[];
+  guarantors: GuarantorData[]; // legacy, keeping for backward compatibility
+  guaranteeAgreements?: GuaranteeAgreementData[];
   jointVentureData: JointVentureData;
   serviceAgreementData: ServiceAgreementData;
   feePaymentData: FeePaymentData;
@@ -414,6 +422,7 @@ export const initialAppData: AppData = {
   activeAgreementId: 'initial-hp',
 
   guarantors: [],
+  guaranteeAgreements: [],
 
   jointVentureData: {
     contractNo: '',
