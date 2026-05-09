@@ -560,12 +560,27 @@ function App() {
     }
   };
 
+  const customerName = data.customerInfo.companyName || 'Unknown_Customer';
+  
   const exportItems: ExportItem[] = [
-    ...mainContractGroups.flatMap(g => [
-      { id: g.key, label: g.label, type: 'main' as const },
-      ...g.buybacks.map(b => ({ id: b.key, label: b.label, type: 'buyback' as const }))
-    ]),
-    ...supplementaryTabs.map(t => ({ id: t.key, label: t.label, type: 'supplementary' as const }))
+    ...mainContractGroups.flatMap(g => {
+      const contractRef = g.contractNo ? `_${g.contractNo}` : '';
+      return [
+        { id: g.key, label: g.label, type: 'main' as const, fileName: `${g.label}_${customerName}${contractRef}` },
+        ...g.buybacks.map((b, bIdx) => ({ 
+          id: b.key, 
+          label: b.label, 
+          type: 'buyback' as const, 
+          fileName: `สัญญารับซื้อคืน${bIdx > 0 ? `_${bIdx + 1}` : ''}_${customerName}${contractRef}` 
+        }))
+      ];
+    }),
+    ...supplementaryTabs.map(t => ({ 
+      id: t.key, 
+      label: t.label, 
+      type: 'supplementary' as const, 
+      fileName: `${t.label}_${customerName}` 
+    }))
   ];
 
   const renderContractPreview = (agreement: Agreement) => {
@@ -645,7 +660,6 @@ function App() {
         <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-3 z-20 shadow-sm">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <h1 className="text-xl font-bold tracking-tight text-slate-800">Control Panel</h1>
               <CountdownTimer />
             </div>
             <div className="flex items-center gap-2">
@@ -742,7 +756,7 @@ function App() {
                         title="โหลดหลายสัญญาต่อเนื่อง"
                       >
                         <Printer size={14} />
-                        {showText && <span>Batch Export</span>}
+                        {showText && <span>Print All</span>}
                       </button>
                     </div>
                   </>

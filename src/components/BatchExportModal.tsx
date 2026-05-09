@@ -6,6 +6,7 @@ export interface ExportItem {
   id: string;
   label: string;
   type: 'main' | 'buyback' | 'supplementary';
+  fileName?: string;
 }
 
 interface Props {
@@ -61,10 +62,18 @@ export default function BatchExportModal({ isOpen, onClose, items, onSelectPrevi
       // Increased delay to ensure all heavy DOM elements (like 80 pages) are fully rendered
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // 3. Trigger print. Browser will pause JS here until dialog closes.
+      // 3. Temporarily change document title to set default save filename
+      const originalTitle = document.title;
+      const safeFileName = (item.fileName || item.label).replace(/[\\/:*?"<>|]/g, '-');
+      document.title = safeFileName;
+
+      // 4. Trigger print. Browser will pause JS here until dialog closes.
       window.print();
       
-      // 4. Wait briefly after dialog closes before moving to next
+      // 5. Restore original title
+      document.title = originalTitle;
+
+      // 6. Wait briefly after dialog closes before moving to next
       await new Promise(resolve => setTimeout(resolve, 500));
     }
 
