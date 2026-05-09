@@ -26,6 +26,8 @@ import { useHighlight } from './contexts/HighlightContext';
 import { useNotification } from './contexts/NotificationContext';
 import { NotificationContainer } from './components/Notification';
 import CountdownTimer from './components/CountdownTimer';
+import BatchExportModal from './components/BatchExportModal';
+import type { ExportItem } from './components/BatchExportModal';
 import { saveDraft, getDraft } from './services/supabase';
 
 type PreviewTab = string;
@@ -66,6 +68,7 @@ function App() {
 
   const [draftId, setDraftId] = useState<string | null>(null);
   const [isCloudSaving, setIsCloudSaving] = useState(false);
+  const [isBatchExportOpen, setIsBatchExportOpen] = useState(false);
 
   // Load draft from Supabase if draftId is in URL
   useEffect(() => {
@@ -161,14 +164,12 @@ function App() {
   // Preview scroll sync: switches to the correct preview tab and scrolls to the matching section
   const lastFocusSectionRef = useRef<string>('');
   const scrollToPreviewSection = useCallback((sectionId: string, previewTabKey?: string) => {
-    console.log(`[scrollToPreviewSection] called with sectionId: "${sectionId}", previewTabKey: "${previewTabKey}", activePreview: "${activePreview}"`);
     const key = `${previewTabKey || ''}::${sectionId}`;
     const isNewSection = key !== lastFocusSectionRef.current;
     lastFocusSectionRef.current = key;
 
     // Switch to the correct preview tab if provided
     if (previewTabKey && previewTabKey !== activePreview) {
-      console.log(`[scrollToPreviewSection] switching tab to: ${previewTabKey}`);
       // Only block restoration if we actually have a sectionId to scroll to.
       // If no sectionId, we want the standard restoration logic to run.
       if (sectionId) {
@@ -179,7 +180,6 @@ function App() {
 
     // If no sectionId, just switch the tab (for supplementary contracts)
     if (!sectionId) {
-       console.log(`[scrollToPreviewSection] no sectionId, returning early`);
        return;
     }
 
@@ -188,11 +188,9 @@ function App() {
       setTimeout(() => {
         const previewPanel = document.getElementById('preview-panel');
         const target = previewPanel?.querySelector(`[data-section-id="${sectionId}"]`);
-        console.log(`[scrollToPreviewSection] looking for [data-section-id="${sectionId}"]... panel: ${!!previewPanel}, target: ${!!target}`);
         
         if (target && previewPanel) {
           isSectionScrollingRef.current = true;
-          console.log(`[scrollToPreviewSection] scrolling target into view`);
           
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -284,7 +282,6 @@ function App() {
       const panel = previewPanelRef.current;
       if (panel) {
         const targetPos = scrollPositionsRef.current[activePreview] || 0;
-        console.log(`[useEffect] contentHeight changed or tab switched. Restoring scroll to ${targetPos}`);
         if (panel.scrollTop < targetPos) {
           panel.scrollTop = targetPos;
         }
@@ -563,7 +560,13 @@ function App() {
     }
   };
 
-
+  const exportItems: ExportItem[] = [
+    ...mainContractGroups.flatMap(g => [
+      { id: g.key, label: g.label, type: 'main' as const },
+      ...g.buybacks.map(b => ({ id: b.key, label: b.label, type: 'buyback' as const }))
+    ]),
+    ...supplementaryTabs.map(t => ({ id: t.key, label: t.label, type: 'supplementary' as const }))
+  ];
 
   const renderContractPreview = (agreement: Agreement) => {
     const filteredGuarantors = data.guarantors.filter(g => g.selectedAgreementIds?.includes(agreement.id));
@@ -731,6 +734,15 @@ function App() {
                       >
                         <Printer size={14} />
                         {showText && <span>ทำสัญญา</span>}
+                      </button>
+                      <div className="w-px h-4 bg-slate-300 mx-1" />
+                      <button
+                        onClick={() => setIsBatchExportOpen(true)}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-bold transition-all text-sm h-full bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200`}
+                        title="โหลดหลายสัญญาต่อเนื่อง"
+                      >
+                        <Printer size={14} />
+                        {showText && <span>Batch Export</span>}
                       </button>
                     </div>
                   </>
@@ -1145,6 +1157,13 @@ function App() {
         </div>
       )}
       <NotificationContainer />
+      {/* Batch Export Modal */}
+      <BatchExportModal
+        isOpen={isBatchExportOpen}
+        onClose={() => setIsBatchExportOpen(false)}
+        items={exportItems}
+        onSelectPreview={setActivePreview}
+      />
     </div>
   );
 }
