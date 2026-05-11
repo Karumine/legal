@@ -8,6 +8,7 @@ import ThaiAddressInput from './ThaiAddressInput';
 import { useNotification } from '../contexts/NotificationContext';
 
 interface Props {
+  title?: string;
   data: GuarantorData[];
   onChange: (data: GuarantorData[]) => void;
   agreements: Agreement[];
@@ -15,7 +16,7 @@ interface Props {
   onFocusSection?: (sectionId: string) => void;
 }
 
-export default function GuarantorForm({ data, onChange, agreements, customerInfo, onFocusSection }: Props) {
+export default function GuarantorForm({ title = 'สัญญาค้ำประกัน (ผู้ค้ำ)', data, onChange, agreements, customerInfo, onFocusSection }: Props) {
   const { notify } = useNotification();
   const prevAgreementsRef = useRef<string[]>([]);
   const mainAgreements = agreements; // Show all main contracts as requested
@@ -128,7 +129,7 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
     <section className="bg-white p-4 rounded-lg shadow-sm border border-emerald-200" onFocusCapture={() => onFocusSection?.('guarantee-parties')}>
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-        <h3 className="font-semibold text-lg text-emerald-700">สัญญาค้ำประกัน (ผู้ค้ำ)</h3>
+        <h3 className="font-semibold text-lg text-emerald-700">{title}</h3>
       </div>
 
       <div className="space-y-6">
@@ -213,6 +214,33 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                 </div>
               </div>
 
+              {/* Guarantor Nationality (Only for person) */}
+              {(!guarantor.guarantorType || guarantor.guarantorType === 'person') && (
+                <div className="pb-4 border-b border-emerald-100/50 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <label className="block text-xs font-medium text-gray-600 mb-2">สัญชาติ</label>
+                  <div className="flex gap-4">
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={!guarantor.nationality || guarantor.nationality === 'thai'}
+                        onChange={() => updateGuarantor(guarantor.id, { nationality: 'thai', guarantorIdCard: '' })}
+                        className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">คนไทย (บัตรประชาชน)</span>
+                    </label>
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={guarantor.nationality === 'foreigner'}
+                        onChange={() => updateGuarantor(guarantor.id, { nationality: 'foreigner', guarantorIdCard: '' })}
+                        className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">ชาวต่างชาติ (พาสปอร์ต)</span>
+                    </label>
+                  </div>
+                </div>
+              )}
+
               {/* Internal Guarantee Info */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -265,15 +293,25 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
-                    {guarantor.guarantorType === 'person' || !guarantor.guarantorType ? 'เลขบัตรประจำตัวประชาชน' : 'เลขทะเบียนนิติบุคคล'}
+                    {guarantor.guarantorType === 'company' || guarantor.guarantorType === 'partnership' 
+                      ? 'เลขทะเบียนนิติบุคคล' 
+                      : (guarantor.nationality === 'foreigner' ? 'เลขพาสปอร์ต / Passport No.' : 'เลขบัตรประจำตัวประชาชน')}
                   </label>
                   <div className="relative">
                     <input
                       type="text"
                       value={guarantor.guarantorIdCard}
-                      onChange={(e) => updateGuarantor(guarantor.id, { guarantorIdCard: formatThaiId(e.target.value) })}
+                      onChange={(e) => {
+                         const isForeigner = guarantor.nationality === 'foreigner';
+                         const isCorporate = guarantor.guarantorType === 'company' || guarantor.guarantorType === 'partnership';
+                         let val = e.target.value;
+                         if (!isForeigner) {
+                           val = isCorporate ? val.replace(/\D/g, '').slice(0, 13) : formatThaiId(val);
+                         }
+                         updateGuarantor(guarantor.id, { guarantorIdCard: val });
+                      }}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 pr-10 border"
-                      placeholder={guarantor.guarantorType === 'person' || !guarantor.guarantorType ? 'X-XXXX-XXXXX-XX-X' : '0XXXXXXXXXXXX'}
+                      placeholder={guarantor.guarantorType === 'company' || guarantor.guarantorType === 'partnership' ? '0XXXXXXXXXXXX' : (guarantor.nationality === 'foreigner' ? 'Passport No.' : 'X-XXXX-XXXXX-XX-X')}
                     />
                     <button
                       type="button"
@@ -363,15 +401,44 @@ export default function GuarantorForm({ data, onChange, agreements, customerInfo
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
                     />
                   </div>
+                  <div className="pt-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <label className="block text-xs font-medium text-gray-600 mb-2">สัญชาติคู่สมรส</label>
+                    <div className="flex gap-4">
+                      <label className="inline-flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          checked={!guarantor.spouseNationality || guarantor.spouseNationality === 'thai'}
+                          onChange={() => updateGuarantor(guarantor.id, { spouseNationality: 'thai', spouseIdCard: '' })}
+                          className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">คนไทย (บัตรประชาชน)</span>
+                      </label>
+                      <label className="inline-flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          checked={guarantor.spouseNationality === 'foreigner'}
+                          onChange={() => updateGuarantor(guarantor.id, { spouseNationality: 'foreigner', spouseIdCard: '' })}
+                          className="text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">ชาวต่างชาติ (พาสปอร์ต)</span>
+                      </label>
+                    </div>
+                  </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">เลขบัตรปชช. คู่สมรส</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        {guarantor.spouseNationality === 'foreigner' ? 'เลขพาสปอร์ต คู่สมรส / Passport No.' : 'เลขบัตรปชช. คู่สมรส'}
+                      </label>
                       <input
                         type="text"
                         value={guarantor.spouseIdCard}
-                        onChange={(e) => updateGuarantor(guarantor.id, { spouseIdCard: formatThaiId(e.target.value) })}
+                        onChange={(e) => {
+                          const isForeigner = guarantor.spouseNationality === 'foreigner';
+                          const val = isForeigner ? e.target.value : formatThaiId(e.target.value);
+                          updateGuarantor(guarantor.id, { spouseIdCard: val });
+                        }}
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
-                        placeholder="X-XXXX-XXXXX-XX-X"
+                        placeholder={guarantor.spouseNationality === 'foreigner' ? 'Passport No.' : 'X-XXXX-XXXXX-XX-X'}
                       />
                     </div>
                   </div>
