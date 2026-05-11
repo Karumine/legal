@@ -358,7 +358,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             ซึ่งเครื่องจักรและอุปกรณ์ประกอบในข้อ 2.1 ต่อไปนี้จะเรียกรวมว่า (<b>“ทรัพย์สินที่เช่าซื้อ”</b>) และผู้ให้เช่าซื้อตกลงให้เช่าซื้อทรัพย์สินที่เช่าซื้อตามสัดส่วนกรรมสิทธิ์รวมที่กำหนดไว้ในข้อ 1. ของสัญญาฉบับนี้
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-4" data-section-id="hp-purpose">
             <span className="w-8 shrink-0">2.2</span>
             <div className="flex-1">
               ผู้เช่าซื้อตกลงเช่าซื้อทรัพย์สินไปเพื่อใช้ในการประกอบกิจการเกี่ยวกับ <Highlight>{data.businessPurpose}</Highlight> เท่านั้น ณ <Highlight>{data.installationLocation}</Highlight> <b>(“สถานที่ตั้ง”)</b> แต่หากภายหลังจากที่เข้าทำสัญญาฉบับนี้ ในกรณีที่ผู้เช่าซื้อจำเป็นต้องทำการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อจากสถานที่ตั้งเดิมที่เคยแจ้งไว้ตามสัญญาฉบับนี้ ผู้เช่าซื้อจะต้องได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อก่อนการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อออกจากสถานที่ตั้งเดิม
@@ -389,7 +389,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div data-section-id="hp-financials" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
-          <div className="flex gap-4">
+          <div className="flex gap-4" data-section-id="hp-financials">
             <span className="w-8 shrink-0">3.2</span>
             <div className="flex-1 space-y-4">
               <div className="underline">การชำระค่าเช่าซื้อ</div>
@@ -421,7 +421,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-4" data-section-id="hp-stamp-duty">
             <span className="w-8 shrink-0">3.3</span>
             <div className="flex-1 space-y-4">
               <div className="underline">ค่าอากรแสตมป์</div>
@@ -587,7 +587,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-4" data-section-id="hp-insurance">
             <span className="w-8 shrink-0">5.5</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การประกันภัยทรัพย์สิน</div>

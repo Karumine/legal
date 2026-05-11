@@ -224,7 +224,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <PageHeader />
 
         <div className="space-y-6 mt-4">
-          <div className="flex gap-2">
+          <div className="flex gap-2" data-section-id="cf-conditions">
             <span>3.2</span>
             <div className="flex-1 text-justify">
               <span className="mb-2 inline-block underline">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ</span>
@@ -252,7 +252,21 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   <div key={idx} className="flex gap-2">
                     <span>({THAI_INDEX[idx + 2]})</span>
                     <div className="flex-1">
-                      <Highlight>{condition}</Highlight>
+                      <Highlight className="block">
+                        {condition.split('\n').map((line, lIdx) => {
+                          const match = line.match(/^\s*(\(\d+\))\s*(.*)/);
+                          if (match) {
+                            return (
+                              <div key={lIdx} className="flex gap-2 pl-8">
+                                <span className="shrink-0">{match[1]}</span>
+                                <div className="flex-1">{match[2]}</div>
+                              </div>
+                            );
+                          }
+                          const paddingClass = lIdx === 0 ? "" : "pl-8";
+                          return <div key={lIdx} className={paddingClass}>{line || '\u00A0'}</div>;
+                        })}
+                      </Highlight>
                     </div>
                   </div>
                 ))}
@@ -303,7 +317,21 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <div key={idx} className="flex gap-2">
                   <span>({THAI_INDEX[idx + 3]})</span>
                   <div className="flex-1 text-justify">
-                    <Highlight>{condition}</Highlight>
+                    <Highlight className="block">
+                      {condition.split('\n').map((line, lIdx) => {
+                        const match = line.match(/^\s*(\(\d+\))\s*(.*)/);
+                        if (match) {
+                          return (
+                            <div key={lIdx} className="flex gap-2 pl-8">
+                              <span className="shrink-0">{match[1]}</span>
+                              <div className="flex-1">{match[2]}</div>
+                            </div>
+                          );
+                        }
+                        const paddingClass = lIdx === 0 ? "" : "pl-8";
+                        return <div key={lIdx} className={paddingClass}>{line || '\u00A0'}</div>;
+                      })}
+                    </Highlight>
                   </div>
                 </div>
               ))}
@@ -453,7 +481,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
         <PageHeader />
         <div className="space-y-6 mt-4">
-          <div className="flex gap-2 ml-8">
+          <div className="flex gap-2 ml-8" data-section-id="cf-interest">
             <span>4.2</span>
             <div className="flex-1 text-justify">
               <span className="mb-2 inline-block underline">อัตราดอกเบี้ย</span>
@@ -488,7 +516,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                     ให้คำนวณดอกเบี้ยตามข้อ 4 <i>(ดอกเบี้ย)</i> นี้เป็นรายวันตามจำนวนที่ผ่านพ้นไปจริง โดยตกลงกำหนดให้ 1 ปี มี 365 วัน โดยให้ผู้กู้ชำระดอกเบี้ยที่เกิดขึ้นเป็นรายเดือนทุกๆ เดือน โดยชำระพร้อมกับการชำระคืนเงินต้นตามระยะเวลาที่กำหนดในข้อ 5 <i>(การชำระคืนเงินต้น)</i>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2" data-section-id="cf-installments">
                   <span>(ข)</span>
                   <div className="flex-1">
                     ผู้กู้ตกลงชำระคืนเงินต้นพร้อมดอกเบี้ยภายใต้สัญญาฉบับนี้ ในรูปแบบของเช็คธนาคารสั่งจ่ายล่วงหน้า ในนามผู้ให้สินเชื่อแต่ละรายตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ โดยระบุจำนวนเงินต้นพร้อมดอกเบี้ยในแต่ละงวด ลงวันที่ที่ครบกำหนดชำระหนี้ รวมทั้งสิ้น <Highlight>{data.installments} ({thaiNumberText(data.installments)})</Highlight> งวด งวดละ 2 (สอง) ฉบับ ลงบนเช็ค <Highlight>{(parseInt(data.installments) * 2).toString()} ({(thaiNumberText((parseInt(data.installments) * 2).toString()))})</Highlight> ฉบับ และให้ถือว่าเป็นการชำระค่างวดเงินกู้ในแต่ละงวดเมื่อได้มีการขึ้นเงินและได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น ทั้งนี้ ผู้กู้ได้จัดส่งมอบเช็คสั่งจ่ายล่วงหน้าให้ไว้แก่ผู้ให้สินเชื่อ เป็นจำนวน <Highlight>{(parseInt(data.installments) * 2).toString()} ({(thaiNumberText((parseInt(data.installments) * 2).toString()))})</Highlight> ฉบับ ณ วันที่ทำสัญญาฉบับนี้แล้ว โดยรายละเอียดเกี่ยวกับเช็คสั่งจ่ายล่วงหน้า <span><span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 4</u></span> <i>(หลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้าสำหรับการชำระค่างวดและดอกเบี้ย)</i></span> ทั้งนี้รายละเอียดการคำนวณเงินต้นพร้อมดอกเบี้ยในแต่ละงวด ปรากฏตามตารางคำนวณดอกเบี้ยเงินกู้ <span><span className="font-bold"><u>เอกสารแนบท้ายหมายเลข 5</u></span> <i>(รายละเอียดค่างวดแต่ละงวดและวิธีการคำนวณค่างวด)</i></span>
@@ -507,11 +535,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <div className="space-y-6 mt-4">
           <div className="flex gap-2 ml-14">
             <span>(ค)</span>
-            <div className="flex-1 text-justify text-[12px]">
+            <div className="flex-1 text-justify">
               สัญญาให้สินเชื่อฉบับนี้ คู่สัญญาทุกฝ่ายตกลงร่วมกันว่าการชำระเงินค่างวดเป็นงวดๆ ตามที่ระบุในสัญญา เป็นการชำระหนี้อันมีกำหนดระยะเวลาการชำระหนี้ที่แน่นอนอันถือเป็นสาระสำคัญของสัญญา ผู้กู้ตกลงและยินยอมที่จะไม่ขอชำระค่างวดและ/หรือ เงินต้นและ/หรือ ดอกเบี้ยก่อนกำหนดเวลา อย่างไรก็ตาม ในกรณีที่ผู้กู้มีความประสงค์จะชำระปิดบัญชีก่อนกำหนดชำระหนี้ ไม่ว่าด้วยเหตุที่ผู้กู้ได้รับเงินทุนจากแหล่งเงินทุนอื่น และ/หรือ จากสถาบันการเงินอื่นใดอันเป็นแหล่งเงินทุนใหม่นอกเหนือจากให้ผู้ให้สินเชื่อ หรือด้วยเหตุผลอื่นใดก็ตาม ผู้กู้จะต้องทำหนังสือแจ้งล่วงหน้าฝ่ายเดียวไปยังผู้ให้สินเชื่อไม่น้อยกว่า 5 (ห้า) วันทำการเพื่อแจ้งถึงการชำระเงินต้นสินเชื่อพร้อมดอกเบี้ยล่วงหน้าดังกล่าว และระบุจำนวนเงินที่จะชำระให้ชัดเจน
             </div>
           </div>
-          <div className="text-justify ml-20 text-[12px]">
+          <div className="text-justify ml-20 ">
             <div className="mt-4">
               ทั้งนี้การที่ผู้กู้จะใช้สิทธิชำระปิดบัญชีก่อนกำหนดนั้น ผู้กู้จะต้องได้ชำระค่างวดเรียบร้อยแล้วเป็นจำนวนทั้งสิ้นอย่างน้อย <Highlight>{Math.ceil((parseInt(data.installments) || 0) * 2 / 3)} ({thaiNumberText(Math.ceil((parseInt(data.installments) || 0) * 2 / 3).toString())})</Highlight> งวด และผู้กู้ไม่ได้ผิดสัญญาในข้อใด ผู้ให้สินเชื่ออาจใช้ดุลยพินิจอนุญาตให้ผู้กู้ชำระค่างวดที่เหลือทั้งหมดเพื่อปิดวงเงินก่อนกำหนดระยะเวลาก็ได้ โดยผู้ให้สินเชื่อสงวนสิทธิในการคิดค่าดำเนินการเพิ่มเติมในอัตราร้อยละ 5 (ห้า) โดยคำนวณจากยอดเงินต้นและดอกเบี้ยที่เหลือที่นำมาชำระทั้งหมดได้ โดยให้ถือเป็นดุลยพินิจฝ่ายเดียวของผู้ให้สินเชื่อ
             </div>
@@ -523,7 +551,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               <span className="font-bold">การชำระคืนเงินต้นและดอกเบี้ย</span>
             </div>
 
-            <div className="flex gap-2 ml-8">
+            <div className="flex gap-2 ml-8" data-section-id="cf-payment">
               <span>5.1</span>
               <div className="flex-1 text-justify">
                 ภายใต้บังคับของสัญญานี้ ผู้กู้ตกลงชำระคืนเงินต้นของสินเชื่อพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ <b>โดยผู้กู้ตกลงชำระคืนเงินต้นภายใต้สัญญาฉบับนี้เป็นงวดพร้อมดอกเบี้ย{(data.interestType === 'แบบคงที่' ? 'แบบคงที่ (Flat Interest Rate)' : 'แบบลดต้นลดดอก (Effective Interest Rate)')} เป็นจำนวนเงินงวดละ <Highlight>{data.installmentAmount || '63,032.64'}</Highlight> บาท (<Highlight>{thaiBahtText(data.installmentAmount || '63,032.64')}</Highlight>) รวมทั้งสิ้น <Highlight>{data.installments || '24'}</Highlight> (<Highlight>{thaiNumberText(data.installments || '24')}</Highlight>) งวด</b> โดยชำระ 1 (หนึ่ง) เดือนต่อ 1 (หนึ่ง) งวด และตกลงจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อใน<b>งวดแรก วันที่ <Highlight>{data.firstInstallmentDate ? formatThaiDate(data.firstInstallmentDate) : '25 เมษายน 2569'}</Highlight></b> และจะชำระเงินต้นพร้อมดอกเบี้ยให้แก่ผู้ให้สินเชื่อในแต่ละงวดทุกวันที่ <Highlight>{data.paymentDay || '25'}</Highlight> (<Highlight>{thaiNumberText(data.paymentDay || '25')}</Highlight>) ของเดือนปฏิทินนั้นๆ และในงวดสุดท้ายผู้กู้ตกลงชำระทั้งเงินต้นและดอกเบี้ยที่ยังคงค้างชำระตามสัญญานี้ให้ครบถ้วน <b>ทั้งนี้ ผู้กู้จะชำระเงินต้นสินเชื่อพร้อมดอกเบี้ยให้เสร็จสิ้นภายในวันที่ <Highlight>{data.lastInstallmentDate ? formatThaiDate(data.lastInstallmentDate) : '25 มีนาคม 2571'}</Highlight> (“วันครบกำหนดชำระเงินงวดสุดท้าย”)</b>
@@ -1216,7 +1244,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
         <div className="space-y-4 pt-4">
-          <div className="flex gap-2 items-center ml-8">
+          <div className="flex gap-2 items-center ml-8" data-section-id="cf-stamp-duty">
             <span className="shrink-0 w-6">13.2</span>
             <span className="underline">ค่าอากรแสตมป์</span>
           </div>

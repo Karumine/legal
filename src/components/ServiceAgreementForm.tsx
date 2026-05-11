@@ -260,7 +260,7 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
                   {isSelected && (
                     <div className="pl-8 grid grid-cols-2 gap-x-12 gap-y-8 pt-4 pb-4">
                       {/* Column 1: Origination Fee */}
-                      <div className="space-y-4">
+                      <div className="space-y-4" onFocusCapture={() => onFocusSection?.('sa-general')}>
                         <div className="text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1 rounded-sm border border-teal-100">1. Origination Fee</div>
 
                         {/* Rate % */}
@@ -351,7 +351,7 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
                       </div>
 
                       {/* Column 2: Service Fee */}
-                      <div className="space-y-4">
+                      <div className="space-y-4" onFocusCapture={() => onFocusSection?.('sa-annex-2-service')}>
                         <div className="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-sm border border-amber-100">2. Service Fee</div>
 
                         {/* Rate % */}
@@ -479,7 +479,7 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
 
         {/* 2.4 รายละเอียดการชำระเงิน */}
         <div className="pt-4 border-t border-gray-100">
-          <h4 className="text-sm font-bold text-gray-700 mb-3">2.4 รายละเอียดการชำระเงิน</h4>
+          <h4 className="text-sm font-bold text-gray-700 mb-3" onFocusCapture={() => onFocusSection?.('sa-clause-3')}>2.4 รายละเอียดการชำระเงิน</h4>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">งวดแรก</label>

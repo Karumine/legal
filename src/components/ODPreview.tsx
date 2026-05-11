@@ -32,7 +32,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
-      <div data-section-id="cf-general" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
+      <div data-section-id="od-general" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
