@@ -359,6 +359,9 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
                   <Plus size={12} /> เพิ่มเงื่อนไข
                 </button>
               </div>
+              <p className="text-[10px] text-gray-400 mb-2 italic">
+                * ขึ้นบรรทัดใหม่และเริ่มด้วย (1), (2) ... เพื่อย่อหน้าข้อย่อยในหน้าพรีวิวโดยอัตโนมัติ
+              </p>
               <div className="space-y-3">
                 {(data.conditions32 || []).map((condition, idx) => (
                   <div key={idx} className="flex gap-2 items-start">

@@ -252,7 +252,21 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   <div key={idx} className="flex gap-2">
                     <span>({THAI_INDEX[idx + 2]})</span>
                     <div className="flex-1">
-                      <Highlight>{condition}</Highlight>
+                      <Highlight className="block">
+                        {condition.split('\n').map((line, lIdx) => {
+                          const match = line.match(/^\s*(\(\d+\))\s*(.*)/);
+                          if (match) {
+                            return (
+                              <div key={lIdx} className="flex gap-2 pl-8">
+                                <span className="shrink-0">{match[1]}</span>
+                                <div className="flex-1">{match[2]}</div>
+                              </div>
+                            );
+                          }
+                          const paddingClass = lIdx === 0 ? "" : "pl-8";
+                          return <div key={lIdx} className={paddingClass}>{line || '\u00A0'}</div>;
+                        })}
+                      </Highlight>
                     </div>
                   </div>
                 ))}
@@ -303,7 +317,21 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <div key={idx} className="flex gap-2">
                   <span>({THAI_INDEX[idx + 3]})</span>
                   <div className="flex-1 text-justify">
-                    <Highlight>{condition}</Highlight>
+                    <Highlight className="block">
+                      {condition.split('\n').map((line, lIdx) => {
+                        const match = line.match(/^\s*(\(\d+\))\s*(.*)/);
+                        if (match) {
+                          return (
+                            <div key={lIdx} className="flex gap-2 pl-8">
+                              <span className="shrink-0">{match[1]}</span>
+                              <div className="flex-1">{match[2]}</div>
+                            </div>
+                          );
+                        }
+                        const paddingClass = lIdx === 0 ? "" : "pl-8";
+                        return <div key={lIdx} className={paddingClass}>{line || '\u00A0'}</div>;
+                      })}
+                    </Highlight>
                   </div>
                 </div>
               ))}
