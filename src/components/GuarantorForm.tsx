@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Copy, Plus, Search, Trash2, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Copy, Search, Trash2, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
 import type { GuarantorData, Agreement, CompanyInfo } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
@@ -52,24 +52,6 @@ export default function GuarantorForm({ title = 'สัญญาค้ำปร�
     onChange(
       data.map((g) => (g.id === id ? { ...g, ...updates } : g))
     );
-  };
-
-  const addGuarantor = () => {
-    const newGuarantor: GuarantorData = {
-      id: Date.now().toString(),
-      contractNo: `AGA/XX-SUR`,
-      contractDate: mainAgreements[0]?.data.contractDate || '',
-      guarantorName: '',
-      guarantorIdCard: '',
-      guarantorAddress: '',
-      isMarried: false,
-      spouseName: '',
-      spouseIdCard: '',
-      spouseAddress: '',
-      selectedAgreementIds: mainAgreements.map(a => a.id), // Default to all
-      guarantorType: 'person',
-    };
-    onChange([...data, newGuarantor]);
   };
 
   const removeGuarantor = (id: string) => {
