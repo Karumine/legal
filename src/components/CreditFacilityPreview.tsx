@@ -23,8 +23,11 @@ export const getThaiIndex = (index: number) => {
 };
 
 export default function CreditFacilityPreview({ data, customerInfo, agileInfo, tkInfo, guarantors }: Props) {
-  // Dynamic overflow: insert an extra page if conditions32 has more than 2 items
-  const hasConditionsOverflow = (data.conditions32 && data.conditions32.length > 2);
+  // Heuristic split: If (ค) and (ง) are short, keep them with 3.3 on Page 3.
+  // Otherwise, move (ง) and 3.3 to the overflow page to prevent overcrowding.
+  const conditions32 = data.conditions32 || [];
+  const totalCondChars = conditions32.reduce((sum, s) => sum + s.length, 0);
+  const hasConditionsOverflow = totalCondChars > 800 || conditions32.length > 2;
   const totalPages = 35 + (hasConditionsOverflow ? 1 : 0);
 
   // Strip leading "เลขที่" from address data to prevent duplication
@@ -244,8 +247,8 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                   </div>
                 </div>
 
-                {/* Dynamic conditions (ค), (ง) on Page 3 */}
-                {(data.conditions32 || []).slice(0, 2).map((condition, idx) => (
+                {/* Dynamic conditions — show all on Page 3 if they fit, otherwise split after (ค) */}
+                {(data.conditions32 || []).slice(0, hasConditionsOverflow ? 1 : undefined).map((condition, idx) => (
                   <div key={idx} className="flex gap-2">
                     <span>({THAI_INDEX[idx + 2]})</span>
                     <div className="flex-1">
@@ -257,8 +260,8 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             </div>
           </div>
 
-          {/* Section 3.3 on Page 3 (Only if conditions <= 4 total) */}
-          {(!data.conditions32 || data.conditions32.length <= 2) && (
+          {/* Section 3.3 on Page 3 (Only if not overflowing) */}
+          {!hasConditionsOverflow && (
             <div className="flex gap-2">
               <span>3.3</span>
               <div className="flex-1 text-justify">
@@ -294,22 +297,16 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <PageHeader />
 
           <div className="space-y-6 mt-4">
-            {/* Continuation of Section 3.2 items from (จ) onwards */}
-            <div className="flex gap-2">
-              <span>3.2</span>
-              <div className="flex-1 text-justify">
-                <span className="mb-2 inline-block">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ (ต่อ)</span>
-                <div className="space-y-4">
-                  {data.conditions32!.slice(2).map((condition, idx) => (
-                    <div key={idx} className="flex gap-2">
-                      <span>({THAI_INDEX[idx + 4]})</span>
-                      <div className="flex-1">
-                        <Highlight>{condition}</Highlight>
-                      </div>
-                    </div>
-                  ))}
+            {/* Continuation of Section 3.2 items from (ง) onwards */}
+            <div className="ml-8 space-y-4">
+              {(data.conditions32 || []).slice(hasConditionsOverflow ? 1 : 999).map((condition, idx) => (
+                <div key={idx} className="flex gap-2">
+                  <span>({THAI_INDEX[idx + 3]})</span>
+                  <div className="flex-1 text-justify">
+                    <Highlight>{condition}</Highlight>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
 
             {/* Section 3.3 moved to this overflow page */}
