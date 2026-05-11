@@ -79,7 +79,7 @@ export default function GuaranteePreview({ data }: Props) {
             const isCorporate = guarantor.type === 'company' || guarantor.type === 'partnership';
 
             return (
-              <div key={idx} className="flex gap-2 text-justify">
+              <div key={idx} data-section-id={`guarantor-${idx + 1}`} className="flex gap-2 text-justify">
                 <span className="shrink-0 w-6">({idx + 3})</span>
                 <div className="flex-1">
                   {isCorporate ? (
@@ -591,7 +591,7 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="hidden print:block page-break"></div>
 
           {/* Status Confirmation Page */}
-          <div className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
+          <div data-section-id={`guarantor-${idx + 1}-spouse`} className="print-page relative bg-white shadow-lg print:shadow-none min-h-[1050px] p-24">
             <PageHeader />
 
             <div className="mt-8">

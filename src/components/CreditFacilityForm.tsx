@@ -345,7 +345,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
             </div>
 
             {/* Conditions 3.2 Dynamic Section */}
-            <div className="pt-2 border-t border-blue-200">
+            <div className="pt-2 border-t border-blue-200" onFocusCapture={() => onFocusSection?.('cf-conditions')}>
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-xs font-bold text-blue-700">เงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อ (ข้อ 3.2 - เริ่มจาก ค)</label>
                 <button
@@ -401,7 +401,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4" onFocusCapture={() => onFocusSection?.('cf-interest')}>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">ประเภทดอกเบี้ย</label>
                 <select
@@ -427,7 +427,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4" onFocusCapture={() => onFocusSection?.('cf-installments')}>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">จำนวนงวด (เดือน) (4.3 ข)</label>
                 <input
@@ -452,7 +452,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4" onFocusCapture={() => onFocusSection?.('cf-payment')}>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">งวดแรก วันที่ (5.1)</label>
                 <input
@@ -486,7 +486,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
               </div>
 
             </div>
-            <div className="pt-2">
+            <div className="pt-2" onFocusCapture={() => onFocusSection?.('cf-stamp-duty')}>
               <label className="block text-xs font-medium text-gray-600 mb-1">ค่าอากรแสตมป์ (13.2) (บาท)</label>
               <div className="flex gap-4 items-center">
                 <input

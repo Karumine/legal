@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Copy, Plus, Search, Trash2, Loader2 } from 'lucide-react';
+import { Copy, Plus, Search, Trash2, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
 import type { GuarantorData, Agreement, CompanyInfo } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
@@ -21,6 +21,7 @@ export default function GuarantorForm({ title = 'สัญญาค้ำปร�
   const prevAgreementsRef = useRef<string[]>([]);
   const mainAgreements = agreements; // Show all main contracts as requested
   const [searchingId, setSearchingId] = useState<string | null>(null);
+  const [collapsedIds, setCollapsedIds] = useState<string[]>([]);
 
   // Auto-select ONLY newly added agreements for ALL guarantors
   useEffect(() => {
@@ -125,8 +126,14 @@ export default function GuarantorForm({ title = 'สัญญาค้ำปร�
     }
   };
 
+  const toggleCollapse = (id: string) => {
+    setCollapsedIds(prev =>
+      prev.includes(id) ? prev.filter(cid => cid !== id) : [...prev, id]
+    );
+  };
+
   return (
-    <section className="bg-white p-4 rounded-lg shadow-sm border border-emerald-200" onFocusCapture={() => onFocusSection?.('guarantee-parties')}>
+    <section className="bg-white p-4 rounded-lg shadow-sm border border-emerald-200">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
         <h3 className="font-semibold text-lg text-emerald-700">{title}</h3>
@@ -135,24 +142,45 @@ export default function GuarantorForm({ title = 'สัญญาค้ำปร�
       <div className="space-y-6">
         {data.map((guarantor, index) => (
           <div key={guarantor.id} className="relative p-4 border border-emerald-100 rounded-lg bg-emerald-50/30">
-            {data.length > 1 && (
-              <button
-                onClick={() => removeGuarantor(guarantor.id)}
-                className="absolute top-3 right-3 text-red-400 hover:text-red-600 p-1"
-                title="ลบผู้ค้ำคนนี้"
-              >
-                <Trash2 size={16} />
-              </button>
-            )}
-
-            <div className="flex items-center gap-2 mb-4">
-              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-[10px] font-bold">
-                {index + 1}
-              </span>
-              <h4 className="font-medium text-emerald-800 text-sm">ผู้ค้ำประกันคนที่ {index + 1}</h4>
+            <div 
+              className="flex items-center justify-between mb-4 cursor-pointer hover:bg-emerald-100/50 p-2 -m-2 rounded-lg transition-colors group"
+              onClick={() => toggleCollapse(guarantor.id)}
+              onFocusCapture={() => onFocusSection?.(`guarantor-${index + 1}`)}
+            >
+              <div className="flex items-center gap-3">
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-[10px] font-bold shadow-sm">
+                  {index + 1}
+                </span>
+                <div>
+                  <h4 className="font-bold text-emerald-800 text-sm">ผู้ค้ำประกันคนที่ {index + 1}</h4>
+                  {collapsedIds.includes(guarantor.id) && guarantor.guarantorName && (
+                    <p className="text-[10px] text-emerald-600 font-medium truncate max-w-[200px] animate-in fade-in duration-300">
+                      {guarantor.guarantorName}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {data.length > 1 && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeGuarantor(guarantor.id);
+                    }}
+                    className="text-red-400 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-md transition-colors mr-1"
+                    title="ลบผู้ค้ำคนนี้"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                )}
+                <div className="text-emerald-500 group-hover:text-emerald-700 transition-colors">
+                  {collapsedIds.includes(guarantor.id) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-4">
+            {!collapsedIds.includes(guarantor.id) && (
+              <div className="space-y-4 animate-in fade-in zoom-in-95 duration-200 origin-top">
               {/* Contract Selection */}
               <div className="pb-4 border-b border-emerald-100/50">
                 <label className="block text-xs font-medium text-gray-600 mb-2">เลือกสัญญาหลักที่ค้ำประกัน</label>
@@ -391,7 +419,13 @@ export default function GuarantorForm({ title = 'สัญญาค้ำปร�
               )}
 
               {guarantor.isMarried && (
-                <div className="space-y-3 pt-3 border-t border-emerald-100 animate-in fade-in slide-in-from-top-1 duration-200">
+                <div 
+                  className="space-y-3 pt-3 border-t border-emerald-100 animate-in fade-in slide-in-from-top-1 duration-200"
+                  onFocusCapture={(e) => {
+                    e.stopPropagation();
+                    onFocusSection?.(`guarantor-${index + 1}-spouse`);
+                  }}
+                >
                   <div>
                     <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อคู่สมรส</label>
                     <input
@@ -467,10 +501,12 @@ export default function GuarantorForm({ title = 'สัญญาค้ำปร�
                 </div>
               )}
             </div>
+            )}
           </div>
         ))}
       </div>
 
+      {/* 
       <button
         onClick={addGuarantor}
         className="mt-6 w-full py-10 border-2 border-dashed border-emerald-200 rounded-xl bg-emerald-50/30 hover:bg-emerald-50 hover:border-emerald-400 transition-all group flex flex-col items-center justify-center gap-3"
@@ -483,6 +519,7 @@ export default function GuarantorForm({ title = 'สัญญาค้ำปร�
           <p className="text-xs text-emerald-600/70 mt-1">ระบุข้อมูลบุคคลหรือนิติบุคคลเพิ่มเติมเพื่อร่วมค้ำประกันสัญญาหลัก</p>
         </div>
       </button>
+      */}
     </section>
   );
 }

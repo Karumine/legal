@@ -72,7 +72,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4" onClick={() => onFocusSection?.('section-vendor')}>
+      <div className="grid grid-cols-2 gap-4" onFocusCapture={() => onFocusSection?.('section-vendor')}>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">เลขที่สัญญารับซื้อคืน</label>
           <input
@@ -94,7 +94,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
         </div>
       </div>
 
-      <div className="p-4 border border-blue-100 rounded-lg bg-blue-50/30" onClick={() => onFocusSection?.('section-buyback-assets')}>
+      <div className="p-4 border border-blue-100 rounded-lg bg-blue-50/30" onFocusCapture={() => onFocusSection?.('section-buyback-assets')}>
         <h5 className="text-xs font-bold text-blue-700 mb-3 flex items-center gap-2">
           <CheckCircle2 size={14} /> เลือกเครื่องจักรในสัญญานี้
         </h5>
@@ -165,7 +165,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
         </div>
       </div>
       
-      <div className="pt-2" onClick={() => onFocusSection?.('section-vendor')}>
+      <div className="pt-2" onFocusCapture={() => onFocusSection?.('section-vendor')}>
         <h5 className="text-xs font-bold text-orange-700 mb-3 uppercase tracking-wider">ข้อมูลผู้ขาย / ตัวแทนจำหน่าย (คู่สัญญาฝ่ายที่ 3)</h5>
         <div className="space-y-3 bg-orange-50/30 p-4 rounded-lg border border-orange-100">
           <div className="pb-2 border-b border-orange-100/50 mb-2">
@@ -266,7 +266,7 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
         </div>
       </div>
 
-      <div className="pt-4 border-t border-orange-100" onClick={() => onFocusSection?.('section-buyback-rate')}>
+      <div className="pt-4 border-t border-orange-100" onFocusCapture={() => onFocusSection?.('section-buyback-rate')}>
         <div className="flex justify-between items-center mb-3">
           <h5 className="text-xs font-bold text-orange-700 uppercase tracking-wider">เกณฑ์ราคาการรับซื้อคืน (ตามปี)</h5>
           <div className="flex bg-orange-100/50 p-1 rounded-lg border border-orange-200">

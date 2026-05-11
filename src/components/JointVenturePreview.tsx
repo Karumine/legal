@@ -146,7 +146,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
     return (
       <div key={agreement.id} className="space-y-3">
-        <div className="font-bold text-justify text-[13px]">
+        <div className="font-normal text-justify">
           1.{agreeIdx + 1}. {label}{enLabel} เลขที่ {agreement.data.contractNo} โดยชำระค่า Origination Fee ตามตารางที่แนบมาด้วย ดังนี้
         </div>
 

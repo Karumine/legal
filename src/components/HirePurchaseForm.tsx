@@ -564,7 +564,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
             </div>
 
             {/* 3.2 (ก) เงินดาวน์ */}
-            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-blue-100">
+            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-blue-100" onFocusCapture={() => onFocusSection?.('hp-financials')}>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
                   {type === 'hirePurchaseBack' ? 'เงินดาวน์ (%) ที่หักจากยอดจัดเช่าซื้อ' : 'เงินดาวน์ (%)'}
@@ -652,7 +652,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
             {/* Other Financial Info */}
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t border-blue-100">
-              <div>
+              <div onFocusCapture={() => onFocusSection?.('hp-stamp-duty')}>
                 <label className="block text-xs font-medium text-gray-600 mb-1">ค่าอากรแสตมป์ (บาท)</label>
                 <input
                   type="text"
@@ -661,7 +661,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                   className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border"
                 />
               </div>
-              <div>
+              <div onFocusCapture={() => onFocusSection?.('hp-insurance')}>
                 <label className="block text-xs font-medium text-gray-600 mb-1">ค่าเบี้ยประกันภัย (บาท)</label>
                 <input
                   type="text"
