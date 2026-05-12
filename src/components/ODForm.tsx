@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Copy, ChevronDown } from 'lucide-react';
+import { CustomDatePicker } from './CustomDatePicker';
 import type { ODData, LessorInfo, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
@@ -98,16 +99,11 @@ export default function ODForm({ data, onChange, agreements = [], currentAgreeme
               placeholder="เช่น AGA/17-PL112025"
             />
           </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
-            <input
-              type="date"
-              name="effectiveDate"
-              value={data.effectiveDate || ''}
-              onChange={handleChange}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
-            />
-          </div>
+          <CustomDatePicker
+            label="วันที่ทำสัญญา"
+            value={data.effectiveDate || ''}
+            onChange={(val) => onChange({ ...data, effectiveDate: val })}
+          />
         </div>
       </section>
 
@@ -269,16 +265,11 @@ export default function ODForm({ data, onChange, agreements = [], currentAgreeme
                 placeholder="ระบุเลขที่ใบสั่งซื้อ"
               />
             </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">ลงวันที่ใบสั่งซื้อ</label>
-              <input
-                type="date"
-                name="annex4PODate"
-                value={data.annex4PODate || ''}
-                onChange={handleChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
-              />
-            </div>
+            <CustomDatePicker
+              label="ลงวันที่ใบสั่งซื้อ"
+              value={data.annex4PODate || ''}
+              onChange={(val) => onChange({ ...data, annex4PODate: val })}
+            />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -292,27 +283,17 @@ export default function ODForm({ data, onChange, agreements = [], currentAgreeme
                 placeholder="ระบุเลขที่ใบวางบิล"
               />
             </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">ลงวันที่ใบวางบิล</label>
-              <input
-                type="date"
-                name="annex4BillDate"
-                value={data.annex4BillDate || ''}
-                onChange={handleChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">กำหนดส่งคืนเอกสาร (ภายในวันที่)</label>
-            <input
-              type="date"
-              name="annex4ReturnDate"
-              value={data.annex4ReturnDate || ''}
-              onChange={handleChange}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+            <CustomDatePicker
+              label="ลงวันที่ใบวางบิล"
+              value={data.annex4BillDate || ''}
+              onChange={(val) => onChange({ ...data, annex4BillDate: val })}
             />
           </div>
+          <CustomDatePicker
+            label="กำหนดส่งคืนเอกสาร (ภายในวันที่)"
+            value={data.annex4ReturnDate || ''}
+            onChange={(val) => onChange({ ...data, annex4ReturnDate: val })}
+          />
         </div>
       </section>
     </div>

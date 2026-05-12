@@ -5,6 +5,7 @@ import type { BuybackData, AssetDetail } from '../types/app';
 import { ShieldAlert, CheckCircle2, Search, Loader2 } from 'lucide-react';
 import { searchCompanyByTaxId } from '../services/dbdService';
 import { formatThaiId } from '../utils/formatters';
+import { CustomDatePicker } from './CustomDatePicker';
 
 interface Props {
   data: BuybackData;
@@ -83,15 +84,11 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
             placeholder="AGA/XX-BB2025"
           />
         </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
-          <input
-            type="date"
-            value={data.contractDate}
-            onChange={(e) => updateBuyback({ contractDate: e.target.value })}
-            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white"
-          />
-        </div>
+        <CustomDatePicker
+          label="วันที่ทำสัญญา"
+          value={data.contractDate}
+          onChange={(val) => updateBuyback({ contractDate: val })}
+        />
       </div>
 
       <div className="p-4 border border-blue-100 rounded-lg bg-blue-50/30" onFocusCapture={() => onFocusSection?.('section-buyback-assets')}>

@@ -192,7 +192,7 @@ function App() {
         if (target && previewPanel) {
           isSectionScrollingRef.current = true;
           
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
           // Brief highlight flash on the target element only if it's a new section or it was not previously flashing
           if (isNewSection) {

@@ -1,4 +1,5 @@
 import type { JointVentureData } from '../types/app';
+import { CustomDatePicker } from './CustomDatePicker';
 
 interface Props {
   data: JointVentureData;
@@ -31,12 +32,10 @@ export default function JointVentureForm({ data, onChange, onFocusSection }: Pro
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
-            <input
-              type="date"
+            <CustomDatePicker
+              label="วันที่ทำสัญญา"
               value={data.contractDate}
-              onChange={(e) => handleChange('contractDate', e.target.value)}
-              className="block w-full rounded-md border-gray-200 shadow-sm focus:border-amber-500 focus:ring-amber-500 text-sm p-2 border"
+              onChange={(val) => handleChange('contractDate', val)}
             />
           </div>
         </div>

@@ -28,7 +28,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
   const conditions32 = data.conditions32 || [];
   const totalCondChars = conditions32.reduce((sum, s) => sum + s.length, 0);
   const hasConditionsOverflow = totalCondChars > 800 || conditions32.length > 2;
-  const totalPages = 35 + (hasConditionsOverflow ? 1 : 0);
+  const totalPages = 36 + (hasConditionsOverflow ? 1 : 0);
 
   // Strip leading "เลขที่" from address data to prevent duplication
   // since the template text already includes the prefix
@@ -66,11 +66,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
-      <div data-section-id="cf-general" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
         <div className="text-center font-bold mb-6 mt-4">
-          <h2 className="text-[16px]">สัญญาให้สินเชื่อ</h2>
+          <h2 data-section-id="cf-general" className="text-[16px]">สัญญาให้สินเชื่อ</h2>
           <div className="mt-2 text-[16px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
           </div>
@@ -126,7 +126,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       </div>
 
       {/* Page 2 */}
-      <div data-section-id="cf-financials" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
         <div className="space-y-6 mt-4">
@@ -144,7 +144,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               <div className="flex-1 font-bold">คู่สัญญาทั้งสามฝ่ายจึงได้ตกลงเข้าทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้</div>
             </div>
 
-            <div className="flex gap-2 items-center mb-4">
+            <div data-section-id="cf-financials" className="flex gap-2 items-center mb-4">
               <span className="font-bold">1.</span>
               <span className="font-bold">วงเงินสินเชื่อ</span>
             </div>
@@ -263,8 +263,13 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                               </div>
                             );
                           }
-                          const paddingClass = lIdx === 0 ? "" : "pl-8";
-                          return <div key={lIdx} className={paddingClass}>{line || '\u00A0'}</div>;
+                          if (lIdx === 0) return <div key={lIdx}>{line || '\u00A0'}</div>;
+                          return (
+                            <div key={lIdx} className="flex gap-2 pl-8">
+                              <span className="shrink-0 opacity-0 select-none">(1)</span>
+                              <div className="flex-1">{line || '\u00A0'}</div>
+                            </div>
+                          );
                         })}
                       </Highlight>
                     </div>
@@ -312,29 +317,37 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
 
           <div className="space-y-6 mt-4">
             {/* Continuation of Section 3.2 items from (ง) onwards */}
-            <div className="ml-8 space-y-4">
-              {(data.conditions32 || []).slice(hasConditionsOverflow ? 1 : 999).map((condition, idx) => (
-                <div key={idx} className="flex gap-2">
-                  <span>({THAI_INDEX[idx + 3]})</span>
-                  <div className="flex-1 text-justify">
-                    <Highlight className="block">
-                      {condition.split('\n').map((line, lIdx) => {
-                        const match = line.match(/^\s*(\(\d+\))\s*(.*)/);
-                        if (match) {
+            <div className="flex gap-2">
+              <span className="invisible shrink-0">3.2</span>
+              <div className="flex-1 space-y-4">
+                {(data.conditions32 || []).slice(hasConditionsOverflow ? 1 : 999).map((condition, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <span className="shrink-0">({THAI_INDEX[idx + 3]})</span>
+                    <div className="flex-1 text-justify">
+                      <Highlight className="block">
+                        {condition.split('\n').map((line, lIdx) => {
+                          const match = line.match(/^\s*(\(\d+\))\s*(.*)/);
+                          if (match) {
+                            return (
+                              <div key={lIdx} className="flex gap-2 pl-8">
+                                <span className="shrink-0">{match[1]}</span>
+                                <div className="flex-1">{match[2]}</div>
+                              </div>
+                            );
+                          }
+                          if (lIdx === 0) return <div key={lIdx}>{line || '\u00A0'}</div>;
                           return (
                             <div key={lIdx} className="flex gap-2 pl-8">
-                              <span className="shrink-0">{match[1]}</span>
-                              <div className="flex-1">{match[2]}</div>
+                              <span className="shrink-0 opacity-0 select-none">(1)</span>
+                              <div className="flex-1">{line || '\u00A0'}</div>
                             </div>
                           );
-                        }
-                        const paddingClass = lIdx === 0 ? "" : "pl-8";
-                        return <div key={lIdx} className={paddingClass}>{line || '\u00A0'}</div>;
-                      })}
-                    </Highlight>
+                        })}
+                      </Highlight>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             {/* Section 3.3 moved to this overflow page */}
@@ -614,7 +627,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       </div>
 
       {/* Page 9 */}
-      <div data-section-id="cf-collateral" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans text-gray-900">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans text-gray-900">
         <PageHeader />
         <div className="space-y-6 mt-4">
           <div className="flex gap-2 ml-8">
@@ -625,7 +638,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           </div>
 
           <div className="mt-8 space-y-4">
-            <div className="flex gap-2 items-center">
+            <div data-section-id="cf-collateral" className="flex gap-2 items-center">
               <span className="font-bold">7.</span>
               <span className="font-bold">หลักประกัน</span>
             </div>
@@ -1668,10 +1681,10 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 29 (Annex 2: Loan Drawdown Request - Lender 1) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
-        <div className="space-y-4 pt-4 text-[12px]">
+        <div className="space-y-4 text-[12px]">
           <div className="text-center font-bold">
-            <div>เอกสารแนบท้ายหมายเลข 2</div>
-            <div className="underline">หนังสือขอเบิกใช้สินเชื่อ</div>
+            <div className="font-bold">เอกสารแนบท้ายหมายเลข 2</div>
+            <div className="font-bold underline text-center uppercase">หนังสือขอเบิกใช้สินเชื่อ</div>
           </div>
 
           <div className="flex justify-end">
@@ -1781,7 +1794,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <div className="space-y-4 pt-4 text-[12px]">
           <div className="text-center font-bold">
 
-            <div className="underline decoration-1 underline-offset-4">หนังสือขอเบิกใช้สินเชื่อ</div>
+            <div className="underline">หนังสือขอเบิกใช้สินเชื่อ</div>
           </div>
 
           <div className="flex justify-end">
@@ -1888,9 +1901,9 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 31 (Annex 3: Evidence of Receipt of Credit - Lender 1) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
         <PageHeader />
-        <div className="space-y-6 pt-4 text-[12px]">
+        <div className="space-y-6 text-[12px]">
           <div className="text-center font-bold">
-            <div>เอกสารแนบท้ายหมายเลข 3</div>
+            <div className="font-bold">เอกสารแนบท้ายหมายเลข 3</div>
             <div className="underline">เอกสารการรับสินเชื่อ</div>
           </div>
 
@@ -2020,7 +2033,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 33 (Annex 4: Evidence of Delivery of Post-dated Checks) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
         <PageHeader />
-        <div className="space-y-4 pt-2 text-[12px]">
+        <div className="space-y-4 text-[12px]">
           <div className="text-center font-bold">
             <div>เอกสารแนบท้ายหมายเลข 4</div>
             <div className="underline">หลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่างวดและดอกเบี้ย</div>
@@ -2086,7 +2099,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex flex-col items-center">
               <div className="w-full flex items-baseline gap-1 justify-center">
                 <span className="shrink-0 whitespace-nowrap">ลงชื่อ</span>
-                <div className="border-b border-dotted border-black w-[200px]"></div>
+                <div className="border-b border-dotted border-black w-[150px]"></div>
                 <div className="shrink-0 text-[10px] leading-tight flex flex-col items-start translate-y-1">
                   <span>ผู้กู้ / ผู้ส่ง</span>
                   <span>มอบเช็ค</span>
@@ -2099,7 +2112,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex flex-col items-center">
               <div className="w-full flex items-baseline gap-1 justify-center">
                 <span className="shrink-0 whitespace-nowrap">ลงชื่อ</span>
-                <div className="border-b border-dotted border-black w-[200px]"></div>
+                <div className="border-b border-dotted border-black w-[150px]"></div>
                 <div className="shrink-0 text-[10px] leading-tight flex flex-col items-start translate-y-1">
                   <span>ผู้ให้สินเชื่อฝ่ายที่ 2 </span>
                   <span>/ ผู้รับมอบเช็ค</span>
@@ -2135,6 +2148,115 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         </div>
         {renderPageFooter(35)}
       </div>
+
+      {/* Page 36 (Annex 7: Notification of Change in Payment Channel) */}
+      {data.showAnnex7 && (
+        <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+          <PageHeader />
+          <div className="flex flex-col items-center text-[12px] mb-4">
+            <div className="font-bold">เอกสารแนบท้ายหมายเลข 7</div>
+            <div className="font-bold underline text-center uppercase">
+              แบบของหนังสือแจ้งเปลี่ยนแปลงช่องทางการชำระเงิน
+            </div>
+          </div>
+
+          <div className="space-y-3 text-[12px] leading-normal">
+            <div className="flex justify-end mb-2">
+              วันที่ <Highlight className="min-w-[100px] inline-flex border-b border-dotted border-black justify-center ml-2">{data.bankAccountChangeDate ? formatThaiDate(data.bankAccountChangeDate) : '[•]'}</Highlight>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="font-bold shrink-0 w-12">เรื่อง</span>
+              <div className="flex-1 text-justify">
+                ขอเปลี่ยนแปลงวิธีการรับชำระเงิน
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="font-bold shrink-0 w-12">เรียน</span>
+              <div className="flex-1">
+                บริษัท [ชื่อของลูกค้าของผู้กู้]
+              </div>
+            </div>
+
+            <div data-section-id="cf-bank" className="mt-4 text-justify indent-16">
+              ตามที่ท่านได้ทำการ[สั่งให้ข้าพเจ้าผลิตสินค้า และ/หรือ ให้บริการ และ/หรือ ว่าจ้างให้ข้าพเจ้าผลิตสินค้า และ/หรือ ให้บริการ] ภายใต้เลขที่ใบสั่งซื้อ [หมายเลขใบสั่งซื้อ] ลงวันที่ [วันที่สั่งซื้อ] และข้าพเจ้าได้วางบิล [หมายเลขใบวางบิล] ลงวันที่ [วันที่ของบิล] นั้น ข้าพเจ้ามีความประสงค์ขอเปลี่ยนแปลงวิธีการชำระเงินสำหรับการ[สั่งผลิตสินค้า และ/หรือ ให้บริการ และ/หรือ ว่าจ้างให้ผลิตสินค้า และ/หรือ ให้บริการ]ดังกล่าวจากวิธีการเดิม เป็นการโอนเงินเข้าบัญชีธนาคาร <Highlight className="font-bold">{data.bankAccountName || '[•]'}</Highlight> ประเภท{data.bankAccountType || '[•]'} สาขา{data.bankAccountBranch || '[•]'} หมายเลขบัญชี <Highlight className="font-bold font-mono text-[14px]">{data.bankAccountNumber || '[•]'}</Highlight> สำหรับการชำระเงินที่จะเกิดขึ้นหลังจากวันที่ของหนังสือฉบับนี้เป็นต้นไป
+            </div>
+
+            <div className="mt-4 text-justify">
+              หากมีข้อสงสัยประการใด โปรดติดต่อ .......... โทร ..........
+            </div>
+
+            <div className="mt-8 flex flex-col items-end">
+              <div className="flex items-center gap-16">
+                <div className="text-[10px] text-gray-500 italic whitespace-nowrap pb-2">
+                  ประทับตราบริษัท (ถ้ามี)
+                </div>
+                <div className="w-[280px] text-center space-y-4">
+                  <div>
+                    <p>ขอแสดงความนับถือ</p>
+                    <p className="mt-2 font-bold"><Highlight>{customerInfo.companyName}</Highlight></p>
+                  </div>
+
+                  <div className="pt-10">
+                    <p className="border-b border-dotted border-black w-full mx-auto"></p>
+                    <div className="mt-2 flex justify-start items-baseline">
+                      <span className="shrink-0">ชื่อ:</span>
+                      <span className="flex-1 ml-2 text-center">(........................................................................................)</span>
+                    </div>
+                    <div className="mt-1 flex justify-start">
+                      <span>ตำแหน่ง:</span>
+                      <span className="ml-2 font-bold">กรรมการผู้มีอำนาจลงนาม</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Acknowledgment Section (formerly Annex 8) */}
+            <div className="space-y-3 pt-2">
+              <div className="font-bold underline text-center uppercase text-[12px]">
+                ส่วนของหนังสือรับทราบการเปลี่ยนแปลงช่องทางการชำระเงิน
+              </div>
+              <div className="text-justify indent-16">
+                ข้าพเจ้ารับทราบและจะดำเนินการเปลี่ยนแปลงวิธีการชำระเงินเป็นการโอนเงินเข้าบัญชีธนาคารตามรายละเอียดที่ท่านได้แจ้งในหนังสือฉบับนี้ สำหรับการชำระเงินจะเกิดขึ้นหลังจากวันที่ของหนังสือฉบับนี้เป็นต้นไป
+              </div>
+
+              <div className="mt-8 flex flex-col items-end">
+                <div className="flex items-center gap-16">
+                  <div className="text-[10px] text-gray-500 italic whitespace-nowrap pb-2">
+                    ประทับตราบริษัท (ถ้ามี)
+                  </div>
+                  <div className="w-[280px] text-center space-y-3">
+                    <div>
+                      <p>ขอแสดงความนับถือ</p>
+                      <p className="mt-1 font-bold">บริษัท [ชื่อของลูกค้าของผู้กู้]</p>
+                    </div>
+
+                    <div className="pt-8">
+                      <p className="border-b border-dotted border-black w-full mx-auto"></p>
+                      <div className="mt-2 flex justify-start items-baseline">
+                        <span className="shrink-0">ชื่อ:</span>
+                        <span className="flex-1 ml-2 text-center">(........................................................................................)</span>
+                      </div>
+                      <div className="mt-1 flex justify-start">
+                        <span>ตำแหน่ง:</span>
+                        <span className="ml-2 font-bold">กรรมการผู้มีอำนาจลงนาม</span>
+                      </div>
+                      <div className="mt-1 flex justify-start items-baseline">
+                        <span className="shrink-0">วันที่:</span>
+                        <span className="flex-1 ml-2 text-center">..........................................................</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {renderPageFooter(36)}
+        </div>
+      )}
     </div>
   );
 }

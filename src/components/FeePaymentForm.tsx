@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Trash2, FileText } from 'lucide-react';
+import { CustomDatePicker } from './CustomDatePicker';
 import type { FeePaymentData, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import type { ContractItem, ContractItemType } from '../types/contract';
@@ -180,15 +181,11 @@ export default function FeePaymentForm({ data, onChange, agreements, onFocusSect
               placeholder="AGA/XX-FEE2025"
             />
           </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">วันที่มีผลใช้บังคับ</label>
-            <input
-              type="date"
+            <CustomDatePicker
+              label="วันที่มีผลใช้บังคับ"
               value={data.effectiveDate}
-              onChange={(e) => handleChange('effectiveDate', e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-rose-500 focus:ring-rose-500 text-sm p-2 border"
+              onChange={(val) => handleChange('effectiveDate', val)}
             />
-          </div>
         </div>
 
         {/* Contract Items */}
