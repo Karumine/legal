@@ -200,6 +200,14 @@ export interface CreditFacilityData {
 
   // Added dynamic conditions for 3.2
   conditions32?: string[];
+
+  // Bank Account Info (for Annex 7)
+  bankAccountName?: string;
+  bankAccountType?: string;
+  bankAccountBranch?: string;
+  bankAccountNumber?: string;
+  bankAccountChangeDate?: string;
+  showAnnex7?: boolean;
 }
 
 export interface ODData {

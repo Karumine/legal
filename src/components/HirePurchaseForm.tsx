@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { ShieldCheck, ChevronDown, ChevronUp, FileText, Plus, Trash2, Copy } from 'lucide-react';
+import { CustomDatePicker } from './CustomDatePicker';
 
 import ThaiAddressInput from './ThaiAddressInput';
 import { TODAY } from '../types/app';
@@ -298,12 +299,10 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
-            <input
-              type="date"
+            <CustomDatePicker
+              label="วันที่ทำสัญญา"
               value={data.contractDate}
-              onChange={(e) => handleChange('contractDate', e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+              onChange={(val) => handleChange('contractDate', val)}
             />
           </div>
 
@@ -635,18 +634,20 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
               </div>
 
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">เริ่มชำระงวดแรก</label>
-                  <input type="date" value={data.firstInstallmentDate || ''} onChange={(e) => handleChange('firstInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-                </div>
+                  <CustomDatePicker
+                    label="เริ่มชำระงวดแรก"
+                    value={data.firstInstallmentDate || ''}
+                    onChange={(val) => handleChange('firstInstallmentDate', val)}
+                  />
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">ชำระทุกวันที่ [ดึงจากงวดแรก]</label>
                   <input type="text" value={data.paymentDay || ''} onChange={(e) => handleChange('paymentDay', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
                 </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">สิ้นสุดงวดสุดท้าย [คำนวณอัตโนมัติ]</label>
-                  <input type="date" value={data.lastInstallmentDate || ''} onChange={(e) => handleChange('lastInstallmentDate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
-                </div>
+                  <CustomDatePicker
+                    label="สิ้นสุดงวดสุดท้าย [คำนวณอัตโนมัติ]"
+                    value={data.lastInstallmentDate || ''}
+                    onChange={(val) => handleChange('lastInstallmentDate', val)}
+                  />
               </div>
             </div>
 

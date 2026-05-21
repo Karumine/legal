@@ -148,6 +148,7 @@ function dbdApiPlugin(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [react(), dbdApiPlugin()],
   server: {
     open: true,

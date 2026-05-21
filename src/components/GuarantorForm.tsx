@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Copy, Search, Trash2, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { CustomDatePicker } from './CustomDatePicker';
 import type { GuarantorData, Agreement, CompanyInfo } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
@@ -263,15 +264,11 @@ export default function GuarantorForm({ title = 'สัญญาค้ำปร�
                     placeholder="AGA/XX-SUR"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญาค้ำ</label>
-                  <input
-                    type="date"
-                    value={guarantor.contractDate}
-                    onChange={(e) => updateGuarantor(guarantor.id, { contractDate: e.target.value })}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm p-2 border"
-                  />
-                </div>
+                <CustomDatePicker
+                  label="วันที่ทำสัญญาค้ำ"
+                  value={guarantor.contractDate}
+                  onChange={(val) => updateGuarantor(guarantor.id, { contractDate: val })}
+                />
               </div>
 
               <div>

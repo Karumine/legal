@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Plus, Copy, ChevronDown } from 'lucide-react';
+import { CustomDatePicker } from './CustomDatePicker';
 import type { CreditFacilityData, LessorInfo, CompanyInfo, Agreement, CollateralAsset } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
@@ -215,13 +216,10 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
-            <input
-              type="date"
-              name="effectiveDate"
+            <CustomDatePicker
+              label="วันที่ทำสัญญา"
               value={data.effectiveDate || ''}
-              onChange={handleChange}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+              onChange={(val) => onChange({ ...data, effectiveDate: val })}
             />
           </div>
         </div>
@@ -457,13 +455,10 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
 
             <div className="grid grid-cols-3 gap-4" onFocusCapture={() => onFocusSection?.('cf-payment')}>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">งวดแรก วันที่ (5.1)</label>
-                <input
-                  type="date"
-                  name="firstInstallmentDate"
+                <CustomDatePicker
+                  label="งวดแรก วันที่ (5.1)"
                   value={data.firstInstallmentDate || ''}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+                  onChange={(val) => onChange({ ...data, firstInstallmentDate: val })}
                 />
               </div>
               <div>
@@ -478,13 +473,10 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">งวดสุดท้าย วันที่ (5.1)</label>
-                <input
-                  type="date"
-                  name="lastInstallmentDate"
+                <CustomDatePicker
+                  label="งวดสุดท้าย วันที่ (5.1)"
                   value={data.lastInstallmentDate || ''}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
+                  onChange={(val) => onChange({ ...data, lastInstallmentDate: val })}
                 />
               </div>
 
@@ -990,6 +982,81 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Bank Account Section (Annex 7) */}
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('cf-bank')}>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+            <h3 className="font-semibold text-lg text-blue-700">ข้อมูลบัญชีธนาคาร (เอกสารแนบท้าย 7)</h3>
+          </div>
+          <label className="flex items-center gap-2 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={data.showAnnex7}
+              onChange={(e) => onChange({ ...data, showAnnex7: e.target.checked })}
+              className="w-4 h-4 text-blue-600 border-blue-300 rounded focus:ring-blue-500 cursor-pointer"
+            />
+            <span className="text-sm font-bold text-blue-700 group-hover:text-blue-800 transition-colors">แสดงเอกสารแนบท้าย 7</span>
+          </label>
+        </div>
+
+        {data.showAnnex7 && (
+          <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="col-span-2">
+              <CustomDatePicker
+                label="วันที่ในหนังสือ (เอกสารแนบท้าย 7)"
+                value={data.bankAccountChangeDate || ''}
+                onChange={(val) => onChange({ ...data, bankAccountChangeDate: val })}
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อบัญชีธนาคาร</label>
+              <input
+                type="text"
+                name="bankAccountName"
+                value={data.bankAccountName || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white font-bold"
+                placeholder="ระบุชื่อบัญชี..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">ประเภทบัญชี</label>
+              <input
+                type="text"
+                name="bankAccountType"
+                value={data.bankAccountType || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                placeholder="เช่น ออมทรัพย์"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">สาขา</label>
+              <input
+                type="text"
+                name="bankAccountBranch"
+                value={data.bankAccountBranch || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                placeholder="ระบุสาขา..."
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="block text-xs font-medium text-gray-600 mb-1">หมายเลขบัญชี</label>
+              <input
+                type="text"
+                name="bankAccountNumber"
+                value={data.bankAccountNumber || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white font-mono"
+                placeholder="xxx-x-xxxxx-x"
+              />
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

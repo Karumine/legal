@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { CustomDatePicker } from './CustomDatePicker';
 import type { ServiceAgreementData, AppData } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 
@@ -229,12 +230,10 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">วันที่ทำสัญญา</label>
-            <input
-              type="date"
+            <CustomDatePicker
+              label="วันที่ทำสัญญา"
               value={data.contractDate}
-              onChange={(e) => handleChange('contractDate', e.target.value)}
-              className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border h-[38px]"
+              onChange={(val) => handleChange('contractDate', val)}
             />
           </div>
         </div>
@@ -291,18 +290,14 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
                         </div>
 
                         {/* First Date */}
-                        <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1">วันที่งวดแรก</label>
-                          <input
-                            type="date"
+                          <CustomDatePicker
+                            label="วันที่งวดแรก"
                             value={data.agreementFirstDates?.[agreement.id] || ''}
-                            onChange={(e) => {
-                              const newDates = { ...data.agreementFirstDates, [agreement.id]: e.target.value };
+                            onChange={(val) => {
+                              const newDates = { ...data.agreementFirstDates, [agreement.id]: val };
                               handleChange('agreementFirstDates', newDates);
                             }}
-                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border h-[38px]"
                           />
-                        </div>
 
                         {/* Installment Amount Cal */}
                         <div>
@@ -382,18 +377,14 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
                         </div>
 
                         {/* First Date */}
-                        <div>
-                          <label className="block text-xs font-medium text-gray-600 mb-1">วันที่งวดแรก</label>
-                          <input
-                            type="date"
+                          <CustomDatePicker
+                            label="วันที่งวดแรก"
                             value={data.agreementServiceFeeFirstDates?.[agreement.id] || ''}
-                            onChange={(e) => {
-                              const newDates = { ...data.agreementServiceFeeFirstDates, [agreement.id]: e.target.value };
+                            onChange={(val) => {
+                              const newDates = { ...data.agreementServiceFeeFirstDates, [agreement.id]: val };
                               handleChange('agreementServiceFeeFirstDates', newDates);
                             }}
-                            className="block w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border h-[38px]"
                           />
-                        </div>
 
                         {/* Installment Amount Cal */}
                         <div>
@@ -481,24 +472,18 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
         <div className="pt-4 border-t border-gray-100">
           <h4 className="text-sm font-bold text-gray-700 mb-3" onFocusCapture={() => onFocusSection?.('sa-clause-3')}>2.4 รายละเอียดการชำระเงิน</h4>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">งวดแรก</label>
-              <input
-                type="date"
+              <CustomDatePicker
+                label="งวดแรก"
                 value={data.firstInstallmentDate}
+                onChange={() => {}}
                 readOnly
-                className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed"
               />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">งวดสุดท้าย</label>
-              <input
-                type="date"
+              <CustomDatePicker
+                label="งวดสุดท้าย"
                 value={data.lastInstallmentDate}
+                onChange={() => {}}
                 readOnly
-                className="block w-full rounded-md border-gray-100 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed"
               />
-            </div>
           </div>
         </div>
 
