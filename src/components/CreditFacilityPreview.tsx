@@ -2188,7 +2188,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             </div>
 
             <div className="mt-8 flex flex-col items-end">
-              <div className="flex items-center gap-16">
+              <div className="flex items-center gap-24">
                 <div className="text-[10px] text-gray-500 italic whitespace-nowrap pb-2">
                   ประทับตราบริษัท (ถ้ามี)
                 </div>
@@ -2215,15 +2215,15 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
 
             {/* Acknowledgment Section (formerly Annex 8) */}
             <div className="space-y-3 pt-2">
-              <div className="font-bold underline text-center uppercase text-[12px]">
-                ส่วนของหนังสือรับทราบการเปลี่ยนแปลงช่องทางการชำระเงิน
+              <div className="w-full py-4">
+                <div className="border-t border-black w-full"></div>
               </div>
               <div className="text-justify indent-16">
                 ข้าพเจ้ารับทราบและจะดำเนินการเปลี่ยนแปลงวิธีการชำระเงินเป็นการโอนเงินเข้าบัญชีธนาคารตามรายละเอียดที่ท่านได้แจ้งในหนังสือฉบับนี้ สำหรับการชำระเงินจะเกิดขึ้นหลังจากวันที่ของหนังสือฉบับนี้เป็นต้นไป
               </div>
 
               <div className="mt-8 flex flex-col items-end">
-                <div className="flex items-center gap-16">
+                <div className="flex items-center gap-24">
                   <div className="text-[10px] text-gray-500 italic whitespace-nowrap pb-2">
                     ประทับตราบริษัท (ถ้ามี)
                   </div>
