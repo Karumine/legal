@@ -584,7 +584,11 @@ function App() {
   ];
 
   const renderContractPreview = (agreement: Agreement) => {
-    const filteredGuarantors = data.guarantors.filter(g => g.selectedAgreementIds?.includes(agreement.id));
+    const allGuarantors = [
+      ...data.guarantors,
+      ...(data.guaranteeAgreements?.flatMap(ga => ga.guarantors) || [])
+    ];
+    const filteredGuarantors = allGuarantors.filter(g => g.selectedAgreementIds?.includes(agreement.id));
 
     if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
       return (
