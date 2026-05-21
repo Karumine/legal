@@ -1,5 +1,4 @@
 import type { ContractData } from '../types/contract';
-import { getAuthorizedSignatoryText } from '../utils/formatters';
 
 interface Props {
   data: ContractData;
@@ -73,7 +72,7 @@ export default function SignatureSection({ data }: Props) {
             </div>
 
             <div className="mt-8 space-y-1 text-left px-0">
-              <div className="font-bold whitespace-nowrap">ตำแหน่ง: {getAuthorizedSignatoryText({ entityType: data.entityType })}</div>
+              <div className="font-bold whitespace-nowrap">ตำแหน่ง: {data.entityType === 'partnership' ? 'หุ้นส่วนผู้จัดการ' : 'กรรมการผู้มีอำนาจลงนาม'}</div>
               <div className="font-bold">
                 <span className="bg-yellow-100 print:bg-transparent leading-relaxed rounded px-1">{data.customerCompany || '\u00A0'}</span>
               </div>

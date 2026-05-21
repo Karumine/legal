@@ -84,11 +84,11 @@ export default function GuaranteePreview({ data }: Props) {
                 <div className="flex-1">
                   {isCorporate ? (
                     <>
-                      <b><Highlight>{guarantor.name}</Highlight></b> (โดย<Highlight>{guarantor.directors}</Highlight> {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> (<b>“ผู้ค้ำประกันคนที่ {idx + 1}”</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                      <b><Highlight>{guarantor.name}</Highlight></b> (โดย<Highlight>{guarantor.directors}</Highlight> {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ' : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท'}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(guarantor.idCard)}</Highlight> (<b>“{data.guarantors.length > 1 ? `ผู้ค้ำประกันคนที่ ${idx + 1}` : 'ผู้ค้ำประกัน'}”</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
                     </>
                   ) : (
                     <>
-                      <b><Highlight>{guarantor.name}</Highlight></b> {guarantor.nationality === 'foreigner' ? 'ผู้ถือหนังสือเดินทางเลขที่' : 'ผู้ถือบัตรประจำตัวประชาชนเลขที่'} <Highlight>{guarantor.nationality === 'foreigner' ? guarantor.idCard : formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (<b>“ผู้ค้ำประกันคนที่ {idx + 1}”</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
+                      <b><Highlight>{guarantor.name}</Highlight></b> {guarantor.nationality === 'foreigner' ? 'ผู้ถือหนังสือเดินทางเลขที่' : 'ผู้ถือบัตรประจำตัวประชาชนเลขที่'} <Highlight>{guarantor.nationality === 'foreigner' ? guarantor.idCard : formatThaiId(guarantor.idCard)}</Highlight> มีที่อยู่ตามทะเบียนบ้านเลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(guarantor.address, guarantor.postalCode))}</Highlight> (<b>“{data.guarantors.length > 1 ? `ผู้ค้ำประกันคนที่ ${idx + 1}` : 'ผู้ค้ำประกัน'}”</b>) {idx === data.guarantors.length - 1 && 'อีกฝ่ายหนึ่ง'}
                     </>
                   )}
                 </div>
@@ -485,7 +485,7 @@ export default function GuaranteePreview({ data }: Props) {
                     return (
                       <div key={idx} className="space-y-16 pb-8 border-b border-gray-100 last:border-0">
                         <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
-                          <div>ผู้ค้ำประกันคนที่ {idx + 1} :</div>
+                          <div>{data.guarantors.length > 1 ? `ผู้ค้ำประกันคนที่ ${idx + 1} :` : 'ผู้ค้ำประกัน :'}</div>
                           <Highlight>{guarantor.name}</Highlight>
                         </div>
 

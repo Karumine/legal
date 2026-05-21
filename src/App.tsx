@@ -459,7 +459,7 @@ function App() {
 
     return {
       contractNo: guarantors[0]?.contractNo || (hpData?.contractNo ? `AGA/XX-SUR` : ''),
-      effectiveDate: guarantors[0]?.contractDate || hpData?.contractDate || '',
+      effectiveDate: guarantors[0]?.contractDate || hpData?.contractDate || (selectedAgreements[0]?.data as any)?.effectiveDate || (selectedAgreements[0]?.data as any)?.contractDate || '',
       // Party 1 (Lender)
       lenderCompany: data.agileInfo.companyName,
       lenderDirectors: data.agileInfo.directors,
@@ -498,7 +498,7 @@ function App() {
       refContracts: selectedAgreements.map(a => ({
         type: a.type,
         no: (a.data as any).contractNo || '',
-        date: (a.data as any).contractDate || '',
+        date: (a.type === 'loan' || a.type === 'od') ? ((a.data as any).effectiveDate || '') : ((a.data as any).contractDate || ''),
         amount: parseFloat(((a.data as any).totalAmount || '0').toString().replace(/,/g, '')) || 0
       })),
       guaranteeAmountText: thaiBahtText(totalAmount.toString()),
