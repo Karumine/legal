@@ -32,7 +32,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
   const collateralAssetsCount = (data.collateralAssets || []).length;
   const isDedicatedCollateral = collateralAssetsCount >= 5;
   const isIntegratedCollateral = collateralAssetsCount === 4;
-  const collateralOffset = isDedicatedCollateral ? 1 : 0;
+  const collateralOffset = isDedicatedCollateral ? 2 : 0;
 
   const integratedAssetsCount = (!isLargeList && assetCount > firstPageMax)
     ? Math.min(assetCount - firstPageMax, integratedPageMax)
@@ -44,7 +44,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
   const overflowPagesCount = Math.ceil(dedicatedOverflowAssets.length / subsequentPageMax);
 
-  const totalPages = 24 + overflowPagesCount + collateralOffset;
+  const totalPages = 25 + overflowPagesCount + collateralOffset;
 
   const renderPageFooter = (pageNum: number) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
@@ -544,18 +544,27 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <div className="flex gap-4">
                 <span className="w-8 shrink-0 whitespace-nowrap">(ค)</span>
                 <div className="flex-1">
-                  ผู้เช่าซื้อจะไม่เปลี่ยนแปลงสภาพ ดัดแปลง แก้ไข หรือต่อเติมทรัพย์สินที่เช่าซื้อ อุปกรณ์ หรืออะไหล่ หรือส่วนหนึ่งส่วนใดของทรัพย์สินด้วยประการใด ๆ เว้นแต่ได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อ
+                  <div>ผู้เช่าซื้อจะไม่เปลี่ยนแปลงสภาพ ดัดแปลง แก้ไข หรือต่อเติมทรัพย์สินที่เช่าซื้อ อุปกรณ์ หรืออะไหล่ หรือส่วนหนึ่งส่วนใดของทรัพย์สินด้วยประการใด ๆ เว้นแต่ได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อ</div>
+                  <div className="mt-4">ทั้งนี้ ในกรณีที่ผู้เช่าซื้อฝ่าฝืน ไม่ว่าการฝ่าฝืนนั้นจะก่อให้เกิดความเสียหาย หรือทำให้การรับประกันของทรัพย์สินสิ้นสุลงหรือไม่ก็ตาม ผู้ให้เช่าซื้อ และ/หรือ ตัวแทนเช่าซื้อมีสิทธิดำเนินการดังต่อไปนี้</div>
+                  <div className="mt-4 space-y-1">
+                    <div className="flex gap-4">
+                      <span className="w-8 shrink-0 whitespace-nowrap">(1)</span>
+                      <div className="flex-1">เรียกร้องให้ผู้เช่าซื้อดัดแปลงกลับคืนสู่สภาพเดิมด้วยค่าใช้จ่ายของผู้เช่าซื้อเองทันที</div>
+                    </div>
+                    <div className="flex gap-4">
+                      <span className="w-8 shrink-0 whitespace-nowrap">(2)</span>
+                      <div className="flex-1">บรรดาส่วนควบ อุปกรณ์ หรือส่วนต่อเติมใด ๆ ที่ผู้เช่าซื้อได้ทำขึ้น ให้ตกเป็นกรรมสิทธิ์ของผู้ให้เช่าซื้อทันทีโดยไม่มีค่าชดเชย เว้นแต่ผู้ให้เช่าซื้อจะสั่งให้รื้อถอนออก</div>
+                    </div>
+                    <div className="flex gap-4">
+                      <span className="w-8 shrink-0 whitespace-nowrap">(3)</span>
+                      <div className="flex-1">เรียกร้องค่าเสียหาย ค่าขาดประโยชน์ หรือค่าใช้จ่ายใด ๆ ทั้งสิ้นที่เกิดขึ้นในปัจจุบันและอนาคต อันเนื่องมาจากการฝ่าฝืนหรือการสิ้นสุดของการรับประกันดังกล่าว</div>
+                    </div>
+                    <div className="flex gap-4">
+                      <span className="w-8 shrink-0 whitespace-nowrap">(4)</span>
+                      <div className="flex-1">บอกเลิกสัญญาฉบับนี้ได้ทันทีตามข้อ 9. ของสัญญาฉบับนี้</div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <span className="w-8 shrink-0">5.2</span>
-            <div className="flex-1 space-y-2">
-              <div className="underline">ค่าใช้จ่ายและค่าธรรมเนียม</div>
-              <div>
-                ผู้เช่าซื้อตกลงชำระและรับผิดชอบค่าใช้จ่ายทั้งปวง และ/หรือ การดำเนินการอย่างหนึ่งอย่างใดหรือหลายอย่างอันเกี่ยวกับทรัพย์สินที่เช่าซื้อตามรายละเอียดและข้อกำหนดที่ผู้ให้เช่าซื้อกำหนดไว้อย่างเคร่งครัด
               </div>
             </div>
           </div>
@@ -568,17 +577,76 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
+            <span className="w-8 shrink-0">5.2</span>
+            <div className="flex-1 space-y-2">
+              <div className="underline">ค่าใช้จ่ายและค่าธรรมเนียม</div>
+              <div>
+                ผู้เช่าซื้อตกลงชำระและรับผิดชอบค่าใช้จ่ายทั้งปวง และ/หรือ การดำเนินการอย่างหนึ่งอย่างใดหรือหลายอย่างอันเกี่ยวกับทรัพย์สินที่เช่าซื้อตามรายละเอียดและข้อกำหนดที่ผู้ให้เช่าซื้อกำหนดไว้อย่างเคร่งครัด
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
             <span className="w-8 shrink-0">5.3</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การเข้าถึงข้อมูลการใช้งานและการตรวจสอบสภาพของทรัพย์สิน</div>
               <div>
                 ผู้เช่าซื้อยินยอมและอนุญาตให้ตัวแทนเช่าซื้อ ผู้ให้เช่าซื้อ ตัวแทน หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งโดยชอบจากตัวแทนเช่าซื้อหรือผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินที่เช่าซื้อ หรือ ตัวแทนจำหน่าย ให้มีสิทธิเข้าถึงข้อมูลการใช้งานทรัพย์สินที่เช่าซื้อในการใช้งานและการบำรุงรักษา เพื่อให้สามารถตรวจสอบประสิทธิภาพของทรัพย์สินที่เช่าซื้อได้ในระหว่างที่สัญญาฉบับนี้มีผลบังคับใช้ ทั้งนี้ ไม่ว่าการเข้าถึงข้อมูลดังกล่าวจะกระทำผ่านทางระบบออนไลน์ หรือทางการติดต่อสื่อสารใด ๆ ทั้งสิ้น หากตัวแทนเช่าซื้อหรือผู้ให้เช่าซื้อตรวจพบว่าทรัพย์สินหรือส่วนหนึ่งส่วนใดของทรัพย์สินที่เช่าซื้อ เสียหาย ชำรุด หรืออยู่ในสภาพที่ไม่เหมาะสมแก่การใช้งาน ตัวแทนเช่าซื้อจะดำเนินการแจ้งเป็นลายลักษณ์อักษรไปยังผู้เช่าซื้อเพื่อให้ทราบเรื่องดังกล่าว และให้ดำเนินการซ่อมแซมทรัพย์สินในการนี้ ผู้เช่าซื้อตกลงที่จะทำการซ่อมแซมทรัพย์สินให้กลับคืนสู่สภาพที่ดีและเหมาะสมในการใช้งานได้อย่างมีประสิทธิภาพ โดยค่าใช้จ่ายทั้งหมดให้ถือเป็นหน้าที่ของผู้เช่าซื้อเอง
               </div>
-            </div>
+          </div>
           </div>
 
           <div className="flex gap-4">
             <span className="w-8 shrink-0">5.4</span>
+            <div className="flex-1 space-y-2">
+              <div className="underline">การให้ความยินยอมเปิดเผยข้อมูล</div>
+              <div>
+                ผู้เช่าซื้อตกลงให้ความยินยอมเปิดเผยข้อมูลโดยชอบด้วยกฎหมายแก่ตัวแทนเช่าซื้อ ผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งโดยชอบจากตัวแทนเช่าซื้อหรือผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินที่เช่าซื้อ หรือ ตัวแทนจำหน่าย ในการเข้าถึง รวบรวม ตรวจสอบ และบันทึกข้อมูลดังต่อไปนี้ตลอดอายุสัญญาเช่าซื้อฉบับนี้
+              </div>
+            </div>
+          </div>
+        </div>
+        {renderPageFooter(8 + overflowPagesCount)}
+      </div>
+
+      {/* Contract Sections Page 7 */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+        <PageHeader />
+        <div className="mt-8 space-y-6">
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 opacity-0">5.4</span>
+            <div className="flex-1 space-y-2">
+              <div className="space-y-1">
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
+                  <div className="flex-1">ข้อมูลการผลิต : ปริมาณการผลิต ชั่วโมงการทำงานของเครื่องจักร แผนการบำรุงรักษาเครื่องจักรประจำวัน และ/หรือ ประจำเดือน และ/หรือ นำส่งรูปถ่ายเครื่องจักร และ/หรือ วิธีโอกาสการทำงานของเครื่องจักร</div>
+                </div>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0 whitespace-nowrap">(ข)</span>
+                  <div className="flex-1">ข้อมูลรายได้ : รายงานยอดขาย, บัญชีรายรับ-รายจ่ายเกี่ยวข้องกับการใช้ทรัพย์สินที่เช่าซื้อ, สำเนาใบกำกับภาษี/ใบเสร็จรับเงิน และข้อมูลทางการเงินอื่นที่แสดงถึงรายได้ที่เกิดจากการประกอบกิจการของผู้เช่าซื้อ</div>
+                </div>
+              </div>
+              <div>
+                ทั้งนี้ ผู้เช่าซื้อยินยอมจัดส่งข้อมูลตามข้อ 5.4 ให้แก่ผู้ให้เช่าซื้อ และ/หรือ ตัวแทน โดยวิธีการดังต่อไปนี้
+              </div>
+              <div className="space-y-1">
+                <div className="flex gap-4">
+                  <span className="w-12 shrink-0 whitespace-nowrap">5.4.1.</span>
+                  <div className="flex-1">จัดส่งรายงานสรุปยอดขายและยอดการผลิตเป็นไฟล์รูปภาพ และ/หรือ ตามที่ตัวแทนเช่าซื้อร้องขอ</div>
+                </div>
+                <div className="flex gap-4">
+                  <span className="w-12 shrink-0 whitespace-nowrap">5.4.2.</span>
+                  <div className="flex-1">ผู้เช่าซื้อยินยอมให้ผู้ให้เช่าซื้อหรือตัวแทนเช่าซื้อเชื่อมต่อระบบดึงข้อมูลอัตโนมัติ (API หรือระบบ Cloud ของเครื่องจักร) หากมี</div>
+                </div>
+                <div className="flex gap-4">
+                  <span className="w-12 shrink-0 whitespace-nowrap">5.4.3.</span>
+                  <div className="flex-1">ผู้เช่าซื้อยินยอม/ให้ตัวแทนเช่าซื้อ ผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้ง โดยชอบจากตัวแทนเช่าซื้อหรือผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินที่เช่าซื้อ หรือ ตัวแทนจำหน่ายเข้าตรวจเยี่ยมสถานที่ตั้งของทรัพย์สินเพื่อตรวจสอบข้อมูลการผลิตจริง โดยจะแจ้งล่วงหน้าไม่น้อยกว่า 3 วันทำการ</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0">5.5</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การรับประกันและการบริการบำรุงรักษาทรัพย์สิน โดยผู้ผลิต</div>
               <div>
@@ -587,8 +655,16 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
 
+        </div>
+        {renderPageFooter(9 + overflowPagesCount)}
+      </div>
+
+      {/* Contract Sections Page 7 - Section 6 */}
+      <div data-section-id="hp-collateral" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+        <PageHeader />
+        <div className="mt-8 space-y-6">
           <div className="flex gap-4" data-section-id="hp-insurance">
-            <span className="w-8 shrink-0">5.5</span>
+            <span className="w-8 shrink-0">5.6</span>
             <div className="flex-1 space-y-2">
               <div className="underline">การประกันภัยทรัพย์สิน</div>
               <div>
@@ -596,14 +672,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               </div>
             </div>
           </div>
-        </div>
-        {renderPageFooter(8 + overflowPagesCount)}
-      </div>
 
-      {/* Contract Sections Page 7 - Section 6 */}
-      <div data-section-id="hp-collateral" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
-        <PageHeader />
-        <div className="mt-8 space-y-6">
           <div className="flex gap-4 font-bold">
             <span className="">6.</span>
             <span className="">หลักประกัน</span>
@@ -629,6 +698,14 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
 
+        </div>
+        {renderPageFooter(10 + overflowPagesCount)}
+      </div>
+
+      {/* Contract Sections Page 9 (6.3 and 6.4) */}
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+        <PageHeader />
+        <div className="mt-8 space-y-6">
           <div className="flex gap-4">
             <span className="w-8 shrink-0">6.3</span>
             <div className="flex-1 space-y-4">
@@ -637,7 +714,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               {/* Strictly show first 3 items (ก, ข, ค) if the list continues elsewhere */}
               {(data.collateralAssets || []).slice(0, 3).map((asset, idx) => renderCollateralAsset(asset, idx))}
 
-              {/* Show summary text on Page 9 ONLY if there is no overflow at all (1-3 assets) */}
+              {/* Show summary text ONLY if there is no overflow at all (1-3 assets) */}
               {(data.collateralAssets || []).length > 0 && (data.collateralAssets || []).length <= 3 && (
                 <div className="mt-4 text-justify">
                   นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
@@ -645,8 +722,58 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               )}
             </div>
           </div>
+
+          {/* Integrated collateral overflow if exactly 4 items exist */}
+          {isIntegratedCollateral && (
+            <div className="flex gap-4 mb-4 pb-4 border-b border-gray-100 italic">
+              <span className="opacity-0 w-8 shrink-0">6.3</span>
+              <div className="flex-1 space-y-4">
+                {(data.collateralAssets || []).slice(3).map((asset, idx) => renderCollateralAsset(asset, idx + 3))}
+                <div className="mt-4 text-justify">
+                  นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!isDedicatedCollateral && (
+            <>
+              <div className="flex gap-4">
+                <span className="w-8 shrink-0">6.4</span>
+                <div className="flex-1 text-justify">
+                  คู่สัญญาทั้งสามฝ่ายตกลงว่าสิทธิของผู้ให้เช่าซื้อเหนือทรัพย์สินที่เป็นหลักประกันตามข้อ 6.3 ของสัญญาฉบับนี้ นั้น เป็นไปตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <span className="w-8 shrink-0">6.5</span>
+                <div className="flex-1 text-justify">
+                  ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ <b>(“ผู้ประเมินมูลค่าทรัพย์สิน”)</b> และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <span className="w-8 shrink-0">6.6</span>
+                <div className="flex-1 text-justify">
+                  ในกรณีที่ทรัพย์สินหลักประกันเป็นสิ่งปลูกสร้าง และ/หรือ เครื่องจักร ผู้เช่าซื้อตกลงจัดให้มีการทำประกันภัยทรัพย์สินบนสิ่งปลูกสร้าง และ/หรือ เครื่องจักรที่เป็นทรัพย์สินหลักประกันกับบริษัทประกันภัยที่ผู้ให้เช่าซื้อยอมรับ ตลอดระยะเวลาจนกว่าผู้เช่าซื้อจะชำระหนี้ตามสัญญาฉบับนี้จนครบถ้วน โดยผู้เช่าซื้อจะเป็นผู้ชำระเบี้ยประกันและค่าใช้จ่าย และให้ผู้ให้เช่าซื้อเป็นผู้รับผลประโยชน์ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <span className="w-8 shrink-0">6.7</span>
+                <div className="flex-1 space-y-4">
+                  <div>
+                    ผู้เช่าซื้อตกลงว่าหากมูลค่าทรัพย์สินหลักประกันลดลงน้อยกว่ามูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อจะนำทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกันจนครบมูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ภายใน 30 (สามสิบ) วัน นับจากวันที่ผู้เช่าซื้อได้รับแจ้งจากผู้ให้เช่าซื้อ
+                  </div>
+                  <div>
+                    หากผู้เช่าซื้อประสงค์จะขอขยายระยะเวลาการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อจะต้องแจ้งให้ตัวแทนเช่าซื้อทราบเป็นลายลักษณ์อักษรล่วงหน้าก่อนครบกำหนดในวรรคแรกไม่น้อยกว่า 7 (เจ็ด) วัน และหากผู้ให้เช่าซื้อตกลงยินยอมให้ขยายระยะเวลาในการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ให้ถือว่าผู้ให้เช่าซื้อยินยอมให้ขยายระยะเวลาเฉพาะคราวดังกล่าวเท่านั้น ทั้งนี้ ระยะเวลา หรือ การยินยอมดังกล่าวให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
-        {renderPageFooter(9 + overflowPagesCount)}
+        {renderPageFooter(11 + overflowPagesCount)}
       </div>
 
       {/* Contract Sections Page 10 - Dedicated Overflow for Section 6.3 (Triggered at 5+ items) */}
@@ -668,65 +795,52 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 </div>
               </div>
             </div>
-            {renderPageFooter(10 + overflowPagesCount)}
+            {renderPageFooter(12 + overflowPagesCount)}
           </div>
         )
       }
 
+      {/* Contract Sections Page 11 - Sections 6.4-6.7 (ONLY if dedicated collateral) */}
+      {isDedicatedCollateral && (
+        <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+          <PageHeader />
+          <div className="mt-8 space-y-6">
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0">6.4</span>
+              <div className="flex-1 text-justify">
+                คู่สัญญาทั้งสามฝ่ายตกลงว่าสิทธิของผู้ให้เช่าซื้อเหนือทรัพย์สินที่เป็นหลักประกันตามข้อ 6.3 ของสัญญาฉบับนี้ นั้น เป็นไปตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
+              </div>
+            </div>
 
-      {/* Contract Sections Page 9 - Sections 6.4-6.7 */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
-        <PageHeader />
-        <div className="mt-8 space-y-6">
-          {/* Integrated collateral overflow if exactly 4 items exist */}
-          {isIntegratedCollateral && (
-            <div className="flex gap-4 mb-4 pb-4 border-b border-gray-100 italic">
-              <span className="opacity-0 w-8 shrink-0">6.3</span>
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0">6.5</span>
+              <div className="flex-1 text-justify">
+                ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ <b>(“ผู้ประเมินมูลค่าทรัพย์สิน”)</b> และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0">6.6</span>
+              <div className="flex-1 text-justify">
+                ในกรณีที่ทรัพย์สินหลักประกันเป็นสิ่งปลูกสร้าง และ/หรือ เครื่องจักร ผู้เช่าซื้อตกลงจัดให้มีการทำประกันภัยทรัพย์สินบนสิ่งปลูกสร้าง และ/หรือ เครื่องจักรที่เป็นทรัพย์สินหลักประกันกับบริษัทประกันภัยที่ผู้ให้เช่าซื้อยอมรับ ตลอดระยะเวลาจนกว่าผู้เช่าซื้อจะชำระหนี้ตามสัญญาฉบับนี้จนครบถ้วน โดยผู้เช่าซื้อจะเป็นผู้ชำระเบี้ยประกันและค่าใช้จ่าย และให้ผู้ให้เช่าซื้อเป็นผู้รับผลประโยชน์ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0">6.7</span>
               <div className="flex-1 space-y-4">
-                {(data.collateralAssets || []).slice(3).map((asset, idx) => renderCollateralAsset(asset, idx + 3))}
-                <div className="mt-4 text-justify">
-                  นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
+                <div>
+                  ผู้เช่าซื้อตกลงว่าหากมูลค่าทรัพย์สินหลักประกันลดลงน้อยกว่ามูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อจะนำทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกันจนครบมูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ภายใน 30 (สามสิบ) วัน นับจากวันที่ผู้เช่าซื้อได้รับแจ้งจากผู้ให้เช่าซื้อ
+                </div>
+                <div>
+                  หากผู้เช่าซื้อประสงค์จะขอขยายระยะเวลาการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อจะต้องแจ้งให้ตัวแทนเช่าซื้อทราบเป็นลายลักษณ์อักษรล่วงหน้าก่อนครบกำหนดในวรรคแรกไม่น้อยกว่า 7 (เจ็ด) วัน และหากผู้ให้เช่าซื้อตกลงยินยอมให้ขยายระยะเวลาในการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ให้ถือว่าผู้ให้เช่าซื้อยินยอมให้ขยายระยะเวลาเฉพาะคราวดังกล่าวเท่านั้น ทั้งนี้ ระยะเวลา หรือ การยินยอมดังกล่าวให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
                 </div>
               </div>
             </div>
-          )}
-
-          <div className="flex gap-4">
-            <span className="w-8 shrink-0">6.4</span>
-            <div className="flex-1 text-justify">
-              คู่สัญญาทั้งสามฝ่ายตกลงว่าสิทธิของผู้ให้เช่าซื้อเหนือทรัพย์สินที่เป็นหลักประกันตามข้อ 6.3 ของสัญญาฉบับนี้ นั้น เป็นไปตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
-            </div>
           </div>
-
-
-          <div className="flex gap-4">
-            <span className="w-8 shrink-0">6.5</span>
-            <div className="flex-1 text-justify">
-              ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ <b>(“ผู้ประเมินมูลค่าทรัพย์สิน”)</b> และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <span className="w-8 shrink-0">6.6</span>
-            <div className="flex-1 text-justify">
-              ในกรณีที่ทรัพย์สินหลักประกันเป็นสิ่งปลูกสร้าง และ/หรือ เครื่องจักร ผู้เช่าซื้อตกลงจัดให้มีการทำประกันภัยทรัพย์สินบนสิ่งปลูกสร้าง และ/หรือ เครื่องจักรที่เป็นทรัพย์สินหลักประกันกับบริษัทประกันภัยที่ผู้ให้เช่าซื้อยอมรับ ตลอดระยะเวลาจนกว่าผู้เช่าซื้อจะชำระหนี้ตามสัญญาฉบับนี้จนครบถ้วน โดยผู้เช่าซื้อจะเป็นผู้ชำระเบี้ยประกันและค่าใช้จ่าย และให้ผู้ให้เช่าซื้อเป็นผู้รับผลประโยชน์ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <span className="w-8 shrink-0">6.7</span>
-            <div className="flex-1 space-y-4">
-              <div>
-                ผู้เช่าซื้อตกลงว่าหากมูลค่าทรัพย์สินหลักประกันลดลงน้อยกว่ามูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อจะนำทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกันจนครบมูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ภายใน 30 (สามสิบ) วัน นับจากวันที่ผู้เช่าซื้อได้รับแจ้งจากผู้ให้เช่าซื้อ
-              </div>
-              <div>
-                หากผู้เช่าซื้อประสงค์จะขอขยายระยะเวลาการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อจะต้องแจ้งให้ตัวแทนเช่าซื้อทราบเป็นลายลักษณ์อักษรล่วงหน้าก่อนครบกำหนดในวรรคแรกไม่น้อยกว่า 7 (เจ็ด) วัน และหากผู้ให้เช่าซื้อตกลงยินยอมให้ขยายระยะเวลาในการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ให้ถือว่าผู้ให้เช่าซื้อยินยอมให้ขยายระยะเวลาเฉพาะคราวดังกล่าวเท่านั้น ทั้งนี้ ระยะเวลา หรือ การยินยอมดังกล่าวให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
-              </div>
-            </div>
-          </div>
+          {renderPageFooter(11 + overflowPagesCount + collateralOffset)}
         </div>
-        {renderPageFooter(10 + overflowPagesCount + collateralOffset)}
-      </div>
+      )}
 
       {/* Contract Sections Page 10 - Sections 6.8-6.12 */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
@@ -768,7 +882,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
         </div>
-        {renderPageFooter(11 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(12 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Contract Sections Page 11 - Sections 7, 8, 9 */}
@@ -799,7 +913,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
         </div>
-        {renderPageFooter(12 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(13 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Contract Sections Page 12 - Sections 9.2, 10 */}
@@ -847,7 +961,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
         </div>
-        {renderPageFooter(13 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(14 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Contract Sections Page 13 - Sections 11, 12, 13, 14 */}
@@ -882,7 +996,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
         </div>
-        {renderPageFooter(14 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(15 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Contract Sections Page 14 - Sections 15, 16 */}
@@ -907,7 +1021,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             (คู่สัญญาลงนามในหน้าถัดไป)
           </div>
         </div>
-        {renderPageFooter(15 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(16 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Signature Page 1 - Lessor 1 & Purchaser */}
@@ -989,7 +1103,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
         </div>
-        {renderPageFooter(16 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(17 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Signature Page 2 - Lessor 2 */}
@@ -1037,7 +1151,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="p-4 space-y-12">
           </div>
         </div>
-        {renderPageFooter(17 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(18 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 1 - Image 9 */}
@@ -1047,7 +1161,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 1</div>
           <div className="text-[12px] font-bold underline">ทรัพย์สินที่เช่าซื้อ</div>
         </div>
-        {renderPageFooter(18 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(19 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 2 - Image 10 */}
@@ -1057,7 +1171,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 2</div>
           <div className="text-[12px] font-bold underline">รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ</div>
         </div>
-        {renderPageFooter(19 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(20 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 3 - Image 11 */}
@@ -1067,7 +1181,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 3</div>
           <div className="text-[12px] font-bold underline">รายละเอียดการส่งมอบเครื่องจักร</div>
         </div>
-        {renderPageFooter(20 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(21 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 4 - Image 14 */}
@@ -1155,7 +1269,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
         </div>
 
-        {renderPageFooter(21 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(22 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 5 - Debt Collection Fees */}
@@ -1287,7 +1401,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </tbody>
         </table>
 
-        {renderPageFooter(22 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(23 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 5 (Cont.) - Consent & Signatures */}
@@ -1345,7 +1459,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
         </div>
 
-        {renderPageFooter(23 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(24 + overflowPagesCount + collateralOffset)}
       </div>
 
       {/* Annex Page 6 - Collateral Details */}
@@ -1357,7 +1471,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <p className="font-bold underline text-[12px]">รายละเอียดเกี่ยวกับหลักประกันการเช่าซื้อ</p>
         </div>
 
-        {renderPageFooter(24 + overflowPagesCount + collateralOffset)}
+        {renderPageFooter(25 + overflowPagesCount + collateralOffset)}
       </div>
     </div >
   );
