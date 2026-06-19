@@ -1195,21 +1195,28 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
               ))}
             </div>
 
-            <div className="mt-4">
-              <button
-                type="button"
-                onClick={addCollateralAsset}
-                className="w-full py-6 border-2 border-dashed border-blue-200 rounded-xl text-blue-600 hover:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 group bg-blue-50/10"
-              >
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Plus className="w-6 h-6 text-blue-600" />
-                </div>
-                <div className="text-center">
-                  <p className="text-sm font-bold">เพิ่มทรัพย์สินหลักประกัน</p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">เลือกประเภทหลักประกัน เช่น ที่ดิน, เครื่องจักร, เงินสด ฯลฯ</p>
-                </div>
-              </button>
-            </div>
+            {(data.collateralAssets || []).length < 10 ? (
+              <div className="mt-4">
+                <button
+                  type="button"
+                  onClick={addCollateralAsset}
+                  className="w-full py-6 border-2 border-dashed border-blue-200 rounded-xl text-blue-600 hover:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2 group bg-blue-50/10"
+                >
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Plus className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-bold">เพิ่มทรัพย์สินหลักประกัน</p>
+                    <p className="text-[10px] text-gray-500 mt-0.5">เลือกประเภทหลักประกัน เช่น ที่ดิน, เครื่องจักร, เงินสด ฯลฯ</p>
+                  </div>
+                </button>
+              </div>
+            ) : (
+              <div className="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-xl text-center">
+                <p className="text-sm font-bold text-orange-600">ถึงขีดจำกัดแล้ว</p>
+                <p className="text-xs text-orange-500">สามารถเพิ่มทรัพย์สินหลักประกันได้สูงสุด 10 รายการเท่านั้น</p>
+              </div>
+            )}
 
           </div>
         </div>

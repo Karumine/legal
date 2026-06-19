@@ -32,7 +32,9 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
   const collateralAssetsCount = (data.collateralAssets || []).length;
   const isDedicatedCollateral = collateralAssetsCount >= 5;
   const isIntegratedCollateral = collateralAssetsCount === 4;
-  const collateralOffset = isDedicatedCollateral ? 2 : 0;
+  const hasCollateral = collateralAssetsCount > 0;
+  const collateralOffset = isDedicatedCollateral ? 2 : (hasCollateral ? 1 : 0);
+  const firstPageCollateralCount = collateralAssetsCount >= 8 ? collateralAssetsCount - 3 : (isDedicatedCollateral ? 4 : (isIntegratedCollateral ? 3 : undefined));
 
   const integratedAssetsCount = (!isLargeList && assetCount > firstPageMax)
     ? Math.min(assetCount - firstPageMax, integratedPageMax)
@@ -660,7 +662,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       </div>
 
       {/* Contract Sections Page 7 - Section 6 */}
-      <div data-section-id="hp-collateral" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4" data-section-id="hp-insurance">
@@ -703,7 +705,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       </div>
 
       {/* Contract Sections Page 9 (6.3 and 6.4) */}
-      <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
+      <div data-section-id="hp-collateral" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
           <div className="flex gap-4">
@@ -711,11 +713,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="flex-1 space-y-4">
               <div>ผู้เช่าซื้อตกลงว่าบรรดาทรัพย์สินดังต่อไปนี้ <b>(“ทรัพย์สินหลักประกัน”)</b> เป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า</div>
 
-              {/* Strictly show first 3 items (ก, ข, ค) if the list continues elsewhere */}
-              {(data.collateralAssets || []).slice(0, 3).map((asset, idx) => renderCollateralAsset(asset, idx))}
+              {/* Strictly show items up to limit if the list continues elsewhere */}
+              {(data.collateralAssets || []).slice(0, firstPageCollateralCount).map((asset, idx) => renderCollateralAsset(asset, idx))}
 
-              {/* Show summary text ONLY if there is no overflow at all (1-3 assets) */}
-              {(data.collateralAssets || []).length > 0 && (data.collateralAssets || []).length <= 3 && (
+              {/* Show summary text ONLY if there is no overflow */}
+              {(data.collateralAssets || []).length > 0 && !isDedicatedCollateral && !isIntegratedCollateral && (
                 <div className="mt-4 text-justify">
                   นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
                 </div>
@@ -745,31 +747,37 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <span className="w-8 shrink-0">6.5</span>
-                <div className="flex-1 text-justify">
-                  ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ <b>(“ผู้ประเมินมูลค่าทรัพย์สิน”)</b> และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <span className="w-8 shrink-0">6.6</span>
-                <div className="flex-1 text-justify">
-                  ในกรณีที่ทรัพย์สินหลักประกันเป็นสิ่งปลูกสร้าง และ/หรือ เครื่องจักร ผู้เช่าซื้อตกลงจัดให้มีการทำประกันภัยทรัพย์สินบนสิ่งปลูกสร้าง และ/หรือ เครื่องจักรที่เป็นทรัพย์สินหลักประกันกับบริษัทประกันภัยที่ผู้ให้เช่าซื้อยอมรับ ตลอดระยะเวลาจนกว่าผู้เช่าซื้อจะชำระหนี้ตามสัญญาฉบับนี้จนครบถ้วน โดยผู้เช่าซื้อจะเป็นผู้ชำระเบี้ยประกันและค่าใช้จ่าย และให้ผู้ให้เช่าซื้อเป็นผู้รับผลประโยชน์ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <span className="w-8 shrink-0">6.7</span>
-                <div className="flex-1 space-y-4">
-                  <div>
-                    ผู้เช่าซื้อตกลงว่าหากมูลค่าทรัพย์สินหลักประกันลดลงน้อยกว่ามูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อจะนำทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกันจนครบมูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ภายใน 30 (สามสิบ) วัน นับจากวันที่ผู้เช่าซื้อได้รับแจ้งจากผู้ให้เช่าซื้อ
-                  </div>
-                  <div>
-                    หากผู้เช่าซื้อประสงค์จะขอขยายระยะเวลาการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อจะต้องแจ้งให้ตัวแทนเช่าซื้อทราบเป็นลายลักษณ์อักษรล่วงหน้าก่อนครบกำหนดในวรรคแรกไม่น้อยกว่า 7 (เจ็ด) วัน และหากผู้ให้เช่าซื้อตกลงยินยอมให้ขยายระยะเวลาในการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ให้ถือว่าผู้ให้เช่าซื้อยินยอมให้ขยายระยะเวลาเฉพาะคราวดังกล่าวเท่านั้น ทั้งนี้ ระยะเวลา หรือ การยินยอมดังกล่าวให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+              {!isIntegratedCollateral && (
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0">6.5</span>
+                  <div className="flex-1 text-justify">
+                    ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ <b>(“ผู้ประเมินมูลค่าทรัพย์สิน”)</b> และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
                   </div>
                 </div>
-              </div>
+              )}
+
+              {!hasCollateral && (
+                <>
+                  <div className="flex gap-4">
+                    <span className="w-8 shrink-0">6.6</span>
+                    <div className="flex-1 text-justify">
+                      ในกรณีที่ทรัพย์สินหลักประกันเป็นสิ่งปลูกสร้าง และ/หรือ เครื่องจักร ผู้เช่าซื้อตกลงจัดให้มีการทำประกันภัยทรัพย์สินบนสิ่งปลูกสร้าง และ/หรือ เครื่องจักรที่เป็นทรัพย์สินหลักประกันกับบริษัทประกันภัยที่ผู้ให้เช่าซื้อยอมรับ ตลอดระยะเวลาจนกว่าผู้เช่าซื้อจะชำระหนี้ตามสัญญาฉบับนี้จนครบถ้วน โดยผู้เช่าซื้อจะเป็นผู้ชำระเบี้ยประกันและค่าใช้จ่าย และให้ผู้ให้เช่าซื้อเป็นผู้รับผลประโยชน์ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <span className="w-8 shrink-0">6.7</span>
+                    <div className="flex-1 space-y-4">
+                      <div>
+                        ผู้เช่าซื้อตกลงว่าหากมูลค่าทรัพย์สินหลักประกันลดลงน้อยกว่ามูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อจะนำทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกันจนครบมูลค่าตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้ ภายใน 30 (สามสิบ) วัน นับจากวันที่ผู้เช่าซื้อได้รับแจ้งจากผู้ให้เช่าซื้อ
+                      </div>
+                      <div>
+                        หากผู้เช่าซื้อประสงค์จะขอขยายระยะเวลาการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อจะต้องแจ้งให้ตัวแทนเช่าซื้อทราบเป็นลายลักษณ์อักษรล่วงหน้าก่อนครบกำหนดในวรรคแรกไม่น้อยกว่า 7 (เจ็ด) วัน และหากผู้ให้เช่าซื้อตกลงยินยอมให้ขยายระยะเวลาในการหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ให้ถือว่าผู้ให้เช่าซื้อยินยอมให้ขยายระยะเวลาเฉพาะคราวดังกล่าวเท่านั้น ทั้งนี้ ระยะเวลา หรือ การยินยอมดังกล่าวให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </>
           )}
         </div>
@@ -786,12 +794,26 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 <span className="opacity-0 w-8 shrink-0">6.3</span>
                 <div className="flex-1 space-y-4">
                   {(data.collateralAssets || [])
-                    .slice(3)
-                    .map((asset, idx) => renderCollateralAsset(asset, idx + 3))}
+                    .slice(firstPageCollateralCount)
+                    .map((asset, idx) => renderCollateralAsset(asset, idx + (firstPageCollateralCount || 4)))}
 
                   <div className="mt-4 text-justify">
                     นอกจากนี้ ผู้ให้เช่าซื้อมีสิทธิกำหนดให้ผู้เช่าซื้อจัดหาหลักประกันประเภทอื่น ๆ ตามที่ผู้ให้เช่าซื้อเห็นสมควรมาเป็นหลักประกันหนี้ และ/หรือ ภาระใด ๆ ทั้งหมดของผู้เช่าซื้อที่มีต่อผู้ให้เช่าซื้อ ทั้งที่มีอยู่แล้วในขณะนี้ และ/หรือ จะมีต่อไปในภายหน้า
                   </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <span className="w-8 shrink-0">6.4</span>
+                <div className="flex-1 text-justify">
+                  คู่สัญญาทั้งสามฝ่ายตกลงว่าสิทธิของผู้ให้เช่าซื้อเหนือทรัพย์สินที่เป็นหลักประกันตามข้อ 6.3 ของสัญญาฉบับนี้ นั้น เป็นไปตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <span className="w-8 shrink-0">6.5</span>
+                <div className="flex-1 text-justify">
+                  ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ <b>(“ผู้ประเมินมูลค่าทรัพย์สิน”)</b> และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
                 </div>
               </div>
             </div>
@@ -800,24 +822,19 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         )
       }
 
-      {/* Contract Sections Page 11 - Sections 6.4-6.7 (ONLY if dedicated collateral) */}
-      {isDedicatedCollateral && (
+      {/* Contract Sections Page - New Page for Collateral > 0 (6.6, 6.7, 6.8) */}
+      {hasCollateral && (
         <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
           <PageHeader />
           <div className="mt-8 space-y-6">
-            <div className="flex gap-4">
-              <span className="w-8 shrink-0">6.4</span>
-              <div className="flex-1 text-justify">
-                คู่สัญญาทั้งสามฝ่ายตกลงว่าสิทธิของผู้ให้เช่าซื้อเหนือทรัพย์สินที่เป็นหลักประกันตามข้อ 6.3 ของสัญญาฉบับนี้ นั้น เป็นไปตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
+            {isIntegratedCollateral && (
+              <div className="flex gap-4">
+                <span className="w-8 shrink-0">6.5</span>
+                <div className="flex-1 text-justify">
+                  ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ <b>(“ผู้ประเมินมูลค่าทรัพย์สิน”)</b> และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+                </div>
               </div>
-            </div>
-
-            <div className="flex gap-4">
-              <span className="w-8 shrink-0">6.5</span>
-              <div className="flex-1 text-justify">
-                ในกรณีที่ทรัพย์สินหลักประกันเป็นที่ดิน และ/หรือ สิ่งปลูกสร้าง และ/หรือ เครื่องจักร และ/หรือหลักประกันอื่น ผู้เช่าซื้อตกลงจะดำเนินการประเมินมูลค่าของทรัพย์สินหลักประกันดังกล่าวโดยหน่วยงานที่เชื่อถือได้และเป็นที่ยอมรับของผู้ให้เช่าซื้อ <b>(“ผู้ประเมินมูลค่าทรัพย์สิน”)</b> และผู้เช่าซื้อจะดำเนินการให้ผู้ประเมินมูลค่าทรัพย์สินทบทวนมูลค่าทรัพย์สินหลักประกันทุก 4 ปี นับแต่วันที่ของสัญญาฉบับนี้ และ/หรือให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
-              </div>
-            </div>
+            )}
 
             <div className="flex gap-4">
               <span className="w-8 shrink-0">6.6</span>
@@ -837,8 +854,15 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 </div>
               </div>
             </div>
+
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0">6.8</span>
+              <div className="flex-1">
+                โดยไม่คำนึงถึงข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงว่าในกรณีที่ผู้ให้เช่าซื้อได้ร้องขอให้ผู้เช่าซื้อจัดหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อตกลงจัดหาทรัพย์สินเพิ่มเติมแก่ผู้ให้เช่าซื้อภายใน 1 (หนึ่ง) เดือน นับจากวันที่ผู้ให้เช่าซื้อร้องขอ ทั้งนี้ ผู้ให้เช่าซื้อตกลงว่าจะไม่ใช้สิทธิในข้อนี้โดยไม่มีเหตุอันสมควร
+              </div>
+            </div>
           </div>
-          {renderPageFooter(11 + overflowPagesCount + collateralOffset)}
+          {renderPageFooter(12 + overflowPagesCount + (isDedicatedCollateral ? 1 : 0))}
         </div>
       )}
 
@@ -846,12 +870,14 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
-          <div className="flex gap-4">
-            <span className="w-8 shrink-0">6.8</span>
-            <div className="flex-1">
-              โดยไม่คำนึงถึงข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงว่าในกรณีที่ผู้ให้เช่าซื้อได้ร้องขอให้ผู้เช่าซื้อจัดหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อตกลงจัดหาทรัพย์สินเพิ่มเติมแก่ผู้ให้เช่าซื้อภายใน 1 (หนึ่ง) เดือน นับจากวันที่ผู้ให้เช่าซื้อร้องขอ ทั้งนี้ ผู้ให้เช่าซื้อตกลงว่าจะไม่ใช้สิทธิในข้อนี้โดยไม่มีเหตุอันสมควร
+          {!hasCollateral && (
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0">6.8</span>
+              <div className="flex-1">
+                โดยไม่คำนึงถึงข้อ 6.1 ของสัญญาฉบับนี้ ผู้เช่าซื้อตกลงว่าในกรณีที่ผู้ให้เช่าซื้อได้ร้องขอให้ผู้เช่าซื้อจัดหาทรัพย์สินเพิ่มเติมมาเป็นทรัพย์สินหลักประกัน ผู้เช่าซื้อตกลงจัดหาทรัพย์สินเพิ่มเติมแก่ผู้ให้เช่าซื้อภายใน 1 (หนึ่ง) เดือน นับจากวันที่ผู้ให้เช่าซื้อร้องขอ ทั้งนี้ ผู้ให้เช่าซื้อตกลงว่าจะไม่ใช้สิทธิในข้อนี้โดยไม่มีเหตุอันสมควร
+              </div>
             </div>
-          </div>
+          )}
 
 
           <div className="flex gap-4">
