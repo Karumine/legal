@@ -97,7 +97,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
       principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
     } else if (agreement.type === 'loan' || agreement.type === 'od') {
-      principal = parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0;
+      principal = (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
     }
     const proportion2 = appData.jointVentureData?.proportion2 || 0;
     const svcRate = parseFloat(data.serviceFeeRate) || 0;
@@ -192,7 +192,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
       principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
     } else if (agreement.type === 'loan' || agreement.type === 'od') {
-      principal = parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0;
+      principal = (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
     }
     const proportion2 = appData.jointVentureData?.proportion2 || 0;
     const origRate = parseFloat(data.originationFeeRate) || 0;

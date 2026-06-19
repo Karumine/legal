@@ -355,7 +355,7 @@ export const initialAppData: AppData = {
 
   tkInfo: {
     companyName: 'บริษัท ฐิติกร จำกัด (มหาชน)',
-    directors: 'นางสาวปัทมา พรประภา และ นายประพล พรประภา',
+    directors: 'นางสาวปฐมา พรประภา และ นายประพล พรประภา',
     address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร 10240',
     postalCode: '10240',
     taxId: '0107546000130',
@@ -416,7 +416,7 @@ export const initialAppData: AppData = {
         chequesPerInstallment: '',
         clause4_2Text: 'ในกรณีที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งมีความประสงค์จะเปลี่ยนแปลงวิธีการชำระตามที่ระบุในข้อ 4.1 ของสัญญาฉบับนี้เป็นรูปแบบอื่น คู่สัญญาทั้งสามฝ่ายจะต้องตกลงกันเป็นลายลักษณ์อักษร',
         lessor1Signatories: 'นายพรรษา เริงพิทยา และ นายกอบพงษ์ ตรีสุขี',
-        lessor2Signatories: 'นางสาวปัทมา พรประภา และ นายประพล พรประภา',
+        lessor2Signatories: 'นางสาวปฐมา พรประภา และ นายประพล พรประภา',
         lesseeSignatories: 'นางสาวรัตนา หมู่ทอง',
         witnesses: '',
         businessPurpose: '',
