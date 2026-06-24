@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 import DirectorInput from './DirectorInput';
 import ThaiAddressInput from './ThaiAddressInput';
-import type { CompanyInfo } from '../types/app';
+import type { CompanyInfo, CompanyMode } from '../types/app';
 import { searchCompanyByTaxId } from '../services/dbdService';
 import { formatThaiId, formatPhoneNumber } from '../utils/formatters';
 
 interface Props {
+  companyMode: CompanyMode;
   agileInfo: CompanyInfo;
   tkInfo: CompanyInfo;
   customerInfo: CompanyInfo;
@@ -178,6 +179,7 @@ function InfoFields({ label, info, onChange, showSearch, showEntityType }: {
 }
 
 export default function CompanyInfoForm({ 
+  companyMode,
   agileInfo, 
   tkInfo, 
   customerInfo, 
@@ -185,20 +187,26 @@ export default function CompanyInfoForm({
   onTkChange, 
   onCustomerChange 
 }: Props) {
+  const isAgileOnly = companyMode === 'agileOnly';
+
   return (
     <section className="bg-white p-5 rounded-lg shadow-sm border border-slate-200">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
-        <h3 className="font-bold text-xl text-slate-800">ข้อมูลบริษัท (3 ฝ่าย)</h3>
+        <h3 className="font-bold text-xl text-slate-800">ข้อมูลบริษัท ({isAgileOnly ? '2 ฝ่าย' : '3 ฝ่าย'})</h3>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="space-y-6">
-          <InfoFields label="🏢 Agile (ฝ่ายที่ 1)" info={agileInfo} onChange={onAgileChange} showSearch />
-          <InfoFields label="👤 ลูกค้า (ฝ่ายที่ 3)" info={customerInfo} onChange={onCustomerChange} showSearch showEntityType />
-        </div>
-        <div className="space-y-6">
+        <InfoFields label="🏢 Agile (ฝ่ายที่ 1)" info={agileInfo} onChange={onAgileChange} showSearch />
+        
+        {isAgileOnly ? (
+          <InfoFields label="👤 ลูกค้า (ฝ่ายที่ 2)" info={customerInfo} onChange={onCustomerChange} showSearch showEntityType />
+        ) : (
           <InfoFields label="🏢 TK (ฝ่ายที่ 2)" info={tkInfo} onChange={onTkChange} showSearch />
-        </div>
+        )}
+
+        {!isAgileOnly && (
+          <InfoFields label="👤 ลูกค้า (ฝ่ายที่ 3)" info={customerInfo} onChange={onCustomerChange} showSearch showEntityType />
+        )}
       </div>
     </section>
   );

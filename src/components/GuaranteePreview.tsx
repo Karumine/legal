@@ -9,14 +9,17 @@ import { Highlight } from './Highlight';
 
 interface Props {
   data: GuaranteeData;
+  companyMode?: string;
 }
 
-export default function GuaranteePreview({ data }: Props) {
+export default function GuaranteePreview({ data, companyMode }: Props) {
 
   // Strip leading "เลขที่" from address data to prevent duplication
   // since the template text already includes the prefix
   const stripAddressPrefix = (addr: string) =>
     addr?.replace(/^เลขที่\s*/, '') || '';
+
+  const isAgileOnly = companyMode === 'agileOnly';
 
   const totalPages = 8 + data.guarantors.reduce((sum, g) => {
     if (g.type === 'company' || g.type === 'partnership') return sum;
@@ -26,16 +29,16 @@ export default function GuaranteePreview({ data }: Props) {
   const hasHP = data.refContracts.some(r => r.type === 'hirePurchase' || r.type === 'hirePurchaseBack');
   const hasLoan = data.refContracts.some(r => r.type === 'loan' || r.type === 'od');
 
-  let lender1Label = 'ผู้ให้เช่าซื้อฝ่ายที่ 1';
+  let lender1Label = isAgileOnly ? 'ผู้ให้เช่าซื้อ' : 'ผู้ให้เช่าซื้อฝ่ายที่ 1';
   let lender2Label = 'ผู้ให้เช่าซื้อฝ่ายที่ 2';
   let collectiveLenderLabel = 'ผู้ให้เช่าซื้อ';
 
   if ((hasHP && hasLoan) || (!hasHP && !hasLoan)) {
-    lender1Label = 'ผู้ให้เช่าซื้อฝ่ายที่ 1 และ/หรือ ผู้ให้สินเชื่อฝ่ายที่ 1';
+    lender1Label = isAgileOnly ? 'ผู้ให้เช่าซื้อ และ/หรือ ผู้ให้สินเชื่อ' : 'ผู้ให้เช่าซื้อฝ่ายที่ 1 และ/หรือ ผู้ให้สินเชื่อฝ่ายที่ 1';
     lender2Label = 'ผู้ให้เช่าซื้อฝ่ายที่ 2 และ/หรือ ผู้ให้สินเชื่อฝ่ายที่ 2';
     collectiveLenderLabel = 'ผู้ให้เช่าซื้อ และ/หรือ ผู้ให้สินเชื่อ';
   } else if (hasLoan) {
-    lender1Label = 'ผู้ให้สินเชื่อฝ่ายที่ 1';
+    lender1Label = isAgileOnly ? 'ผู้ให้สินเชื่อ' : 'ผู้ให้สินเชื่อฝ่ายที่ 1';
     lender2Label = 'ผู้ให้สินเชื่อฝ่ายที่ 2';
     collectiveLenderLabel = 'ผู้ให้สินเชื่อ';
   }
@@ -77,27 +80,32 @@ export default function GuaranteePreview({ data }: Props) {
           <div className="flex gap-2 text-justify">
             <span className="shrink-0 w-6">(1)</span>
             <div className="flex-1">
-              <b><Highlight>{data.lenderCompany}</Highlight></b> (โดย<Highlight>{data.lenderDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lenderAddress, data.lenderPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lenderTaxId)}</Highlight> (<b>“{lender1Label}”</b>)
+              <b><Highlight>{data.lenderCompany}</Highlight></b> (โดย<Highlight>{data.lenderDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lenderAddress, data.lenderPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lenderTaxId)}</Highlight> (<b>“{lender1Label}”</b>) {isAgileOnly && 'ฝ่ายหนึ่ง'}
             </div>
           </div>
 
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-6">(2)</span>
-            <div className="flex-1">
-              <b><Highlight>{data.borrowerCompany}</Highlight></b> (โดย<Highlight>{data.borrowerDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.borrowerAddress, data.borrowerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.borrowerTaxId)}</Highlight> (<b>“{lender2Label}”</b>)
-            </div>
-          </div>
+          {!isAgileOnly && (
+            <>
+              <div className="flex gap-2 text-justify">
+                <span className="shrink-0 w-6">(2)</span>
+                <div className="flex-1">
+                  <b><Highlight>{data.borrowerCompany}</Highlight></b> (โดย<Highlight>{data.borrowerDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.borrowerAddress, data.borrowerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.borrowerTaxId)}</Highlight> (<b>“{lender2Label}”</b>)
+                </div>
+              </div>
 
-          <div className="indent-10 mb-6">
-            ซึ่ง (1) และ (2) จะเรียกรวมกันว่า <b>“{collectiveLenderLabel}”</b> ฝ่ายหนึ่ง
-          </div>
+              <div className="indent-10 mb-6">
+                ซึ่ง (1) และ (2) จะเรียกรวมกันว่า <b>“{collectiveLenderLabel}”</b> ฝ่ายหนึ่ง
+              </div>
+            </>
+          )}
 
           {data.guarantors.map((guarantor, idx) => {
             const isCorporate = guarantor.type === 'company' || guarantor.type === 'partnership';
+            const guarantorIndex = isAgileOnly ? idx + 2 : idx + 3;
 
             return (
               <div key={idx} data-section-id={`guarantor-${idx + 1}`} className="flex gap-2 text-justify">
-                <span className="shrink-0 w-6">({idx + 3})</span>
+                <span className="shrink-0 w-6">({guarantorIndex})</span>
                 <div className="flex-1">
                   {isCorporate ? (
                     <>
@@ -374,12 +382,14 @@ export default function GuaranteePreview({ data }: Props) {
             <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.lenderPhone)}</Highlight></div>
           </div>
 
-          <div className="mb-4">
-            <div className="font-bold mb-1 ">ในกรณีของ{lender2Label}:</div>
-            <div><Highlight>{data.borrowerCompany}</Highlight></div>
-            <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(data.borrowerAddress)}</Highlight> รหัสไปรษณีย์ 10240</div>
-            <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.borrowerPhone)}</Highlight></div>
-          </div>
+          {!isAgileOnly && (
+            <div className="mb-4">
+              <div className="font-bold mb-1 ">ในกรณีของ{lender2Label}:</div>
+              <div><Highlight>{data.borrowerCompany}</Highlight></div>
+              <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(data.borrowerAddress)}</Highlight> รหัสไปรษณีย์ 10240</div>
+              <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.borrowerPhone)}</Highlight></div>
+            </div>
+          )}
 
           <div className="flex gap-2 text-justify mb-4">
             <span className="shrink-0 w-6">16.</span>

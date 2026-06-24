@@ -13,10 +13,12 @@ interface Props {
   customerInfo: CompanyInfo;
   guarantors?: GuarantorData[];
   type?: ContractType;
+  companyMode?: string;
 }
 
 
-export default function HirePurchasePreview({ data, customerInfo, guarantors = [], type = 'hirePurchase' }: Props) {
+export default function HirePurchasePreview({ data, customerInfo, guarantors = [], type = 'hirePurchase', companyMode }: Props) {
+  const isAgileOnly = companyMode === 'agileOnly';
 
   // Strip leading "เลขที่" from address data to prevent duplication
   // since the template text already includes the prefix
@@ -193,27 +195,46 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         </div>
 
         <div className="space-y-4 mb-6">
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-8">1.</span>
-            <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
-            </div>
-          </div>
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-8">2.</span>
-            <div className="flex-1">
-              <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor2.address, data.lessor2.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
-            </div>
-          </div>
-          <div className="pl-6">
-            (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
-          </div>
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-8">3.</span>
-            <div className="flex-1">
-              <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
-            </div>
-          </div>
+          {isAgileOnly ? (
+            <>
+              <div className="flex gap-2 text-justify">
+                <span className="shrink-0 w-8">1.</span>
+                <div className="flex-1">
+                  <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อ”</b>)
+                </div>
+              </div>
+              <div className="flex gap-2 text-justify">
+                <span className="shrink-0 w-8">2.</span>
+                <div className="flex-1">
+                  <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex gap-2 text-justify">
+                <span className="shrink-0 w-8">1.</span>
+                <div className="flex-1">
+                  <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
+                </div>
+              </div>
+              <div className="flex gap-2 text-justify">
+                <span className="shrink-0 w-8">2.</span>
+                <div className="flex-1">
+                  <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor2.address, data.lessor2.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
+                </div>
+              </div>
+              <div className="pl-6">
+                (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
+              </div>
+              <div className="flex gap-2 text-justify">
+                <span className="shrink-0 w-8">3.</span>
+                <div className="flex-1">
+                  <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="font-bold mb-4">โดยที่</div>
@@ -235,18 +256,20 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div data-section-id="hp-assets" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
 
-        <div className="space-y-4 mb-6 mt-4">
-          <div className="flex gap-4">
-            <span className="w-8 shrink-0 whitespace-nowrap">ค.</span>
-            <div className="flex-1">ผู้ให้เช่าซื้อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้เช่าซื้อในการติดต่อประสานงานกับผู้เช่าซื้อเพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ (<b>“ตัวแทนเช่าซื้อ”</b>)</div>
+        {!isAgileOnly && (
+          <div className="space-y-4 mb-6 mt-4">
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0 whitespace-nowrap">ค.</span>
+              <div className="flex-1">ผู้ให้เช่าซื้อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้เช่าซื้อในการติดต่อประสานงานกับผู้เช่าซื้อเพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ (<b>“ตัวแทนเช่าซื้อ”</b>)</div>
+            </div>
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0 whitespace-nowrap">ง.</span>
+              <div className="flex-1">ผู้เช่าซื้อและผู้ให้เช่าซื้อฝ่ายที่ 2 ตกลงจะให้ผู้ให้เช่าซื้อฝ่ายที่ 1 ทำหน้าที่เป็นตัวแทนเช่าซื้อ</div>
+            </div>
           </div>
-          <div className="flex gap-4">
-            <span className="w-8 shrink-0 whitespace-nowrap">ง.</span>
-            <div className="flex-1">ผู้เช่าซื้อและผู้ให้เช่าซื้อฝ่ายที่ 2 ตกลงจะให้ผู้ให้เช่าซื้อฝ่ายที่ 1 ทำหน้าที่เป็นตัวแทนเช่าซื้อ</div>
-          </div>
-        </div>
+        )}
 
-        <div className="font-bold mb-6">คู่สัญญาทั้งสามฝ่ายจึงตกลงทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้</div>
+        <div className={`font-bold mb-6 ${isAgileOnly ? 'mt-4' : ''}`}>คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จึงตกลงทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้</div>
 
         <div className="mb-6">
           <div className="font-bold mb-2">1. การถือกรรมสิทธิ์รวม</div>
@@ -262,17 +285,19 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </thead>
             <tbody>
               <tr>
-                <td className="border border-black p-2">ผู้ให้เช่าซื้อฝ่ายที่ 1</td>
+                <td className="border border-black p-2">{isAgileOnly ? 'ผู้ให้เช่าซื้อ' : 'ผู้ให้เช่าซื้อฝ่ายที่ 1'}</td>
                 <td className="border border-black p-2 font-bold">
                   <Highlight>{data.lessor1.proportion}</Highlight> ({thaiNumberText(data.lessor1.proportion)})
                 </td>
               </tr>
-              <tr>
-                <td className="border border-black p-2">ผู้ให้เช่าซื้อฝ่ายที่ 2</td>
-                <td className="border border-black p-2 font-bold">
-                  <Highlight>{data.lessor2.proportion}</Highlight> ({thaiNumberText(data.lessor2.proportion)})
-                </td>
-              </tr>
+              {!isAgileOnly && (
+                <tr>
+                  <td className="border border-black p-2">ผู้ให้เช่าซื้อฝ่ายที่ 2</td>
+                  <td className="border border-black p-2 font-bold">
+                    <Highlight>{data.lessor2.proportion}</Highlight> ({thaiNumberText(data.lessor2.proportion)})
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -465,14 +490,14 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-4">
             <span className="w-8 shrink-0">3.6</span>
             <div className="flex-1">
-              ผู้เช่าซื้อตกลงยินยอมให้ผู้ให้เช่าซื้อนำเงินที่ได้รับชำระในแต่ละงวดตามสัดส่วนในข้อ 1. นำไปหักหรือรับชำระหนี้ส่วนใด ก่อน-หลัง ได้ตามเงื่อนไขที่ผู้ให้เช่าซื้อกำหนดไว้ และผู้เช่าซื้อยินยอมให้ผู้ให้เช่าซื้อทั้งสองฝ่ายทำการปรับปรุงบัญชี และ/หรือ รายการรับชำระหนี้ได้ โดยผู้เช่าซื้อตกลงให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
+              ผู้เช่าซื้อตกลงยินยอมให้ผู้ให้เช่าซื้อนำเงินที่ได้รับชำระในแต่ละงวดตามสัดส่วนในข้อ 1. นำไปหักหรือรับชำระหนี้ส่วนใด ก่อน-หลัง ได้ตามเงื่อนไขที่ผู้ให้เช่าซื้อกำหนดไว้ และผู้เช่าซื้อยินยอมให้ผู้ให้เช่าซื้อ{isAgileOnly ? '' : 'ทั้งสองฝ่าย'}ทำการปรับปรุงบัญชี และ/หรือ รายการรับชำระหนี้ได้ โดยผู้เช่าซื้อตกลงให้เป็นดุลยพินิจของผู้ให้เช่าซื้อ
             </div>
           </div>
 
           <div className="flex gap-4">
             <span className="w-8 shrink-0">3.7</span>
             <div className="flex-1">
-              กรณีที่มีค่าใช้จ่ายอันเกิดจากการที่เช็คสั่งจ่ายล่วงหน้าเพื่อชำระหนี้ ไม่อาจขึ้นเงินได้ไม่ว่ากรณีใดก็ตาม และ/หรือ ในกรณีที่มีค่าธรรมเนียมในการเรียกเก็บเช็คข้ามเขต และ/หรือ กรณีอื่น ๆ ที่ก่อให้เกิดค่าใช้จ่ายอันเกี่ยวกับเช็คสั่งจ่ายล่วงหน้าโดยมิใช่ความผิดของผู้ให้เช่าซื้อ ผู้เช่าซื้อตกลงชำระให้แก่ผู้ให้เช่าซื้อทั้งสองฝ่ายในสัดส่วนตามข้อ 1. ของสัญญาฉบับนี้ ภายในระยะเวลาที่ผู้ให้เช่าซื้อกำหนด
+              กรณีที่มีค่าใช้จ่ายอันเกิดจากการที่เช็คสั่งจ่ายล่วงหน้าเพื่อชำระหนี้ ไม่อาจขึ้นเงินได้ไม่ว่ากรณีใดก็ตาม และ/หรือ ในกรณีที่มีค่าธรรมเนียมในการเรียกเก็บเช็คข้ามเขต และ/หรือ กรณีอื่น ๆ ที่ก่อให้เกิดค่าใช้จ่ายอันเกี่ยวกับเช็คสั่งจ่ายล่วงหน้าโดยมิใช่ความผิดของผู้ให้เช่าซื้อ ผู้เช่าซื้อตกลงชำระให้แก่ผู้ให้เช่าซื้อ{isAgileOnly ? '' : 'ทั้งสองฝ่าย'}ในสัดส่วนตามข้อ 1. ของสัญญาฉบับนี้ ภายในระยะเวลาที่ผู้ให้เช่าซื้อกำหนด
             </div>
           </div>
         </div>
@@ -489,7 +514,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <span className="w-8 shrink-0">4.1</span>
             <div className="flex-1 space-y-4">
               <div>
-                ในกรณีที่ผู้เช่าซื้อต้องชำระเงินใด ๆ ให้แก่ผู้ให้เช่าซื้อ ผู้เช่าซื้อตกลงชำระเงินให้แก่ผู้ให้เช่าซื้อในรูปแบบเช็คธนาคารสั่งจ่ายล่วงหน้าในนามผู้ให้เช่าซื้อแต่ละราย ตามจำนวนเงินค่างวดการเช่าซื้อในแต่ละงวด <Highlight>จำนวนงวดละ {data.chequesPerInstallment} ({thaiBahtText(data.chequesPerInstallment || '0').replace('บาทถ้วน', '').trim()}) ฉบับ</Highlight> (สั่งจ่ายในนามของผู้ให้เช่าซื้อแต่ละรายตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้) <Highlight>รวมทั้งสิ้น {data.installments} งวด</Highlight> โดยให้ถือว่าเป็นการชำระค่างวดการเช่าซื้อในแต่ละงวด ต่อเมื่อได้มีการขึ้นเงินและได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น
+                ในกรณีที่ผู้เช่าซื้อต้องชำระเงินใด ๆ ให้แก่ผู้ให้เช่าซื้อ ผู้เช่าซื้อตกลงชำระเงินให้แก่ผู้ให้เช่าซื้อในรูปแบบเช็คธนาคารสั่งจ่ายล่วงหน้าในนามผู้ให้เช่าซื้อ{isAgileOnly ? '' : 'แต่ละราย'} ตามจำนวนเงินค่างวดการเช่าซื้อในแต่ละงวด <Highlight>จำนวนงวดละ {data.chequesPerInstallment} ({thaiBahtText(data.chequesPerInstallment || '0').replace('บาทถ้วน', '').trim()}) ฉบับ</Highlight> (สั่งจ่ายในนามของผู้ให้เช่าซื้อ{isAgileOnly ? '' : 'แต่ละราย'}ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้) <Highlight>รวมทั้งสิ้น {data.installments} งวด</Highlight> โดยให้ถือว่าเป็นการชำระค่างวดการเช่าซื้อในแต่ละงวด ต่อเมื่อได้มีการขึ้นเงินและได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น
               </div>
               <div>
                 ทั้งนี้ ผู้เช่าซื้อได้ส่งมอบเช็คสั่งจ่ายล่วงหน้าให้ไว้แก่ผู้ให้เช่าซื้อ <Highlight>งวดละ {data.chequesPerInstallment} ({thaiBahtText(data.chequesPerInstallment || '0').replace('บาทถ้วน', '').trim()}) ฉบับ รวมทั้งสิ้น {data.installments} งวด เป็นเช็คสั่งจ่ายล่วงหน้าจำนวนทั้งสิ้น {totalCheques} ฉบับ (สำหรับค่างวดเช่าซื้องวดที่ 1 ถึง งวดที่ {data.installments})</Highlight> ณ วันที่ทำสัญญาฉบับนี้แล้ว

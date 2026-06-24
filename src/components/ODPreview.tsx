@@ -13,11 +13,13 @@ interface Props {
   agileInfo: CompanyInfo;
   tkInfo: CompanyInfo;
   guarantors: GuarantorData[];
+  companyMode?: string;
 }
 
 export const THAI_INDEX = ['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'];
 
-export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guarantors }: Props) {
+export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guarantors, companyMode }: Props) {
+  const isAgileOnly = companyMode === 'agileOnly';
   // Strip leading "เลขที่" from address data to prevent duplication
   const stripAddressPrefix = (addr: string) =>
     addr?.replace(/^เลขที่\s*/, '') || '';
@@ -49,30 +51,50 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         <div className="mb-4 mt-6">โดยและระหว่าง</div>
 
         <div className="space-y-4 mb-6">
-          <div className="flex gap-4 text-justify">
-            <span className="shrink-0 w-6">1)</span>
-            <div className="flex-1">
-              <b><Highlight>{agileInfo.companyName}</Highlight></b> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 1”</b>)
-            </div>
-          </div>
+          {isAgileOnly ? (
+            <>
+              <div className="flex gap-4 text-justify">
+                <span className="shrink-0 w-6">1)</span>
+                <div className="flex-1">
+                  <b><Highlight>{agileInfo.companyName}</Highlight></b> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อ”</b>)
+                </div>
+              </div>
 
-          <div className="flex gap-4 text-justify">
-            <span className="shrink-0 w-6">2)</span>
-            <div className="flex-1">
-              <b><Highlight>{tkInfo.companyName}</Highlight></b> (โดย <Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 2”</b>)
-            </div>
-          </div>
+              <div className="flex gap-4 text-justify">
+                <span className="shrink-0 w-6">2)</span>
+                <div className="flex-1">
+                  <b><Highlight>{customerInfo.companyName}</Highlight></b> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex gap-4 text-justify">
+                <span className="shrink-0 w-6">1)</span>
+                <div className="flex-1">
+                  <b><Highlight>{agileInfo.companyName}</Highlight></b> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 1”</b>)
+                </div>
+              </div>
 
-          <div className="pl-10">
-            (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้สินเชื่อ”</b>) และ
-          </div>
+              <div className="flex gap-4 text-justify">
+                <span className="shrink-0 w-6">2)</span>
+                <div className="flex-1">
+                  <b><Highlight>{tkInfo.companyName}</Highlight></b> (โดย <Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 2”</b>)
+                </div>
+              </div>
 
-          <div className="flex gap-4 text-justify">
-            <span className="shrink-0 w-6">3)</span>
-            <div className="flex-1">
-              <b><Highlight>{customerInfo.companyName}</Highlight></b> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
-            </div>
-          </div>
+              <div className="pl-10">
+                (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้สินเชื่อ”</b>) และ
+              </div>
+
+              <div className="flex gap-4 text-justify">
+                <span className="shrink-0 w-6">3)</span>
+                <div className="flex-1">
+                  <b><Highlight>{customerInfo.companyName}</Highlight></b> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="font-bold mb-4">โดยที่</div>
@@ -108,21 +130,25 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
 
         <div className="space-y-6 mt-4">
           <div>
-            <div className="flex gap-2">
-              <span>ค.</span>
-              <div className="flex-1 mb-4">
-                ผู้ให้สินเชื่อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้สินเชื่อในการติดต่อประสานงานกับผู้กู้เพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ <b>(“ตัวแทนสินเชื่อ”)</b>
-              </div>
-            </div>
+            {!isAgileOnly && (
+              <>
+                <div className="flex gap-2">
+                  <span>ค.</span>
+                  <div className="flex-1 mb-4">
+                    ผู้ให้สินเชื่อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้สินเชื่อในการติดต่อประสานงานกับผู้กู้เพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ <b>(“ตัวแทนสินเชื่อ”)</b>
+                  </div>
+                </div>
+                <div className="flex gap-2 mb-6">
+                  <span>ง.</span>
+                  <div className="flex-1">
+                    ผู้กู้และผู้ให้สินเชื่อฝ่ายที่ 2 ตกลงจะให้ผู้ให้สินเชื่อฝ่ายที่ 1 ทำหน้าที่เป็นตัวแทนสินเชื่อ
+                  </div>
+                </div>
+              </>
+            )}
             <div className="flex gap-2 mb-6">
-              <span>ง.</span>
               <div className="flex-1">
-                ผู้กู้และผู้ให้สินเชื่อฝ่ายที่ 2 ตกลงจะให้ผู้ให้สินเชื่อฝ่ายที่ 1 ทำหน้าที่เป็นตัวแทนสินเชื่อ
-              </div>
-            </div>
-            <div className="flex gap-2 mb-6">
-              <div className="flex-1">
-                คู่สัญญาทั้งสามฝ่ายจึงได้ตกลงเข้าทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้
+                คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จึงได้ตกลงเข้าทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้
               </div>
             </div>
 
@@ -153,7 +179,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               </thead>
               <tbody>
                 <tr>
-                  <td className="border border-black p-2">ผู้ให้สินเชื่อฝ่ายที่ 1</td>
+                  <td className="border border-black p-2">{isAgileOnly ? 'ผู้ให้สินเชื่อ' : 'ผู้ให้สินเชื่อฝ่ายที่ 1'}</td>
                   <td className="border border-black p-2">
                     <Highlight>{data.lender1?.proportion || '0'} ({thaiNumberText(data.lender1?.proportion || '0')})</Highlight>
                   </td>
@@ -161,15 +187,17 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
                     <Highlight>{limit1.toLocaleString('en-US')}</Highlight>
                   </td>
                 </tr>
-                <tr>
-                  <td className="border border-black p-2">ผู้ให้สินเชื่อฝ่ายที่ 2</td>
-                  <td className="border border-black p-2">
-                    <Highlight>{data.lender2?.proportion || '0'} ({thaiNumberText(data.lender2?.proportion || '0')})</Highlight>
-                  </td>
-                  <td className="border border-black p-2">
-                    <Highlight>{limit2.toLocaleString('en-US')}</Highlight>
-                  </td>
-                </tr>
+                {!isAgileOnly && (
+                  <tr>
+                    <td className="border border-black p-2">ผู้ให้สินเชื่อฝ่ายที่ 2</td>
+                    <td className="border border-black p-2">
+                      <Highlight>{data.lender2?.proportion || '0'} ({thaiNumberText(data.lender2?.proportion || '0')})</Highlight>
+                    </td>
+                    <td className="border border-black p-2">
+                      <Highlight>{limit2.toLocaleString('en-US')}</Highlight>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -192,7 +220,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             <div className="flex gap-4">
               <span className="shrink-0 w-8">3.1</span>
               <div className="flex-1 text-justify">
-                ผู้กู้และผู้ให้สินเชื่อตกลงกันว่าในการเบิกใช้สินเชื่อ ผู้กู้ต้องเบิกใช้สินเชื่อจากผู้ให้สินเชื่อแต่ละรายตามสัดส่วน และไม่เกินจำนวนสินเชื่อของผู้ให้สินเชื่อแต่ละรายตามที่กำหนดในข้อ 1.2 ของสัญญาฉบับนี้
+                ผู้กู้และผู้ให้สินเชื่อตกลงกันว่าในการเบิกใช้สินเชื่อ ผู้กู้ต้องเบิกใช้สินเชื่อจากผู้ให้สินเชื่อ{isAgileOnly ? '' : 'แต่ละราย'}ตามสัดส่วน และไม่เกินจำนวนสินเชื่อของผู้ให้สินเชื่อ{isAgileOnly ? '' : 'แต่ละราย'}ตามที่กำหนดในข้อ 1.2 ของสัญญาฉบับนี้
               </div>
             </div>
           </div>
@@ -516,7 +544,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
                               <div className="flex-1">
                                 <span className="underline">รูปแบบของแคชเชียร์เช็ค (Cashier Cheque)</span>
                                 <div className="mt-2">
-                                  ผู้ให้สินเชื่อตกลงจะส่งมอบแคชเชียร์เช็ค (Cashier Cheque) ตามจำนวนเงินที่ระบุในหนังสือขอเบิกใช้สินเชื่อจำนวน 2 (สอง) ฉบับ ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ ให้แก่ผู้กู้ ณ ที่ทำการของผู้ให้สินเชื่อภายในวันเบิกใช้สินเชื่อ และให้ถือว่าเป็นกาารให้สินเชื่อเมื่อผู้ให้สินเชื่อได้มีการส่งมอบแคชเชียร์เช็ค (Cashier Cheque) ให้แก่ผู้กู้
+                                  ผู้ให้สินเชื่อตกลงจะส่งมอบแคชเชียร์เช็ค (Cashier Cheque) ตามจำนวนเงินที่ระบุในหนังสือขอเบิกใช้สินเชื่อจำนวน <Highlight>{isAgileOnly ? '1 (หนึ่ง)' : '2 (สอง)'}</Highlight> ฉบับ ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ ให้แก่ผู้กู้ ณ ที่ทำการของผู้ให้สินเชื่อภายในวันเบิกใช้สินเชื่อ และให้ถือว่าเป็นกาารให้สินเชื่อเมื่อผู้ให้สินเชื่อได้มีการส่งมอบแคชเชียร์เช็ค (Cashier Cheque) ให้แก่ผู้กู้
                                 </div>
                               </div>
                             </div>
@@ -562,7 +590,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
                           <div className="flex-1">
                             <span className="underline">รูปแบบของเช็คธนาคารสั่งจ่ายล่วงหน้า</span>
                             <div className="mt-2 text-justify">
-                              ผู้ให้สินเชื่อตกลงจะส่งมอบเช็คธนาคารสั่งจ่ายล่วงหน้าในนามผู้กู้ตามจำนวนเงินที่ระบุในหนังสือขอเบิกใช้เงินกู้จำนวน 2 (สอง) ฉบับ ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ ให้แก่ผู้กู้ ณ ที่ทำการของผู้ให้สินเชื่อ ก่อนหรือภายในวันเบิกใช้สินเชื่อ และให้ถือว่าเป็นการให้สินเชื่อเมื่อผู้กู้ได้รับเงินจำนวนดังกล่าวไว้ในบัญชีธนาคารเต็มจำนวนเรียบร้อยแล้ว
+                              ผู้ให้สินเชื่อตกลงจะส่งมอบเช็คธนาคารสั่งจ่ายล่วงหน้าในนามผู้กู้ตามจำนวนเงินที่ระบุในหนังสือขอเบิกใช้เงินกู้จำนวน <Highlight>{isAgileOnly ? '1 (หนึ่ง)' : '2 (สอง)'}</Highlight> ฉบับ ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ ให้แก่ผู้กู้ ณ ที่ทำการของผู้ให้สินเชื่อ ก่อนหรือภายในวันเบิกใช้สินเชื่อ และให้ถือว่าเป็นการให้สินเชื่อเมื่อผู้กู้ได้รับเงินจำนวนดังกล่าวไว้ในบัญชีธนาคารเต็มจำนวนเรียบร้อยแล้ว
                             </div>
                           </div>
                         </div>

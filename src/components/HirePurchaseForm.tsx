@@ -20,9 +20,10 @@ interface Props {
   agreements?: Agreement[];
   onFocusSection?: (sectionId: string, tabKey?: string) => void;
   onBuybackToggled?: (buybackId: string) => void;
+  companyMode?: string;
 }
 
-export default function HirePurchaseForm({ data, onChange, customerInfo, type = 'hirePurchase', agreementId, agreements = [], onFocusSection, onBuybackToggled }: Props) {
+export default function HirePurchaseForm({ data, onChange, customerInfo, type = 'hirePurchase', agreementId, agreements = [], onFocusSection, onBuybackToggled, companyMode }: Props) {
   const [showBuyback, setShowBuyback] = useState(true);
   const [showCopyCollateralMenu, setShowCopyCollateralMenu] = useState(false);
   const copyMenuRef = useRef<HTMLDivElement>(null);
@@ -311,10 +312,10 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
 
 
       {/* Lessors */}
-      <div className="grid grid-cols-1 gap-4">
+      <div className={`grid ${companyMode === 'agileOnly' ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'} gap-4`}>
         {[
-          { key: 'lessor1', label: 'ผู้ให้เช่าซื้อ ฝ่ายที่ 1' },
-          { key: 'lessor2', label: 'ผู้ให้เช่าซื้อ ฝ่ายที่ 2' }
+          { key: 'lessor1', label: companyMode === 'agileOnly' ? 'ผู้ให้เช่าซื้อ' : 'ผู้ให้เช่าซื้อ ฝ่ายที่ 1' },
+          ...(companyMode === 'agileOnly' ? [] : [{ key: 'lessor2', label: 'ผู้ให้เช่าซื้อ ฝ่ายที่ 2' }])
         ].map(l => (
           <section key={l.key} className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
             <h3 className="font-semibold text-md text-blue-700 mb-3">{l.label}</h3>
@@ -323,7 +324,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                 <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อบริษัท (ดึงข้อมูลอัตโนมัติ)</label>
                 <input
                   type="text"
-                  value={(data as any)[l.key].name}
+                  value={(data as any)[l.key]?.name || ''}
                   readOnly
                   className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed"
                 />
@@ -333,25 +334,32 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                   <label className="block text-xs font-medium text-gray-600 mb-1">เลขทะเบียน (ดึงอัตโนมัติ)</label>
                   <input
                     type="text"
-                    value={(data as any)[l.key].taxId}
+                    value={(data as any)[l.key]?.taxId || ''}
                     readOnly
                     className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-blue-600 mb-1 font-bold">สัดส่วน (%) *แก้ไขได้*</label>
+                  <label className="block text-xs font-medium text-blue-600 mb-1 font-bold">
+                    สัดส่วน (%) {companyMode === 'agileOnly' ? '(ล็อค 100%)' : '*แก้ไขได้*'}
+                  </label>
                   <input
                     type="text"
-                    value={(data as any)[l.key].proportion}
-                    onChange={(e) => handleLessorChange(l.key as any, 'proportion', e.target.value)}
-                    className="block w-full rounded-md border-blue-300 shadow-sm text-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                    value={companyMode === 'agileOnly' ? '100' : (data as any)[l.key]?.proportion || ''}
+                    readOnly={companyMode === 'agileOnly'}
+                    onChange={(e) => {
+                      if (companyMode !== 'agileOnly') {
+                        handleLessorChange(l.key as any, 'proportion', e.target.value);
+                      }
+                    }}
+                    className={`block w-full rounded-md shadow-sm text-sm p-2 border ${companyMode === 'agileOnly' ? 'border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed' : 'border-blue-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">ที่อยู่จดทะเบียน (ดึงอัตโนมัติ)</label>
                 <textarea
-                  value={(data as any)[l.key].address}
+                  value={(data as any)[l.key]?.address || ''}
                   readOnly
                   className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed h-16"
                 />

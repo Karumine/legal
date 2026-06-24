@@ -13,10 +13,11 @@ interface Props {
   agreements?: Agreement[];
   currentAgreementId?: string;
   onChange: (data: CreditFacilityData) => void;
-  onFocusSection?: (sectionId: string) => void;
+  onFocusSection?: (sectionId: string, tabKey?: string) => void;
+  companyMode?: string;
 }
 
-export default function CreditFacilityForm({ data, onChange, customerInfo, agreements = [], currentAgreementId, onFocusSection }: Props) {
+export default function CreditFacilityForm({ data, onChange, customerInfo, agreements = [], currentAgreementId, onFocusSection, companyMode }: Props) {
   const [showCopyCollateralMenu, setShowCopyCollateralMenu] = useState(false);
   const copyMenuRef = useRef<HTMLDivElement>(null);
 
@@ -250,28 +251,35 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
           </div>
 
           {/* Proportions */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className={`grid ${companyMode === 'agileOnly' ? 'grid-cols-1' : 'grid-cols-2'} gap-4`}>
             {[
-              { key: 'lender1', label: 'ผู้ให้สินเชื่อฝ่ายที่ 1', limit: limit1 },
-              { key: 'lender2', label: 'ผู้ให้สินเชื่อฝ่ายที่ 2', limit: limit2 }
+              { key: 'lender1', label: companyMode === 'agileOnly' ? 'ผู้ให้สินเชื่อ' : 'ผู้ให้สินเชื่อฝ่ายที่ 1', limit: limit1 },
+              ...(companyMode === 'agileOnly' ? [] : [{ key: 'lender2', label: 'ผู้ให้สินเชื่อฝ่ายที่ 2', limit: limit2 }])
             ].map(l => (
               <section key={l.key} className="bg-white p-4 rounded-lg shadow-sm border border-blue-200">
                 <h3 className="font-semibold text-md text-blue-700 mb-3">{l.label}</h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-xs font-medium text-blue-600 mb-1 font-bold italic">สัดส่วน (%) *คำนวณวงเงินอัตโนมัติ*</label>
+                    <label className="block text-xs font-medium text-blue-600 mb-1 font-bold italic">
+                      สัดส่วน (%) {companyMode === 'agileOnly' ? '(ล็อค 100%)' : '*คำนวณวงเงินอัตโนมัติ*'}
+                    </label>
                     <input
                       type="text"
-                      value={(data as any)[l.key].proportion}
-                      onChange={(e) => handleLenderChange(l.key as any, 'proportion', e.target.value)}
-                      className="block w-full rounded-md border-blue-300 shadow-sm text-sm p-2 border focus:ring-blue-500 focus:border-blue-500"
+                      value={companyMode === 'agileOnly' ? '100' : (data as any)[l.key]?.proportion || ''}
+                      readOnly={companyMode === 'agileOnly'}
+                      onChange={(e) => {
+                        if (companyMode !== 'agileOnly') {
+                          handleLenderChange(l.key as any, 'proportion', e.target.value);
+                        }
+                      }}
+                      className={`block w-full rounded-md shadow-sm text-sm p-2 border ${companyMode === 'agileOnly' ? 'border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed' : 'border-blue-300 focus:ring-blue-500 focus:border-blue-500'}`}
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-600 mb-1">วงเงินที่ได้รับ (บาท)</label>
                     <input
                       type="text"
-                      value={l.limit.toLocaleString('en-US')}
+                      value={companyMode === 'agileOnly' ? (parseFloat(data.loanAmount.replace(/,/g, '')) || 0).toLocaleString('en-US') : l.limit.toLocaleString('en-US')}
                       readOnly
                       className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border bg-gray-50 text-gray-500 cursor-not-allowed font-bold"
                     />

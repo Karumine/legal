@@ -81,6 +81,9 @@ function App() {
           const draft = await getDraft(dId);
           if (draft && draft.data) {
             setData(draft.data);
+            if (draft.data.agreements && draft.data.agreements.length > 0) {
+              setActivePreview(`agreement-${draft.data.agreements[0].id}`);
+            }
           }
         } catch (e) {
           console.error('Failed to load cloud draft', e);
@@ -110,7 +113,9 @@ function App() {
       setIsCloudSaving(false);
     }
   };
-  const [activePreview, setActivePreview] = useState<PreviewTab>('agreement-initial-hp');
+  const [activePreview, setActivePreview] = useState<PreviewTab>(() => {
+    return `agreement-${data.agreements[0]?.id || 'initial-hp'}`;
+  });
 
   // Panel resize & toggle
   const [previewVisible, setPreviewVisible] = useState(true);
@@ -324,15 +329,20 @@ function App() {
       id,
       type,
       data: (type === 'hirePurchase' || type === 'hirePurchaseBack')
-        ? { ...initialAppData.agreements[0].data, contractNo: '' }
+        ? { 
+            ...initialAppData.agreements[0].data, 
+            contractNo: '',
+            lessor1: { ...initialAppData.agreements[0].data.lessor1, name: data.agileInfo.companyName, taxId: data.agileInfo.taxId, address: data.agileInfo.address, proportion: data.companyMode === 'agileOnly' ? '100' : '20' },
+            lessor2: { ...initialAppData.agreements[0].data.lessor2, name: data.tkInfo.companyName, taxId: data.tkInfo.taxId, address: data.tkInfo.address, proportion: data.companyMode === 'agileOnly' ? '0' : '80' }
+          }
         : (type === 'loan')
           ? {
             contractNo: '',
             contractDate: TODAY,
             madeAt: data.agileInfo.companyName,
             effectiveDate: TODAY,
-            lender1: { name: data.agileInfo.companyName, taxId: data.agileInfo.taxId, address: data.agileInfo.address, proportion: '20' },
-            lender2: { name: data.tkInfo.companyName, taxId: data.tkInfo.taxId, address: data.tkInfo.address, proportion: '80' },
+            lender1: { name: data.agileInfo.companyName, taxId: data.agileInfo.taxId, address: data.agileInfo.address, proportion: data.companyMode === 'agileOnly' ? '100' : '20' },
+            lender2: { name: data.tkInfo.companyName, taxId: data.tkInfo.taxId, address: data.tkInfo.address, proportion: data.companyMode === 'agileOnly' ? '0' : '80' },
             loanAmount: '0',
             installments: '48',
             interestRate: '9',
@@ -351,8 +361,8 @@ function App() {
               contractDate: TODAY,
               madeAt: data.agileInfo.companyName,
               effectiveDate: TODAY,
-              lender1: { name: data.agileInfo.companyName, taxId: data.agileInfo.taxId, address: data.agileInfo.address, proportion: '20' },
-              lender2: { name: data.tkInfo.companyName, taxId: data.tkInfo.taxId, address: data.tkInfo.address, proportion: '80' },
+              lender1: { name: data.agileInfo.companyName, taxId: data.agileInfo.taxId, address: data.agileInfo.address, proportion: data.companyMode === 'agileOnly' ? '100' : '20' },
+              lender2: { name: data.tkInfo.companyName, taxId: data.tkInfo.taxId, address: data.tkInfo.address, proportion: data.companyMode === 'agileOnly' ? '0' : '80' },
               loanAmount: '0',
               installments: '',
               installmentAmount: '',
@@ -469,12 +479,12 @@ function App() {
       lenderPhone: data.agileInfo.phone,
 
       // Party 2 (Borrower)
-      borrowerCompany: data.companyMode === 'agileTK' ? data.tkInfo.companyName : '',
-      borrowerDirectors: data.companyMode === 'agileTK' ? data.tkInfo.directors : '',
-      borrowerAddress: data.companyMode === 'agileTK' ? data.tkInfo.address : '',
-      borrowerPostalCode: data.companyMode === 'agileTK' ? data.tkInfo.postalCode : '',
-      borrowerTaxId: data.companyMode === 'agileTK' ? data.tkInfo.taxId : '',
-      borrowerPhone: data.companyMode === 'agileTK' ? data.tkInfo.phone : '',
+      borrowerCompany: data.companyMode !== 'agileOnly' ? data.tkInfo.companyName : '',
+      borrowerDirectors: data.companyMode !== 'agileOnly' ? data.tkInfo.directors : '',
+      borrowerAddress: data.companyMode !== 'agileOnly' ? data.tkInfo.address : '',
+      borrowerPostalCode: data.companyMode !== 'agileOnly' ? data.tkInfo.postalCode : '',
+      borrowerTaxId: data.companyMode !== 'agileOnly' ? data.tkInfo.taxId : '',
+      borrowerPhone: data.companyMode !== 'agileOnly' ? data.tkInfo.phone : '',
 
       // Party 3 (Guarantors)
       guarantors: guarantors.map(g => ({
@@ -546,7 +556,9 @@ function App() {
   } else if (data.guarantors && data.guarantors.length > 0) { // Fallback for safety
     supplementaryTabs.push({ key: 'guarantee-legacy', label: 'ค้ำประกัน', icon: 'shield' });
   }
-  supplementaryTabs.push({ key: 'jointVenture', label: 'ค้าร่วม', icon: 'handshake' });
+  if (data.companyMode !== 'agileOnly') {
+    supplementaryTabs.push({ key: 'jointVenture', label: 'ค้าร่วม', icon: 'handshake' });
+  }
   supplementaryTabs.push({ key: 'serviceAgreement', label: 'จ้างบริการ', icon: 'wrench' });
   supplementaryTabs.push({ key: 'feePayment', label: 'ค่าธรรมเนียม', icon: 'receipt' });
 
@@ -597,6 +609,7 @@ function App() {
           customerInfo={data.customerInfo}
           guarantors={filteredGuarantors}
           type={agreement.type}
+          companyMode={data.companyMode}
         />
       );
     }
@@ -608,6 +621,7 @@ function App() {
           agileInfo={data.agileInfo}
           tkInfo={data.tkInfo}
           guarantors={filteredGuarantors}
+          companyMode={data.companyMode}
         />
       );
     }
@@ -619,6 +633,7 @@ function App() {
           agileInfo={data.agileInfo}
           tkInfo={data.tkInfo}
           guarantors={filteredGuarantors}
+          companyMode={data.companyMode}
         />
       );
     }
@@ -780,6 +795,7 @@ function App() {
 
           {/* Step 2: Company Info */}
           <CompanyInfoForm
+            companyMode={data.companyMode}
             agileInfo={data.agileInfo}
             tkInfo={data.tkInfo}
             customerInfo={data.customerInfo}
@@ -843,6 +859,7 @@ function App() {
                   data={activeAgreement.data}
                   type={activeAgreement.type}
                   customerInfo={data.customerInfo}
+                  companyMode={data.companyMode}
                   agreementId={activeAgreement.id}
                   agreements={data.agreements}
                   onChange={(hp: HirePurchaseData) => updateAgreementData(activeAgreement.id, hp)}
@@ -855,6 +872,7 @@ function App() {
                   data={activeAgreement.data}
                   customerInfo={data.customerInfo}
                   agreements={data.agreements}
+                  companyMode={data.companyMode}
                   currentAgreementId={activeAgreement.id}
                   onChange={(cf: any) => updateAgreementData(activeAgreement.id, cf)}
                   onFocusSection={(sectionId: string, tabKey?: string) => scrollToPreviewSection(sectionId, tabKey || `agreement-${activeAgreement.id}`)}
@@ -864,6 +882,7 @@ function App() {
                 <ODForm
                   data={activeAgreement.data}
                   agreements={data.agreements}
+                  companyMode={data.companyMode}
                   currentAgreementId={activeAgreement.id}
                   onChange={(od: any) => updateAgreementData(activeAgreement.id, od)}
                   onFocusSection={(sectionId: string, tabKey?: string) => scrollToPreviewSection(sectionId, tabKey || `agreement-${activeAgreement.id}`)}
@@ -1142,12 +1161,12 @@ function App() {
               {activePreview.startsWith('guarantee-') && (
                 (() => {
                   if (activePreview === 'guarantee-legacy' && data.guarantors && data.guarantors.length > 0) {
-                    return <GuaranteePreview data={buildGuaranteeData(data.guarantors)} />;
+                    return <GuaranteePreview data={buildGuaranteeData(data.guarantors)} companyMode={data.companyMode} />;
                   }
                   const gaId = activePreview.replace('guarantee-', '');
                   const ga = data.guaranteeAgreements?.find(g => g.id === gaId);
                   if (ga && ga.guarantors && ga.guarantors.length > 0) {
-                    return <GuaranteePreview data={buildGuaranteeData(ga.guarantors)} />;
+                    return <GuaranteePreview data={buildGuaranteeData(ga.guarantors)} companyMode={data.companyMode} />;
                   }
                   return null;
                 })()

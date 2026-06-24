@@ -70,18 +70,18 @@ export default function ContractPreview({ data }: Props) {
         <div className="mb-4 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(1)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.companyName}</Highlight></b> (โดย <Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.companyAddress, data.companyPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>“ผู้รับค่าธรรมเนียม”</b>) และ
+            <b><Highlight>{data.companyName}</Highlight></b> (โดย<Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.companyAddress, data.companyPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>“ผู้รับค่าธรรมเนียม”</b>) และ
           </div>
         </div>
 
         <div className="mb-6 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(2)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย <Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.customerAddress, data.customerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>“ผู้ชำระค่าธรรมเนียม”</b>)
+            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย<Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.customerAddress, data.customerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>“ผู้ชำระค่าธรรมเนียม”</b>)
           </div>
         </div>
 
-        <div className="indent-10 mb-6 font-bold">
+        <div className="indent-8 mb-6 font-bold">
           คู่สัญญาทั้งสองฝ่ายได้ตกลงเข้าทำสัญญาฉบับนี้ขึ้นโดยมีข้อความดังต่อไปนี้
         </div>
 
@@ -95,7 +95,7 @@ export default function ContractPreview({ data }: Props) {
         {data.items.slice(0, 2).map((item, index) => {
           const label = CONTRACT_TYPE_LABELS[item.type];
           return (
-            <div key={item.id} className={`flex gap-2 pl-6 text-justify ${index === 1 || index === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
+            <div key={item.id} className={`flex gap-2 pl-8 text-justify ${index === 1 || index === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
               <span className="shrink-0 font-bold whitespace-nowrap">1.{index + 1}.</span>
               <div className="flex-1 text-justify">
                 ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
@@ -105,7 +105,7 @@ export default function ContractPreview({ data }: Props) {
         })}
 
         {data.items.length <= 2 && (
-          <div className="pl-12 mb-6 ">
+          <div className="pl-8 mb-6 ">
             โดยตกลงชำระค่าธรรมเนียมตามข้อ 1. ในคราวเดียว ณ วันที่ทำสัญญาเช่าซื้อดังกล่าว
           </div>
         )}
@@ -122,7 +122,7 @@ export default function ContractPreview({ data }: Props) {
               const actualIndex = index + 2;
               const label = CONTRACT_TYPE_LABELS[item.type];
               return (
-                <div key={item.id} className={`flex gap-2 pl-6 text-justify ${actualIndex === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
+                <div key={item.id} className={`flex gap-2 pl-8 text-justify ${actualIndex === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
                   <span className="shrink-0 font-bold whitespace-nowrap">1.{actualIndex + 1}.</span>
                   <div className="flex-1 text-justify">
                     ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
@@ -130,7 +130,7 @@ export default function ContractPreview({ data }: Props) {
                 </div>
               );
             })}
-            <div className="pl-12 mb-6 ">
+            <div className="pl-8 mb-6 ">
               โดยตกลงชำระค่าธรรมเนียมตามข้อ 1. ในคราวเดียว ณ วันที่ทำสัญญาเช่าซื้อดังกล่าว
             </div>
           </div>
