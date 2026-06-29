@@ -197,7 +197,7 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
 
     return (
       <div className="grid grid-cols-3 gap-2 p-1">
-        {months.map((m, idx) => {
+        {months.map((_, idx) => {
           const isSelected = currentMonth === idx;
           const isCurrentMonth = isCurrentYear && today.getMonth() === idx;
           return (
