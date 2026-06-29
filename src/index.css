@@ -21,6 +21,12 @@
   text-align-last: center;
 }
 
+/* Fix thick underlines in print by forcing a consistent thin line */
+.print-page u,
+.print-page .underline {
+  text-decoration-thickness: 1px !important;
+}
+
 .text-justify-reset {
   text-align: left !important;
   text-justify: none !important;

@@ -215,13 +215,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <div className="flex gap-2 text-justify">
                 <span className="shrink-0 w-8">1.</span>
                 <div className="flex-1">
-                  <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
+                  <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
                 </div>
               </div>
               <div className="flex gap-2 text-justify">
                 <span className="shrink-0 w-8">2.</span>
                 <div className="flex-1">
-                  <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor2.address, data.lessor2.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
+                  <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor2.address, data.lessor2.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
                 </div>
               </div>
               <div className="flex gap-2 text-justify">
@@ -233,7 +233,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <div className="flex gap-2 text-justify">
                 <span className="shrink-0 w-8">3.</span>
                 <div className="flex-1">
-                  <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
+                  <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
                 </div>
               </div>
             </>
@@ -311,7 +311,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <span className="w-8 shrink-0">2.1</span>
             <div className="flex-1">ผู้ให้เช่าซื้อตกลงให้เช่าซื้อ และผู้เช่าซื้อตกลงเช่าซื้อเครื่องจักรและอุปกรณ์ประกอบ ดังต่อไปนี้</div>
           </div>
-          <div className="space-y-4 pl-12">
+          <div className="space-y-2 pl-12">
             {data.assets?.slice(0, firstPageMax).map((asset, idx) => (
               <div key={idx} className="flex gap-2">
                 <span className="w-12 shrink-0 whitespace-nowrap">(2.1.{idx + 1})</span>
@@ -339,7 +339,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         return (
           <div key={`overflow-page-${pageIndex}`} className="print-page relative min-h-[1050px] p-24">
             <PageHeader />
-            <div className="mt-8 space-y-4 pl-12">
+            <div className="mt-8 space-y-2 pl-12">
               {pageAssets.map((asset, idx) => {
                 const globalIdx = firstPageMax + startIndex + idx;
                 return (
@@ -365,7 +365,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
 
         {integratedAssets.length > 0 && (
-          <div className="space-y-4 pl-12 mb-6 mt-6">
+          <div className="space-y-2 pl-12 mb-6 mt-6">
             {integratedAssets.map((asset, idx) => {
               const globalIdx = assetCount - integratedAssets.length + idx;
               return (
@@ -429,7 +429,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   <div className="flex-1">
                     ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก <b>(Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
                     {data.hasCustomGreenText !== false && data.customGreenText && (
-                      <div className="mt-4">
+                      <div>
                         <GreenHighlight>{data.customGreenText}</GreenHighlight>
                       </div>
                     )}
@@ -623,7 +623,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <div>
                 ผู้เช่าซื้อยินยอมและอนุญาตให้ตัวแทนเช่าซื้อ ผู้ให้เช่าซื้อ ตัวแทน หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งโดยชอบจากตัวแทนเช่าซื้อหรือผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินที่เช่าซื้อ หรือ ตัวแทนจำหน่าย ให้มีสิทธิเข้าถึงข้อมูลการใช้งานทรัพย์สินที่เช่าซื้อในการใช้งานและการบำรุงรักษา เพื่อให้สามารถตรวจสอบประสิทธิภาพของทรัพย์สินที่เช่าซื้อได้ในระหว่างที่สัญญาฉบับนี้มีผลบังคับใช้ ทั้งนี้ ไม่ว่าการเข้าถึงข้อมูลดังกล่าวจะกระทำผ่านทางระบบออนไลน์ หรือทางการติดต่อสื่อสารใด ๆ ทั้งสิ้น หากตัวแทนเช่าซื้อหรือผู้ให้เช่าซื้อตรวจพบว่าทรัพย์สินหรือส่วนหนึ่งส่วนใดของทรัพย์สินที่เช่าซื้อ เสียหาย ชำรุด หรืออยู่ในสภาพที่ไม่เหมาะสมแก่การใช้งาน ตัวแทนเช่าซื้อจะดำเนินการแจ้งเป็นลายลักษณ์อักษรไปยังผู้เช่าซื้อเพื่อให้ทราบเรื่องดังกล่าว และให้ดำเนินการซ่อมแซมทรัพย์สินในการนี้ ผู้เช่าซื้อตกลงที่จะทำการซ่อมแซมทรัพย์สินให้กลับคืนสู่สภาพที่ดีและเหมาะสมในการใช้งานได้อย่างมีประสิทธิภาพ โดยค่าใช้จ่ายทั้งหมดให้ถือเป็นหน้าที่ของผู้เช่าซื้อเอง
               </div>
-          </div>
+            </div>
           </div>
 
           <div className="flex gap-4">
