@@ -48,7 +48,10 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
       const currentYear = viewDate.getFullYear();
       const element = yearScrollRef.current.querySelector(`[data-year="${currentYear}"]`);
       if (element) {
-        element.scrollIntoView({ block: 'center' });
+        const container = yearScrollRef.current;
+        const containerRect = container.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        container.scrollTop += (elementRect.top - containerRect.top) - (containerRect.height / 2) + (elementRect.height / 2);
       }
     }
   }, [viewMode, viewDate]);
