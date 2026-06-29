@@ -1231,9 +1231,9 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
       </section>
 
       {/* สัญญารับซื้อคืน Section */}
-      <section className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+      <section className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
         <div
-          className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors bg-orange-50/30"
+          className={`p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors bg-orange-50/30 ${showBuyback ? 'rounded-t-xl' : 'rounded-xl'}`}
           onClick={() => setShowBuyback(!showBuyback)}
         >
           <div className="flex items-center gap-3">
@@ -1304,7 +1304,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
               </div>
             ))}
 
-            <div className="p-4 border-t border-gray-100 flex justify-center bg-white">
+            <div className="p-4 border-t border-gray-100 flex justify-center bg-white rounded-b-xl">
               <button
                 onClick={addBuyback}
                 className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm font-bold bg-blue-50 px-4 py-2 rounded-lg transition-all"

@@ -12,7 +12,6 @@ interface CustomDatePickerProps {
 export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: CustomDatePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [viewDate, setViewDate] = useState(new Date(value || new Date()));
-  const [showAbove, setShowAbove] = useState(false);
   const [isYearPickerOpen, setIsYearPickerOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const yearScrollRef = useRef<HTMLDivElement>(null);
@@ -31,12 +30,6 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
         setIsYearPickerOpen(false);
       }
     };
-    
-    if (isOpen && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - rect.bottom;
-      setShowAbove(spaceBelow < 380); 
-    }
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -101,7 +94,7 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
     const days = [];
     // Padding for start day
     for (let i = 0; i < startDay; i++) {
-      days.push(<div key={`pad-${i}`} className="h-9 w-9"></div>);
+      days.push(<div key={`pad-start-${i}`} className="h-9 w-9"></div>);
     }
 
     const currentSelected = value ? new Date(value) : null;
@@ -134,6 +127,7 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
         </button>
       );
     }
+
     return days;
   };
 
@@ -184,7 +178,7 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
       <button
         type="button"
         onClick={() => !readOnly && setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between px-3 py-2 bg-white border rounded-md shadow-sm transition-all text-left ${readOnly ? 'bg-gray-50 cursor-not-allowed opacity-75 border-gray-200' : isOpen ? 'border-blue-500 ring-2 ring-blue-100 ring-offset-0' : 'border-gray-300 hover:border-gray-400'}`}
+        className={`w-full flex items-center justify-between p-2 text-sm bg-white border rounded-md shadow-sm transition-all text-left ${readOnly ? 'bg-gray-50 cursor-not-allowed opacity-75 border-gray-200' : isOpen ? 'border-blue-500 ring-2 ring-blue-100 ring-offset-0' : 'border-gray-300 hover:border-gray-400'}`}
       >
         <span className={`truncate ${!value ? 'text-gray-400' : 'text-slate-700 font-medium'}`}>
           {value ? formatThaiDate(value) : 'เลือกวันที่...'}
@@ -194,8 +188,7 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
 
       {isOpen && (
         <div 
-          className={`absolute z-[100] w-[300px] bg-white rounded-xl shadow-2xl border border-slate-200 p-4 transition-all duration-200 animate-in fade-in zoom-in-95 origin-top-left
-            ${showAbove ? 'bottom-full mb-2' : 'top-full mt-2'}`}
+          className="absolute z-[100] w-[300px] bg-white rounded-xl shadow-2xl border border-slate-200 p-4 transition-all duration-200 animate-in fade-in zoom-in-95 origin-top-left top-full mt-2"
           style={{ left: 0 }}
         >
           {/* Header */}
@@ -268,4 +261,3 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
     </div>
   );
 };
-

@@ -155,7 +155,7 @@ function App() {
     });
     observer.observe(panel);
     return () => observer.disconnect();
-  }, []);
+  }, [previewVisible]);
 
   useEffect(() => {
     if (!previewContentRef.current) return;
@@ -164,7 +164,7 @@ function App() {
     });
     observer.observe(previewContentRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [previewVisible]);
 
   // Preview scroll sync: switches to the correct preview tab and scrolls to the matching section
   const lastFocusSectionRef = useRef<string>('');

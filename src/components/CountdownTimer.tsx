@@ -223,7 +223,9 @@ function SurpriseModal({ onClose }: { onClose: () => void }) {
 export default function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(getTimeLeft);
   const [showSurprise, setShowSurprise] = useState(false);
-  const [hasFired, setHasFired] = useState(false);
+  const [hasFired, setHasFired] = useState(() => {
+    return localStorage.getItem('hasSeenSurprise') === 'true';
+  });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -234,6 +236,7 @@ export default function CountdownTimer() {
       if (tl.total <= 0 && !hasFired) {
         setHasFired(true);
         setShowSurprise(true);
+        localStorage.setItem('hasSeenSurprise', 'true');
       }
     }, 1000);
     return () => clearInterval(timer);
