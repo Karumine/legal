@@ -224,8 +224,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor2.address, data.lessor2.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
                 </div>
               </div>
-              <div className="pl-6">
-                (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
+              <div className="flex gap-2 text-justify">
+                <span className="shrink-0 w-8"></span>
+                <div className="flex-1">
+                  (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
+                </div>
               </div>
               <div className="flex gap-2 text-justify">
                 <span className="shrink-0 w-8">3.</span>
@@ -308,7 +311,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <span className="w-8 shrink-0">2.1</span>
             <div className="flex-1">ผู้ให้เช่าซื้อตกลงให้เช่าซื้อ และผู้เช่าซื้อตกลงเช่าซื้อเครื่องจักรและอุปกรณ์ประกอบ ดังต่อไปนี้</div>
           </div>
-          <div className="space-y-4 pl-8">
+          <div className="space-y-4 pl-12">
             {data.assets?.slice(0, firstPageMax).map((asset, idx) => (
               <div key={idx} className="flex gap-2">
                 <span className="w-12 shrink-0 whitespace-nowrap">(2.1.{idx + 1})</span>
@@ -336,7 +339,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         return (
           <div key={`overflow-page-${pageIndex}`} className="print-page relative min-h-[1050px] p-24">
             <PageHeader />
-            <div className="mt-8 space-y-4 pl-8">
+            <div className="mt-8 space-y-4 pl-12">
               {pageAssets.map((asset, idx) => {
                 const globalIdx = firstPageMax + startIndex + idx;
                 return (
@@ -362,7 +365,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
 
         {integratedAssets.length > 0 && (
-          <div className="space-y-4 pl-8 mb-6 mt-6">
+          <div className="space-y-4 pl-12 mb-6 mt-6">
             {integratedAssets.map((asset, idx) => {
               const globalIdx = assetCount - integratedAssets.length + idx;
               return (
