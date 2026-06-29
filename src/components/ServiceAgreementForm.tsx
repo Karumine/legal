@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { CustomDatePicker } from './CustomDatePicker';
+import { PercentageInput } from './PercentageInput';
 import type { ServiceAgreementData, AppData } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 
@@ -265,10 +266,9 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
                         {/* Rate % */}
                         <div>
                           <label className="block text-xs font-medium text-gray-600 mb-1">อัตราค่าตอบแทน (Rate) %</label>
-                          <input
-                            type="text"
+                          <PercentageInput
                             value={data.originationFeeRate}
-                            onChange={(e) => handleChange('originationFeeRate', e.target.value)}
+                            onChange={(val) => handleChange('originationFeeRate', val)}
                             className="block w-full rounded-md border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm p-2 border bg-white h-[38px]"
                           />
                         </div>
@@ -352,10 +352,9 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
                         {/* Rate % */}
                         <div>
                           <label className="block text-xs font-medium text-gray-600 mb-1">อัตราค่าตอบแทน (Rate) %</label>
-                          <input
-                            type="text"
+                          <PercentageInput
                             value={data.serviceFeeRate}
-                            onChange={(e) => handleChange('serviceFeeRate', e.target.value)}
+                            onChange={(val) => handleChange('serviceFeeRate', val)}
                             className="block w-full rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white h-[38px]"
                           />
                         </div>

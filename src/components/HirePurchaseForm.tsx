@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { ShieldCheck, ChevronDown, ChevronUp, FileText, Plus, Trash2, Copy } from 'lucide-react';
 import { CustomDatePicker } from './CustomDatePicker';
+import { PercentageInput } from './PercentageInput';
 
 import ThaiAddressInput from './ThaiAddressInput';
 import { TODAY } from '../types/app';
@@ -343,13 +344,12 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                   <label className="block text-xs font-medium text-blue-600 mb-1 font-bold">
                     สัดส่วน (%) {companyMode === 'agileOnly' ? '(ล็อค 100%)' : '*แก้ไขได้*'}
                   </label>
-                  <input
-                    type="text"
+                  <PercentageInput
                     value={companyMode === 'agileOnly' ? '100' : (data as any)[l.key]?.proportion || ''}
                     readOnly={companyMode === 'agileOnly'}
-                    onChange={(e) => {
+                    onChange={(val) => {
                       if (companyMode !== 'agileOnly') {
-                        handleLessorChange(l.key as any, 'proportion', e.target.value);
+                        handleLessorChange(l.key as any, 'proportion', val);
                       }
                     }}
                     className={`block w-full rounded-md shadow-sm text-sm p-2 border ${companyMode === 'agileOnly' ? 'border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed' : 'border-blue-300 focus:ring-blue-500 focus:border-blue-500'}`}
@@ -576,10 +576,9 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                 <label className="block text-xs font-medium text-gray-600 mb-1">
                   {type === 'hirePurchaseBack' ? 'เงินดาวน์ (%) ที่หักจากยอดจัดเช่าซื้อ' : 'เงินดาวน์ (%)'}
                 </label>
-                <input
-                  type="text"
+                <PercentageInput
                   value={data.downPaymentPercentage || ''}
-                  onChange={(e) => handleChange('downPaymentPercentage', e.target.value)}
+                  onChange={(val) => handleChange('downPaymentPercentage', val)}
                   className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border"
                 />
               </div>
@@ -616,7 +615,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">อัตราดอกเบี้ย (%)</label>
-                  <input type="text" value={data.interestRate} onChange={(e) => handleChange('interestRate', e.target.value)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
+                  <PercentageInput value={data.interestRate} onChange={(val) => handleChange('interestRate', val)} className="block w-full rounded-md border-gray-300 shadow-sm text-sm p-2 border" />
                 </div>
               </div>
 

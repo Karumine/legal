@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Trash2, FileText } from 'lucide-react';
 import { CustomDatePicker } from './CustomDatePicker';
+import { PercentageInput } from './PercentageInput';
 import type { FeePaymentData, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import type { ContractItem, ContractItemType } from '../types/contract';
@@ -263,10 +264,9 @@ export default function FeePaymentForm({ data, onChange, agreements, onFocusSect
                   <div className="grid grid-cols-2 gap-2">
                     <div>
                       <label className="block text-xs font-medium text-rose-600 mb-1">ร้อยละ (%)</label>
-                      <input
-                        type="text"
+                      <PercentageInput
                         value={item.rate}
-                        onChange={(e) => handleItemChange(item.id, 'rate', e.target.value)}
+                        onChange={(val) => handleItemChange(item.id, 'rate', val)}
                         className="block w-full rounded-md border-gray-200 shadow-sm p-2 border text-sm focus:border-rose-400 focus:ring-rose-400 font-medium"
                         placeholder="3.00"
                       />

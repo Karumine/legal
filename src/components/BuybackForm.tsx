@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DirectorInput from './DirectorInput';
+import { PercentageInput } from './PercentageInput';
 import ThaiAddressInput from './ThaiAddressInput';
 import type { BuybackData, AssetDetail } from '../types/app';
 import { ShieldAlert, CheckCircle2, Search, Loader2 } from 'lucide-react';
@@ -142,10 +143,9 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">เงินดาวน์ในส่วนสัญญานี้ (%)</label>
             <div className="flex items-center gap-2">
-              <input
-                type="text"
+              <PercentageInput
                 value={data.downPercentage}
-                onChange={(e) => updateBuyback({ downPercentage: e.target.value })}
+                onChange={(val) => updateBuyback({ downPercentage: val })}
                 className="block w-20 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm p-2 border bg-white font-bold text-orange-600 text-center"
                 placeholder="20"
               />
@@ -305,20 +305,18 @@ export default function BuybackForm({ data, parentAssets = [], otherBuybacksSele
                   <td className="py-2 px-3 font-medium text-gray-700">ปีที่ {row.year}</td>
                   {(data.buybackMode === 'all' || data.buybackMode === 'newOnly') && (
                     <td className="py-1.5 px-3">
-                      <input
-                        type="text"
+                      <PercentageInput
                         value={row.newRate}
-                        onChange={(e) => updateTable(rowIdx, 'newRate', e.target.value)}
+                        onChange={(val) => updateTable(rowIdx, 'newRate', val)}
                         className="w-full p-1.5 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none text-center"
                       />
                     </td>
                   )}
                   {(data.buybackMode === 'all' || data.buybackMode === 'usedOnly') && (
                     <td className="py-1.5 px-3">
-                      <input
-                        type="text"
+                      <PercentageInput
                         value={row.usedRate}
-                        onChange={(e) => updateTable(rowIdx, 'usedRate', e.target.value)}
+                        onChange={(val) => updateTable(rowIdx, 'usedRate', val)}
                         className="w-full p-1.5 border border-orange-200 rounded text-[11px] focus:ring-1 focus:ring-orange-500 outline-none text-center"
                       />
                     </td>

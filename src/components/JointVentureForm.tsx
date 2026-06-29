@@ -1,5 +1,6 @@
 import type { JointVentureData } from '../types/app';
 import { CustomDatePicker } from './CustomDatePicker';
+import { PercentageInput } from './PercentageInput';
 
 interface Props {
   data: JointVentureData;
@@ -43,20 +44,18 @@ export default function JointVentureForm({ data, onChange, onFocusSection }: Pro
         <div className="grid grid-cols-2 gap-4 border-t border-gray-100 pt-4" onFocusCapture={() => onFocusSection?.('jv-proportions')}>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">สัดส่วน คู่สัญญาฝ่ายที่ 1 (%)</label>
-            <input
-              type="number"
+            <PercentageInput
               value={data.proportion1}
-              onChange={(e) => handleChange('proportion1', parseInt(e.target.value) || 0)}
+              onChange={(val) => handleChange('proportion1', parseInt(val) || 0)}
               className="block w-full rounded-md border-gray-200 shadow-sm focus:border-amber-500 focus:ring-amber-500 text-sm p-2 border"
               placeholder="20"
             />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">สัดส่วน คู่สัญญาฝ่ายที่ 2 (%)</label>
-            <input
-              type="number"
+            <PercentageInput
               value={data.proportion2}
-              onChange={(e) => handleChange('proportion2', parseInt(e.target.value) || 0)}
+              onChange={(val) => handleChange('proportion2', parseInt(val) || 0)}
               className="block w-full rounded-md border-gray-200 shadow-sm focus:border-amber-500 focus:ring-amber-500 text-sm p-2 border"
               placeholder="80"
             />

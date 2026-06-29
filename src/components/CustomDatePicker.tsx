@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { formatThaiDate } from '../utils/thaiDate';
-import { Calendar, ChevronLeft, ChevronRight, ChevronDown, RotateCcw } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 
 interface CustomDatePickerProps {
   value: string; // YYYY-MM-DD
@@ -9,10 +9,12 @@ interface CustomDatePickerProps {
   readOnly?: boolean;
 }
 
+type ViewMode = 'day' | 'month' | 'year';
+
 export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: CustomDatePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [viewDate, setViewDate] = useState(new Date(value || new Date()));
-  const [isYearPickerOpen, setIsYearPickerOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('day');
   const containerRef = useRef<HTMLDivElement>(null);
   const yearScrollRef = useRef<HTMLDivElement>(null);
 
@@ -21,13 +23,18 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
     'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
   ];
 
+  const monthsShort = [
+    'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+    'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
+  ];
+
   const weekdays = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
-        setIsYearPickerOpen(false);
+        setViewMode('day');
       }
     };
 
@@ -37,26 +44,51 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
 
   // Scroll to current year when year picker opens
   useEffect(() => {
-    if (isYearPickerOpen && yearScrollRef.current) {
+    if (viewMode === 'year' && yearScrollRef.current) {
       const currentYear = viewDate.getFullYear();
       const element = yearScrollRef.current.querySelector(`[data-year="${currentYear}"]`);
       if (element) {
         element.scrollIntoView({ block: 'center' });
       }
     }
-  }, [isYearPickerOpen, viewDate]);
+  }, [viewMode, viewDate]);
 
   const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
   const firstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
 
-  const handlePrevMonth = (e: React.MouseEvent) => {
+  // Navigation handlers for prev/next based on viewMode
+  const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
+    if (viewMode === 'day') {
+      setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
+    } else if (viewMode === 'month') {
+      setViewDate(new Date(viewDate.getFullYear() - 1, viewDate.getMonth(), 1));
+    } else if (viewMode === 'year') {
+      // Jump back 30 years in year view
+      setViewDate(new Date(viewDate.getFullYear() - 30, viewDate.getMonth(), 1));
+    }
   };
 
-  const handleNextMonth = (e: React.MouseEvent) => {
+  const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1));
+    if (viewMode === 'day') {
+      setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1));
+    } else if (viewMode === 'month') {
+      setViewDate(new Date(viewDate.getFullYear() + 1, viewDate.getMonth(), 1));
+    } else if (viewMode === 'year') {
+      // Jump forward 30 years in year view
+      setViewDate(new Date(viewDate.getFullYear() + 30, viewDate.getMonth(), 1));
+    }
+  };
+
+  // Header click: drill up (day → month → year)
+  const handleHeaderClick = () => {
+    if (viewMode === 'day') {
+      setViewMode('month');
+    } else if (viewMode === 'month') {
+      setViewMode('year');
+    }
+    // Already at year level, do nothing
   };
 
   const handleSelectDay = (day: number) => {
@@ -67,6 +99,7 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
     const isoString = adjustedDate.toISOString().split('T')[0];
     onChange(isoString);
     setIsOpen(false);
+    setViewMode('day');
   };
 
   const handleToday = (e: React.MouseEvent) => {
@@ -78,11 +111,34 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
     onChange(isoString);
     setViewDate(new Date());
     setIsOpen(false);
+    setViewMode('day');
   };
 
+  // Select year → go back to month view
   const handleSelectYear = (year: number) => {
     setViewDate(new Date(year, viewDate.getMonth(), 1));
-    setIsYearPickerOpen(false);
+    setViewMode('month');
+  };
+
+  // Select month → go back to day view
+  const handleSelectMonth = (month: number) => {
+    setViewDate(new Date(viewDate.getFullYear(), month, 1));
+    setViewMode('day');
+  };
+
+  // Get header label based on view mode
+  const getHeaderLabel = () => {
+    if (viewMode === 'day') {
+      return `${months[viewDate.getMonth()]} ${viewDate.getFullYear() + 543}`;
+    } else if (viewMode === 'month') {
+      return `${viewDate.getFullYear() + 543}`;
+    } else {
+      // year mode: show range
+      const currentYear = viewDate.getFullYear();
+      const startYear = currentYear - 20;
+      const endYear = currentYear + 10;
+      return `${startYear + 543} - ${endYear + 543}`;
+    }
   };
 
   const renderDays = () => {
@@ -131,8 +187,40 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
     return days;
   };
 
+  const renderMonthPicker = () => {
+    const currentMonth = viewDate.getMonth();
+    const today = new Date();
+    const isCurrentYear = viewDate.getFullYear() === today.getFullYear();
+
+    return (
+      <div className="grid grid-cols-3 gap-2 p-1">
+        {months.map((m, idx) => {
+          const isSelected = currentMonth === idx;
+          const isCurrentMonth = isCurrentYear && today.getMonth() === idx;
+          return (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => handleSelectMonth(idx)}
+              className={`py-3 px-2 rounded-lg text-sm transition-all duration-200 ${
+                isSelected 
+                  ? 'bg-blue-600 text-white font-bold shadow-md' 
+                  : isCurrentMonth
+                    ? 'bg-blue-50 text-blue-600 border border-blue-200 font-medium'
+                    : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              {monthsShort[idx]}
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
   const renderYearPicker = () => {
-    const currentYear = new Date().getFullYear();
+    const currentYear = viewDate.getFullYear();
+    const thisYear = new Date().getFullYear();
     const years = [];
     for (let y = currentYear - 20; y <= currentYear + 10; y++) {
       years.push(y);
@@ -141,33 +229,25 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
     return (
       <div 
         ref={yearScrollRef}
-        className="absolute inset-0 bg-white z-20 flex flex-col p-2 animate-in fade-in duration-200"
+        className="grid grid-cols-3 gap-1.5 p-1 max-h-[260px] overflow-y-auto"
       >
-        <div className="flex items-center justify-between px-2 py-1 mb-2 border-b border-slate-100">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">เลือกปี พ.ศ.</span>
-          <button 
-            onClick={() => setIsYearPickerOpen(false)}
-            className="text-xs text-blue-600 font-bold hover:underline"
-          >
-            ยกเลิก
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto grid grid-cols-3 gap-1">
-          {years.map(y => (
-            <button
-              key={y}
-              data-year={y}
-              onClick={() => handleSelectYear(y)}
-              className={`py-2 px-1 rounded text-sm transition-colors ${
-                viewDate.getFullYear() === y 
-                  ? 'bg-blue-600 text-white font-bold' 
+        {years.map(y => (
+          <button
+            key={y}
+            data-year={y}
+            type="button"
+            onClick={() => handleSelectYear(y)}
+            className={`py-2.5 px-1 rounded-lg text-sm transition-all duration-200 ${
+              currentYear === y 
+                ? 'bg-blue-600 text-white font-bold shadow-md' 
+                : y === thisYear
+                  ? 'bg-blue-50 text-blue-600 border border-blue-200 font-medium'
                   : 'text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              {y + 543}
-            </button>
-          ))}
-        </div>
+            }`}
+          >
+            {y + 543}
+          </button>
+        ))}
       </div>
     );
   };
@@ -177,7 +257,7 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
       {label && <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>}
       <button
         type="button"
-        onClick={() => !readOnly && setIsOpen(!isOpen)}
+        onClick={() => { if (!readOnly) { setIsOpen(!isOpen); setViewMode('day'); } }}
         className={`w-full flex items-center justify-between p-2 text-sm bg-white border rounded-md shadow-sm transition-all text-left ${readOnly ? 'bg-gray-50 cursor-not-allowed opacity-75 border-gray-200' : isOpen ? 'border-blue-500 ring-2 ring-blue-100 ring-offset-0' : 'border-gray-300 hover:border-gray-400'}`}
       >
         <span className={`truncate ${!value ? 'text-gray-400' : 'text-slate-700 font-medium'}`}>
@@ -195,7 +275,7 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
           <div className="flex items-center justify-between mb-4">
             <button
               type="button"
-              onClick={handlePrevMonth}
+              onClick={handlePrev}
               className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-blue-600 transition-colors"
             >
               <ChevronLeft size={18} />
@@ -203,37 +283,44 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
             
             <button
               type="button"
-              onClick={() => setIsYearPickerOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-lg hover:bg-blue-50 text-slate-800 font-bold transition-colors group"
+              onClick={handleHeaderClick}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg hover:bg-blue-50 text-slate-800 font-bold transition-colors ${viewMode === 'year' ? 'cursor-default hover:bg-transparent' : ''}`}
             >
               <span className="text-sm">
-                {months[viewDate.getMonth()]} {viewDate.getFullYear() + 543}
+                {getHeaderLabel()}
               </span>
-              <ChevronDown size={14} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
             </button>
 
             <button
               type="button"
-              onClick={handleNextMonth}
+              onClick={handleNext}
               className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-blue-600 transition-colors"
             >
               <ChevronRight size={18} />
             </button>
           </div>
 
-          {/* Weekdays */}
-          <div className="grid grid-cols-7 mb-2">
-            {weekdays.map(day => (
-              <div key={day} className="text-[11px] font-bold text-slate-400 text-center uppercase tracking-tighter">
-                {day}
+          {/* Content based on viewMode */}
+          {viewMode === 'day' && (
+            <>
+              {/* Weekdays */}
+              <div className="grid grid-cols-7 mb-2">
+                {weekdays.map(day => (
+                  <div key={day} className="text-[11px] font-bold text-slate-400 text-center uppercase tracking-tighter">
+                    {day}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {/* Days Grid */}
-          <div className="grid grid-cols-7 gap-1">
-            {renderDays()}
-          </div>
+              {/* Days Grid */}
+              <div className="grid grid-cols-7 gap-1">
+                {renderDays()}
+              </div>
+            </>
+          )}
+
+          {viewMode === 'month' && renderMonthPicker()}
+          {viewMode === 'year' && renderYearPicker()}
 
           {/* Footer */}
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
@@ -247,15 +334,12 @@ export const CustomDatePicker = ({ value, onChange, label, readOnly = false }: C
             </button>
             <button
               type="button"
-              onClick={() => setIsOpen(false)}
+              onClick={() => { setIsOpen(false); setViewMode('day'); }}
               className="text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors px-2 py-1"
             >
               ปิด
             </button>
           </div>
-
-          {/* Year Picker Overlay */}
-          {isYearPickerOpen && renderYearPicker()}
         </div>
       )}
     </div>

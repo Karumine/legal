@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, Trash2, Search, Loader2 } from 'lucide-react';
+import { PercentageInput } from './PercentageInput';
 import type { ContractData, ContractItem, ContractItemType } from '../types/contract';
 import { searchCompanyByTaxId } from '../services/dbdService';
 import { formatThaiId } from '../utils/formatters';
@@ -207,10 +208,9 @@ export default function ContractForm({ data, onChange }: Props) {
                   </div>
                   <div>
                     <label className="block text-xs text-gray-500">Rate (%)</label>
-                    <input
-                      type="text"
+                    <PercentageInput
                       value={item.rate}
-                      onChange={(e) => handleItemChange(item.id, 'rate', e.target.value)}
+                      onChange={(val) => handleItemChange(item.id, 'rate', val)}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"
                     />
                   </div>

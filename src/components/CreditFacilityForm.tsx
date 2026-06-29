@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Plus, Copy, ChevronDown } from 'lucide-react';
 import { CustomDatePicker } from './CustomDatePicker';
+import { PercentageInput } from './PercentageInput';
 import type { CreditFacilityData, LessorInfo, CompanyInfo, Agreement, CollateralAsset } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
@@ -263,13 +264,12 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
                     <label className="block text-xs font-medium text-blue-600 mb-1 font-bold italic">
                       สัดส่วน (%) {companyMode === 'agileOnly' ? '(ล็อค 100%)' : '*คำนวณวงเงินอัตโนมัติ*'}
                     </label>
-                    <input
-                      type="text"
+                    <PercentageInput
                       value={companyMode === 'agileOnly' ? '100' : (data as any)[l.key]?.proportion || ''}
                       readOnly={companyMode === 'agileOnly'}
-                      onChange={(e) => {
+                      onChange={(val) => {
                         if (companyMode !== 'agileOnly') {
-                          handleLenderChange(l.key as any, 'proportion', e.target.value);
+                          handleLenderChange(l.key as any, 'proportion', val);
                         }
                       }}
                       className={`block w-full rounded-md shadow-sm text-sm p-2 border ${companyMode === 'agileOnly' ? 'border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed' : 'border-blue-300 focus:ring-blue-500 focus:border-blue-500'}`}
@@ -425,11 +425,9 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">อัตราดอกเบี้ย (%) (4.2)</label>
-                <input
-                  type="text"
-                  name="interestRate"
+                <PercentageInput
                   value={data.interestRate || ''}
-                  onChange={handleChange}
+                  onChange={(val) => onChange({ ...data, interestRate: val })}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border"
                   placeholder="เช่น 15"
                 />

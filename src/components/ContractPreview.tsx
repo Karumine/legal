@@ -28,8 +28,8 @@ export default function ContractPreview({ data }: Props) {
     return addr.replace(/^(เลขที่\s*|ที่อยู่:\s*เลขที่\s*|ที่อยู่\s*)/, '');
   };
 
-
-  const totalPages = data.items.length > 2 ? 3 : 2;
+  // ≤3 items = 2 pages, ≥4 items = 3 pages
+  const totalPages = data.items.length > 3 ? 3 : 2;
 
   const PageFooter = ({ pageNum }: { pageNum: number }) => (
     <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600">
@@ -52,6 +52,11 @@ export default function ContractPreview({ data }: Props) {
     ? itemSummaryParts.slice(0, -1).join(', ') + ' และ ' + itemSummaryParts[itemSummaryParts.length - 1]
     : itemSummaryParts[0] || '';
 
+  // How many items to show on page 1:
+  // ≤3 items → show all on page 1
+  // ≥4 items → show first 2 on page 1, rest on page 2
+  const page1ItemCount = data.items.length <= 3 ? data.items.length : 2;
+
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line">
       {/* Page 1 */}
@@ -64,20 +69,20 @@ export default function ContractPreview({ data }: Props) {
           </div>
         </div>
         <div className="indent-10 mb-6">
-          สัญญาชำระค่าธรรมเนียม <b>(“สัญญา”)</b> ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> <b>(“วันที่สัญญามีผลใช้บังคับ”)</b> ระหว่าง
+          สัญญาชำระค่าธรรมเนียม <b>("สัญญา")</b> ฉบับนี้ทำขึ้นเพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> <b>("วันที่สัญญามีผลใช้บังคับ")</b> ระหว่าง
         </div>
 
         <div className="mb-4 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(1)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.companyName}</Highlight></b> (โดย<Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.companyAddress, data.companyPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>“ผู้รับค่าธรรมเนียม”</b>) และ
+            <b><Highlight>{data.companyName}</Highlight></b> (โดย<Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.companyAddress, data.companyPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้รับค่าธรรมเนียม"</b>) และ
           </div>
         </div>
 
         <div className="mb-6 flex gap-2 text-justify">
           <span className="shrink-0 w-6 font-bold">(2)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย<Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.customerAddress, data.customerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>“ผู้ชำระค่าธรรมเนียม”</b>)
+            <b><Highlight>{data.customerCompany}</Highlight></b> (โดย<Highlight>{data.customerDirector}</Highlight> {getAuthorizedSignatoryText({ entityType: data.entityType })}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.customerAddress, data.customerPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.customerTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้ชำระค่าธรรมเนียม"</b>)
           </div>
         </div>
 
@@ -92,10 +97,12 @@ export default function ContractPreview({ data }: Props) {
           </div>
         </div>
 
-        {data.items.slice(0, 2).map((item, index) => {
+        {/* Show items on page 1 (up to 3 if ≤3 items, or 2 if ≥4 items) */}
+        {data.items.slice(0, page1ItemCount).map((item, index) => {
           const label = CONTRACT_TYPE_LABELS[item.type];
+          const isLast = index === page1ItemCount - 1;
           return (
-            <div key={item.id} className={`flex gap-2 pl-8 text-justify ${index === 1 || index === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
+            <div key={item.id} className={`flex gap-2 pl-8 text-justify ${isLast ? 'mb-6' : 'mb-2'}`}>
               <span className="shrink-0 font-bold whitespace-nowrap">1.{index + 1}.</span>
               <div className="flex-1 text-justify">
                 ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
@@ -104,7 +111,8 @@ export default function ContractPreview({ data }: Props) {
           );
         })}
 
-        {data.items.length <= 2 && (
+        {/* Closing text on page 1 only when ≤3 items (all items fit on page 1) */}
+        {data.items.length <= 3 && (
           <div className="pl-8 mb-6 ">
             โดยตกลงชำระค่าธรรมเนียมตามข้อ 1. ในคราวเดียว ณ วันที่ทำสัญญาเช่าซื้อดังกล่าว
           </div>
@@ -113,8 +121,8 @@ export default function ContractPreview({ data }: Props) {
         <PageFooter pageNum={1} />
       </div>
 
-      {/* Page 2 (Items 1.3+ if any) */}
-      {data.items.length > 2 && (
+      {/* Page 2 (Items 1.3+ only when ≥4 items) */}
+      {data.items.length > 3 && (
         <div className="print-page relative">
           <PageHeader />
           <div className="mt-8">
@@ -162,4 +170,3 @@ export default function ContractPreview({ data }: Props) {
     </div>
   );
 }
-

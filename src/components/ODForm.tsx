@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Copy, ChevronDown } from 'lucide-react';
 import { CustomDatePicker } from './CustomDatePicker';
+import { PercentageInput } from './PercentageInput';
 import type { ODData, LessorInfo, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
@@ -144,13 +145,12 @@ export default function ODForm({ data, onChange, agreements = [], currentAgreeme
                     <label className="block text-xs font-medium text-blue-600 mb-1 font-bold italic">
                       สัดส่วน (%) {companyMode === 'agileOnly' ? '(ล็อค 100%)' : '*คำนวณวงเงินอัตโนมัติ*'}
                     </label>
-                    <input
-                      type="text"
+                    <PercentageInput
                       value={companyMode === 'agileOnly' ? '100' : (data as any)[l.key]?.proportion || ''}
                       readOnly={companyMode === 'agileOnly'}
-                      onChange={(e) => {
+                      onChange={(val) => {
                         if (companyMode !== 'agileOnly') {
-                          handleLenderChange(l.key as any, 'proportion', e.target.value);
+                          handleLenderChange(l.key as any, 'proportion', val);
                         }
                       }}
                       className={`block w-full rounded-md shadow-sm text-sm p-2 border ${companyMode === 'agileOnly' ? 'border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed' : 'border-blue-300 focus:ring-blue-500 focus:border-blue-500'}`}
