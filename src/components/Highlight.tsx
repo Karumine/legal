@@ -26,7 +26,7 @@ export const GreenHighlight = ({ children, className = '' }: HighlightProps) => 
     : 'bg-green-100/50 font-bold print:bg-transparent print:text-black print:font-normal';
   
   return (
-    <span className={`${baseClass} px-1 rounded inline break-words ${className}`}>
+    <span className={`${baseClass} rounded inline break-words ${className}`}>
       {children || '\u00A0'}
     </span>
   );

@@ -24,7 +24,7 @@
 /* Fix thick underlines in print by forcing a consistent thin line */
 .print-page u,
 .print-page .underline {
-  text-decoration-thickness: 1px !important;
+  text-decoration-thickness: 0.5px !important;
 }
 
 .text-justify-reset {
