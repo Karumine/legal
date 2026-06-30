@@ -242,11 +242,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
         <div className="font-bold mb-4">โดยที่</div>
         <div className="space-y-3 mb-6">
-          <div className="flex gap-4">
+          <div className="flex gap-2 text-justify">
             <span className="w-8 shrink-0 whitespace-nowrap">ก.</span>
             <div className="flex-1">ผู้เช่าซื้อมีความประสงค์จะเช่าซื้อทรัพย์สินจากผู้ให้เช่าซื้อ</div>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-2 text-justify">
             <span className="w-8 shrink-0 whitespace-nowrap">ข.</span>
             <div className="flex-1">ผู้ให้เช่าซื้อตกลงจะให้เช่าซื้อทรัพย์สินแก่ผู้เช่าซื้อตามเงื่อนไขและข้อกำหนดที่ระบุไว้ในสัญญาฉบับนี้</div>
           </div>
@@ -261,11 +261,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
         {!isAgileOnly && (
           <div className="space-y-4 mb-6 mt-4">
-            <div className="flex gap-4">
+            <div className="flex gap-2 text-justify">
               <span className="w-8 shrink-0 whitespace-nowrap">ค.</span>
               <div className="flex-1">ผู้ให้เช่าซื้อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้เช่าซื้อในการติดต่อประสานงานกับผู้เช่าซื้อเพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ (<b>“ตัวแทนเช่าซื้อ”</b>)</div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-2 text-justify">
               <span className="w-8 shrink-0 whitespace-nowrap">ง.</span>
               <div className="flex-1">ผู้เช่าซื้อและผู้ให้เช่าซื้อฝ่ายที่ 2 ตกลงจะให้ผู้ให้เช่าซื้อฝ่ายที่ 1 ทำหน้าที่เป็นตัวแทนเช่าซื้อ</div>
             </div>
@@ -276,7 +276,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
         <div className="mb-6">
           <div className="font-bold mb-2">1. การถือกรรมสิทธิ์รวม</div>
-          <div className="indent-8 mb-4">
+          <div className="indent-10 mb-4">
             ผู้ให้เช่าซื้อตกลงให้ถือกรรมสิทธิ์ในทรัพย์สินที่เช่าซื้อตามที่กำหนดไว้ในข้อ 2.1 ของสัญญาฉบับนี้ เป็นไปตามสัดส่วนดังต่อไปนี้:
           </div>
           <table className="w-[80%] mx-auto border-collapse border border-black text-center text-[12px] mb-6">
@@ -308,12 +308,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <div className="mb-6">
           <div className="font-bold mb-2">2. รายละเอียดของทรัพย์สินที่เช่าซื้อ</div>
           <div className="flex gap-4 mb-2">
-            <span className="w-8 shrink-0">2.1</span>
+            <span className="w-5 shrink-0">2.1</span>
             <div className="flex-1">ผู้ให้เช่าซื้อตกลงให้เช่าซื้อ และผู้เช่าซื้อตกลงเช่าซื้อเครื่องจักรและอุปกรณ์ประกอบ ดังต่อไปนี้</div>
           </div>
-          <div className="space-y-2 pl-12">
+          <div className="space-y-2 pl-10">
             {data.assets?.slice(0, firstPageMax).map((asset, idx) => (
-              <div key={idx} className="flex gap-2">
+              <div key={idx} className="flex gap-2 text-justify">
                 <span className="w-12 shrink-0 whitespace-nowrap">(2.1.{idx + 1})</span>
                 <div className="flex-1">
                   <span>
@@ -661,15 +661,15 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               </div>
               <div className="space-y-1">
                 <div className="flex gap-4">
-                  <span className="w-12 shrink-0 whitespace-nowrap">5.4.1.</span>
+                  <span className="w-8 shrink-0 whitespace-nowrap">5.4.1.</span>
                   <div className="flex-1">จัดส่งรายงานสรุปยอดขายและยอดการผลิตเป็นไฟล์รูปภาพ และ/หรือ ตามที่ตัวแทนเช่าซื้อร้องขอ</div>
                 </div>
                 <div className="flex gap-4">
-                  <span className="w-12 shrink-0 whitespace-nowrap">5.4.2.</span>
+                  <span className="w-8 shrink-0 whitespace-nowrap">5.4.2.</span>
                   <div className="flex-1">ผู้เช่าซื้อยินยอมให้ผู้ให้เช่าซื้อหรือตัวแทนเช่าซื้อเชื่อมต่อระบบดึงข้อมูลอัตโนมัติ (API หรือระบบ Cloud ของเครื่องจักร) หากมี</div>
                 </div>
                 <div className="flex gap-4">
-                  <span className="w-12 shrink-0 whitespace-nowrap">5.4.3.</span>
+                  <span className="w-8 shrink-0 whitespace-nowrap">5.4.3.</span>
                   <div className="flex-1">ผู้เช่าซื้อยินยอม/ให้ตัวแทนเช่าซื้อ ผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้ง โดยชอบจากตัวแทนเช่าซื้อหรือผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินที่เช่าซื้อ หรือ ตัวแทนจำหน่ายเข้าตรวจเยี่ยมสถานที่ตั้งของทรัพย์สินเพื่อตรวจสอบข้อมูลการผลิตจริง โดยจะแจ้งล่วงหน้าไม่น้อยกว่า 3 วันทำการ</div>
                 </div>
               </div>
