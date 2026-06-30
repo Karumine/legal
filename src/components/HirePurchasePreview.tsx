@@ -962,7 +962,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="flex gap-4">
               <span className="w-8 shrink-0">9.1.</span>
               <div className="flex-1 text-justify">
-                กรณีหากผู้เช่าซื้อผิดนัดไม่ชำระค่าเช่าซื้องวดหนึ่งงวดใด หรือไม่ปฏิบัติตามเงื่อนไขและรายละเอียดที่กำหนดไว้ในสัญญาฉบับนี้ และ/หรือ สัญญาและเอกสารอื่นใดที่เกี่ยวข้องกับทรัพย์สินหลักประกันหรือไม่ปฏิบัติตามข้อกำหนดของผู้ให้เช่าซื้อทั้งหมดหรือแต่เพียงบางส่วน เป็นเหตุให้ผู้ให้เช่าซื้อได้รับความเสียหาย ผู้ให้เช่าซื้อมีสิทธิบอกเลิกสัญญาได้ ภายใต้บทบัญญัติตามกฎหมาย โดยเมื่อมีการเลิกสัญญาฉบับนี้ ผู้ให้เช่าซื้อตกลงว่าบรรดาเงินที่ผู้เช่าซื้อได้ชำระมาแล้วแต่ก่อนให้ริบเป็นของผู้ให้เช่าซื้อ และผู้ให้เช่าซื้อมีสิทธิที่จะกลับเข้าครองทรัพย์สินที่เช่าซื้อได้
+                กรณีหากผู้เช่าซื้อผิดนัดไม่ชำระค่าเช่าซื้องวดหนึ่งงวดใด หรือไม่ปฏิบัติตามเงื่อนไขและรายละเอียดที่กำหนดไว้ในสัญญาฉบับนี้ และ/หรือ สัญญาและเอกสารอื่นใดที่เกี่ยวข้องกับทรัพย์สินหลักประกันหรือไม่ปฏิบัติตามข้อกำหนดของผู้ให้เช่าซื้อทั้งหมดหรือแต่เพียงบางส่วน เป็นเหตุให้ผู้ให้เช่าซื้อได้รับความเสียหาย ผู้ให้เช่าซื้อมีสิทธิบอกเลิกสัญญาได้ ภายใต้บทบัญญัติตามกฎหมาย โดยเมื่อมีการเลิกสัญญาฉบับนี้ ผู้ให้เช่าซื้อตกลงว่าบรรดาเงินที่ผู้เช่าซื้อได้ใช้มาแล้วแต่ก่อน ให้ริบเป็นของผู้ให้เช่าซื้อ และผู้ให้เช่าซื้อมีสิทธิที่จะกลับเข้าครองทรัพย์สินที่เช่าซื้อได้
               </div>
             </div>
           </div>
@@ -984,7 +984,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="space-y-4">
             <div className="font-bold">10. การบอกกล่าว</div>
             <div className="indent-8 text-justify">
-              การติดต่อหรือบอกกล่าวซึ่งทำขึ้นโดยคู่สัญญาฝ่ายหนึ่งและส่งไปยังคู่สัญญาอีกฝ่ายหนึ่ง ให้ทำเป็นหนังสือหากมิได้ระบุไว้เป็นอย่างอื่นอาจส่งโดยทางโทรสารหรือส่งทางไปรษณีย์ หรือให้คนนำไปส่งเองก็ดี ให้ส่งไปยังคู่สัญญาทุกฝ่ายตามที่อยู่ที่ได้ระบุไว้ข้างต้นของสัญญาฉบับนี้ และให้ถือว่าหนังสือบอกกล่าวนั้นได้ส่งโดยชอบแล้วเมื่อได้ดำเนินการดังต่อไปนี้
+              การติดต่อหรือบอกกล่าวซึ่งทำขึ้นโดยคู่สัญญาฝ่ายใดฝ่ายหนึ่ง ให้ทำเป็นหนังสือหากมิได้ระบุไว้เป็นอย่างอื่นอาจส่งโดยทางโทรสารหรือส่งทางไปรษณีย์ หรือให้คนนำไปส่งเองก็ดี ให้ส่งไปยังคู่สัญญาทุกฝ่ายตามที่อยู่ที่ได้ระบุไว้ข้างต้นของสัญญาฉบับนี้ และให้ถือว่าหนังสือบอกกล่าวนั้นได้ส่งโดยชอบแล้วเมื่อได้ดำเนินการดังต่อไปนี้
             </div>
 
             <div className="space-y-4 pt-4">
@@ -1006,11 +1006,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               </div>
             </div>
 
-            <div className="indent-8 text-justify mt-6">
-              หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่หากในการส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้ว ในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป
+            <div className="text-justify mt-6">
+              หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่วันที่การส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้ว ในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป
             </div>
 
-            <div className="indent-8 text-justify">
+            <div className="text-justify">
               หากคู่สัญญาฝ่ายหนึ่งฝ่ายใดต้องการเปลี่ยนสถานที่อยู่ คู่สัญญาฝ่ายนั้นต้องแจ้งให้คู่สัญญาอีกฝ่ายทราบล่วงหน้าเป็นลายลักษณ์อักษรไม่น้อยกว่า 5 (ห้า) วันทำการก่อนวันที่ย้ายหรือเปลี่ยนแปลงสถานที่อยู่ ในกรณีเช่นนี้คู่สัญญาฝ่ายที่ได้รับแจ้งการเปลี่ยนแปลงสถานที่อยู่จะส่งคำบอกกล่าวให้แก่คู่สัญญาฝ่ายที่แจ้งเปลี่ยนแปลงสถานที่อยู่ตามรายละเอียดที่ได้รับแจ้งดังกล่าว
             </div>
           </div>
@@ -1025,7 +1025,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="space-y-4">
             <div className="font-bold">11. การโอนสิทธิ และ/หรือ หน้าที่</div>
             <div className="indent-8 text-justify">
-              ผู้ให้เช่าซื้อมีสิทธิอย่างเต็มที่ที่จะจำหน่าย จ่ายโอน สิทธิ และ/หรือ หน้าที่ มอบ จำนำ ก่อภาระผูกพัน นำไปวางประกัน หรือจำหน่ายโดยการอื่น ซึ่งส่วนหนึ่งส่วนใดหรือทั้งหมดของสิทธิ กรรมสิทธิ์ และผลประโยชน์ของผู้ให้เช่าซื้อตามสัญญาฉบับนี้และเอกสารที่เกี่ยวข้องกับหลักประกัน และให้บุคคลผู้รับโอนสิทธิ และ/หรือ หน้าที่สามารถรับไปทั้งสิทธิ และ/หรือ หน้าที่ตามสัญญาฉบับนี้และเอกสาร ทั้งนี้ ผู้ให้เช่าซื้อที่ประสงค์จะโอนสิทธิ และ/หรือ หน้าที่ควรมีหนังสือบอกกล่าวไปยังผู้เช่าซื้อภายใน 30 (สามสิบ) วัน นับแต่วันที่มีการโอนสิทธิ และ/หรือ หน้าที่
+              ผู้ให้เช่าซื้อมีสิทธิอย่างเต็มที่ที่จะจำหน่าย จ่ายโอน สิทธิ และ/หรือ หน้าที่ มอบ จำนำ ก่อภาระผูกพัน นำไปวางประกัน หรือจำหน่ายโดยการอื่น ซึ่งส่วนหนึ่งส่วนใดหรือทั้งหมดของสิทธิ กรรมสิทธิ์ และผลประโยชน์ของผู้ให้เช่าซื้อตามสัญญาฉบับนี้และเอกสารที่เกี่ยวข้องกับหลักประกัน และให้บุคคลผู้รับโอนสิทธิ และ/หรือ หน้าที่สามารถรับไปทั้งสิทธิ และ/หรือ หน้าที่ตามสัญญาฉบับนี้และเอกสาร ทั้งนี้ ผู้ให้เช่าซื้อที่ประสงค์จะโอนสิทธิ และ/หรือ หน้าที่จะมีหนังสือบอกกล่าวไปยังผู้เช่าซื้อภายใน 30 (สามสิบ) วัน นับแต่วันที่มีการโอนสิทธิ และ/หรือ หน้าที่
             </div>
           </div>
 
@@ -1089,7 +1089,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           {/* Left Column: Lessor 1 */}
           <div className="border-r border-black p-4 flex flex-col h-full">
             <div className="space-y-12">
-              <div className="font-bold underline text-left">ผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
+              <div className="font-bold text-left">ผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
               <div className="font-bold text-left">{data.lessor1.name}</div>
 
               <div className="pt-8 space-y-12">
@@ -1102,27 +1102,29 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   </div>
                 ))}
 
-                <div className="pt-4 text-left">
-                  <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                  <div className="mt-2">{data.lessor1.name}</div>
-                </div>
               </div>
             </div>
 
-            <div className="mt-auto pt-8 space-y-4">
-              <div>พยาน:</div>
-              <div className="border-b border-black w-full h-8"></div>
-              <div className="flex justify-between px-4">
-                <span>(</span>
-                <span className="flex-1 border-b border-black mx-4 mb-1"></span>
-                <span>)</span>
+            <div className="mt-auto pt-8 space-y-8">
+              <div className="text-left">
+                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                <div className="mt-2">{data.lessor1.name}</div>
+              </div>
+              <div className="space-y-4">
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between px-4">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                  <span>)</span>
+                </div>
               </div>
             </div>
           </div>
 
           <div className="p-4 flex flex-col h-full">
             <div className="space-y-12">
-              <div className="font-bold underline text-left">ผู้เช่าซื้อ:</div>
+              <div className="font-bold text-left">ผู้เช่าซื้อ:</div>
               <div className="font-bold text-left">
                 <Highlight>{customerInfo.companyName}</Highlight>
               </div>
@@ -1137,22 +1139,24 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   </div>
                 ))}
 
-                <div className="pt-4 text-left">
-                  <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                  <div className="mt-2">
-                    <Highlight>{customerInfo.companyName}</Highlight>
-                  </div>
-                </div>
               </div>
             </div>
 
-            <div className="mt-auto pt-8 space-y-4">
-              <div>พยาน:</div>
-              <div className="border-b border-black w-full h-8"></div>
-              <div className="flex justify-between px-4">
-                <span>(</span>
-                <span className="flex-1 border-b border-black mx-4 mb-1"></span>
-                <span>)</span>
+            <div className="mt-auto pt-8 space-y-8">
+              <div className="text-left">
+                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                <div className="mt-2">
+                  <Highlight>{customerInfo.companyName}</Highlight>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between px-4">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                  <span>)</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1183,20 +1187,22 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   </div>
                 ))}
 
-                <div className="pt-4 text-left">
-                  <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                  <div className="mt-2">{data.lessor2.name}</div>
-                </div>
               </div>
             </div>
 
-            <div className="mt-auto pt-8 space-y-4">
-              <div>พยาน:</div>
-              <div className="border-b border-black w-full h-8"></div>
-              <div className="flex justify-between px-4">
-                <span>(</span>
-                <span className="flex-1 border-b border-black mx-4 mb-1"></span>
-                <span>)</span>
+            <div className="mt-auto pt-8 space-y-8">
+              <div className="text-left">
+                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
+                <div className="mt-2">{data.lessor2.name}</div>
+              </div>
+              <div className="space-y-4">
+                <div>พยาน:</div>
+                <div className="border-b border-black w-full h-8"></div>
+                <div className="flex justify-between px-4">
+                  <span>(</span>
+                  <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                  <span>)</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1254,13 +1260,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-2">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              การส่งมอบเช็ค : ผู้เช่าซื้อตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่าเช่าซื้อให้แก่<span className="underline">ผู้ให้เช่าซื้อ</span> จำนวนทั้งสิ้น <Highlight>{totalCheques} ฉบับ</Highlight> เพื่อเป็นการชำระค่างวดเช่าซื้อ (<Highlight>งวดที่ 1 ถึง งวดที่ {data.installments}</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ {data.chequesPerInstallment} ฉบับ ให้แก่ผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบบัดนี้
+              การส่งมอบเช็ค : ผู้เช่าซื้อตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่าเช่าซื้อให้แก่<span className="underline">ผู้ให้เช่าซื้อ</span> จำนวนทั้งสิ้น <Highlight>{totalCheques} ฉบับ</Highlight> เพื่อเป็นการชำระค่างวดเช่าซื้อ (<Highlight>งวดที่ 1 ถึง งวดที่ {data.installments}</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ {data.chequesPerInstallment} ฉบับ ให้แก่ผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบมานี้
             </div>
           </div>
           <div className="flex gap-2">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
-              รายละเอียดการชำระ : เช็คแต่ละฉบับจะถูกสั่งจ่ายในนามผู้ให้เช่าซื้อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ <span className="underline">"รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ"</span> ตามเอกสารแนบท้ายหมายเลข 2 ของสัญญาเช่าซื้อฉบับนี้
+              รายละเอียดการชำระ : เช็คแต่ละฉบับจะถูกสั่งจ่ายให้ในนามผู้ให้เช่าซื้อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ <span className="underline">"รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ"</span> ตามเอกสารแนบท้ายหมายเลข 2 ของสัญญาเช่าซื้อฉบับนี้
             </div>
           </div>
           <div className="flex gap-2">
@@ -1334,7 +1340,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="text-[12px] font-bold underline text-center">
             รายละเอียดเกี่ยวกับการติดตามทวงถาม และค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดี
           </div>
-          <div className="text-[12px] font-bold underline text-center">
+          <div className="text-[12px] font-bold text-center">
             ประกาศอัตราดอกเบี้ย ค่าปรับ ค่าบริการ ค่าธรรมเนียมใดๆ และค่าใช้จ่ายอันเกิดจากสัญญาตามที่จ่ายไปจริง
           </div>
           <div className="text-[12px] font-bold text-center">
@@ -1351,12 +1357,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </thead>
           <tbody>
             <tr>
-              <td className="border border-black p-1">1.1 กรณีค้างชำระหนี้หนึ่งงวด</td>
-              <td className="border border-black p-1">ไม่เกิน 50 บาท / รอบการทวงถามหนี้</td>
+              <td className="border border-black p-1">1.1 กรณีค้างชำระหนึ่งงวด</td>
+              <td className="border border-black p-1">ไม่เกิน 50 บาท / รอบการทวงหนี้</td>
             </tr>
             <tr>
               <td className="border border-black p-1">1.2 กรณีค้างชำระเกินหนึ่งงวด</td>
-              <td className="border border-black p-1">ไม่เกิน 100 บาท / รอบการทวงถามหนี้</td>
+              <td className="border border-black p-1">ไม่เกิน 100 บาท / รอบการทวงหนี้</td>
             </tr>
             <tr>
               <td className="border border-black p-1">1.3 ลำดับการตัดชำระหนี้</td>
@@ -1404,9 +1410,9 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         </div>
 
         {/* Table 3 */}
-        <table className="w-full border-collapse border border-black text-[12px] text-center mb-4">
+        <table className="w-full border-collapse border border-black text-[12px] mb-4">
           <thead>
-            <tr className="bg-gray-200 print:bg-transparent">
+            <tr className="bg-gray-200 print:bg-transparent text-center">
               <th className="border border-black p-1 text-left"></th>
               <th className="border border-black p-1">งวดที่ 1<br />(ม.ค.)</th>
               <th className="border border-black p-1">งวดที่ 2<br />(ก.พ.)</th>
@@ -1417,40 +1423,43 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </thead>
           <tbody>
             <tr>
-              <td className="border border-black p-1 text-left font-bold">กรณีที่ไม่มีการชำระหนี้เพิ่มเติม</td>
-              <td className="border border-black p-1">50 บาท</td>
-              <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1 font-bold bg-gray-100 print:bg-transparent">350 บาท</td>
+              <td className="border border-black p-1 text-left font-bold">กรณีที่<u>ไม่มี</u>การชำระหนี้เพิ่มเติม</td>
+              <td className="border border-black p-1 text-center">50 บาท</td>
+              <td className="border border-black p-1 text-center">100 บาท</td>
+              <td className="border border-black p-1 text-center">100 บาท</td>
+              <td className="border border-black p-1 text-center">100 บาท</td>
+              <td className="border border-black p-1 text-center font-bold bg-gray-100 print:bg-transparent">350 บาท</td>
             </tr>
             <tr>
-              <td className="border-x border-black p-1 text-left font-bold">กรณีที่มีการชำระหนี้เพิ่มเติม</td>
-              <td className="border-x border-black p-1"></td>
-              <td className="border-x border-black p-1"></td>
-              <td className="border-x border-black p-1"></td>
-              <td className="border-x border-black p-1"></td>
-              <td className="border-x border-black p-1 bg-gray-100 print:bg-transparent"></td>
-            </tr>
-            <tr>
-              <td className="border border-black p-1 text-left pl-4 whitespace-normal leading-tight">
-                - เงินที่ชำระเข้ามาสามารถนำไปตัดชำระค่าธรรมเนียมใน<br />การทวงถามของงวดที่ 1 ได้
+              <td className="border border-black p-1 text-left whitespace-normal leading-tight">
+                <div className="font-bold">กรณีที่<u>มี</u>การชำระหนี้เพิ่มเติม</div>
+                <div className="flex gap-1 pl-4">
+                  <span>-</span>
+                  <div>
+                    เงินที่ชำระเข้ามาสามารถนำไปตัดชำระค่าธรรมเนียมใน<br />การทวงถามของงวดที่ 1 ได้
+                  </div>
+                </div>
               </td>
-              <td className="border border-black p-1 line-through">50 บาท</td>
-              <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1 font-bold bg-gray-100 print:bg-transparent">300 บาท</td>
+              <td className="border border-black p-1 text-center line-through">50 บาท</td>
+              <td className="border border-black p-1 text-center">100 บาท</td>
+              <td className="border border-black p-1 text-center">100 บาท</td>
+              <td className="border border-black p-1 text-center">100 บาท</td>
+              <td className="border border-black p-1 text-center font-bold bg-gray-100 print:bg-transparent">300 บาท</td>
             </tr>
             <tr>
-              <td className="border border-black p-1 text-left pl-4 whitespace-normal leading-tight">
-                - เงินที่ชำระเข้ามาสามารถนำไปตัดชำระค่าธรรมเนียมใน<br />การทวงถามของงวดที่ 1 และ งวดที่ 2 ได้ แต่ยังคงค้างเงิน<br />ต้นงวดที่ 2
+              <td className="border border-black p-1 text-left whitespace-normal leading-tight">
+                <div className="flex gap-1 pl-4">
+                  <span>-</span>
+                  <div>
+                    เงินที่ชำระเข้ามาสามารถนำไปตัดชำระค่าธรรมเนียมใน<br />การทวงถามของงวดที่ 1 และ งวดที่ 2 ได้ แต่ยังคงค้างเงิน<br />ต้นงวดที่ 2
+                  </div>
+                </div>
               </td>
-              <td className="border border-black p-1 line-through">50 บาท</td>
-              <td className="border border-black p-1 line-through">100 บาท</td>
-              <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1 font-bold bg-gray-100 print:bg-transparent">200 บาท</td>
+              <td className="border border-black p-1 text-center line-through">50 บาท</td>
+              <td className="border border-black p-1 text-center line-through">100 บาท</td>
+              <td className="border border-black p-1 text-center">100 บาท</td>
+              <td className="border border-black p-1 text-center">100 บาท</td>
+              <td className="border border-black p-1 text-center font-bold bg-gray-100 print:bg-transparent">200 บาท</td>
             </tr>
           </tbody>
         </table>
