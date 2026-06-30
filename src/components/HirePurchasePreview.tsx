@@ -1472,9 +1472,9 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
 
         {/* Table 4 - Mixed Payment Example */}
-        <table className="w-full border-collapse border border-black text-[12px] text-center mt-12 mb-12">
+        <table className="w-full border-collapse border border-black text-[12px] mt-12 mb-12">
           <thead>
-            <tr className="bg-gray-200 print:bg-transparent">
+            <tr className="bg-gray-200 print:bg-transparent text-center">
               <th className="border border-black p-1 text-left"></th>
               <th className="border border-black p-1">งวดที่ 1<br />(ม.ค.)</th>
               <th className="border border-black p-1">งวดที่ 2<br />(ก.พ.)</th>
@@ -1485,17 +1485,22 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </thead>
           <tbody>
             <tr>
-              <td className="border border-black p-1 text-left pl-2 whitespace-normal leading-tight h-auto py-4">
-                - เงินที่ชำระเข้ามาสามารถนำไปตัดชำระค่าธรรมเนียมใน<br />
-                การทวงถามของงวดที่ 1 และ งวดที่ 2 ได้ และ<br />
-                สามารถนำเงินส่วนที่เหลือไปตัดเงินต้นงวดที่ 1 และ 2<br />
-                ทั้งหมด
+              <td className="border border-black p-1 text-left whitespace-normal leading-tight h-auto py-4">
+                <div className="flex gap-1 pl-4">
+                  <span>-</span>
+                  <div>
+                    เงินที่ชำระเข้ามาสามารถนำไปตัดชำระค่าธรรมเนียมใน<br />
+                    การทวงถามของงวดที่ 1 และ งวดที่ 2 ได้ และ<br />
+                    สามารถนำเงินส่วนที่เหลือไปตัดเงินต้นงวดที่ 1 และ 2<br />
+                    ทั้งหมด
+                  </div>
+                </div>
               </td>
-              <td className="border border-black p-1 line-through">50 บาท</td>
-              <td className="border border-black p-1 line-through">100 บาท</td>
-              <td className="border border-black p-1">50 บาท</td>
-              <td className="border border-black p-1">100 บาท</td>
-              <td className="border border-black p-1 font-bold bg-gray-100 print:bg-transparent">150 บาท</td>
+              <td className="border border-black p-1 text-center line-through">50 บาท</td>
+              <td className="border border-black p-1 text-center line-through">100 บาท</td>
+              <td className="border border-black p-1 text-center">50 บาท</td>
+              <td className="border border-black p-1 text-center">100 บาท</td>
+              <td className="border border-black p-1 text-center font-bold bg-gray-100 print:bg-transparent">150 บาท</td>
             </tr>
           </tbody>
         </table>
