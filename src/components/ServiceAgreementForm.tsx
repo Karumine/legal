@@ -33,7 +33,17 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
   }, [appData.agreements, data.selectedAgreementIds, onChange, data]);
 
   // Reactive Calculation for Fees
-  const proportion2 = appData.jointVentureData?.proportion2 || 0;
+  const getProportion2 = (agreement: any) => {
+    if (!agreement) return 0;
+    if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
+      return parseFloat(agreement.data.lessor2?.proportion) || 0;
+    }
+    if (agreement.type === 'loan' || agreement.type === 'od') {
+      return parseFloat(agreement.data.lender2?.proportion) || 0;
+    }
+    return 0;
+  };
+
   const origRate = parseFloat(data.originationFeeRate) || 0;
   const svcRate = parseFloat(data.serviceFeeRate) || 0;
 
@@ -47,6 +57,7 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
       const agreement = appData.agreements.find(a => a.id === id);
       if (!agreement) return;
 
+      const proportion2 = getProportion2(agreement);
       let principal = 0;
       if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
         principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
@@ -83,6 +94,7 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
       const agreement = appData.agreements.find(a => a.id === id);
       if (!agreement) return;
 
+      const proportion2 = getProportion2(agreement);
       let principal = 0;
       if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
         principal = parseFloat(agreement.data.remainingAmount?.replace(/,/g, '')) || 0;
@@ -184,7 +196,6 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
     data.firstInstallmentDate,
     data.lastInstallmentDate,
     appData.agreements,
-    proportion2,
     onChange
   ]);
 
@@ -243,6 +254,7 @@ export default function ServiceAgreementForm({ data, appData, onChange, onFocusS
           <label className="block text-sm font-medium text-gray-600 mb-2">เลือกสัญญาที่เกี่ยวข้อง และระบุวันชำระงวดแรก</label>
           <div className="space-y-4 border border-gray-200 rounded-lg p-6 bg-gray-50/50 font-sans">
             {appData.agreements.map((agreement) => {
+              const proportion2 = getProportion2(agreement);
               const isSelected = data.selectedAgreementIds.includes(agreement.id);
               return (
                 <div key={agreement.id} className="space-y-2 pb-2 border-b border-gray-200 last:border-0">

@@ -277,7 +277,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <div className="mb-6">
           <div className="font-bold mb-2">1. การถือกรรมสิทธิ์รวม</div>
           <div className="indent-10 mb-4">
-            ผู้ให้เช่าซื้อตกลงให้ถือกรรมสิทธิ์ในทรัพย์สินที่เช่าซื้อตามที่กำหนดไว้ในข้อ 2.1 ของสัญญาฉบับนี้ เป็นไปตามสัดส่วนดังต่อไปนี้:
+            ผู้ให้เช่าซื้อตกลงให้กรรมสิทธิ์ในทรัพย์สินที่เช่าซื้อตามที่กำหนดไว้ในข้อ 2.1 ของสัญญาฉบับนี้ เป็นไปตามสัดส่วนดังต่อไปนี้:
           </div>
           <table className="w-[80%] mx-auto border-collapse border border-black text-center text-[12px] mb-6">
             <thead>
@@ -322,8 +322,8 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 </div>
               </div>
             ))}
+            {(!data.assets || data.assets.length <= firstPageMax) && renderTotalSummary()}
           </div>
-          {(!data.assets || data.assets.length <= firstPageMax) && renderTotalSummary()}
         </div>
 
         {renderPageFooter(2)}
@@ -353,8 +353,8 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                   </div>
                 );
               })}
+              {pageIndex === overflowPagesCount - 1 && integratedAssetsCount === 0 && renderTotalSummary()}
             </div>
-            {pageIndex === overflowPagesCount - 1 && integratedAssetsCount === 0 && renderTotalSummary()}
             {renderPageFooter(currentPageNum)}
           </div>
         );
@@ -384,7 +384,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         )}
 
         <div className="mt-8 space-y-6">
-          <div>
+          <div className="pl-12">
             ซึ่งเครื่องจักรและอุปกรณ์ประกอบในข้อ 2.1 ต่อไปนี้จะเรียกรวมว่า (<b>“ทรัพย์สินที่เช่าซื้อ”</b>) และผู้ให้เช่าซื้อตกลงให้เช่าซื้อทรัพย์สินที่เช่าซื้อตามสัดส่วนกรรมสิทธิ์รวมที่กำหนดไว้ในข้อ 1. ของสัญญาฉบับนี้
           </div>
 

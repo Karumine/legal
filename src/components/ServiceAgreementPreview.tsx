@@ -13,6 +13,17 @@ interface Props {
 
 
 export default function ServiceAgreementPreview({ data, appData }: Props) {
+  const getProportion2 = (agreement: any) => {
+    if (!agreement) return 0;
+    if (agreement.type === 'hirePurchase' || agreement.type === 'hirePurchaseBack') {
+      return parseFloat(agreement.data.lessor2?.proportion) || 0;
+    }
+    if (agreement.type === 'loan' || agreement.type === 'od') {
+      return parseFloat(agreement.data.lender2?.proportion) || 0;
+    }
+    return 0;
+  };
+
   // Strip leading "เลขที่" from address data to prevent duplication
   // since the template text already includes the prefix
   const stripAddressPrefix = (addr: string) =>
@@ -99,7 +110,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     } else if (agreement.type === 'loan' || agreement.type === 'od') {
       principal = (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
     }
-    const proportion2 = appData.jointVentureData?.proportion2 || 0;
+    const proportion2 = getProportion2(agreement);
     const svcRate = parseFloat(data.serviceFeeRate) || 0;
 
     const exactTotal = principal * (proportion2 / 100) * (svcRate / 100) * (periods / 12);
@@ -194,7 +205,7 @@ export default function ServiceAgreementPreview({ data, appData }: Props) {
     } else if (agreement.type === 'loan' || agreement.type === 'od') {
       principal = (parseFloat(agreement.data.loanAmount?.replace(/,/g, '')) || 0) * 1.07;
     }
-    const proportion2 = appData.jointVentureData?.proportion2 || 0;
+    const proportion2 = getProportion2(agreement);
     const origRate = parseFloat(data.originationFeeRate) || 0;
 
     const exactTotal = principal * (proportion2 / 100) * (origRate / 100);
