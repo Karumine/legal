@@ -190,20 +190,21 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
         </div>
 
-        <div className="indent-10 mb-6">
-          สัญญาเช่าซื้อ <b>(“สัญญา”)</b> ฉบับนี้ ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง:
+        <div className="mb-6 space-y-4">
+          <div>สัญญาเช่าซื้อ <b>(“สัญญา”)</b> ฉบับนี้ ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight></div>
+          <div>โดยและระหว่าง:</div>
         </div>
 
         <div className="space-y-4 mb-6">
           {isAgileOnly ? (
             <>
-              <div className="flex gap-2 text-justify">
+              <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-8">1.</span>
                 <div className="flex-1">
                   <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่าซื้อ”</b>)
                 </div>
               </div>
-              <div className="flex gap-2 text-justify">
+              <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-8">2.</span>
                 <div className="flex-1">
                   <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
@@ -212,25 +213,25 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </>
           ) : (
             <>
-              <div className="flex gap-2 text-justify">
+              <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-8">1.</span>
                 <div className="flex-1">
                   <span className="font-bold"><Highlight>{data.lessor1.name}</Highlight></span> (โดย<Highlight>{data.lessor1Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor1.address, data.lessor1.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor1.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 1”</b>)
                 </div>
               </div>
-              <div className="flex gap-2 text-justify">
+              <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-8">2.</span>
                 <div className="flex-1">
                   <span className="font-bold"><Highlight>{data.lessor2.name}</Highlight></span> (โดย<Highlight>{data.lessor2Signatories}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.lessor2.address, data.lessor2.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.lessor2.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้ให้เช่าซื้อฝ่ายที่ 2”</b>)
                 </div>
               </div>
-              <div className="flex gap-2 text-justify">
+              <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-8"></span>
                 <div className="flex-1">
                   (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
                 </div>
               </div>
-              <div className="flex gap-2 text-justify">
+              <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-8">3.</span>
                 <div className="flex-1">
                   <span className="font-bold"><Highlight>{customerInfo.companyName}</Highlight></span> (โดย<Highlight>{customerInfo.directors || data.lesseeSignatories}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้เช่าซื้อ”</b>)
@@ -240,13 +241,16 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           )}
         </div>
 
-        <div className="font-bold mb-4">โดยที่</div>
+        <div className="flex gap-4 mb-4">
+          <span className="w-8 shrink-0"></span>
+          <div className="flex-1 font-bold">โดยที่</div>
+        </div>
         <div className="space-y-3 mb-6">
-          <div className="flex gap-2 text-justify">
+          <div className="flex gap-4 text-justify">
             <span className="w-8 shrink-0 whitespace-nowrap">ก.</span>
             <div className="flex-1">ผู้เช่าซื้อมีความประสงค์จะเช่าซื้อทรัพย์สินจากผู้ให้เช่าซื้อ</div>
           </div>
-          <div className="flex gap-2 text-justify">
+          <div className="flex gap-4 text-justify">
             <span className="w-8 shrink-0 whitespace-nowrap">ข.</span>
             <div className="flex-1">ผู้ให้เช่าซื้อตกลงจะให้เช่าซื้อทรัพย์สินแก่ผู้เช่าซื้อตามเงื่อนไขและข้อกำหนดที่ระบุไว้ในสัญญาฉบับนี้</div>
           </div>
@@ -261,57 +265,70 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
         {!isAgileOnly && (
           <div className="space-y-4 mb-6 mt-4">
-            <div className="flex gap-2 text-justify">
+            <div className="flex gap-4 text-justify">
               <span className="w-8 shrink-0 whitespace-nowrap">ค.</span>
               <div className="flex-1">ผู้ให้เช่าซื้อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้เช่าซื้อในการติดต่อประสานงานกับผู้เช่าซื้อเพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ (<b>“ตัวแทนเช่าซื้อ”</b>)</div>
             </div>
-            <div className="flex gap-2 text-justify">
+            <div className="flex gap-4 text-justify">
               <span className="w-8 shrink-0 whitespace-nowrap">ง.</span>
               <div className="flex-1">ผู้เช่าซื้อและผู้ให้เช่าซื้อฝ่ายที่ 2 ตกลงจะให้ผู้ให้เช่าซื้อฝ่ายที่ 1 ทำหน้าที่เป็นตัวแทนเช่าซื้อ</div>
             </div>
           </div>
         )}
 
-        <div className={`font-bold mb-6 ${isAgileOnly ? 'mt-4' : ''}`}>คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จึงตกลงทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้</div>
-
-        <div className="mb-6">
-          <div className="font-bold mb-2">1. การถือกรรมสิทธิ์รวม</div>
-          <div className="indent-10 mb-4">
-            ผู้ให้เช่าซื้อตกลงให้กรรมสิทธิ์ในทรัพย์สินที่เช่าซื้อตามที่กำหนดไว้ในข้อ 2.1 ของสัญญาฉบับนี้ เป็นไปตามสัดส่วนดังต่อไปนี้:
-          </div>
-          <table className="w-[80%] mx-auto border-collapse border border-black text-center text-[12px] mb-6">
-            <thead>
-              <tr>
-                <th className="border border-black p-2">ผู้ให้เช่าซื้อ</th>
-                <th className="border border-black p-2">สัดส่วนกรรมสิทธิ์รวม (ร้อยละ)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-black p-2">{isAgileOnly ? 'ผู้ให้เช่าซื้อ' : 'ผู้ให้เช่าซื้อฝ่ายที่ 1'}</td>
-                <td className="border border-black p-2 font-bold">
-                  <Highlight>{data.lessor1.proportion}</Highlight> ({thaiNumberText(data.lessor1.proportion)})
-                </td>
-              </tr>
-              {!isAgileOnly && (
-                <tr>
-                  <td className="border border-black p-2">ผู้ให้เช่าซื้อฝ่ายที่ 2</td>
-                  <td className="border border-black p-2 font-bold">
-                    <Highlight>{data.lessor2.proportion}</Highlight> ({thaiNumberText(data.lessor2.proportion)})
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        <div className={`flex gap-4 mb-6 ${isAgileOnly ? 'mt-4' : ''}`}>
+          <span className="w-8 shrink-0"></span>
+          <div className="flex-1 font-bold">คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จึงตกลงทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้</div>
         </div>
 
         <div className="mb-6">
-          <div className="font-bold mb-2">2. รายละเอียดของทรัพย์สินที่เช่าซื้อ</div>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">1.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">การถือกรรมสิทธิ์รวม</div>
+              <div className="text-justify">
+                ผู้ให้เช่าซื้อตกลงให้กรรมสิทธิ์ในทรัพย์สินที่เช่าซื้อตามที่กำหนดไว้ในข้อ 2.1 ของสัญญาฉบับนี้ เป็นไปตามสัดส่วนดังต่อไปนี้:
+              </div>
+              <table className="w-[80%] mx-auto border-collapse border border-black text-center text-[12px] mb-6">
+                <thead>
+                  <tr>
+                    <th className="border border-black p-2">ผู้ให้เช่าซื้อ</th>
+                    <th className="border border-black p-2">สัดส่วนกรรมสิทธิ์รวม (ร้อยละ)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-black p-2">{isAgileOnly ? 'ผู้ให้เช่าซื้อ' : 'ผู้ให้เช่าซื้อฝ่ายที่ 1'}</td>
+                    <td className="border border-black p-2 font-bold">
+                      <Highlight>{data.lessor1.proportion}</Highlight> ({thaiNumberText(data.lessor1.proportion)})
+                    </td>
+                  </tr>
+                  {!isAgileOnly && (
+                    <tr>
+                      <td className="border border-black p-2">ผู้ให้เช่าซื้อฝ่ายที่ 2</td>
+                      <td className="border border-black p-2 font-bold">
+                        <Highlight>{data.lessor2.proportion}</Highlight> ({thaiNumberText(data.lessor2.proportion)})
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-6">
           <div className="flex gap-4 mb-2">
-            <span className="w-5 shrink-0">2.1</span>
+            <span className="w-8 shrink-0 font-bold">2.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">รายละเอียดของทรัพย์สินที่เช่าซื้อ</div>
+            </div>
+          </div>
+          <div className="flex gap-4 mb-2">
+            <span className="w-8 shrink-0">2.1</span>
             <div className="flex-1">ผู้ให้เช่าซื้อตกลงให้เช่าซื้อ และผู้เช่าซื้อตกลงเช่าซื้อเครื่องจักรและอุปกรณ์ประกอบ ดังต่อไปนี้</div>
           </div>
-          <div className="space-y-2 pl-10">
+          <div className="space-y-2 pl-12">
             {data.assets?.slice(0, firstPageMax).map((asset, idx) => (
               <div key={idx} className="flex gap-2 text-justify">
                 <span className="w-12 shrink-0 whitespace-nowrap">(2.1.{idx + 1})</span>
@@ -391,7 +408,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-4" data-section-id="hp-purpose">
             <span className="w-8 shrink-0">2.2</span>
             <div className="flex-1">
-              ผู้เช่าซื้อตกลงเช่าซื้อทรัพย์สินไปเพื่อใช้ในการประกอบกิจการเกี่ยวกับ <Highlight>{data.businessPurpose}</Highlight> เท่านั้น ณ <Highlight>{data.installationLocation}</Highlight> <b>(“สถานที่ตั้ง”)</b> แต่หากภายหลังจากที่เข้าทำสัญญาฉบับนี้ ในกรณีที่ผู้เช่าซื้อจำเป็นต้องทำการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อจากสถานที่ตั้งเดิมที่เคยแจ้งไว้ตามสัญญาฉบับนี้ ผู้เช่าซื้อจะต้องได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อก่อนการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อออกจากสถานที่ตั้งเดิม
+              ผู้เช่าซื้อตกลงเช่าซื้อทรัพย์สินไปเพื่อใช้ในการประกอบกิจการเกี่ยวกับ <Highlight>{data.businessPurpose}</Highlight> เท่านั้น ณ สำนักงานใหญ่<Highlight>{data.installationLocation}</Highlight> <b>(“สถานที่ตั้ง”)</b> แต่หากภายหลังจากที่เข้าทำสัญญาฉบับนี้ ในกรณีที่ผู้เช่าซื้อจำเป็นต้องทำการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อจากสถานที่ตั้งเดิมที่เคยแจ้งไว้ตามสัญญาฉบับนี้ ผู้เช่าซื้อจะต้องได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อก่อนการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อออกจากสถานที่ตั้งเดิม
             </div>
           </div>
 
@@ -403,7 +420,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="pt-4">
-            <div className="font-bold mb-4">3. ค่าเช่าซื้อ การชำระค่าเช่าซื้อ และค่าใช้จ่ายอื่น ๆ</div>
+            <div className="flex gap-4 mb-4">
+              <span className="w-8 shrink-0 font-bold">3.</span>
+              <div className="flex-1 space-y-4">
+                <div className="font-bold">ค่าเช่าซื้อ การชำระค่าเช่าซื้อ และค่าใช้จ่ายอื่น ๆ</div>
+              </div>
+            </div>
             <div className="flex gap-4">
               <span className="w-8 shrink-0">3.1</span>
               <div className="flex-1">
@@ -511,7 +533,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
-          <div className="font-bold mb-4">4. วิธีการชำระเงิน</div>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">4.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">วิธีการชำระเงิน</div>
+            </div>
+          </div>
 
           <div className="flex gap-4">
             <span className="w-8 shrink-0">4.1</span>
@@ -553,7 +580,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-6">
-          <div className="font-bold mb-4">5. หน้าที่และความรับผิดชอบของผู้เช่าซื้อ</div>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">5.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">หน้าที่และความรับผิดชอบของผู้เช่าซื้อ</div>
+            </div>
+          </div>
 
           <div className="flex gap-4">
             <span className="w-8 shrink-0">5.1</span>
@@ -631,7 +663,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <div className="flex-1 space-y-2">
               <div className="underline">การให้ความยินยอมเปิดเผยข้อมูล</div>
               <div>
-                ผู้เช่าซื้อตกลงให้ความยินยอมเปิดเผยข้อมูลโดยชอบด้วยกฎหมายแก่ตัวแทนเช่าซื้อ ผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งโดยชอบจากตัวแทนเช่าซื้อหรือผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินที่เช่าซื้อ หรือ ตัวแทนจำหน่าย ในการเข้าถึง รวบรวม ตรวจสอบ และบันทึกข้อมูลดังต่อไปนี้ตลอดอายุสัญญาเช่าซื้อฉบับนี้
+                ผู้เช่าซื้อตกลงให้ความยินยอมเปิดเผยข้อมูลโดยชอบด้วยกฎหมายแก่ตัวแทนผู้ให้เช่าซื้อ ผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งโดยชอบจากตัวแทนผู้ให้เช่าซื้อหรือผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินที่เช่าซื้อ หรือ ตัวแทนจำหน่าย ในการเข้าถึง รวบรวม ตรวจสอบ และบันทึกข้อมูลดังต่อไปนี้ตลอดอายุสัญญาเช่าซื้อฉบับนี้
               </div>
             </div>
           </div>
@@ -649,7 +681,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <div className="space-y-1">
                 <div className="flex gap-4">
                   <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
-                  <div className="flex-1">ข้อมูลการผลิต : ปริมาณการผลิต ชั่วโมงการทำงานของเครื่องจักร แผนการบำรุงรักษาเครื่องจักรประจำวัน และ/หรือ ประจำเดือน และ/หรือ นำส่งรูปถ่ายเครื่องจักร และ/หรือ วิธีโอกาสการทำงานของเครื่องจักร</div>
+                  <div className="flex-1">ข้อมูลการผลิต : ปริมาณการผลิต ชั่วโมงการทำงานของเครื่องจักร แผนการบำรุงรักษาเครื่องจักรประจำวัน และ/หรือ ประจำเดือน และ/หรือ นำส่งรูปถ่ายเครื่องจักร และ/หรือ วิดีโอการทำงานของเครื่องจักร</div>
                 </div>
                 <div className="flex gap-4">
                   <span className="w-8 shrink-0 whitespace-nowrap">(ข)</span>
@@ -657,20 +689,20 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 </div>
               </div>
               <div>
-                ทั้งนี้ ผู้เช่าซื้อยินยอมจัดส่งข้อมูลตามข้อ 5.4 ให้แก่ผู้ให้เช่าซื้อ และ/หรือ ตัวแทน โดยวิธีการดังต่อไปนี้
+                ทั้งนี้ ผู้เช่าซื้อยินยอมจัดส่งข้อมูลตามข้อ 5.4 ให้แก่ผู้ให้เช่าซื้อ และ/หรือ ตัวแทนผู้ให้เช่าซื้อ โดยวิธีการดังต่อไปนี้
               </div>
               <div className="space-y-1">
                 <div className="flex gap-4">
                   <span className="w-8 shrink-0 whitespace-nowrap">5.4.1.</span>
-                  <div className="flex-1">จัดส่งรายงานสรุปยอดขายและยอดการผลิตเป็นไฟล์รูปภาพ และ/หรือ ตามที่ตัวแทนเช่าซื้อร้องขอ</div>
+                  <div className="flex-1">จัดส่งรายงานสรุปยอดขายและยอดการผลิตเป็นไตรมาส และ/หรือ ตามที่ตัวแทนผู้ให้เช่าซื้อร้องขอ</div>
                 </div>
                 <div className="flex gap-4">
                   <span className="w-8 shrink-0 whitespace-nowrap">5.4.2.</span>
-                  <div className="flex-1">ผู้เช่าซื้อยินยอมให้ผู้ให้เช่าซื้อหรือตัวแทนเช่าซื้อเชื่อมต่อระบบดึงข้อมูลอัตโนมัติ (API หรือระบบ Cloud ของเครื่องจักร) หากมี</div>
+                  <div className="flex-1">ผู้เช่าซื้อยินยอมให้ผู้ให้เช่าซื้อหรือตัวแทนผู้ให้เช่าซื้อเชื่อมต่อระบบดึงข้อมูลอัตโนมัติ (API หรือระบบ Cloud ของเครื่องจักร) หากมี</div>
                 </div>
                 <div className="flex gap-4">
                   <span className="w-8 shrink-0 whitespace-nowrap">5.4.3.</span>
-                  <div className="flex-1">ผู้เช่าซื้อยินยอม/ให้ตัวแทนเช่าซื้อ ผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้ง โดยชอบจากตัวแทนเช่าซื้อหรือผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินที่เช่าซื้อ หรือ ตัวแทนจำหน่ายเข้าตรวจเยี่ยมสถานที่ตั้งของทรัพย์สินเพื่อตรวจสอบข้อมูลการผลิตจริง โดยจะแจ้งล่วงหน้าไม่น้อยกว่า 3 วันทำการ</div>
+                  <div className="flex-1">ผู้เช่าซื้อยินยอมให้ตัวแทนผู้ให้เช่าซื้อ ผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้ง โดยชอบจากตัวแทนผู้ให้เช่าซื้อหรือผู้ให้เช่าซื้อ หรือผู้เชี่ยวชาญที่ได้รับการแต่งตั้งจากผู้ผลิตทรัพย์สินที่เช่าซื้อ หรือ ตัวแทนจำหน่ายเข้าตรวจเยี่ยมสถานที่ตั้งของทรัพย์สินเพื่อตรวจสอบข้อมูลการผลิตจริง โดยจะแจ้งล่วงหน้าไม่น้อยกว่า 3 วันทำการ</div>
                 </div>
               </div>
             </div>
@@ -703,9 +735,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
           </div>
 
-          <div className="flex gap-4 font-bold">
-            <span className="">6.</span>
-            <span className="">หลักประกัน</span>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">6.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">หลักประกัน</div>
+            </div>
           </div>
 
           <div className="flex gap-4">
@@ -925,7 +959,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-4">
             <span className="w-8 shrink-0">6.11</span>
             <div className="flex-1">
-              ในกรณีที่ผู้เช่าซื้อมีการนำทรัพย์สินหลักประกันมาเป็นหลักประกันให้แก่ผู้ให้เช่าซื้อ ถ้าผู้ให้เช่าซื้อบังคับหลักประกันไม่ว่าจะด้วยวิธีการขายทอดตลาดแล้ว ได้เงินสุทธิไม่พอชำระหนี้ หรือเอาทรัพย์สินหลักประกันหลุดเป็นสิทธิและราคาทรัพย์สินหลักประกันนั้นต่ำกว่าจำนวนหนี้อยู่เท่าใด ผู้เช่าซื้อยอมรับชำระหนี้ที่ขาดจำนวนนั้นจากทรัพย์สินอื่นของผู้เช่าซื้อให้แก่ผู้ให้เช่าซื้อตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ จนครบถ้วน
+              ในกรณีผู้เช่าซื้อมีการนำทรัพย์สินหลักประกันมาเป็นหลักประกันให้แก่ผู้ให้เช่าซื้อ ถ้าผู้ให้เช่าซื้อบังคับหลักประกันไม่ว่าจะด้วยวิธีการขายทอดตลาดแล้ว ได้เงินสุทธิไม่พอชำระหนี้ หรือเอาทรัพย์สินหลักประกันหลุดเป็นสิทธิและราคาทรัพย์สินหลักประกันนั้นต่ำกว่าจำนวนหนี้อยู่เท่าใด ผู้เช่าซื้อยอมชำระหนี้ที่ขาดจำนวนนั้นจากทรัพย์สินอื่นของผู้เช่าซื้อให้แก่ผู้ให้เช่าซื้อตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ จนครบถ้วน
             </div>
           </div>
 
@@ -943,27 +977,37 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-8">
-          <div className="space-y-4">
-            <div className="font-bold">7. การโอนกรรมสิทธิ์ให้แก่ผู้เช่าซื้อ</div>
-            <div className="indent-8 text-justify">
-              เมื่อผู้เช่าซื้อได้ชำระเงินค่าเช่าซื้อ และค่าใช้จ่ายอื่นๆ ที่ผู้ให้เช่าซื้อเรียกเก็บได้ตามสัญญานี้จนครบถ้วน ผู้ให้เช่าซื้อตกลงให้กรรมสิทธิ์ในทรัพย์สินที่เช่าซื้อเป็นของผู้เช่าซื้อทันที โดยผู้เช่าซื้อตกลงชำระค่าธรรมเนียมการโอน ทะเบียนทรัพย์สินที่เช่าซื้อให้แก่หน่วยงานราชการที่เกี่ยวข้อง (ถ้ามี) ภาษีมูลค่าเพิ่ม และภาษีอากรที่เกี่ยวข้อง
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="font-bold">8. การผิดนัดชำระหนี้</div>
-            <div className="indent-8 text-justify">
-              หากผู้เช่าซื้อผิดนัดชำระหนี้ตามสัญญาฉบับนี้ <b>ผู้เช่าซื้อยินยอมและตกลงชำระค่าปรับกรณีผิดนัดชำระเงินใดๆ ตามสัญญาฉบับนี้ ในอัตราร้อยละ 18 (สิบแปด) ต่อปี</b> บนจำนวนต้นเงินงวดที่ผิดนัดชำระ นับแต่วันที่ครบกำหนดชำระหนี้นั้น ๆ เป็นต้นไปจนถึงวันที่ผู้เช่าซื้อได้ชำระหนี้ค้างชำระจนครบถ้วน ทั้งนี้ อัตราดอกเบี้ยผิดนัดชำระหนี้ผู้เช่าซื้อตกลงยินยอมชำระอัตราดอกเบี้ยผิดนัดดังกล่าวตามที่ผู้ให้เช่าซื้อกำหนด และไม่ว่าอัตราดอกเบี้ยผิดนัดนั้นจะเพิ่มขึ้นหรือลดลง ผู้ให้เช่าซื้อทั้งสองฝ่ายไม่ต้องบอกกล่าวผู้เช่าซื้อล่วงหน้า และมิต้องได้รับความยินยอมจากผู้เช่าซื้อก่อน โดยคู่สัญญาทั้งสามฝ่ายถือปฏิบัติเช่นนี้ตลอดไป จนกว่าผู้เช่าซื้อจะชำระค่างวดเช่าซื้อแก่ผู้ให้เช่าซื้อจนครบถ้วน
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="font-bold">9. การบอกเลิกสัญญา</div>
-            <div className="flex gap-4">
-              <span className="w-8 shrink-0">9.1.</span>
-              <div className="flex-1 text-justify">
-                กรณีหากผู้เช่าซื้อผิดนัดไม่ชำระค่าเช่าซื้องวดหนึ่งงวดใด หรือไม่ปฏิบัติตามเงื่อนไขและรายละเอียดที่กำหนดไว้ในสัญญาฉบับนี้ และ/หรือ สัญญาและเอกสารอื่นใดที่เกี่ยวข้องกับทรัพย์สินหลักประกันหรือไม่ปฏิบัติตามข้อกำหนดของผู้ให้เช่าซื้อทั้งหมดหรือแต่เพียงบางส่วน เป็นเหตุให้ผู้ให้เช่าซื้อได้รับความเสียหาย ผู้ให้เช่าซื้อมีสิทธิบอกเลิกสัญญาได้ ภายใต้บทบัญญัติตามกฎหมาย โดยเมื่อมีการเลิกสัญญาฉบับนี้ ผู้ให้เช่าซื้อตกลงว่าบรรดาเงินที่ผู้เช่าซื้อได้ใช้มาแล้วแต่ก่อน ให้ริบเป็นของผู้ให้เช่าซื้อ และผู้ให้เช่าซื้อมีสิทธิที่จะกลับเข้าครองทรัพย์สินที่เช่าซื้อได้
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">7.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">การโอนกรรมสิทธิ์ให้แก่ผู้เช่าซื้อ</div>
+              <div className="text-justify">
+                เมื่อผู้เช่าซื้อได้ชำระเงินค่าเช่าซื้อ และค่าใช้จ่ายอื่นๆ ที่ผู้ให้เช่าซื้อเรียกเก็บได้ตามสัญญานี้จนครบถ้วน ผู้ให้เช่าซื้อตกลงให้กรรมสิทธิ์ในทรัพย์สินที่เช่าซื้อเป็นของผู้เช่าซื้อทันที โดยผู้เช่าซื้อตกลงชำระค่าธรรมเนียมการโอน ทะเบียนทรัพย์สินที่เช่าซื้อให้แก่หน่วยงานราชการที่เกี่ยวข้อง (ถ้ามี) ภาษีมูลค่าเพิ่ม และภาษีอากรที่เกี่ยวข้อง
               </div>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">8.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">การผิดนัดชำระหนี้</div>
+              <div className="text-justify">
+                หากผู้เช่าซื้อผิดนัดชำระหนี้ตามสัญญาฉบับนี้ <b>ผู้เช่าซื้อยินยอมตกลงชำระค่าปรับกรณีผิดนัดชำระเงินใดๆ ตามสัญญาฉบับนี้ ในอัตราร้อยละ 18 (สิบแปด) ต่อปี</b> บนจำนวนต้นเงินงวดที่ผิดนัดชำระ นับแต่วันที่ครบกำหนดชำระหนี้นั้น ๆ เป็นต้นไปจนถึงวันที่ผู้เช่าซื้อได้ชำระหนี้ค้างชำระจนครบถ้วน ทั้งนี้ อัตราดอกเบี้ยผิดนัดชำระหนี้ผู้เช่าซื้อตกลงยินยอมชำระอัตราดอกเบี้ยผิดนัดดังกล่าวตามที่ผู้ให้เช่าซื้อกำหนด และไม่ว่าอัตราดอกเบี้ยผิดนัดนั้นจะเพิ่มขึ้นหรือลดลง ผู้ให้เช่าซื้อทั้งสองฝ่ายไม่ต้องบอกกล่าวผู้เช่าซื้อล่วงหน้า และมิต้องได้รับความยินยอมจากผู้เช่าซื้อก่อน โดยคู่สัญญาทั้งสามฝ่ายถือปฏิบัติเช่นนี้ตลอดไป จนกว่าผู้เช่าซื้อจะชำระค่างวดเช่าซื้อแก่ผู้ให้เช่าซื้อจนครบถ้วน
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">9.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">การบอกเลิกสัญญา</div>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0">9.1.</span>
+            <div className="flex-1 text-justify">
+              กรณีหากผู้เช่าซื้อผิดนัดไม่ชำระค่าเช่าซื้องวดหนึ่งงวดใด หรือไม่ปฏิบัติตามเงื่อนไขและรายละเอียดที่กำหนดไว้ในสัญญาฉบับนี้ และ/หรือ สัญญาและเอกสารอื่นใดที่เกี่ยวข้องกับทรัพย์สินหลักประกันหรือไม่ปฏิบัติตามข้อกำหนดของผู้ให้เช่าซื้อทั้งหมดหรือแต่เพียงบางส่วน เป็นเหตุให้ผู้ให้เช่าซื้อได้รับความเสียหาย ผู้ให้เช่าซื้อมีสิทธิบอกเลิกสัญญาได้ ภายใต้บทบัญญัติตามกฎหมาย โดยเมื่อมีการเลิกสัญญาฉบับนี้ ผู้ให้เช่าซื้อตกลงว่าบรรดาเงินที่ผู้เช่าซื้อได้ใช้มาแล้วแต่ก่อน ให้ริบเป็นของผู้ให้เช่าซื้อ และผู้ให้เช่าซื้อมีสิทธิที่จะกลับเข้าครองทรัพย์สินที่เช่าซื้อได้
             </div>
           </div>
         </div>
@@ -977,41 +1021,44 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-4">
             <span className="w-8 shrink-0">9.2.</span>
             <div className="flex-1 text-justify">
-              ผู้ให้เช่าซื้อทั้งสองฝ่ายมีสิทธิได้รับชดใช้บรรดาค่าใช้จ่าย ค่าฤชาธรรมเนียม หรือค่าธรรมเนียมทั้งปวงที่เกี่ยวข้องกับการดำเนินการทางกฎหมาย การทวงถาม การค้นหา ติดตามตัวผู้เช่าซื้อ หรือทรัพย์สิน และการติดตามเอาทรัพย์สินคืนมาจากการครอบครองของผู้เช่าซื้อ หรือบุคคล ห้างร้าน หรือบริษัทอื่นใด
+              ผู้ให้เช่าซื้อทั้งสองฝ่ายมีสิทธิได้รับชดใช้บรรดาค่าใช้จ่าย ค่าฤชาธรรมเนียม หรือค่าธรรมเนียมทั้งปวงที่เกี่ยวเนื่องกับการดำเนินการทางกฎหมาย การทวงถาม การค้นหา ติดตามตัวผู้เช่าซื้อ หรือทรัพย์สิน และการติดตามเอาทรัพย์สินคืนมาจากการครอบครองของผู้เช่าซื้อ หรือบุคคล ห้างร้าน หรือบริษัทอื่นใด
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="font-bold">10. การบอกกล่าว</div>
-            <div className="indent-8 text-justify">
-              การติดต่อหรือบอกกล่าวซึ่งทำขึ้นโดยคู่สัญญาฝ่ายใดฝ่ายหนึ่ง ให้ทำเป็นหนังสือหากมิได้ระบุไว้เป็นอย่างอื่นอาจส่งโดยทางโทรสารหรือส่งทางไปรษณีย์ หรือให้คนนำไปส่งเองก็ดี ให้ส่งไปยังคู่สัญญาทุกฝ่ายตามที่อยู่ที่ได้ระบุไว้ข้างต้นของสัญญาฉบับนี้ และให้ถือว่าหนังสือบอกกล่าวนั้นได้ส่งโดยชอบแล้วเมื่อได้ดำเนินการดังต่อไปนี้
-            </div>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">10.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">การบอกกล่าว</div>
+              <div className="text-justify">
+                การติดต่อหรือบอกกล่าวซึ่งทำขึ้นโดยคู่สัญญาฝ่ายใดฝ่ายหนึ่ง ให้ทำเป็นหนังสือหากมิได้ระบุไว้เป็นอย่างอื่นอาจส่งโดยทางโทรสารหรือส่งทางไปรษณีย์ หรือให้คนนำไปส่งเองก็ดี ให้ส่งไปยังคู่สัญญาทุกฝ่ายตามที่อยู่ที่ได้ระบุไว้ข้างต้นของสัญญาฉบับนี้ และให้ถือว่าหนังสือบอกกล่าวนั้นได้ส่งโดยชอบแล้วเมื่อได้ดำเนินการดังต่อไปนี้
+              </div>
 
-            <div className="space-y-4 pt-4">
-              <div className="flex gap-4">
-                <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
-                <div className="flex-1">ในกรณีที่ส่งโดยบุคคล (By Hand) ให้มีผลเมื่อได้จัดส่งหนังสือบอกกล่าว</div>
+              <div className="space-y-4 pt-4">
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
+                  <div className="flex-1">ในกรณีที่ส่งโดยบุคคล (By Hand) ให้มีผลเมื่อได้จัดส่งหนังสือบอกกล่าว</div>
+                </div>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0 whitespace-nowrap">(ข)</span>
+                  <div className="flex-1">ในกรณีที่ส่งทางไปรษณีย์ลงทะเบียน ให้มีผลภายในวันที่กำหนดในใบตอบรับทางไปรษณีย์หรือใบรับที่เป็นลายลักษณ์อักษรอื่น</div>
+                </div>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0 whitespace-nowrap">(ค)</span>
+                  <div className="flex-1">ในกรณีที่ส่งทางโทรสาร ให้มีผลเมื่อครบกำหนด 1 (หนึ่ง) วัน นับแต่วันที่ส่งหนังสือบอกกล่าว</div>
+                </div>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0 whitespace-nowrap">(ง)</span>
+                  <div className="flex-1">ในกรณีที่ส่งทางอิเล็กทรอนิกส์ ให้มีผลในวันถัดไป</div>
+                </div>
               </div>
-              <div className="flex gap-4">
-                <span className="w-8 shrink-0 whitespace-nowrap">(ข)</span>
-                <div className="flex-1">ในกรณีที่ส่งทางไปรษณีย์ลงทะเบียน ให้มีผลภายในวันที่กำหนดในใบตอบรับทางไปรษณีย์หรือใบรับที่เป็นลายลักษณ์อักษรอื่น</div>
-              </div>
-              <div className="flex gap-4">
-                <span className="w-8 shrink-0 whitespace-nowrap">(ค)</span>
-                <div className="flex-1">ในกรณีที่ส่งทางโทรสาร ให้มีผลเมื่อครบกำหนด 1 (หนึ่ง) วัน นับแต่วันที่ส่งหนังสือบอกกล่าว</div>
-              </div>
-              <div className="flex gap-4">
-                <span className="w-8 shrink-0 whitespace-nowrap">(ง)</span>
-                <div className="flex-1">ในกรณีที่ส่งทางอิเล็กทรอนิกส์ ให้มีผลในวันถัดไป</div>
-              </div>
-            </div>
 
-            <div className="text-justify mt-6">
-              หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่วันที่การส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้ว ในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป
-            </div>
+              <div className="text-justify mt-6">
+                หนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ ที่ได้กระทำขึ้นตามข้อกำหนดดังกล่าวข้างต้น แต่วันที่การส่งหนังสือบอกกล่าวหรือหนังสือติดต่อใด ๆ มีผลนั้นมิใช่วันทำการ หรือการส่งโดยบุคคลนั้นได้รับเมื่อเลิกเวลาทำการแล้ว ในสถานที่ที่ได้รับเอกสารดังกล่าว ให้ถือว่าได้ส่งโดยชอบในวันทำการของสถานที่นั้นในวันถัดไป
+              </div>
 
-            <div className="text-justify">
-              หากคู่สัญญาฝ่ายหนึ่งฝ่ายใดต้องการเปลี่ยนสถานที่อยู่ คู่สัญญาฝ่ายนั้นต้องแจ้งให้คู่สัญญาอีกฝ่ายทราบล่วงหน้าเป็นลายลักษณ์อักษรไม่น้อยกว่า 5 (ห้า) วันทำการก่อนวันที่ย้ายหรือเปลี่ยนแปลงสถานที่อยู่ ในกรณีเช่นนี้คู่สัญญาฝ่ายที่ได้รับแจ้งการเปลี่ยนแปลงสถานที่อยู่จะส่งคำบอกกล่าวให้แก่คู่สัญญาฝ่ายที่แจ้งเปลี่ยนแปลงสถานที่อยู่ตามรายละเอียดที่ได้รับแจ้งดังกล่าว
+              <div className="text-justify">
+                หากคู่สัญญาฝ่ายหนึ่งฝ่ายใดต้องการเปลี่ยนสถานที่อยู่ คู่สัญญาฝ่ายนั้นต้องแจ้งให้คู่สัญญาอีกฝ่ายทราบล่วงหน้าเป็นลายลักษณ์อักษรไม่น้อยกว่า 5 (ห้า) วันทำการก่อนวันที่ย้ายหรือเปลี่ยนแปลงสถานที่อยู่ ในกรณีเช่นนี้คู่สัญญาฝ่ายที่ได้รับแจ้งการเปลี่ยนแปลงสถานที่อยู่จะส่งคำบอกกล่าวให้แก่คู่สัญญาฝ่ายที่แจ้งเปลี่ยนแปลงสถานที่อยู่ตามรายละเอียดที่ได้รับแจ้งดังกล่าว
+              </div>
             </div>
           </div>
         </div>
@@ -1022,31 +1069,43 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-8">
-          <div className="space-y-4">
-            <div className="font-bold">11. การโอนสิทธิ และ/หรือ หน้าที่</div>
-            <div className="indent-8 text-justify">
-              ผู้ให้เช่าซื้อมีสิทธิอย่างเต็มที่ที่จะจำหน่าย จ่ายโอน สิทธิ และ/หรือ หน้าที่ มอบ จำนำ ก่อภาระผูกพัน นำไปวางประกัน หรือจำหน่ายโดยการอื่น ซึ่งส่วนหนึ่งส่วนใดหรือทั้งหมดของสิทธิ กรรมสิทธิ์ และผลประโยชน์ของผู้ให้เช่าซื้อตามสัญญาฉบับนี้และเอกสารที่เกี่ยวข้องกับหลักประกัน และให้บุคคลผู้รับโอนสิทธิ และ/หรือ หน้าที่สามารถรับไปทั้งสิทธิ และ/หรือ หน้าที่ตามสัญญาฉบับนี้และเอกสาร ทั้งนี้ ผู้ให้เช่าซื้อที่ประสงค์จะโอนสิทธิ และ/หรือ หน้าที่จะมีหนังสือบอกกล่าวไปยังผู้เช่าซื้อภายใน 30 (สามสิบ) วัน นับแต่วันที่มีการโอนสิทธิ และ/หรือ หน้าที่
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">11.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">การโอนสิทธิ และ/หรือ หน้าที่</div>
+              <div className="text-justify">
+                ผู้ให้เช่าซื้อมีสิทธิอย่างเต็มที่ที่จะจำหน่าย จ่ายโอน สิทธิ และ/หรือ หน้าที่ มอบ จำนำ ก่อภาระผูกพัน นำไปวางประกัน หรือจำหน่ายโดยการอื่น ซึ่งส่วนหนึ่งส่วนใดหรือทั้งหมดของสิทธิ กรรมสิทธิ์ และผลประโยชน์ของผู้ให้เช่าซื้อตามสัญญาฉบับนี้และเอกสารที่เกี่ยวข้องกับหลักประกัน และให้บุคคลผู้รับโอนสิทธิ และ/หรือ หน้าที่สามารถรับไปทั้งสิทธิ และ/หรือ หน้าที่ตามสัญญาฉบับนี้และเอกสาร ทั้งนี้ ผู้ให้เช่าซื้อที่ประสงค์จะโอนสิทธิ และ/หรือ หน้าที่จะมีหนังสือบอกกล่าวไปยังผู้เช่าซื้อภายใน 30 (สามสิบ) วัน นับแต่วันที่มีการโอนสิทธิ และ/หรือ หน้าที่
+              </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="font-bold">12. การใช้สิทธิ</div>
-            <div className="indent-8 text-justify">
-              การที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งไม่ใช้สิทธิหรือล่าช้าในการใช้สิทธิใด ๆ ภายใต้สัญญาฉบับนี้ มิให้ถือว่าการไม่ใช้สิทธิหรือการล่าช้าดังกล่าวเป็นการสละสิทธิของคู่สัญญาฝ่ายนั้น
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">12.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">การใช้สิทธิ</div>
+              <div className="text-justify">
+                การที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งไม่ใช้สิทธิหรือล่าช้าในการใช้สิทธิใด ๆ ภายใต้สัญญาฉบับนี้ มิให้ถือว่าการไม่ใช้สิทธิหรือการล่าช้าดังกล่าวเป็นการสละสิทธิของคู่สัญญาฝ่ายนั้น
+              </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="font-bold">13. การแยกต่างหากของสัญญา</div>
-            <div className="indent-8 text-justify">
-              ข้อกำหนดต่าง ๆ ในสัญญาฉบับนี้แต่ละข้อเป็นอิสระต่างหากจากกัน หากข้อสัญญาข้อใดข้อหนึ่งภายใต้สัญญาฉบับนี้ไม่สมบูรณ์ เป็นโมฆะ ขัดต่อกฎหมาย หรือไม่อาจบังคับใช้ได้ตามกฎหมายไม่ว่าในกรณีใด ๆ ให้ถือว่าข้อสัญญาหรือข้อกำหนดอื่น ๆ ในสัญญาฉบับนี้ ยังคงมีผลใช้บังคับได้ตามกฎหมาย
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">13.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">การแยกต่างหากของสัญญา</div>
+              <div className="text-justify">
+                ข้อกำหนดต่าง ๆ ในสัญญาฉบับนี้แต่ละข้อเป็นอิสระต่างหากจากกัน หากข้อสัญญาข้อใดข้อหนึ่งภายใต้สัญญาฉบับนี้ไม่สมบูรณ์ เป็นโมฆะ ขัดต่อกฎหมาย หรือไม่อาจบังคับใช้ได้ตามกฎหมายไม่ว่าในกรณีใด ๆ ให้ถือว่าข้อสัญญาหรือข้อกำหนดอื่น ๆ ในสัญญาฉบับนี้ ยังคงมีผลใช้บังคับได้ตามกฎหมาย
+              </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="font-bold">14. ต้นฉบับหรือตัวจริง บรรดาสรรพเอกสารที่เกี่ยวกับการทำสัญญานี้</div>
-            <div className="indent-8 text-justify">
-              บรรดาต้นฉบับหรือสำเนาเอกสารใด ที่เกี่ยวกับการทำสัญญาเช่าซื้อฉบับนี้ทั้งที่มีอยู่ก่อนหรือในขณะที่ทำสัญญาฉบับนี้ หรือที่อาจจะเกิดขึ้นในภายหลังโดยความตกลงและยินยอมของคู่สัญญาทั้งสามฝ่าย รวมตลอดถึงเอกสารแนบท้ายสัญญาฉบับนี้ (ถ้ามี) คู่สัญญาทั้งสามฝ่ายตกลงให้ถือเอาเอกสารทั้งหมดที่เกี่ยวข้องเป็นส่วนหนึ่งและเป็นสาระสำคัญของสัญญาเช่าซื้อฉบับนี้ด้วยทุกประการ
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">14.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">ต้นฉบับหรือตัวจริง บรรดาสรรพเอกสารที่เกี่ยวข้องกับการทำสัญญานี้</div>
+              <div className="text-justify">
+                บรรดาต้นฉบับหรือสำเนาเอกสารใด ที่เกี่ยวกับการทำสัญญาเช่าซื้อฉบับนี้ทั้งที่มีอยู่ก่อนหรือในขณะที่ทำสัญญาฉบับนี้ หรือที่อาจจะเกิดขึ้นในภายหลังโดยความตกลงและยินยอมของคู่สัญญาทั้งสามฝ่าย รวมตลอดถึงเอกสารแนบท้ายสัญญาฉบับนี้ (ถ้ามี) คู่สัญญาทั้งสามฝ่ายตกลงให้ถือเอาเอกสารทั้งหมดที่เกี่ยวข้องเป็นส่วนหนึ่งและเป็นสาระสำคัญของสัญญาเช่าซื้อฉบับนี้ด้วยทุกประการ
+              </div>
             </div>
           </div>
         </div>
@@ -1057,17 +1116,23 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 space-y-8">
-          <div className="space-y-4">
-            <div className="font-bold">15. การแก้ไขสัญญา</div>
-            <div className="indent-8 text-justify">
-              รายละเอียดในสัญญาฉบับนี้ คู่สัญญาฝ่ายใดฝ่ายหนึ่งจะเปลี่ยนแปลงหรือแก้ไขโดยไม่ได้รับการยินยอมเป็นลายลักษณ์อักษรจากคู่สัญญาอีกฝ่ายมิได้ เว้นแต่การเปลี่ยนแปลงและแก้ไขนั้น จะได้ทำเป็นลายลักษณ์อักษร และลงนามโดยคู่สัญญาทั้งสามฝ่ายตามสัญญาฉบับนี้ และให้ถือว่าการแก้ไขสัญญาดังกล่าวเป็นส่วนหนึ่งของสัญญาฉบับนี้
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">15.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">การแก้ไขสัญญา</div>
+              <div className="text-justify">
+                รายละเอียดในสัญญาฉบับนี้ คู่สัญญาฝ่ายใดฝ่ายหนึ่งจะเปลี่ยนแปลงหรือแก้ไขโดยไม่ได้รับการยินยอมเป็นลายลักษณ์อักษรจากคู่สัญญาอีกฝ่ายมิได้ เว้นแต่การเปลี่ยนแปลงและแก้ไขนั้น จะได้ทำเป็นลายลักษณ์อักษร และลงนามโดยคู่สัญญาทั้งสามฝ่ายตามสัญญาฉบับนี้ และให้ถือว่าการแก้ไขสัญญาดังกล่าวเป็นส่วนหนึ่งของสัญญาฉบับนี้
+              </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="font-bold">16. กฎหมายที่ใช้บังคับ</div>
-            <div className="indent-8 text-justify">
-              สัญญาฉบับนี้ให้ใช้บังคับและตีความตามกฎหมายไทย ข้อพิพาท ข้อโต้แย้ง หรือสิทธิเรียกร้องใด ๆ ที่เกิดจากหรือที่เกี่ยวกับสัญญาฉบับนี้ซึ่งไม่สามารถตกลงกันได้ระหว่างคู่สัญญาให้นำเสนอต่อศาลไทยที่มีเขตอำนาจ
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">16.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">กฎหมายที่ใช้บังคับ</div>
+              <div className="text-justify">
+                สัญญาฉบับนี้ให้ใช้บังคับและตีความตามกฎหมายไทย ข้อพิพาท ข้อโต้แย้ง หรือสิทธิเรียกร้องใด ๆ ที่เกิดจากหรือที่เกี่ยวกับสัญญาฉบับนี้ซึ่งไม่สามารถตกลงกันได้ระหว่างคู่สัญญาให้นำเสนอต่อศาลไทยที่มีเขตอำนาจ
+              </div>
             </div>
           </div>
 
@@ -1081,7 +1146,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       {/* Signature Page 1 - Lessor 1 & Purchaser */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
-        <div className="mt-8 text-justify leading-relaxed">
+        <div className="mt-8 text-justify leading-relaxed indent-12">
           สัญญาฉบับนี้ทำขึ้นมา 3 (สาม) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
         </div>
 
@@ -1115,7 +1180,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 <div className="border-b border-black w-full h-8"></div>
                 <div className="flex justify-between px-4">
                   <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                  <span className="flex-1 mx-4"></span>
                   <span>)</span>
                 </div>
               </div>
@@ -1154,7 +1219,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 <div className="border-b border-black w-full h-8"></div>
                 <div className="flex justify-between px-4">
                   <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                  <span className="flex-1 mx-4"></span>
                   <span>)</span>
                 </div>
               </div>
@@ -1200,7 +1265,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
                 <div className="border-b border-black w-full h-8"></div>
                 <div className="flex justify-between px-4">
                   <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                  <span className="flex-1 mx-4"></span>
                   <span>)</span>
                 </div>
               </div>
