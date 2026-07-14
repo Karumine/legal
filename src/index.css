@@ -21,12 +21,7 @@
   text-align-last: center;
 }
 
-/* Fix thick underlines in print by forcing a consistent thin line */
-.print-page u,
-.print-page .underline {
-  text-decoration-thickness: from-font !important;
-  text-underline-offset: auto !important;
-}
+
 
 .text-justify-reset {
   text-align: left !important;
@@ -82,6 +77,12 @@
     margin-bottom: 0 !important;
     height: auto !important;
     width: 210mm !important;
+  }
+
+  /* Fix Chrome rendering underlines too thick in PDF */
+  .print-page u,
+  .print-page .underline {
+    text-decoration-thickness: 0.01em !important;
   }
 }
 
