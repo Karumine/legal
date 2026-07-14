@@ -179,7 +179,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div data-section-id="hp-general" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
-        <div className="text-center font-bold mb-6 mt-4">
+        <div className="text-center font-bold mb-6 mt-8">
           <h2 className="text-[16px]">
             {type === 'hirePurchase' && "สัญญาเช่าซื้อ (Hire Purchase Agreement)"}
             {type === 'hirePurchaseBack' && "สัญญาเช่าซื้อกลับ (Hire Purchase Back Agreement)"}
@@ -264,7 +264,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <PageHeader />
 
         {!isAgileOnly && (
-          <div className="space-y-4 mb-6 mt-4">
+          <div className="space-y-4 mb-6 mt-8">
             <div className="flex gap-4 text-justify">
               <span className="w-8 shrink-0 whitespace-nowrap">ค.</span>
               <div className="flex-1">ผู้ให้เช่าซื้อฝ่ายที่ 1 ประสงค์จะทำหน้าที่เป็นตัวแทนของผู้ให้เช่าซื้อในการติดต่อประสานงานกับผู้เช่าซื้อเพื่อประโยชน์ในการปฏิบัติหน้าที่ตามสัญญาฉบับนี้ (<b>“ตัวแทนเช่าซื้อ”</b>)</div>
@@ -276,7 +276,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
         )}
 
-        <div className={`flex gap-4 mb-6 ${isAgileOnly ? 'mt-4' : ''}`}>
+        <div className={`flex gap-4 mb-6 ${isAgileOnly ? 'mt-8' : ''}`}>
           <span className="w-8 shrink-0"></span>
           <div className="flex-1 font-bold">คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จึงตกลงทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้</div>
         </div>
@@ -1323,7 +1323,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       {/* Annex Page 4 - Image 14 */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
-        <div className="mt-4 flex flex-col items-center justify-center space-y-1 mb-4">
+        <div className="mt-8 flex flex-col items-center justify-center space-y-1 mb-4">
           <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 4</div>
           <div className="text-[12px] font-bold underline text-center">ข้อตกลงและหลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระเงินต้นพร้อมดอกเบี้ย</div>
         </div>
@@ -1336,31 +1336,31 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-2">
             <span className="shrink-0 w-4">1.</span>
             <div className="flex-1">
-              การส่งมอบเช็ค : ผู้เช่าซื้อตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่าเช่าซื้อให้แก่<span className="underline">ผู้ให้เช่าซื้อ</span> จำนวนทั้งสิ้น <Highlight>{totalCheques} ฉบับ</Highlight> เพื่อเป็นการชำระค่างวดเช่าซื้อ (<Highlight>งวดที่ 1 ถึง งวดที่ {data.installments}</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ {data.chequesPerInstallment} ฉบับ ให้แก่ผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบมานี้
+              <b>การส่งมอบเช็ค :</b> ผู้เช่าซื้อตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่าเช่าซื้อให้แก่<span className="underline">ผู้ให้เช่าซื้อ</span> จำนวนทั้งสิ้น <Highlight>{totalCheques} ฉบับ</Highlight> เพื่อเป็นการชำระค่างวดเช่าซื้อ (<Highlight>งวดที่ 1 ถึง งวดที่ {data.installments}</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ {data.chequesPerInstallment} ฉบับ ให้แก่ผู้ให้เช่าซื้อ ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบมานี้
             </div>
           </div>
           <div className="flex gap-2">
             <span className="shrink-0 w-4">2.</span>
             <div className="flex-1">
-              รายละเอียดการชำระ : เช็คแต่ละฉบับจะถูกสั่งจ่ายให้ในนามผู้ให้เช่าซื้อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ "<span className="underline">รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ</span>" ตามเอกสารแนบท้ายหมายเลข 2 ของสัญญาเช่าซื้อฉบับนี้
+              <b>รายละเอียดการชำระ :</b> เช็คแต่ละฉบับจะถูกสั่งจ่ายให้ในนามผู้ให้เช่าซื้อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ "<span className="underline">รายละเอียดค่าเช่าซื้อแต่ละงวดและวิธีการคำนวณค่างวดการเช่าซื้อ</span>" ตามเอกสารแนบท้ายหมายเลข 2 ของสัญญาเช่าซื้อฉบับนี้
             </div>
           </div>
           <div className="flex gap-2">
             <span className="shrink-0 w-4">3.</span>
             <div className="flex-1">
-              การยืนยันรายละเอียดและสำเนาภาพถ่ายเช็ค : คู่สัญญาทุกฝ่ายตกลงให้ถือว่า "ใบรับเช็ค" หรือ "สำเนาภาพถ่ายเช็คทั้งหมด" ที่มีการลงนามรับมอบโดยผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
+              <b>การยืนยันรายละเอียดและสำเนาภาพถ่ายเช็ค :</b> คู่สัญญาทุกฝ่ายตกลงให้ถือว่า "ใบรับเช็ค" หรือ "สำเนาภาพถ่ายเช็คทั้งหมด" ที่มีการลงนามรับมอบโดยผู้ให้เช่าซื้อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
             </div>
           </div>
           <div className="flex gap-2">
             <span className="shrink-0 w-4">4.</span>
             <div className="flex-1">
-              ความรับผิดทางอาญา : ผู้เช่าซื้อยืนยันและรับรองว่าเช็คทุกฉบับที่ส่งมอบเป็นเช็คที่ออกโดยชอบด้วยกฎหมายเพื่อชำระหนี้ที่มีอยู่จริงและบังคับได้ตามกฎหมาย หากเช็คฉบับใดถูกธนาคารปฏิเสธการจ่ายเงินไม่ว่าด้วยเหตุใดๆ ผู้เช่าซื้อยอมรับว่าตนมีเจตนาหรืออาจเล็งเห็นผลที่จะไม่ให้มีการใช้เงินตามเช็คนั้น และยินยอมให้ผู้ให้เช่าซื้อดำเนินคดีตาม <span className="underline">พระราชบัญญัติว่าด้วยความผิดอันเกิดจากการใช้เช็ค พ.ศ. 2534</span> และที่แก้ไขเพิ่มเติม รวมถึงความรับผิดทางแพ่งและทางอาญาในส่วนอื่นๆ ที่เกี่ยวข้องโดยพลัน
+              <b>ความรับผิดทางอาญา :</b> ผู้เช่าซื้อยืนยันและรับรองว่าเช็คทุกฉบับที่ส่งมอบเป็นเช็คที่ออกโดยชอบด้วยกฎหมายเพื่อชำระหนี้ที่มีอยู่จริงและบังคับได้ตามกฎหมาย หากเช็คฉบับใดถูกธนาคารปฏิเสธการจ่ายเงินไม่ว่าด้วยเหตุใดๆ ผู้เช่าซื้อยอมรับว่าตนมีเจตนาหรืออาจเล็งเห็นผลที่จะไม่ให้มีการใช้เงินตามเช็คนั้น และยินยอมให้ผู้ให้เช่าซื้อดำเนินคดีตาม <span className="underline">พระราชบัญญัติว่าด้วยความผิดอันเกิดจากการใช้เช็ค พ.ศ. 2534</span> และที่แก้ไขเพิ่มเติม รวมถึงความรับผิดทางแพ่งและทางอาญาในส่วนอื่นๆ ที่เกี่ยวข้องโดยพลัน
             </div>
           </div>
           <div className="flex gap-2">
             <span className="shrink-0 w-4">5.</span>
             <div className="flex-1">
-              ความเป็นส่วนหนึ่งของสัญญา : ข้อตกลงตามเอกสารแนบท้ายนี้ให้ถือเป็นส่วนหนึ่งของสัญญาเช่าซื้อฉบับนี้ หากความในเอกสารฉบับนี้ขัดหรือแย้งกับสัญญาเช่าซื้อให้ถือตามข้อความในเอกสารแนบท้ายนี้ในส่วนที่เกี่ยวกับการชำระหนี้ด้วยเช็ค
+              <b>ความเป็นส่วนหนึ่งของสัญญา :</b> ข้อตกลงตามเอกสารแนบท้ายนี้ให้ถือเป็นส่วนหนึ่งของสัญญาเช่าซื้อฉบับนี้ หากความในเอกสารฉบับนี้ขัดหรือแย้งกับสัญญาเช่าซื้อให้ถือตามข้อความในเอกสารแนบท้ายนี้ในส่วนที่เกี่ยวกับการชำระหนี้ด้วยเช็ค
             </div>
           </div>
         </div>
@@ -1414,7 +1414,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <div className="mt-2 flex flex-col items-center justify-center space-y-0.5 mb-1.5">
           <div className="text-[12px] font-bold underline">เอกสารแนบท้ายหมายเลข 5</div>
           <div className="text-[12px] font-bold underline text-center">
-            รายละเอียดเกี่ยวกับการติดตามทวงถาม และค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดี
+            รายละเอียดเกี่ยวกับค่าติดตามทวงถาม และค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดี
           </div>
           <div className="text-[12px] font-bold text-center">
             ประกาศอัตราดอกเบี้ย ค่าปรับ ค่าบริการ ค่าธรรมเนียมใดๆ และค่าใช้จ่ายอันเกิดจากสัญญาตามที่จ่ายไปจริง
@@ -1441,23 +1441,15 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <td className="border border-black p-1">ไม่เกิน 100 บาท / รอบการทวงหนี้</td>
             </tr>
             <tr>
-              <td className="border border-black p-1">1.3 ลำดับการตัดชำระหนี้</td>
+              <td className="border border-black p-1 align-top">1.3 ลำดับการตัดชำระหนี้</td>
               <td className="border border-black p-1 text-justify">
-                <span className="underline font-bold text-blue-800 italic">เงินที่ลูกหนี้ชำระเข้ามาจะถูกนำไปตัดชำระตามลำดับ ดังนี้</span><br />
+                <span className="underline">เงินที่ลูกหนี้ชำระเข้ามาจะถูกนำไปตัดชำระตามลำดับ ดังนี้</span><br />
                 (1) ค่าธรรมเนียม (2) ดอกเบี้ย (3) เงินต้นของงวดหนี้ที่ค้างชำระนานที่สุดก่อน
               </td>
             </tr>
-          </tbody>
-        </table>
-
-        {/* Table 2 */}
-        <table className="w-full border-collapse border border-black text-[12px] mb-1.5">
-          <thead>
             <tr className="bg-gray-100 print:bg-transparent text-left">
               <th colSpan={2} className="border border-black p-1">2. ค่าดำเนินการทางกฎหมาย</th>
             </tr>
-          </thead>
-          <tbody>
             <tr>
               <td className="border border-black p-1">2.1 ค่าใช้จ่ายอันเกี่ยวกับการฟ้องร้องดำเนินคดี</td>
               <td className="border border-black p-1">ตามอัตราที่บริษัทฯได้ชำระไปจริง</td>
@@ -1471,7 +1463,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <td className="border border-black p-1">ตามอัตราที่หน่วยงานราชการนั้นกำหนด หรือ ตามที่กฎหมายกำหนด</td>
             </tr>
             <tr>
-              <td className="border border-black p-1 whitespace-nowrap">2.4 ค่าธรรมเนียมในการติดต่อหน่วยงานอื่นๆ</td>
+              <td className="border border-black p-1 whitespace-nowrap align-top">2.4 ค่าธรรมเนียมในการติดต่อหน่วยงานอื่นๆ</td>
               <td className="border border-black p-0">
                 <div className="p-1 border-b border-black">กรณีที่เป็นหน่วยงานราชการ : ตามอัตราที่หน่วยงานราชการนั้นกำหนด</div>
                 <div className="p-1">กรณีที่เป็นหน่วยงานเอกชน : ตามอัตราที่หน่วยงานนั้นกำหนด</div>
@@ -1482,7 +1474,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
         {/* Example Title */}
         <div className="text-center mt-4 mb-1">
-          <span className="text-[12px] font-bold underline italic">ตัวอย่างการคำนวณค่าธรรมเนียมในการติดตามทวงถามหนี้</span>
+          <span className="text-[12px] underline">ตัวอย่างการคำนวณค่าธรรมเนียมในการติดตามทวงถามหนี้</span>
         </div>
 
         {/* Table 3 */}
@@ -1584,11 +1576,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         {/* Notes & Consent Section */}
         <div className="text-[12px] leading-relaxed mb-8">
           <p className="mb-6">
-            <span className="font-bold underline italic">หมายเหตุ</span><br />
+            <span className="font-bold underline">หมายเหตุ</span><br />
             อัตราค่าบริการต่างๆ ค่าติดตามทวงถาม และค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดีสามารถเปลี่ยนแปลงได้ ในกรณีที่มีการเปลี่ยนแปลงกฎหมายที่เกี่ยวข้อง ผู้เช่าซื้อรับทราบและตกลงให้ค่าติดตามทวงถามและค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดีตามสัญญาฉบับนี้เป็นไปตามกฎหมายที่เปลี่ยนแปลงไป โดยมิต้องได้รับความยินยอมจากผู้เช่าซื้อก่อน
           </p>
           <p className="indent-12 text-justify">
-            ข้าพเจ้าในฐานะผู้เช่าซื้อได้รับทราบและตกลงยินยอมให้ผู้ให้สินเชื่อคิดค่าบริการสำหรับการติดตามทวงถาม และค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดี สำหรับกรณีที่ผู้เช่าซื้อได้ผิดนัดชำระหนี้ตามสัญญาเช่าซื้อฉบับนี้
+            ข้าพเจ้าในฐานะผู้เช่าซื้อได้รับทราบและตกลงยินยอมให้ผู้ให้เช่าซื้อคิดค่าบริการสำหรับการติดตามทวงถาม และค่าใช้จ่ายที่เกี่ยวกับงานกฎหมายดำเนินคดี สำหรับกรณีที่ผู้เช่าซื้อได้ผิดนัดชำระหนี้ตามสัญญาเช่าซื้อฉบับนี้
           </p>
         </div>
 
