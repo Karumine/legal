@@ -1153,9 +1153,11 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px] font-bold">
           {/* Left Column: Lessor 1 */}
           <div className="border-r border-black p-4 flex flex-col h-full">
-            <div className="space-y-12">
-              <div className="font-bold text-left">ผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
-              <div className="font-bold text-left">{data.lessor1.name}</div>
+            <div className="flex-1 space-y-16">
+              <div className="font-bold text-[13px] text-left">
+                <div>ผู้ให้เช่าซื้อฝ่ายที่ 1:</div>
+                <div>{data.lessor1.name}</div>
+              </div>
 
               <div className="pt-8 space-y-12">
                 {data.lessor1Signatories.split(/\s*และ\s*/).map((sig, idx) => (
@@ -1171,9 +1173,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
 
             <div className="mt-auto pt-8 space-y-8">
-              <div className="text-left">
-                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                <div className="mt-2">{data.lessor1.name}</div>
+              <div className="relative flex justify-center w-full">
+                <div className="absolute left-0">ตำแหน่ง:</div>
+                <div className="text-center">
+                  <div>กรรมการผู้มีอำนาจลงนาม</div>
+                  <div className="mt-2">{data.lessor1.name}</div>
+                </div>
               </div>
               <div className="space-y-4">
                 <div>พยาน:</div>
@@ -1188,9 +1193,9 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
 
           <div className="p-4 flex flex-col h-full">
-            <div className="space-y-12">
-              <div className="font-bold text-left">ผู้เช่าซื้อ:</div>
-              <div className="font-bold text-left">
+            <div className="flex-1 space-y-16">
+              <div className="font-bold text-[13px] text-left">
+                <div>ผู้เช่าซื้อ:</div>
                 <Highlight>{customerInfo.companyName}</Highlight>
               </div>
 
@@ -1208,10 +1213,13 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
 
             <div className="mt-auto pt-8 space-y-8">
-              <div className="text-left">
-                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                <div className="mt-2">
-                  <Highlight>{customerInfo.companyName}</Highlight>
+              <div className="relative flex justify-center w-full">
+                <div className="absolute left-0">ตำแหน่ง:</div>
+                <div className="text-center">
+                  <div>กรรมการผู้มีอำนาจลงนาม</div>
+                  <div className="mt-2">
+                    <Highlight>{customerInfo.companyName}</Highlight>
+                  </div>
                 </div>
               </div>
               <div className="space-y-4">
@@ -1237,8 +1245,8 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
 
           {/* Left Column: Lessor 2 */}
           <div className="border-r border-black p-4 flex flex-col h-full">
-            <div className="flex-1 mt-4 space-y-16">
-              <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
+            <div className="flex-1 space-y-16">
+              <div className="font-bold text-[13px] text-left">
                 <div>ผู้ให้เช่าซื้อฝ่ายที่ 2:</div>
                 <Highlight>{data.lessor2.name}</Highlight>
               </div>
@@ -1256,9 +1264,12 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             </div>
 
             <div className="mt-auto pt-8 space-y-8">
-              <div className="text-left">
-                <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                <div className="mt-2">{data.lessor2.name}</div>
+              <div className="relative flex justify-center w-full">
+                <div className="absolute left-0">ตำแหน่ง:</div>
+                <div className="text-center">
+                  <div>กรรมการผู้มีอำนาจลงนาม</div>
+                  <div className="mt-2">{data.lessor2.name}</div>
+                </div>
               </div>
               <div className="space-y-4">
                 <div>พยาน:</div>

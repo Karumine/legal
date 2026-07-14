@@ -574,7 +574,7 @@ export default function HirePurchaseForm({ data, onChange, customerInfo, type = 
             <div className="grid grid-cols-2 gap-4 pt-2 border-t border-blue-100" onFocusCapture={() => onFocusSection?.('hp-financials')}>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
-                  {type === 'hirePurchaseBack' ? 'เงินดาวน์ (%) ที่หักจากยอดจัดเช่าซื้อ' : 'เงินดาวน์ (%)'}
+                  {type === 'hirePurchaseBack' ? 'ค่าเสื่อมสภาพ (%)' : 'เงินดาวน์ (%)'}
                 </label>
                 <PercentageInput
                   value={data.downPaymentPercentage || ''}

@@ -24,7 +24,8 @@
 /* Fix thick underlines in print by forcing a consistent thin line */
 .print-page u,
 .print-page .underline {
-  text-decoration-thickness: 0.5px !important;
+  text-decoration-thickness: from-font !important;
+  text-underline-offset: auto !important;
 }
 
 .text-justify-reset {
@@ -40,8 +41,6 @@
 
   html,
   body {
-    width: 210mm;
-    height: 297mm;
     margin: 0;
     padding: 0;
     -webkit-print-color-adjust: exact;

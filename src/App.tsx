@@ -1117,16 +1117,11 @@ function App() {
             </div>
           </div>
 
-          <div className="flex-1 p-6 print:p-0 flex flex-col items-center overflow-x-hidden print:overflow-visible">
+          <div className="flex-1 p-6 print:p-0 flex flex-col items-center overflow-x-auto print:overflow-visible">
             <div
               id="preview-content-container"
               ref={previewContentRef}
-              className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0 origin-top transition-all duration-200"
-              style={{
-                transform: previewScale < 1 ? `scale(${previewScale})` : 'none',
-                height: 'auto',
-                marginBottom: previewScale < 1 ? `${(previewScale - 1) * contentHeight}px` : '0'
-              }}
+              className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0 shrink-0"
             >
               {activePreview.startsWith('agreement-') && (
                 data.agreements.find(a => `agreement-${a.id}` === activePreview) &&

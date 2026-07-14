@@ -9,7 +9,7 @@ interface HighlightProps {
 export const Highlight = ({ children, className = '' }: HighlightProps) => {
   const { printMode } = useHighlight();
   const baseClass = printMode === 'review'
-    ? 'bg-yellow-100 print:bg-transparent print:text-blue-400 print:font-bold'
+    ? 'bg-yellow-100 print:bg-transparent print:text-blue-400'
     : 'bg-yellow-100 print:bg-transparent print:text-black print:font-normal';
   
   return (
