@@ -179,7 +179,7 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
             <span className="shrink-0 w-8">5.</span>
             <div className="flex-1">
               ในกรณีที่ผู้ค้ำประกันเป็นนิติบุคคล ให้ข้อตกลงในข้อ 5 นี้ มีผลบังคับใช้ด้วย กล่าวคือ
-              <div className="mt-2 space-y-2">
+              <div className="mt-2">
                 <div className="flex gap-4">
                   <span className="shrink-0 w-8">ก.</span>
                   <div className="flex-1">ผู้ค้ำประกันตกลงเข้าผูกพันตนรับผิดต่อ{collectiveLenderLabel}ในหนี้ของลูกหนี้อย่างลูกหนี้ร่วม</div>
@@ -221,7 +221,7 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
           <div className="flex gap-4 mb-6">
             <span className="shrink-0 w-8 opacity-0">7.</span>
             <div className="flex-1">
-              <div className="mt-2 space-y-2">
+              <div>
                 <div className="flex gap-4">
                   <span className="shrink-0 w-8">ก.</span>
                   <div className="flex-1">ผ่อนเวลาชำระหนี้หรือขยายระยะเวลาการชำระหนี้ตามสัญญาดังกล่าวให้แก่ลูกหนี้</div>
@@ -263,7 +263,7 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
             <span className="shrink-0 w-8">11.</span>
             <div className="flex-1">
               ผู้ค้ำประกันขอรับรองและรับประกันว่า
-              <div className="mt-2 space-y-2">
+              <div className="mt-2">
                 <div className="flex gap-4">
                   <span className="shrink-0 w-8">ก.</span>
                   <div className="flex-1">สัญญาฉบับนี้เป็นเอกสารที่สมบูรณ์ ถูกต้อง มีผลผูกพัน และใช้บังคับกับผู้ค้ำประกันได้ตามข้อกำหนดของสัญญาฉบับนี้</div>
@@ -297,36 +297,46 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
 
         <div className="mt-8">
           {/* Continuation of clause 11 ง sub-items */}
-          <div className="mt-2 space-y-2">
-            <div className="flex gap-4">
-              <span className="shrink-0 w-8">(1)</span>
-              <div className="flex-1">ไม่เป็นการขัดต่อกฎหมาย กฎระเบียบ ข้อบังคับ หรือการได้รับมอบอำนาจใดๆ ของผู้ค้ำประกัน</div>
-            </div>
-            <div className="flex gap-4">
-              <span className="shrink-0 w-8">(2)</span>
-              <div className="flex-1">ไม่เป็นการละเมิดหรือขัดต่อสัญญาหรือหนี้ที่ผูกพันใดๆ ของผู้ค้ำประกัน หรือซึ่งมีอยู่เหนือทรัพย์สินหรือรายได้ของผู้ค้ำประกัน</div>
-            </div>
-            <div className="flex gap-4">
-              <span className="shrink-0 w-8">(3)</span>
-              <div className="flex-1">ไม่ทำให้ภาระหนี้ที่ผู้ค้ำประกันมีอยู่ ภายใต้สัญญาใดๆ ของผู้ค้ำประกันต้องการปฏิบัติหรือชำระก่อนกำหนดเดิม หรือถูกยกเลิกเพิกถอน</div>
-            </div>
-            <div className="flex gap-4">
-              <span className="shrink-0 w-8">(4)</span>
-              <div className="flex-1">ไม่ก่อให้เกิดการกระทำหรือเหตุใดๆ อันจะทำให้เกิดการผิดนัด การชำระหนี้ก่อนกำหนด การผิดสัญญา หรือการยกเลิกเพิกถอนซึ่งสัญญาใดๆ ที่ผู้ค้ำประกันเป็นคู่สัญญาอยู่ หรือมีภาระหน้าที่อยู่</div>
-            </div>
-            <div className="flex gap-4">
-              <span className="shrink-0 w-8">(5)</span>
-              <div className="flex-1">ไม่มีการฟ้องร้องคดี การดำเนินคดี อนุญาโตตุลาการ หรือการดำเนินกระบวนการทางศาลหรือทางปกครองใดๆ อยู่แก่ผู้ค้ำประกัน ทรัพย์สินของผู้ค้ำประกัน หรือรายได้ของผู้ค้ำประกัน</div>
-            </div>
-          </div>
-          <div className="mt-2 space-y-2">
-            <div className="flex gap-4">
-              <span className="shrink-0 w-8">จ.</span>
-              <div className="flex-1">ผู้ค้ำประกันได้ปฏิบัติตามกฎหมายที่บังคับใช้ทุกประการในการดำเนินธุรกิจของตน</div>
-            </div>
-            <div className="flex gap-4">
-              <span className="shrink-0 w-8 mb-6">ฉ.</span>
-              <div className="flex-1">ไม่มีเหตุใดๆ ที่อาจคาดหมายได้ว่าผู้ค้ำประกันจะไม่สามารถชำระหนี้ของตนได้ เมื่อหนี้นั้นถึงกำหนดชำระ</div>
+          <div className="flex gap-4 mb-6">
+            <span className="shrink-0 w-8 opacity-0">11.</span>
+            <div className="flex-1">
+              <div className="flex gap-4">
+                <span className="shrink-0 w-8 opacity-0">ง.</span>
+                <div className="flex-1">
+                  <div>
+                    <div className="flex gap-4">
+                      <span className="shrink-0 w-8">(1)</span>
+                      <div className="flex-1">ไม่เป็นการขัดต่อกฎหมาย กฎระเบียบ ข้อบังคับ หรือการได้รับมอบอำนาจใดๆ ของผู้ค้ำประกัน</div>
+                    </div>
+                    <div className="flex gap-4">
+                      <span className="shrink-0 w-8">(2)</span>
+                      <div className="flex-1">ไม่เป็นการละเมิดหรือขัดต่อสัญญาหรือหนี้ที่ผูกพันใดๆ ของผู้ค้ำประกัน หรือซึ่งมีอยู่เหนือทรัพย์สินหรือรายได้ของผู้ค้ำประกัน</div>
+                    </div>
+                    <div className="flex gap-4">
+                      <span className="shrink-0 w-8">(3)</span>
+                      <div className="flex-1">ไม่ทำให้ภาระหนี้ที่ผู้ค้ำประกันมีอยู่ ภายใต้สัญญาใดๆ ของผู้ค้ำประกันต้องการปฏิบัติหรือชำระก่อนกำหนดเดิม หรือถูกยกเลิกเพิกถอน</div>
+                    </div>
+                    <div className="flex gap-4">
+                      <span className="shrink-0 w-8">(4)</span>
+                      <div className="flex-1">ไม่ก่อให้เกิดการกระทำหรือเหตุใดๆ อันจะทำให้เกิดการผิดนัด การชำระหนี้ก่อนกำหนด การผิดสัญญา หรือการยกเลิกเพิกถอนซึ่งสัญญาใดๆ ที่ผู้ค้ำประกันเป็นคู่สัญญาอยู่ หรือมีภาระหน้าที่อยู่</div>
+                    </div>
+                    <div className="flex gap-4">
+                      <span className="shrink-0 w-8">(5)</span>
+                      <div className="flex-1">ไม่มีการฟ้องร้องคดี การดำเนินคดี อนุญาโตตุลาการ หรือการดำเนินกระบวนการทางศาลหรือทางปกครองใดๆ อยู่แก่ผู้ค้ำประกัน ทรัพย์สินของผู้ค้ำประกัน หรือรายได้ของผู้ค้ำประกัน</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-2">
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">จ.</span>
+                  <div className="flex-1">ผู้ค้ำประกันได้ปฏิบัติตามกฎหมายที่บังคับใช้ทุกประการในการดำเนินธุรกิจของตน</div>
+                </div>
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">ฉ.</span>
+                  <div className="flex-1">ไม่มีเหตุใดๆ ที่อาจคาดหมายได้ว่าผู้ค้ำประกันจะไม่สามารถชำระหนี้ของตนได้ เมื่อหนี้นั้นถึงกำหนดชำระ</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -370,38 +380,43 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
         <PageHeader />
 
         <div className="mt-8">
-          <div className="mb-6 space-y-4">
-            {data.guarantors.map((guarantor, idx) => (
-              <div key={idx}>
-                <div className="font-bold mb-1">ในกรณีของผู้ค้ำประกัน:</div>
-                <div><Highlight>{guarantor.name}</Highlight></div>
-                <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(guarantor.address)}</Highlight></div>
-                <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(guarantor.phone) || '-'}</Highlight></div>
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 opacity-0">15.</span>
+            <div className="flex-1">
+              <div className="mb-6 space-y-4">
+                {data.guarantors.map((guarantor, idx) => (
+                  <div key={idx}>
+                    <div className="font-bold mb-1">ในกรณีของผู้ค้ำประกัน:</div>
+                    <div><Highlight>{guarantor.name}</Highlight></div>
+                    <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(guarantor.address)}</Highlight></div>
+                    <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(guarantor.phone) || '-'}</Highlight></div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          <div className="mb-6">
-            <div className="font-bold mb-1 ">ในกรณีของ{lender1Label}:</div>
-            <div><Highlight>{data.lenderCompany}</Highlight></div>
-            <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(data.lenderAddress)}</Highlight> รหัสไปรษณีย์ 10270</div>
-            <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.lenderPhone)}</Highlight></div>
-          </div>
+              <div className="mb-6">
+                <div className="font-bold mb-1 ">ในกรณีของ{lender1Label}:</div>
+                <div><Highlight>{data.lenderCompany}</Highlight></div>
+                <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(data.lenderAddress)}</Highlight> รหัสไปรษณีย์ 10270</div>
+                <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.lenderPhone)}</Highlight></div>
+              </div>
 
-          {!isAgileOnly && (
-            <div className="mb-6">
-              <div className="font-bold mb-1 ">ในกรณีของ{lender2Label}:</div>
-              <div><Highlight>{data.borrowerCompany}</Highlight></div>
-              <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(data.borrowerAddress)}</Highlight> รหัสไปรษณีย์ 10240</div>
-              <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.borrowerPhone)}</Highlight></div>
+              {!isAgileOnly && (
+                <div className="mb-6">
+                  <div className="font-bold mb-1 ">ในกรณีของ{lender2Label}:</div>
+                  <div><Highlight>{data.borrowerCompany}</Highlight></div>
+                  <div>ที่อยู่: เลขที่ <Highlight>{stripAddressPrefix(data.borrowerAddress)}</Highlight> รหัสไปรษณีย์ 10240</div>
+                  <div>หมายเลขโทรศัพท์: <Highlight>{formatPhoneNumber(data.borrowerPhone)}</Highlight></div>
+                </div>
+              )}
             </div>
-          )}
+          </div>
 
           <div className="flex gap-4 text-justify mb-6">
             <span className="shrink-0 w-8">16.</span>
             <div className="flex-1">
               การติดต่อหรือคำบอกกล่าวจาก{collectiveLenderLabel}ไปยังผู้ค้ำประกัน ให้ถือว่าผู้ค้ำประกันได้รับโดยถูกต้องแล้ว เมื่อ
-              <div className="mt-2 space-y-2">
+              <div className="mt-2">
                 <div className="flex gap-4">
                   <span className="shrink-0 w-8">ก.</span>
                   <div className="flex-1">ในกรณีที่ส่งโดยไปรษณีย์ เมื่อมีการส่ง หรือ</div>
@@ -473,11 +488,11 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
           <div className="border border-black text-[13px] font-bold">
             <div className="grid grid-cols-2 divide-x divide-black">
               {/* Left: Lender 1 */}
-              <div className="p-6 flex flex-col min-h-[600px]">
-                <div className="flex-1 pt-4 space-y-16">
-                  <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
+              <div className="border-r border-black p-4 flex flex-col h-full">
+                <div className="flex-1 space-y-16">
+                  <div className="font-bold text-[13px] text-left">
                     <div>{lender1Label} :</div>
-                    <Highlight>{data.lenderCompany}</Highlight>
+                    <div>{data.lenderCompany}</div>
                   </div>
 
                   <div className="space-y-12">
@@ -485,15 +500,18 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
                       <div key={idx} className="space-y-2">
                         <div className="border-b border-black w-full h-8"></div>
                         <div className="text-center w-full">
-                          ชื่อ: <Highlight>{sig.trim()}</Highlight>
+                          ( <Highlight>{sig.trim()}</Highlight> )
                         </div>
                       </div>
                     ))}
                   </div>
 
                   <div className="text-left">
-                    <div className="font-bold">ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                    <div className="font-bold"><Highlight>{data.lenderCompany}</Highlight></div>
+                    <div className="relative font-bold">
+                      <div className="absolute left-0">ตำแหน่ง:</div>
+                      <div className="text-center w-full">กรรมการผู้มีอำนาจลงนาม</div>
+                    </div>
+                    <div className="font-bold text-center">{data.lenderCompany}</div>
                   </div>
                 </div>
 
@@ -502,24 +520,24 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
                   <div className="border-b border-black w-full h-8"></div>
                   <div className="flex justify-between px-4">
                     <span>(</span>
-                    <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                    <span className="flex-1 mx-4 mb-1"></span>
                     <span>)</span>
                   </div>
                 </div>
               </div>
 
               {/* Right: Guarantor */}
-              <div className="p-6 flex flex-col min-h-[600px]">
-                <div className="flex-1 pt-4 space-y-16">
+              <div className="p-4 flex flex-col h-full">
+                <div className="flex-1 space-y-16">
                   {data.guarantors.map((guarantor, idx) => {
                     const isCorporate = guarantor.type === 'company' || guarantor.type === 'partnership';
                     const signatories = guarantor.directors?.split(/\s*และ\s*|,\s*/) || [guarantor.name];
 
                     return (
                       <div key={idx} className="space-y-16 pb-8 border-b border-gray-100 last:border-0">
-                        <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
+                        <div className="font-bold text-[13px] text-left">
                           <div>{data.guarantors.length > 1 ? `ผู้ค้ำประกันคนที่ ${idx + 1} :` : 'ผู้ค้ำประกัน :'}</div>
-                          <Highlight>{guarantor.name}</Highlight>
+                          <div><Highlight>{guarantor.name}</Highlight></div>
                         </div>
 
                         {isCorporate ? (
@@ -528,20 +546,23 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
                               <div key={sIdx} className="space-y-2">
                                 <div className="border-b border-black w-full h-8"></div>
                                 <div className="text-center w-full">
-                                  ( ชื่อ: <Highlight>{sig.trim()}</Highlight> )
+                                  ( <Highlight>{sig.trim()}</Highlight> )
                                 </div>
                               </div>
                             ))}
                             <div className="text-left">
-                              <div className="font-bold">ตำแหน่ง: {guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการ' : 'กรรมการผู้มีอำนาจลงนาม'}</div>
-                              <div className="font-bold"><Highlight>{guarantor.name}</Highlight></div>
+                              <div className="relative font-bold">
+                                <div className="absolute left-0">ตำแหน่ง:</div>
+                                <div className="text-center w-full">{guarantor.type === 'partnership' ? 'หุ้นส่วนผู้จัดการ' : 'กรรมการผู้มีอำนาจลงนาม'}</div>
+                              </div>
+                              <div className="font-bold text-center"><Highlight>{guarantor.name}</Highlight></div>
                             </div>
                           </div>
                         ) : (
                           <div className="space-y-2">
                             <div className="border-b border-black w-full h-8"></div>
                             <div className="text-center w-full">
-                              ( ชื่อ: <Highlight>{guarantor.name}</Highlight> )
+                              ( <Highlight>{guarantor.name}</Highlight> )
                             </div>
                           </div>
                         )}
@@ -551,10 +572,12 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
                 </div>
 
                 <div className="mt-auto pt-8 space-y-4">
-                  <div className="font-bold">พยาน:</div>
-                  <div className="flex flex-col items-center">
-                    <div className="border-b border-black w-[80%] h-12 mb-1"></div>
-                    <div className="text-center">(<span className="inline-block w-[150px]"></span>)</div>
+                  <div>พยาน:</div>
+                  <div className="border-b border-black w-full h-8"></div>
+                  <div className="flex justify-between px-4">
+                    <span>(</span>
+                    <span className="flex-1 mx-4 mb-1"></span>
+                    <span>)</span>
                   </div>
                 </div>
               </div>
@@ -574,25 +597,28 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
 
         <div className="mt-8 border border-black text-[13px] font-bold">
           <div className="grid grid-cols-2 divide-x divide-black">
-            <div className="p-6 min-h-[600px] flex flex-col">
-              <div className="flex-1 mt-4 space-y-16">
-                <div className="font-bold text-[13px] text-left h-[50px] flex flex-col justify-center">
-                  <div>{lender2Label}:</div>
-                  <Highlight>{data.borrowerCompany}</Highlight>
+            <div className="border-r border-black p-4 flex flex-col h-full">
+              <div className="flex-1 space-y-16">
+                <div className="font-bold text-[13px] text-left">
+                  <div>{lender2Label} :</div>
+                  <div><Highlight>{data.borrowerCompany}</Highlight></div>
                 </div>
                 <div className="space-y-12">
                   {data.borrowerDirectors.split(/\s*และ\s*/).map((sig, idx) => (
                     <div key={idx} className="space-y-2">
                       <div className="border-b border-black w-full h-8"></div>
                       <div className="text-center w-full">
-                        ชื่อ: <Highlight>{sig.trim()}</Highlight>
+                        ( <Highlight>{sig.trim()}</Highlight> )
                       </div>
                     </div>
                   ))}
 
                   <div className="pt-4 text-left">
-                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                    <div className="font-bold"><Highlight>{data.borrowerCompany}</Highlight></div>
+                    <div className="relative">
+                      <div className="absolute left-0">ตำแหน่ง:</div>
+                      <div className="text-center w-full">กรรมการผู้มีอำนาจลงนาม</div>
+                    </div>
+                    <div className="font-bold text-center"><Highlight>{data.borrowerCompany}</Highlight></div>
                   </div>
                 </div>
               </div>
@@ -602,7 +628,7 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
                 <div className="border-b border-black w-full h-8"></div>
                 <div className="flex justify-between px-4">
                   <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4 mb-1"></span>
+                  <span className="flex-1 mx-4 mb-1"></span>
                   <span>)</span>
                 </div>
               </div>
