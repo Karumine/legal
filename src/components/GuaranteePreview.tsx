@@ -455,7 +455,7 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
           <div className="flex gap-4 text-justify mb-6">
             <span className="shrink-0 w-8">19.</span>
             <div className="flex-1">
-              ข้อสัญญาในสัญญานี้ที่ต้องห้าม หรือมิอาจใช้บังคับได้ในเขตอำนาจศาลใด ให้ถือว่าสัญญานั้นต้องห้าม หรือมิอาจใช้บังคับได้เฉพาะในเขตอำนาจศาลนั้นเท่านั้น นอกจากนี้ การต้องห้าม หรือมิอาจใช้บังคับได้ดังกล่าวจะไม่เป็นเหตุให้ความสมบูรณ์ของข้อสัญญาข้ออื่นต้องเสื่อมเสียตามไปด้วย และมิให้ถือว่าข้อสัญญาข้อที่ต้องห้ามหรือมิอาจใช้บังคับได้นั้นจะถูกต้องห้าม หรือมิอาจใช้บังคับได้ในเขตอำนาจศาลอื่นๆ ตามไปด้วย ผู้ค้ำประกันสละสิทธิ (เพียงเท่าที่กฎหมายอนุญาตให้ทำได้) ในการบังคับใช้บทบัญญัติของกฎหมายซึ่งเป็นเหตุให้ข้อสัญญาใดๆ ของสัญญานี้เป็นอันต้องห้าม หรือมิอาจใช้บังคับได้
+              ข้อสัญญาในสัญญานี้ที่ต้องห้าม หรือมิอาจใช้บังคับได้ในเขตอำนาจศาลใด ให้ถือว่าข้อสัญญานั้นต้องห้าม หรือมิอาจใช้บังคับได้เฉพาะในเขตอำนาจศาลนั้นเท่านั้น นอกจากนี้ การต้องห้าม หรือมิอาจใช้บังคับได้ดังกล่าวจะไม่เป็นเหตุให้ความสมบูรณ์ของข้อสัญญาข้ออื่นต้องเสื่อมเสียตามไปด้วย และมิให้ถือว่าข้อสัญญาข้อที่ต้องห้ามหรือมิอาจใช้บังคับได้นั้นจะถูกต้องห้าม หรือมิอาจใช้บังคับได้ในเขตอำนาจศาลอื่นๆ ตามไปด้วย ผู้ค้ำประกันขอสละสิทธิ์ (เพียงเท่าที่กฎหมายอนุญาตให้ทำได้) ในการบังคับใช้บทบัญญัติของกฎหมายซึ่งเป็นเหตุให้ข้อสัญญาใดๆ ของสัญญานี้เป็นอันต้องห้าม หรือมิอาจใช้บังคับได้
             </div>
           </div>
 
@@ -479,7 +479,7 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
 
         <div className="mt-8">
           <div className="indent-10 mb-6">
-            สัญญาฉบับนี้ทำขึ้นมา 3 (สาม) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านข้อความในสัญญาและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
+            สัญญาฉบับนี้ทำขึ้นมา 3 (สาม) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
           </div>
 
           <div className="border border-black text-[13px] font-bold">
@@ -655,8 +655,8 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
                 <h2 className="text-[13px]">หนังสือยืนยันสถานภาพและให้ความยินยอมของคู่สมรส</h2>
               </div>
 
-              <div className="text-end mb-6 pr-4">
-                เขียนที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด
+              <div className="flex justify-end mb-6 pr-4">
+                <span>เขียนที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด</span>
               </div>
 
               <div className="text-center mb-12">
@@ -669,33 +669,45 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
 
               <div className="flex flex-col items-center gap-16 mt-32">
                 {/* Guarantor Signature Row */}
-                <div className="flex flex-col items-center">
-                  <div className="flex items-end w-fit">
-                    <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                <div className="flex flex-col items-center w-fit">
+                  <div className="flex items-end">
+                    <div className="w-[140px] flex justify-end pr-2 shrink-0 whitespace-nowrap">ลงชื่อ</div>
                     <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
-                    <span className="shrink-0 whitespace-nowrap pl-1">ผู้ค้ำประกัน</span>
+                    <div className="w-[140px] flex justify-start pl-2 shrink-0 whitespace-nowrap">ผู้ค้ำประกัน</div>
                   </div>
-                  <div className="mt-4">( <Highlight>{guarantor.name}</Highlight> )</div>
+                  <div className="mt-4 w-full flex">
+                    <div className="w-[140px] shrink-0"></div>
+                    <div className="w-72 text-center">( <Highlight>{guarantor.name}</Highlight> )</div>
+                    <div className="w-[140px] shrink-0"></div>
+                  </div>
                 </div>
 
                 {/* Witness 1 Signature Row */}
-                <div className="flex flex-col items-center">
-                  <div className="flex items-end w-fit">
-                    <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                <div className="flex flex-col items-center w-fit">
+                  <div className="flex items-end">
+                    <div className="w-[140px] flex justify-end pr-2 shrink-0 whitespace-nowrap">ลงชื่อ</div>
                     <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
-                    <span className="shrink-0 whitespace-nowrap pl-1">พยาน</span>
+                    <div className="w-[140px] flex justify-start pl-2 shrink-0 whitespace-nowrap">พยาน</div>
                   </div>
-                  <div className="mt-4 text-center w-full">(........................................................)</div>
+                  <div className="mt-4 w-full flex">
+                    <div className="w-[140px] shrink-0"></div>
+                    <div className="w-72 text-center flex justify-center gap-1"><span>(</span><span className="w-48 inline-block"></span><span>)</span></div>
+                    <div className="w-[140px] shrink-0"></div>
+                  </div>
                 </div>
 
                 {/* Witness 2 Signature Row */}
-                <div className="flex flex-col items-center">
-                  <div className="flex items-end w-fit">
-                    <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                <div className="flex flex-col items-center w-fit">
+                  <div className="flex items-end">
+                    <div className="w-[140px] flex justify-end pr-2 shrink-0 whitespace-nowrap">ลงชื่อ</div>
                     <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
-                    <span className="shrink-0 whitespace-nowrap pl-1">พยาน</span>
+                    <div className="w-[140px] flex justify-start pl-2 shrink-0 whitespace-nowrap">พยาน</div>
                   </div>
-                  <div className="mt-4 text-center w-full">(........................................................)</div>
+                  <div className="mt-4 w-full flex">
+                    <div className="w-[140px] shrink-0"></div>
+                    <div className="w-72 text-center flex justify-center gap-1"><span>(</span><span className="w-48 inline-block"></span><span>)</span></div>
+                    <div className="w-[140px] shrink-0"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -717,8 +729,8 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
                     <h2 className="text-[13px]">หนังสือยินยอมให้คู่สมรสทำนิติกรรม</h2>
                   </div>
 
-                  <div className="text-end mb-6 pr-4">
-                    เขียนที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด
+                  <div className="flex justify-end mb-6 pr-4">
+                    <span>เขียนที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด</span>
                   </div>
 
                   <div className="text-center mb-12">
@@ -742,33 +754,45 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
 
                   <div className="flex flex-col items-center gap-16 mt-32">
                     {/* Spouse Signature Row */}
-                    <div className="flex flex-col items-center">
-                      <div className="flex items-end w-fit">
-                        <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                    <div className="flex flex-col items-center w-fit">
+                      <div className="flex items-end">
+                        <div className="w-[140px] flex justify-end pr-2 shrink-0 whitespace-nowrap">ลงชื่อ</div>
                         <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
-                        <span className="shrink-0 whitespace-nowrap pl-1 text-[11px]">สามี/ภริยา ผู้ให้ความยินยอม</span>
+                        <div className="w-[140px] flex justify-start pl-2 shrink-0 whitespace-nowrap text-[11px]">สามี/ภริยา ผู้ให้ความยินยอม</div>
                       </div>
-                      <div className="mt-4">( <Highlight>{guarantor.spouseName}</Highlight> )</div>
+                      <div className="mt-4 w-full flex">
+                        <div className="w-[140px] shrink-0"></div>
+                        <div className="w-72 text-center">( <Highlight>{guarantor.spouseName}</Highlight> )</div>
+                        <div className="w-[140px] shrink-0"></div>
+                      </div>
                     </div>
 
                     {/* Witness 1 Signature Row */}
-                    <div className="flex flex-col items-center">
-                      <div className="flex items-end w-fit">
-                        <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                    <div className="flex flex-col items-center w-fit">
+                      <div className="flex items-end">
+                        <div className="w-[140px] flex justify-end pr-2 shrink-0 whitespace-nowrap">ลงชื่อ</div>
                         <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
-                        <span className="shrink-0 whitespace-nowrap pl-1">พยาน</span>
+                        <div className="w-[140px] flex justify-start pl-2 shrink-0 whitespace-nowrap">พยาน</div>
                       </div>
-                      <div className="mt-4 text-center w-full">(........................................................)</div>
+                      <div className="mt-4 w-full flex">
+                        <div className="w-[140px] shrink-0"></div>
+                        <div className="w-72 text-center flex justify-center gap-1"><span>(</span><span className="w-48 inline-block"></span><span>)</span></div>
+                        <div className="w-[140px] shrink-0"></div>
+                      </div>
                     </div>
 
                     {/* Witness 2 Signature Row */}
-                    <div className="flex flex-col items-center">
-                      <div className="flex items-end w-fit">
-                        <span className="shrink-0 whitespace-nowrap pr-1">ลงชื่อ</span>
+                    <div className="flex flex-col items-center w-fit">
+                      <div className="flex items-end">
+                        <div className="w-[140px] flex justify-end pr-2 shrink-0 whitespace-nowrap">ลงชื่อ</div>
                         <div className="border-b border-black border-dotted w-72 mb-[2px]"></div>
-                        <span className="shrink-0 whitespace-nowrap pl-1">พยาน</span>
+                        <div className="w-[140px] flex justify-start pl-2 shrink-0 whitespace-nowrap">พยาน</div>
                       </div>
-                      <div className="mt-4 text-center w-full">(........................................................)</div>
+                      <div className="mt-4 w-full flex">
+                        <div className="w-[140px] shrink-0"></div>
+                        <div className="w-72 text-center flex justify-center gap-1"><span>(</span><span className="w-48 inline-block"></span><span>)</span></div>
+                        <div className="w-[140px] shrink-0"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
