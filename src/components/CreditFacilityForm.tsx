@@ -289,7 +289,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
             ))}
           </div>
           <div className="pt-2 space-y-4">
-            <div>
+            <div onFocusCapture={(e) => { e.stopPropagation(); onFocusSection?.('cf-purpose'); }}>
               <div className="flex justify-between items-center mb-1">
                 <label className="block text-xs font-medium text-gray-600">วัตถุประสงค์ (ข้อ 2)</label>
                 {otherAgreementsWithLocation.length > 0 && (
