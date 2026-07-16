@@ -1449,35 +1449,38 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             สัญญาฉบับนี้ มีข้อความถูกต้องตรงกันทุกฉบับ คู่สัญญาทุกฝ่ายได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
           </div>
 
-          <div className="mt-4 grid grid-cols-2 border border-black min-h-[600px] text-[12px] font-bold">
+          <div className="mt-4 grid grid-cols-2 border border-black min-h-[600px] text-[13px] font-bold">
             {/* Left Column: Lender 1 */}
             <div className="border-r border-black p-4 flex flex-col h-full">
-              <div className="space-y-12">
-                <div className="font-bold">ผู้ให้สินเชื่อฝ่ายที่ 1: <Highlight>{agileInfo.companyName}</Highlight></div>
-                <div className="pt-8 space-y-12">
-                  {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
-                    <div key={idx} className="space-y-2">
-                      <div className="border-b border-black w-full h-8"></div>
-                      <div className="flex justify-center gap-2">
-                        <span>ชื่อ:</span>
-                        <div className="font-bold"><Highlight>{sig.trim()}</Highlight></div>
-                      </div>
+              <div className="font-bold">
+                <div>ผู้ให้สินเชื่อฝ่ายที่ 1:</div>
+                <div className="mt-1">{agileInfo.companyName}</div>
+              </div>
+              <div className="pt-8 space-y-12">
+                {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="border-b border-black w-full h-8"></div>
+                    <div className="flex justify-center gap-2">
+                      <span className="font-bold">( <Highlight>{sig.trim()}</Highlight> )</span>
                     </div>
-                  ))}
-
-                  <div className="pt-4 text-left">
-                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                    <div className="mt-2 text-left font-bold"><Highlight>{agileInfo.companyName}</Highlight></div>
                   </div>
-                </div>
+                ))}
               </div>
 
-              <div className="mt-auto pt-8 space-y-4">
+              <div className="mt-auto pt-12">
+                <div className="relative text-center w-full">
+                  <span className="absolute left-0 top-0">ตำแหน่ง:</span>
+                  <span>กรรมการผู้มีอำนาจลงนาม</span>
+                </div>
+                <div className="mt-2 text-center font-bold"><Highlight>{agileInfo.companyName}</Highlight></div>
+              </div>
+
+              <div className="pt-8 space-y-4">
                 <div>พยาน:</div>
                 <div className="border-b border-black w-full h-8"></div>
                 <div className="flex justify-between">
                   <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4"></span>
+                  <span className="flex-1 mx-4"></span>
                   <span>)</span>
                 </div>
               </div>
@@ -1485,37 +1488,37 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
 
             {/* Right Column: Borrower */}
             <div className="p-4 flex flex-col h-full">
-              <div className="space-y-12">
-                <div className="font-bold">ผู้กู้: <Highlight>{customerInfo.companyName}</Highlight>
-                </div>
-                <div className="pt-8 space-y-12">
-                  {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
-                    <div key={idx} className="space-y-2">
-                      <div className="border-b border-black w-full h-8"></div>
-                      <div className="flex justify-center gap-2">
-                        <span>ชื่อ:</span>
-                        <div className="font-bold">
-                          <Highlight>{sig.trim()}</Highlight>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="pt-4 text-left">
-                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                    <div className="mt-2 text-left font-bold">
-                      <Highlight>{customerInfo.companyName}</Highlight>
+              <div className="font-bold">
+                <div>ผู้กู้:</div>
+                <div className="mt-1"><Highlight>{customerInfo.companyName}</Highlight></div>
+              </div>
+              <div className="pt-8 space-y-12">
+                {(customerInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="border-b border-black w-full h-8"></div>
+                    <div className="flex justify-center gap-2">
+                      <span className="font-bold">( <Highlight>{sig.trim()}</Highlight> )</span>
                     </div>
                   </div>
+                ))}
+              </div>
+
+              <div className="mt-auto pt-12">
+                <div className="relative text-center w-full">
+                  <span className="absolute left-0 top-0">ตำแหน่ง:</span>
+                  <span>กรรมการผู้มีอำนาจลงนาม</span>
+                </div>
+                <div className="mt-2 text-center font-bold">
+                  <Highlight>{customerInfo.companyName}</Highlight>
                 </div>
               </div>
 
-              <div className="mt-auto pt-8 space-y-4">
+              <div className="pt-8 space-y-4">
                 <div>พยาน:</div>
                 <div className="border-b border-black w-full h-8"></div>
                 <div className="flex justify-between">
                   <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4"></span>
+                  <span className="flex-1 mx-4"></span>
                   <span>)</span>
                 </div>
               </div>
@@ -1529,42 +1532,41 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
         <div className="space-y-6 mt-8">
-          <div className="mt-4 grid grid-cols-2 border border-black min-h-[600px] text-[12px] font-bold">
+          <div className="mt-4 grid grid-cols-2 border border-black min-h-[600px] text-[13px] font-bold">
             {/* Left Column: Lender 2 */}
             <div className="border-r border-black p-4 flex flex-col h-full">
-              <div className="space-y-12">
-                <div className="font-bold">
-                  ผู้ให้สินเชื่อฝ่ายที่ 2: <Highlight>{tkInfo.companyName}</Highlight>
-                </div>
+              <div className="font-bold">
+                <div>ผู้ให้สินเชื่อฝ่ายที่ 2:</div>
+                <div className="mt-1"><Highlight>{tkInfo.companyName}</Highlight></div>
+              </div>
 
-                <div className="pt-8 space-y-12">
-                  {(tkInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
-                    <div key={idx} className="space-y-2">
-                      <div className="border-b border-black w-full h-8"></div>
-                      <div className="flex justify-center gap-2">
-                        <span>ชื่อ:</span>
-                        <div className="font-bold">
-                          <Highlight>{sig.trim()}</Highlight>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="pt-4 text-left">
-                    <div>ตำแหน่ง: กรรมการผู้มีอำนาจลงนาม</div>
-                    <div className="mt-2 text-left font-bold">
-                      <Highlight>{tkInfo.companyName}</Highlight>
+              <div className="pt-8 space-y-12">
+                {(tkInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="border-b border-black w-full h-8"></div>
+                    <div className="flex justify-center gap-2">
+                      <span className="font-bold">( <Highlight>{sig.trim()}</Highlight> )</span>
                     </div>
                   </div>
+                ))}
+              </div>
+
+              <div className="mt-auto pt-12">
+                <div className="relative text-center w-full">
+                  <span className="absolute left-0 top-0">ตำแหน่ง:</span>
+                  <span>กรรมการผู้มีอำนาจลงนาม</span>
+                </div>
+                <div className="mt-2 text-center font-bold">
+                  <Highlight>{tkInfo.companyName}</Highlight>
                 </div>
               </div>
 
-              <div className="mt-auto pt-8 space-y-4">
+              <div className="pt-8 space-y-4">
                 <div>พยาน:</div>
                 <div className="border-b border-black w-full h-8"></div>
                 <div className="flex justify-between">
                   <span>(</span>
-                  <span className="flex-1 border-b border-black mx-4"></span>
+                  <span className="flex-1 mx-4"></span>
                   <span>)</span>
                 </div>
               </div>
