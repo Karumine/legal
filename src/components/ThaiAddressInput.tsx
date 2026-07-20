@@ -56,7 +56,7 @@ const subdistricts = subdistrictsData as Subdistrict[];
 function composeAddress(f: AddressFields): string {
   const parts: string[] = [];
   if (f.houseNo) parts.push(`เลขที่ ${f.houseNo}`);
-  if (f.moo) parts.push(`หมู่ ${f.moo}`);
+  if (f.moo) parts.push(`หมู่ที่ ${f.moo}`);
   if (f.soi) parts.push(`ซอย${f.soi}`);
   if (f.road) parts.push(`ถนน${f.road}`);
 

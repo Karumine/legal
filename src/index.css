@@ -4,6 +4,7 @@
    Distributes spacing evenly between characters instead of words,
    which prevents excessive word-spacing in Thai text */
 .print-page {
+  font-family: "TH Sarabun PSK", "TH Sarabun New", "Sarabun", sans-serif;
   text-align: justify;
   text-justify: inter-character;
   -webkit-text-justify: inter-character;
@@ -79,10 +80,12 @@
     width: 210mm !important;
   }
 
-  /* Fix Chrome rendering underlines too thick in PDF */
+  /* Fix Chrome rendering underlines too thick in PDF and prevent cutting through Thai vowels */
   .print-page u,
   .print-page .underline {
     text-decoration-thickness: 0.01em !important;
+    text-decoration-skip-ink: none !important;
+    text-underline-offset: 0.1em;
   }
 }
 

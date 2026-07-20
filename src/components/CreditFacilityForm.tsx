@@ -345,7 +345,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
                 name="businessPurpose"
                 value={data.businessPurpose || ''}
                 onChange={handleChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white auto-resize-textarea resize-none overflow-hidden min-h-[80px]"
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white auto-resize-textarea resize-none overflow-y-auto min-h-[80px]"
                 placeholder="ระบุวัตถุประสงค์การกู้..."
               />
             </div>
@@ -386,7 +386,7 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
                         target.style.height = 'auto';
                         target.style.height = `${target.scrollHeight}px`;
                       }}
-                      className="flex-1 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-gray-50/50 auto-resize-textarea resize-none overflow-hidden min-h-[40px]"
+                      className="flex-1 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-gray-50/50 auto-resize-textarea resize-none overflow-y-auto min-h-[40px]"
                       placeholder={`ระบุเงื่อนไข (${['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][idx + 2] || idx + 3})...`}
                     />
                     <button

@@ -227,7 +227,7 @@ export default function ODForm({ data, onChange, agreements = [], currentAgreeme
                 name="businessPurpose"
                 value={data.businessPurpose || ''}
                 onChange={handleChange}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white auto-resize-textarea resize-none overflow-hidden min-h-[80px]"
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white auto-resize-textarea resize-none overflow-y-auto min-h-[80px]"
                 placeholder="ระบุวัตถุประสงค์การกู้..."
               />
             </div>
