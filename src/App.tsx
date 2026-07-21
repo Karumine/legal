@@ -294,23 +294,7 @@ function App() {
     }
   }, [contentHeight, activePreview]);
 
-  const handlePrint = () => {
-    const rightPanel = document.getElementById('preview-panel');
-    const scrollPos = rightPanel ? rightPanel.scrollTop : 0;
 
-    window.print();
-
-    // Force repaint after print dialog closes to fix browser bug where 
-    // content disappears when scrolled down.
-    setTimeout(() => {
-      if (rightPanel) {
-        rightPanel.style.display = 'none';
-        rightPanel.offsetHeight; // trigger reflow
-        rightPanel.style.display = '';
-        rightPanel.scrollTop = scrollPos;
-      }
-    }, 100);
-  };
 
   const updateField = <K extends keyof AppData>(field: K, value: AppData[K]) => {
     setData(prev => ({ ...prev, [field]: value }));
@@ -594,6 +578,36 @@ function App() {
       fileName: `${t.label}_${customerName}` 
     }))
   ];
+
+  const handlePrint = () => {
+    const rightPanel = document.getElementById('preview-panel');
+    const scrollPos = rightPanel ? rightPanel.scrollTop : 0;
+
+    const currentItem = exportItems.find(item => item.id === activePreview);
+    const originalTitle = document.title;
+    
+    if (currentItem) {
+      const safeFileName = (currentItem.fileName || currentItem.label).replace(/[\\/:*?"<>|]/g, '-');
+      document.title = safeFileName;
+    }
+
+    window.print();
+
+    if (currentItem) {
+      document.title = originalTitle;
+    }
+
+    // Force repaint after print dialog closes to fix browser bug where 
+    // content disappears when scrolled down.
+    setTimeout(() => {
+      if (rightPanel) {
+        rightPanel.style.display = 'none';
+        rightPanel.offsetHeight; // trigger reflow
+        rightPanel.style.display = '';
+        rightPanel.scrollTop = scrollPos;
+      }
+    }, 100);
+  };
 
   const renderContractPreview = (agreement: Agreement) => {
     const allGuarantors = [
