@@ -441,7 +441,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 <div className="flex gap-4">
                   <span className="shrink-0 w-8">(1)</span>
                   <div className="flex-1 text-justify uppercase">
-                    คู่สัญญาทุกฝ่ายตกลงว่าวิธีการรับสินเชื่อตามสัญญาฉบับนี้ สามารถกระทำได้ในรูปแบบของ แคชเชียร์เช็ค (Cashier Cheque) หรือเช็คธนาคารสั่งจ่ายล่วงหน้า ซึ่งออกโดยธนาคารพาณิชย์ที่กำหนดโดยผู้ให้สินเชื่อและยอมรับโดยผู้กู้ หรือ การโอนเงินเข้าบัญชีธนาคารของผู้กู้ หรือ วิธีการอื่นใดที่คู่สัญญาทุกฝ่ายจะได้ตกลงร่วมกัน โดยผู้ให้สินเชื่อจะดำเนินการส่งมอบสินเชื่อให้ผู้กู้ด้วยวิธีการที่ระบุในหนังสือขอเบิกใช้สินเชื่อในแต่ละคราว ภายใต้เงื่อนไขดังต่อไปนี้
+                    คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ตกลงว่าวิธีการรับสินเชื่อตามสัญญาฉบับนี้ สามารถกระทำได้ในรูปแบบของ แคชเชียร์เช็ค (Cashier Cheque) หรือเช็คธนาคารสั่งจ่ายล่วงหน้า ซึ่งออกโดยธนาคารพาณิชย์ที่กำหนดโดยผู้ให้สินเชื่อและยอมรับโดยผู้กู้ หรือ การโอนเงินเข้าบัญชีธนาคารของผู้กู้ หรือ วิธีการอื่นใดที่คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จะได้ตกลงร่วมกัน โดยผู้ให้สินเชื่อจะดำเนินการส่งมอบสินเชื่อให้ผู้กู้ด้วยวิธีการที่ระบุในหนังสือขอเบิกใช้สินเชื่อในแต่ละคราว ภายใต้เงื่อนไขดังต่อไปนี้
                   </div>
                 </div>
 
@@ -492,7 +492,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex-1 text-justify">
               <span className="mb-2 inline-block underline">รูปแบบอื่นใด</span>
               <p>
-                ผู้ให้สินเชื่อตกลงจะได้ส่งมอบสินเชื่อตามจำนวนที่ระบุในหนังสือขอเบิกใช้เงินกู้ให้แก่ผู้กู้ ตามวิธีการอื่นใดที่คู่สัญญาทุกฝ่ายจะได้ตกลงร่วมกัน ก่อนหรือภายในวันเบิกใช้สินเชื่อ และให้ถือว่าเป็นการให้สินเชื่อตามที่คู่สัญญาทุกฝ่ายจะได้ตกลงร่วมกัน
+                ผู้ให้สินเชื่อตกลงจะได้ส่งมอบสินเชื่อตามจำนวนที่ระบุในหนังสือขอเบิกใช้เงินกู้ให้แก่ผู้กู้ ตามวิธีการอื่นใดที่คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จะได้ตกลงร่วมกัน ก่อนหรือภายในวันเบิกใช้สินเชื่อ และให้ถือว่าเป็นการให้สินเชื่อตามที่คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จะได้ตกลงร่วมกัน
               </p>
             </div>
           </div>
@@ -584,7 +584,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-4 ml-12">
             <span className="shrink-0 w-8">(ค)</span>
             <div className="flex-1 text-justify">
-              สัญญาให้สินเชื่อฉบับนี้ คู่สัญญาทุกฝ่ายตกลงร่วมกันว่าการชำระเงินค่างวดเป็นงวดๆ ตามที่ระบุไว้ในสัญญา เป็นการชำระหนี้อันมีกำหนดระยะเวลาการชำระหนี้ที่แน่นอนอันถือเป็นสาระสำคัญของสัญญา ผู้กู้ตกลงและยินยอมที่จะไม่ขอชำระค่างวดและ/หรือ เงินต้นและ/หรือ ดอกเบี้ยก่อนกำหนดเวลา อย่างไรก็ตาม ในกรณีที่ผู้กู้มีความประสงค์จะชำระปิดบัญชีก่อนกำหนดชำระหนี้ ไม่ว่าด้วยเหตุที่ผู้กู้ได้รับเงินทุนจากแหล่งเงินทุนอื่น และ/หรือ จากสถาบันการเงินอื่นใดอันเป็นแหล่งเงินทุนใหม่นอกเหนือจากผู้ให้สินเชื่อ หรือด้วยเหตุผลอื่นใดก็ตาม ผู้กู้จะต้องทำหนังสือแจ้งล่วงหน้าฝ่ายเดียวไปยังผู้ให้สินเชื่อไม่น้อยกว่า 5 (ห้า) วันทำการเพื่อแจ้งถึงการชำระเงินต้นสินเชื่อเงินกู้พร้อมดอกเบี้ยล่วงหน้าดังกล่าว และระบุจำนวนเงินที่จะชำระให้ชัดเจน
+              สัญญาให้สินเชื่อฉบับนี้ คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ตกลงร่วมกันว่าการชำระเงินค่างวดเป็นงวดๆ ตามที่ระบุไว้ในสัญญา เป็นการชำระหนี้อันมีกำหนดระยะเวลาการชำระหนี้ที่แน่นอนอันถือเป็นสาระสำคัญของสัญญา ผู้กู้ตกลงและยินยอมที่จะไม่ขอชำระค่างวดและ/หรือ เงินต้นและ/หรือ ดอกเบี้ยก่อนกำหนดเวลา อย่างไรก็ตาม ในกรณีที่ผู้กู้มีความประสงค์จะชำระปิดบัญชีก่อนกำหนดชำระหนี้ ไม่ว่าด้วยเหตุที่ผู้กู้ได้รับเงินทุนจากแหล่งเงินทุนอื่น และ/หรือ จากสถาบันการเงินอื่นใดอันเป็นแหล่งเงินทุนใหม่นอกเหนือจากผู้ให้สินเชื่อ หรือด้วยเหตุผลอื่นใดก็ตาม ผู้กู้จะต้องทำหนังสือแจ้งล่วงหน้าฝ่ายเดียวไปยังผู้ให้สินเชื่อไม่น้อยกว่า 5 (ห้า) วันทำการเพื่อแจ้งถึงการชำระเงินต้นสินเชื่อเงินกู้พร้อมดอกเบี้ยล่วงหน้าดังกล่าว และระบุจำนวนเงินที่จะชำระให้ชัดเจน
             </div>
           </div>
           <div className="text-justify ml-24">
@@ -1129,7 +1129,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           <div className="flex gap-4 ml-12">
             <span className="shrink-0 w-8">(ฏ)</span>
             <div className="flex-1 text-justify">
-              <span className="font-bold">หน้าที่กระทำการอื่นใด:</span> ผู้กู้จะต้องกระทำการ หรือปฏิบัติตามคำร้องขอของผู้ให้สินเชื่ออื่นใดเพิ่มเติม เพื่อให้การดำเนินการ หรือปฏิบัติตามสัญญานี้ของคู่สัญญาทุกฝ่ายสำเร็จลุล่วงไปได้ด้วยดี
+              <span className="font-bold">หน้าที่กระทำการอื่นใด:</span> ผู้กู้จะต้องกระทำการ หรือปฏิบัติตามคำร้องขอของผู้ให้สินเชื่ออื่นใดเพิ่มเติม เพื่อให้การดำเนินการ หรือปฏิบัติตามสัญญานี้ของคู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}สำเร็จลุล่วงไปได้ด้วยดี
             </div>
           </div>
           <div className="flex gap-4 ml-12">
@@ -1446,7 +1446,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         <PageHeader />
         <div className="space-y-6 mt-8">
           <div className="text-justify leading-relaxed indent-12">
-            สัญญาฉบับนี้ มีข้อความถูกต้องตรงกันทุกฉบับ คู่สัญญาทุกฝ่ายได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
+            สัญญาฉบับนี้ทำขึ้นมา <Highlight>{isAgileOnly ? '2 (สอง)' : '3 (สาม)'}</Highlight> ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญา<Highlight>{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}</Highlight>ได้อ่านข้อความในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
           </div>
 
           <div className="mt-4 grid grid-cols-2 border border-black min-h-[600px] text-[13px] font-bold">
@@ -1454,7 +1454,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="border-r border-black p-4 flex flex-col h-full">
               <div className="font-bold">
                 <div>ผู้ให้สินเชื่อฝ่ายที่ 1:</div>
-                <div className="mt-1">{agileInfo.companyName}</div>
+                <div className="mt-1"><Highlight>{agileInfo.companyName}</Highlight></div>
               </div>
               <div className="pt-8 space-y-12">
                 {(agileInfo.directors || '').split(/\s*และ\s*/).map((sig, idx) => (
@@ -1583,7 +1583,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 27 (Annex 1: Conditions Precedent) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
-        <div className="space-y-6 mt-8 text-[12px]">
+        <div className="space-y-6 mt-8">
           <div className="text-center font-bold">
             <div>เอกสารแนบท้ายหมายเลข 1</div>
             <div className="underline">เงื่อนไขบังคับก่อน</div>
@@ -1651,7 +1651,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 28 (Annex 1: Conditions Precedent Cont.) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
-        <div className="space-y-6 mt-8 text-[12px]">
+        <div className="space-y-6 mt-8">
           <div className="space-y-3 ml-12">
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-8">(จ)</span>
@@ -1731,7 +1731,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 29 (Annex 2: Loan Drawdown Request - Lender 1) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
-        <div className="space-y-4 text-[12px]">
+        <div className="space-y-4 mt-8 text-[12px]">
           <div className="text-center font-bold">
             <div className="font-bold">เอกสารแนบท้ายหมายเลข 2</div>
             <div className="font-bold underline text-center uppercase">หนังสือขอเบิกใช้สินเชื่อ</div>
@@ -1792,7 +1792,10 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                     </div>
                     <div className="flex items-start gap-2">
                       <div className="w-4 h-4 border border-black shrink-0 mt-0.5"></div>
-                      <div className="flex-1 min-w-0">วิธีการอื่นใด: ..................................................................................................................................................................</div>
+                      <div className="flex-1 min-w-0 flex items-baseline gap-1">
+                        <span className="shrink-0">วิธีการอื่นใด:</span>
+                        <span className="flex-1 overflow-hidden whitespace-nowrap">..................................................................................................................................................................</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1900,7 +1903,10 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                     </div>
                     <div className="flex items-start gap-2">
                       <div className="w-4 h-4 border border-black shrink-0 mt-0.5"></div>
-                      <div className="flex-1 min-w-0">วิธีการอื่นใด: ..................................................................................................................................................................</div>
+                      <div className="flex-1 min-w-0 flex items-baseline gap-1">
+                        <span className="shrink-0">วิธีการอื่นใด:</span>
+                        <span className="flex-1 overflow-hidden whitespace-nowrap">..................................................................................................................................................................</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1948,7 +1954,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 31 (Annex 3: Evidence of Receipt of Credit - Lender 1) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
         <PageHeader />
-        <div className="space-y-6 text-[12px]">
+        <div className="space-y-6 mt-8 text-[12px]">
           <div className="text-center font-bold">
             <div className="font-bold">เอกสารแนบท้ายหมายเลข 3</div>
             <div className="underline">เอกสารการรับสินเชื่อ</div>
@@ -1978,7 +1984,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             </div>
 
             <div className="text-justify indent-16 leading-[2.2]">
-              ในวันที่...................................ข้าพเจ้าได้รับสินเชื่อตามสัญญาให้สินเชื่อเป็นจำนวนเงิน.......................................................บาท จาก <Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 ไว้ถูกต้องครบถ้วนเรียบร้อยแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ ณ วัน เดือน ปี ที่กล่าวข้างต้น
+              ในวันที่................................ข้าพเจ้าได้รับสินเชื่อตามสัญญาให้สินเชื่อเป็นจำนวนเงิน.........................................บาท จาก <Highlight>{agileInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 1 ไว้ถูกต้องครบถ้วนเรียบร้อยแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ ณ วัน เดือน ปี ที่กล่าวข้างต้น
             </div>
           </div>
 
@@ -2044,7 +2050,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             </div>
 
             <div className="text-justify indent-16 leading-[2.2]">
-              ในวันที่...................................ข้าพเจ้าได้รับสินเชื่อตามสัญญาให้สินเชื่อเป็นจำนวนเงิน.......................................................บาท จาก <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2 ไว้ถูกต้องครบถ้วนเรียบร้อยแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ ณ วัน เดือน ปี ที่กล่าวข้างต้น
+              ในวันที่................................ข้าพเจ้าได้รับสินเชื่อตามสัญญาให้สินเชื่อเป็นจำนวนเงิน.........................................บาท จาก <Highlight>{tkInfo.companyName}</Highlight> ในฐานะผู้ให้สินเชื่อฝ่ายที่ 2 ไว้ถูกต้องครบถ้วนเรียบร้อยแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ ณ วัน เดือน ปี ที่กล่าวข้างต้น
             </div>
           </div>
 
@@ -2080,14 +2086,14 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 33 (Annex 4: Evidence of Delivery of Post-dated Checks) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
         <PageHeader />
-        <div className="space-y-4 text-[12px]">
+        <div className="space-y-4 mt-8 text-[12px]">
           <div className="text-center font-bold">
             <div>เอกสารแนบท้ายหมายเลข 4</div>
             <div className="underline">หลักฐานการส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่างวดและดอกเบี้ย</div>
           </div>
 
           <div className="text-justify indent-12 mt-4">
-            เอกสารฉบับนี้เป็นส่วนหนึ่งของสัญญาให้สินเชื่อเลขที่ <Highlight>{data.contractNo}</Highlight> ลงวันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> โดยคู่สัญญาทุกฝ่ายตกลงและยืนยัน ดังนี้
+            เอกสารฉบับนี้เป็นส่วนหนึ่งของสัญญาให้สินเชื่อเลขที่ <Highlight>{data.contractNo}</Highlight> ลงวันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> โดยคู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ตกลงและยืนยัน ดังนี้
           </div>
 
           <div className="space-y-3">
@@ -2108,7 +2114,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-8">3.</span>
               <div className="flex-1">
-                <span className="font-bold">การยืนยันรายละเอียดและสำเนาภาพถ่ายเช็ค :</span> คู่สัญญาทุกฝ่ายตกลงให้ถือว่า “ใบรับเช็ค” หรือ “สำเนาภาพถ่ายเช็คทั้งหมด” ที่มีการลงนามรับมอบโดยผู้ให้สินเชื่อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
+                <span className="font-bold">การยืนยันรายละเอียดและสำเนาภาพถ่ายเช็ค :</span> คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ตกลงให้ถือว่า “ใบรับเช็ค” หรือ “สำเนาภาพถ่ายเช็คทั้งหมด” ที่มีการลงนามรับมอบโดยผู้ให้สินเชื่อแต่ละฝ่าย ณ วันที่ทำสัญญานี้ เป็นรายละเอียดส่วนหนึ่งของเอกสารแนบท้ายฉบับนี้ และให้มีผลผูกพันตามกฎหมายเสมือนว่าได้มีการระบุรายละเอียดเช็คทุกฉบับไว้ในสัญญาฉบับนี้โดยละเอียดทุกประการ
               </div>
             </div>
 
@@ -2130,42 +2136,54 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
           {/* Signature Section */}
           <div className="mt-14 grid grid-cols-2 gap-x-12 gap-y-10">
             {/* Lender 1 */}
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center pb-10">
               <div className="w-full flex items-baseline gap-1 justify-center">
                 <span className="shrink-0 whitespace-nowrap">ลงชื่อ</span>
-                <div className="border-b border-dotted border-black w-[200px]"></div>
+                <div className="relative w-[200px]">
+                  <div className="border-b border-dotted border-black w-full"></div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 font-bold whitespace-nowrap">
+                    ( <Highlight>{agileInfo.companyName}</Highlight> )
+                  </div>
+                </div>
                 <div className="shrink-0 text-[10px] leading-tight flex flex-col items-start translate-y-1">
                   <span>ผู้ให้สินเชื่อฝ่ายที่ 1 </span>
                   <span>/ ผู้รับมอบเช็ค</span>
                 </div>
               </div>
-              <div className="mt-4 font-bold">( <Highlight>{agileInfo.companyName}</Highlight> )</div>
             </div>
 
             {/* Borrower */}
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center pb-10">
               <div className="w-full flex items-baseline gap-1 justify-center">
                 <span className="shrink-0 whitespace-nowrap">ลงชื่อ</span>
-                <div className="border-b border-dotted border-black w-[150px]"></div>
+                <div className="relative w-[150px]">
+                  <div className="border-b border-dotted border-black w-full"></div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 font-bold whitespace-nowrap">
+                    ( <Highlight>{customerInfo.companyName}</Highlight> )
+                  </div>
+                </div>
                 <div className="shrink-0 text-[10px] leading-tight flex flex-col items-start translate-y-1">
                   <span>ผู้กู้ / ผู้ส่ง</span>
                   <span>มอบเช็ค</span>
                 </div>
               </div>
-              <div className="mt-4 font-bold">( <Highlight>{customerInfo.companyName}</Highlight> )</div>
             </div>
 
             {/* Lender 2 */}
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center pb-10">
               <div className="w-full flex items-baseline gap-1 justify-center">
                 <span className="shrink-0 whitespace-nowrap">ลงชื่อ</span>
-                <div className="border-b border-dotted border-black w-[150px]"></div>
+                <div className="relative w-[150px]">
+                  <div className="border-b border-dotted border-black w-full"></div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 font-bold whitespace-nowrap">
+                    ( <Highlight>{tkInfo.companyName}</Highlight> )
+                  </div>
+                </div>
                 <div className="shrink-0 text-[10px] leading-tight flex flex-col items-start translate-y-1">
                   <span>ผู้ให้สินเชื่อฝ่ายที่ 2 </span>
                   <span>/ ผู้รับมอบเช็ค</span>
                 </div>
               </div>
-              <div className="mt-4 font-bold">( <Highlight>{tkInfo.companyName}</Highlight> )</div>
             </div>
           </div>
         </div>
@@ -2175,7 +2193,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 34 (Annex 5: Details of Installments and Calculation) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
         <PageHeader />
-        <div className="flex flex-col items-center text-[12px]">
+        <div className="flex flex-col items-center mt-8 text-[12px]">
           <div className="font-bold">เอกสารแนบท้ายหมายเลข 5</div>
           <div className="font-bold underline text-center uppercase">
             รายละเอียดค่างวดแต่ละงวดและวิธีการคำนวณค่างวด
@@ -2187,7 +2205,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {/* Page 35 (Annex 6: Details of Collateral) */}
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
         <PageHeader />
-        <div className="flex flex-col items-center text-[12px]">
+        <div className="flex flex-col items-center mt-8 text-[12px]">
           <div className="font-bold">เอกสารแนบท้ายหมายเลข 6</div>
           <div className="font-bold underline text-center uppercase">
             รายละเอียดเกี่ยวกับหลักประกัน
@@ -2200,7 +2218,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
       {data.showAnnex7 && (
         <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
           <PageHeader />
-          <div className="flex flex-col items-center text-[12px] mb-4">
+          <div className="flex flex-col items-center mt-8 text-[12px] mb-4">
             <div className="font-bold">เอกสารแนบท้ายหมายเลข 7</div>
             <div className="font-bold underline text-center uppercase">
               แบบของหนังสือแจ้งเปลี่ยนแปลงช่องทางการชำระเงิน

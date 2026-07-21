@@ -124,7 +124,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             </div>
           </div>
           <div className="italic">
-            (ซึ่งต่อไปในสัญญานี้แต่ละฝ่ายจะเรียกว่า <b>“คู่สัญญา”</b> และจะเรียกรวมกันว่า <b>“คู่สัญญาทุกฝ่าย”</b>)
+            (ซึ่งต่อไปในสัญญานี้แต่ละฝ่ายจะเรียกว่า <b>“คู่สัญญา”</b> และจะเรียกรวมกันว่า <b>“คู่สัญญาทั้งสามฝ่าย”</b>)
           </div>
         </div>
 
@@ -241,7 +241,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">1.3.</span>
             <div className="flex-1">
-              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {Math.round(downPaymentPercentage)} ({thaiBahtText(Math.round(downPaymentPercentage).toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText(downPaymentAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จาก <Highlight>{customerInfo.companyName}</Highlight> <b>(“ผู้เช่าซื้อ”)</b> ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระแทน และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทุกฝ่ายตกลงให้เงินค่าชำระราคาครั้งแรกดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
+              ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {Math.round(downPaymentPercentage)} ({thaiBahtText(Math.round(downPaymentPercentage).toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText(downPaymentAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จาก <Highlight>{customerInfo.companyName}</Highlight> <b>(“ผู้เช่าซื้อ”)</b> ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระแทน และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทั้งสามฝ่ายตกลงให้เงินค่าชำระราคาครั้งแรกดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
             </div>
           </div>
 
@@ -354,7 +354,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="flex gap-2 ml-4">
             <span className="shrink-0">(ฉ)</span>
             <div className="flex-1">
-              คู่สัญญาทุกฝ่ายตกลงร่วมกันว่า วิธีการชำระเงินค่าซื้อคืนเครื่องจักร ตัวแทนจำหน่ายตกลงชำระให้แก่บริษัทฯ ณ ภูมิลำเนาของบริษัทฯ ตามที่ระบุไว้ในสัญญานี้ โดยตัวแทนจำหน่ายสามารถชำระด้วยเงินสด เช็ค ด้วยวิธีการโอนเงินเข้าบัญชีของบริษัทฯ <b>ชื่อบัญชี บริษัท อาไจล์ แอสเซ็ทส์ จำกัด ธนาคารกสิกรไทย ประเภทออมทรัพย์ หมายเลขบัญชี 025-3-77662-5</b> หรือด้วยวิธีการอื่นใดที่คู่สัญญากตกลงร่วมกัน และให้ถือว่าบริษัทฯ ได้รับชำระค่ารับซื้อเครื่องจักรคืนเมื่อได้มีการขึ้นเงินและ/หรือ ได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น
+              คู่สัญญาทั้งสามฝ่ายตกลงร่วมกันว่า วิธีการชำระเงินค่าซื้อคืนเครื่องจักร ตัวแทนจำหน่ายตกลงชำระให้แก่บริษัทฯ ณ ภูมิลำเนาของบริษัทฯ ตามที่ระบุไว้ในสัญญานี้ โดยตัวแทนจำหน่ายสามารถชำระด้วยเงินสด เช็ค ด้วยวิธีการโอนเงินเข้าบัญชีของบริษัทฯ <b>ชื่อบัญชี บริษัท อาไจล์ แอสเซ็ทส์ จำกัด ธนาคารกสิกรไทย ประเภทออมทรัพย์ หมายเลขบัญชี 025-3-77662-5</b> หรือด้วยวิธีการอื่นใดที่คู่สัญญากตกลงร่วมกัน และให้ถือว่าบริษัทฯ ได้รับชำระค่ารับซื้อเครื่องจักรคืนเมื่อได้มีการขึ้นเงินและ/หรือ ได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น
             </div>
           </div>
         </div>
@@ -372,7 +372,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             <div className="flex-1">
               <span className="font-bold">การส่งมอบเครื่องจักร</span>
               <p className="mt-2 text-justify">
-                คู่สัญญาทุกฝ่ายตกลงร่วมกันว่าในการส่งมอบเครื่องจักรที่ซื้อคืนนั้น ตัวแทนจำหน่ายตกลงชำระ และรับผิดชอบค่าใช้จ่ายทั้งปวงอันเกิดจากการส่งมอบ ขนย้าย และบรรดาค่าใช้จ่ายอื่นๆ อันเกิดจากการกระทำในลักษณะเดียวกันแต่เพียงผู้เดียว
+                คู่สัญญาทั้งสามฝ่ายตกลงร่วมกันว่าในการส่งมอบเครื่องจักรที่ซื้อคืนนั้น ตัวแทนจำหน่ายตกลงชำระ และรับผิดชอบค่าใช้จ่ายทั้งปวงอันเกิดจากการส่งมอบ ขนย้าย และบรรดาค่าใช้จ่ายอื่นๆ อันเกิดจากการกระทำในลักษณะเดียวกันแต่เพียงผู้เดียว
               </p>
             </div>
           </div>
@@ -641,7 +641,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <PageHeader />
 
         <div className="mt-8 indent-10 pb-8 border-b border-white">
-          เพื่อเป็นหลักฐานในการนี้ คู่สัญญาทุกฝ่ายได้ลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
+          เพื่อเป็นหลักฐานในการนี้ คู่สัญญาทั้งสามฝ่ายได้ลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
         </div>
 
         <div className=" border border-black flex min-h-[600px] text-[13px]">
