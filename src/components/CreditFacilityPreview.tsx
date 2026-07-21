@@ -117,8 +117,11 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 </div>
               </div>
 
-              <div className="pl-10">
-                (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>“ผู้ให้สินเชื่อ”</b>) และ
+              <div className="flex gap-4 text-justify">
+                <span className="shrink-0 w-8"></span>
+                <div className="flex-1">
+                  (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>“ผู้ให้สินเชื่อ”</b>) และ
+                </div>
               </div>
 
               <div className="flex gap-4 text-justify">
@@ -1706,7 +1709,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
               <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-8">(ง)</span>
                 <div className="flex-1">
-                  บรรดาคำรับรองและยืนยันที่ผู้กู้ได้ให้ไว้ในข้อ 9. ของสัญญาฉบับนี้ เป็นความจริง และถูกต้องเสมือนว่าได้ทำขึ้น หรือให้ไว้ ณ วันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อครั้งแรก
+                  บรรดาคำรับรองและยืนยันที่ผู้กู้ให้ไว้ในข้อ 9. ของสัญญาฉบับนี้ เป็นความจริง และถูกต้องเสมือนว่าได้ทำขึ้น หรือให้ไว้ ณ วันที่กำหนดให้เป็นวันเบิกใช้สินเชื่อครั้งแรก
                 </div>
               </div>
 
@@ -1756,7 +1759,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-8">1.</span>
               <div className="flex-1">
-                ข้าพเจ้า <Highlight>{customerInfo.companyName}</Highlight> ขออ้างถึงสัญญาให้สินเชื่อ และให้คำจำกัดความต่าง ๆ ที่ใช้ในสัญญาให้สินเชื่อ ให้มีความหมายเช่นเดียวกันกับการใช้ในคำขอเบิกใช้สินเชื่อนี้
+                ข้าพเจ้า<Highlight>{customerInfo.companyName}</Highlight> ขออ้างถึงสัญญาให้สินเชื่อ และให้คำจำกัดความต่าง ๆ ที่ใช้ในสัญญาให้สินเชื่อ ให้มีความหมายเช่นเดียวกันกับการใช้ในคำขอเบิกใช้สินเชื่อนี้
               </div>
             </div>
 
@@ -2100,14 +2103,14 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-8">1.</span>
               <div className="flex-1">
-                <span className="font-bold">การส่งมอบเช็ค :</span> ผู้กู้ตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่างวดให้แก่ผู้ให้สินเชื่อ จำนวนทั้งสิ้น <Highlight>{(parseInt(data.installments) * 2).toString()}</Highlight> ฉบับ เพื่อเป็นการชำระค่างวดสินเชื่อ (งวดที่ 1 ถึง งวดที่ <Highlight>{data.installments}</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ 2 (สอง) ฉบับ ให้แก่ผู้ให้สินเชื่อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบมานี้
+                <span className="font-bold">การส่งมอบเช็ค :</span> ผู้กู้ตกลงส่งมอบเช็คสั่งจ่ายล่วงหน้า สำหรับการชำระค่างวดให้แก่<u><b>ผู้ให้สินเชื่อ</b></u> จำนวนทั้งสิ้น <b><Highlight>{(parseInt(data.installments) * 2).toString()}</Highlight> ฉบับ</b> เพื่อเป็นการชำระค่างวดสินเชื่อ (งวดที่ 1 ถึง งวดที่ <Highlight>{data.installments}</Highlight>) โดยแบ่งชำระเป็นงวด งวดละ 2 (สอง) ฉบับ ให้แก่ผู้ให้สินเชื่อแต่ละฝ่าย ณ วันที่ทำสัญญาฉบับนี้เป็นที่เรียบร้อยแล้ว รายละเอียดปรากฏตามสำเนาเช็คสั่งจ่ายล่วงหน้าที่แนบมานี้
               </div>
             </div>
 
             <div className="flex gap-4 text-justify">
               <span className="shrink-0 w-8">2.</span>
               <div className="flex-1">
-                <span className="font-bold">รายละเอียดการชำระ :</span> เช็คแต่ละฉบับจะถูกสั่งจ่ายในนามผู้ให้สินเชื่อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ “<span className="underline">รายละเอียดค่างวดแต่ละงวดและวิธีการคำนวณค่างวด</span>” ตามเอกสารแนบท้ายหมายเลข 5 ของสัญญาให้สินเชื่อฉบับนี้
+                <span className="font-bold">รายละเอียดการชำระ :</span> เช็คแต่ละฉบับจะถูกสั่งจ่ายในนามผู้ให้สินเชื่อแต่ละฝ่าย โดยระบุจำนวนเงินและวันที่ครบกำหนดชำระในแต่ละงวดให้สอดคล้องกับ “<span className="underline">รายละเอียดค่างวดแต่ละงวดและวิธีการคำนวณค่างวด</span>” <b>ตามเอกสารแนบท้ายหมายเลข 5</b> ของสัญญาให้สินเชื่อฉบับนี้
               </div>
             </div>
 
@@ -2147,7 +2150,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 </div>
                 <div className="shrink-0 text-[10px] leading-tight flex flex-col items-start translate-y-1">
                   <span>ผู้ให้สินเชื่อฝ่ายที่ 1 </span>
-                  <span>/ ผู้รับมอบเช็ค</span>
+                  <span>/ ผู้รับเช็ค</span>
                 </div>
               </div>
             </div>
@@ -2181,7 +2184,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
                 </div>
                 <div className="shrink-0 text-[10px] leading-tight flex flex-col items-start translate-y-1">
                   <span>ผู้ให้สินเชื่อฝ่ายที่ 2 </span>
-                  <span>/ ผู้รับมอบเช็ค</span>
+                  <span>/ ผู้รับเช็ค</span>
                 </div>
               </div>
             </div>
