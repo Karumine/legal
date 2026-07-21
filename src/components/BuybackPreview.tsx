@@ -78,7 +78,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100">
         <PageHeader />
 
-        <div className="text-center font-bold mb-6 mt-4">
+        <div className="text-center font-bold mb-6 mt-8">
           <h2 className="text-[16px] text-balance px-12">สัญญารับซื้อคืน ({contractLabel})</h2>
           <div className="mt-2 text-[16px]">
             สัญญาเลขที่ <Highlight>{data.contractNo}</Highlight>
@@ -90,14 +90,14 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         </div>
 
         <div className="space-y-4 mb-6">
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-4">1.</span>
+          <div className="flex gap-4 text-justify">
+            <span className="shrink-0 w-8">1.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> เลขประจำตัวผู้เสียภาษี <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (<b>“บริษัทฝ่ายที่ 1”</b>)
             </div>
           </div>
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-4">2.</span>
+          <div className="flex gap-4 text-justify">
+            <span className="shrink-0 w-8">2.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (<b>“บริษัทฝ่ายที่ 2”</b>)
             </div>
@@ -105,8 +105,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           <div className="italic">
             (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>“บริษัทฯ”</b> ฝ่ายหนึ่ง)
           </div>
-          <div id="section-vendor" className="flex gap-2 text-justify">
-            <span className="shrink-0 w-4">3.</span>
+          <div id="section-vendor" className="flex gap-4 text-justify">
+            <span className="shrink-0 w-8">3.</span>
             <div className="flex-1">
               {data.vendorType === 'shop' ? (
                 <>
@@ -144,15 +144,15 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             <span className="font-bold text-[14px]">1. รายละเอียดของเครื่องจักรและกรรมสิทธิ์ในเครื่องจักร</span>
           </div>
 
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">1.1.</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">1.1.</span>
             <div className="flex-1">
               ตามที่ตัวแทนจำหน่ายได้จำหน่ายและบริษัทฯ ได้ตกลงซื้อเครื่องจักรและอุปกรณ์ดังต่อไปนี้
 
               <div className="mt-4 space-y-4">
                 {assets.slice(0, PAGE2_MAX).map((asset, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <span className="shrink-0">(1.1.{idx + 1})</span>
+                  <div key={idx} className="flex gap-4">
+                    <span className="w-16 shrink-0">(1.1.{idx + 1})</span>
                     <div className="flex-1">
                       <Highlight>{asset.name} {asset.description}</Highlight> จำนวน <Highlight>{asset.quantity} {asset.unit}</Highlight> ราคา <Highlight>{formattedAmount(parseFloat(asset.totalAmount.replace(/,/g, '')))} บาท ({thaiBahtText(asset.totalAmount.replace(/,/g, ''))})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight>
                     </div>
@@ -175,8 +175,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           </div>
 
           {assets.length <= PAGE2_MAX && (
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">1.2.</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">1.2.</span>
               <div className="flex-1">
                 คู่สัญญาตกลงกันซื้อขายเครื่องจักรนี้ โดยมีวัตถุประสงค์เพื่อให้บริษัทฯ ให้บริการเช่าซื้อแก่ <Highlight>{customerInfo.companyName}</Highlight> (<b>“ผู้เช่าซื้อ”</b>) ตามสัญญาเช่าซื้อเลขที่ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ
               </div>
@@ -200,7 +200,7 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             <div className="mt-8 space-y-4">
               <div className="ml-12 space-y-4">
                 {pageAssets.map((asset, idx) => (
-                  <div key={idx} className="flex gap-2">
+                  <div key={idx} className="flex gap-4">
                     <span className="shrink-0">(1.1.{start + idx + 1})</span>
                     <div className="flex-1">
                       <Highlight>{asset.name} {asset.description}</Highlight> จำนวน <Highlight>{asset.quantity} {asset.unit}</Highlight> ราคา <Highlight>{formattedAmount(parseFloat(asset.totalAmount.replace(/,/g, '')))} บาท ({thaiBahtText(asset.totalAmount.replace(/,/g, ''))})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight>
@@ -219,8 +219,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
                     ซึ่งต่อไปในสัญญาฉบับนี้จะเรียกเครื่องจักรและอุปกรณ์ประกอบในข้อ 1.1 นี้ รวมกันว่า <b>“เครื่องจักร”</b> รายละเอียดปรากฏตาม Quotation / Purchase order sheet เอกสารแนบท้ายหมายเลข 1
                   </div>
 
-                  <div className="mt-6 flex gap-2">
-                    <span className="shrink-0">1.2.</span>
+                  <div className="mt-6 flex gap-4">
+                    <span className="w-8 shrink-0">1.2.</span>
                     <div className="flex-1">
                       คู่สัญญาตกลงกันซื้อขายเครื่องจักรนี้ โดยมีวัตถุประสงค์เพื่อให้บริษัทฯ ให้บริการเช่าซื้อแก่ <Highlight>{customerInfo.companyName}</Highlight> (<b>“ผู้เช่าซื้อ”</b>) ตามสัญญาเช่าซื้อเลขที่ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ
                     </div>
@@ -238,22 +238,22 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <PageHeader />
 
         <div className="mt-8 space-y-6">
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">1.3.</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">1.3.</span>
             <div className="flex-1">
               ตัวแทนจำหน่ายได้รับเงินค่าชำระราคาครั้งแรก <GreenHighlight>(down payment)</GreenHighlight> ในอัตราร้อยละ {Math.round(downPaymentPercentage)} ({thaiBahtText(Math.round(downPaymentPercentage).toString()).replace('บาทถ้วน', '')}) ของราคาเครื่องเครื่องจักร อันมีมูลค่า <Highlight>{formattedAmount(totalAssetValue)} บาท</Highlight> เป็นจำนวนเงิน <Highlight>{formattedAmount(downPaymentAmount)} บาท ({thaiBahtText(downPaymentAmount.toString())})</Highlight> <GreenHighlight>(รวมภาษีมูลค่าเพิ่ม)</GreenHighlight> จาก <Highlight>{customerInfo.companyName}</Highlight> <b>(“ผู้เช่าซื้อ”)</b> ตามสัญญาเช่าซื้อ <Highlight>{hpData.contractNo}</Highlight> ฉบับลงวันที่ <Highlight>{formatThaiDate(hpData.contractDate)}</Highlight> ที่ทำขึ้นระหว่างผู้เช่าซื้อกับบริษัทฯ ซึ่งชำระแทน และ/หรือ ชำระในนามบริษัทฯ ครบถ้วนเรียบร้อยแล้ว รายละเอียดปรากฏตามหนังสือยืนยันการชำระเงินมัดจำ/เงินดาวน์ เอกสารแนบท้ายหมายเลข 2 ทั้งนี้ คู่สัญญาทั้งสามฝ่ายตกลงให้เงินค่าชำระราคาครั้งแรกดังกล่าวนับเป็นส่วนหนึ่งของเงินค่าเครื่องจักรด้วย
             </div>
           </div>
 
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">1.4.</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">1.4.</span>
             <div className="flex-1">
               <b>ณ วันที่ทำสัญญาฉบับนี้ คู่สัญญากตกลงว่าเมื่อบริษัทฯ <Highlight>ชำระเงินค่าเครื่องจักรส่วนที่เหลือเป็นจำนวนทั้งสิ้น {formattedAmount(remainingAmount)} บาท ({thaiBahtText(remainingAmount.toString())})</Highlight> (รวมภาษีมูลค่าเพิ่ม)</b> ให้แก่ตัวแทนจำหน่ายและตัวแทนจำหน่ายได้รับเงินค่าเครื่องจักรส่วนที่เหลือครบถ้วนเรียบร้อยแล้ว กรรมสิทธิ์ในเครื่องจักรตกเป็นของบริษัทฯ <Highlight>ตามสัดส่วนในสัญญาเช่าซื้อ {hpData.contractNo} ฉบับลงวันที่ {formatThaiDate(hpData.contractDate)}</Highlight>
             </div>
           </div>
 
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">1.5.</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">1.5.</span>
             <div className="flex-1">
               คู่สัญญาตกลงว่าให้สัญญารับซื้อคืนฉบับนี้ ถือเป็นหลักประกันภายใต้เงื่อนไขตามข้อ 2.
             </div>
@@ -263,22 +263,22 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             <span className="font-bold text-[14px]">2. หน้าที่และความรับผิดชอบของตัวแทนจำหน่าย</span>
           </div>
 
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">2.1.</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">2.1.</span>
             <div className="flex-1">
               ตัวแทนจำหน่ายตกลงว่าในกรณีที่มีเหตุจำเป็นต้องดำเนินการยืดเครื่องจักรจากผู้เช่าซื้อ ตัวแทนจำหน่ายตกลงที่จะรับซื้อเครื่องจักร หรือกระทำการใดอันมีลักษณะเป็นการเข้ารับซื้อเครื่องจักรดังกล่าวในราคาที่ประเมินที่เหมาะสม
             </div>
           </div>
 
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">2.2.</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">2.2.</span>
             <div className="flex-1">
               ตัวแทนจำหน่ายตกลงรับซื้อเครื่องจักรตามข้อตกลงและเงื่อนไขในการรับซื้อเครื่องจักรคืน ดังต่อไปนี้
             </div>
           </div>
 
-          <div className="flex gap-2 ml-12">
-            <span className="shrink-0">(ก)</span>
+          <div className="flex gap-4 ml-12">
+            <span className="w-8 shrink-0">(ก)</span>
             <div className="flex-1">
               ในการประเมินราคาซื้อคืนเครื่องจักรให้ใช้เกณฑ์นับจำนวนอายุเป็นรายปี โดยนับตั้งแต่คิดตั้งเสร็จพร้อมรับประกัน เครื่องจักร อุปกรณ์ หรือ สินค้า เป็นหลัก
             </div>
@@ -293,22 +293,22 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <PageHeader />
 
         <div className="mt-8 space-y-6">
-          <div className="flex gap-2 ml-12">
-            <span className="shrink-0">(ข)</span>
+          <div className="flex gap-4 ml-12">
+            <span className="w-8 shrink-0">(ข)</span>
             <div className="flex-1">
               การรับซื้อเครื่องจักรคืน{data.buybackMode === 'newOnly' ? 'มือ 1' : data.buybackMode === 'usedOnly' ? 'มือ 2' : 'ทั้งมือ 1 และ มือ 2'} เครื่องจักร อุปกรณ์ หรือ สินค้า ต้องมีความสมบูรณ์ และมีสภาพพร้อมใช้งานได้ตามระบบปกติ โดยทางตัวแทนจำหน่าย จะเป็นผู้สรุปผลการตรวจสอบ
             </div>
           </div>
 
-          <div className="flex gap-2 ml-12">
-            <span className="shrink-0">(ค)</span>
+          <div className="flex gap-4 ml-12">
+            <span className="w-8 shrink-0">(ค)</span>
             <div className="flex-1">
               การรับซื้อคืน{data.buybackMode === 'newOnly' ? 'มือ 1' : data.buybackMode === 'usedOnly' ? 'มือ 2' : 'ทั้งมือ 1 และ มือ 2'} เครื่องจักร อุปกรณ์ หรือ สินค้า จะพิจารณาราคาให้ โดยอ้างอิงจากราคาตามสัญญาของบริษัทฯ เป็นหลัก
             </div>
           </div>
 
-          <div className="flex gap-2 ml-12">
-            <span className="shrink-0">(ง)</span>
+          <div className="flex gap-4 ml-12">
+            <span className="w-8 shrink-0">(ง)</span>
             <div className="flex-1 border-black">
               หากตัวแทนจำหน่ายไม่รับซื้อเครื่องจักรคืนหรือไม่ตอบกลับภายในเวลาที่กำหนด ให้ถือว่าตัวแทนจำหน่ายปฏิเสธการซื้อเครื่องจักรคืน
             </div>
@@ -344,15 +344,15 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             </table>
           </div>
 
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">(จ)</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">(จ)</span>
             <div className="flex-1">
               ในการแจ้งให้ตัวแทนจำหน่ายรับซื้อเครื่องจักรคืนนั้น บริษัทฯ ต้องแจ้งให้ตัวแทนจำหน่ายทราบล่วงหน้าเป็นลายลักษณ์อักษร ไม่น้อยกว่า 60 (หกสิบ) วัน และเมื่อตัวแทนจำหน่ายได้รับการแจ้งดังกล่าวแล้ว ตัวแทนจำหน่ายตกลงรับซื้อเครื่องจักรคืนจากบริษัทฯ ภายใน 60 (หกสิบ) วัน นับแต่วันที่ได้รับแจ้งจากบริษัทฯ
             </div>
           </div>
 
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">(ฉ)</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">(ฉ)</span>
             <div className="flex-1">
               คู่สัญญาทั้งสามฝ่ายตกลงร่วมกันว่า วิธีการชำระเงินค่าซื้อคืนเครื่องจักร ตัวแทนจำหน่ายตกลงชำระให้แก่บริษัทฯ ณ ภูมิลำเนาของบริษัทฯ ตามที่ระบุไว้ในสัญญานี้ โดยตัวแทนจำหน่ายสามารถชำระด้วยเงินสด เช็ค ด้วยวิธีการโอนเงินเข้าบัญชีของบริษัทฯ <b>ชื่อบัญชี บริษัท อาไจล์ แอสเซ็ทส์ จำกัด ธนาคารกสิกรไทย ประเภทออมทรัพย์ หมายเลขบัญชี 025-3-77662-5</b> หรือด้วยวิธีการอื่นใดที่คู่สัญญากตกลงร่วมกัน และให้ถือว่าบริษัทฯ ได้รับชำระค่ารับซื้อเครื่องจักรคืนเมื่อได้มีการขึ้นเงินและ/หรือ ได้รับชำระเต็มจำนวนจากธนาคารดังกล่าวข้างต้น
             </div>
@@ -367,8 +367,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <PageHeader />
 
         <div className="mt-8 space-y-8">
-          <div className="flex gap-2">
-            <span className="shrink-0 font-bold">3.</span>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">3.</span>
             <div className="flex-1">
               <span className="font-bold">การส่งมอบเครื่องจักร</span>
               <p className="mt-2 text-justify">
@@ -377,8 +377,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span className="shrink-0 font-bold">4.</span>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">4.</span>
             <div className="flex-1">
               <span className="font-bold">การโอนกรรมสิทธิ์เครื่องจักรที่รับซื้อคืน</span>
               <p className="mt-2 text-justify">
@@ -387,8 +387,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span className="shrink-0 font-bold">5.</span>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">5.</span>
             <div className="flex-1">
               <span className="font-bold">ประกันภัยเครื่องจักร</span>
               <p className="mt-2 text-justify">
@@ -406,33 +406,33 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <PageHeader />
 
         <div className="mt-8 space-y-6">
-          <div className="flex gap-2">
-            <span className="shrink-0 font-bold">6.</span>
+          <div className="flex gap-4">
+            <span className="w-8 shrink-0 font-bold">6.</span>
             <div className="flex-1">
               <span className="font-bold">เหตุและผลของการผิดนัด</span>
             </div>
           </div>
 
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">6.1</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">6.1</span>
             <div className="flex-1">
               เมื่อเกิดเหตุการณ์ใดเหตุการณ์หนึ่งดังต่อไปนี้ขึ้น ให้ถือว่าเป็นเหตุผิดนัด
 
               <div className="mt-4 space-y-4 text-justify">
-                <div className="flex gap-2">
-                  <span className="shrink-0">(ก)</span>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0">(ก)</span>
                   <div className="flex-1">
                     ตัวแทนจำหน่ายไม่รักษาและปฏิบัติตามข้อตกลงเงื่อนไขข้อผูกพันใดๆ และข้อกำหนดใดๆ อันเป็นหน้าที่ของตนตามที่ระบุไว้ในสัญญานี้
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <span className="shrink-0">(ข)</span>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0">(ข)</span>
                   <div className="flex-1">
                     ตัวแทนจำหน่ายปฏิเสธการรับซื้อเครื่องจักรคืนจากบริษัทฯ
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <span className="shrink-0">(ค)</span>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0">(ค)</span>
                   <div className="flex-1">
                     ตัวแทนจำหน่ายผิดนัดชำระค่ารับซื้อเครื่องจักรคืนงวดใดงวดหนึ่ง หรือเงินอื่นใดที่จะต้องชำระตามสัญญา (ไม่ว่าจะได้ทวงถามหรือไม่)
                   </div>
@@ -441,32 +441,32 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
             </div>
           </div>
 
-          <div className="flex gap-2 ml-4">
-            <span className="shrink-0">6.2</span>
+          <div className="flex gap-4 ml-4">
+            <span className="w-8 shrink-0">6.2</span>
             <div className="flex-1">
               เมื่อเกิดเหตุผิดนัดข้อใดข้อหนึ่งตามข้อ 6.1 ข้างต้น ให้บริษัทฯ มีสิทธิประการใดประการหนึ่งหรือหลายประการดังต่อไปนี้ทันที
 
               <div className="mt-4 space-y-4 text-justify">
-                <div className="flex gap-2">
-                  <span className="shrink-0">(ก)</span>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0">(ก)</span>
                   <div className="flex-1">
                     เรียกร้องให้ตัวแทนจำหน่ายปฏิบัติตามสัญญาให้ถูกต้อง ซึ่งรวมถึงแต่ไม่จำกัดเพียงการชำระค่ารับซื้อเครื่องจักรที่ยังค้างชำระอยู่
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <span className="shrink-0">(ข)</span>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0">(ข)</span>
                   <div className="flex-1">
                     เรียกร้องให้ตัวแทนจำหน่ายชำระค่าปรับกรณีผิดนัดชำระเงินใดๆ ตามสัญญานี้ ในอัตราร้อยละ 18 ต่อปี นับแต่วันที่ครบกำหนดชำระเป็นต้นไปจนถึงวันที่ตัวแทนจำหน่ายได้ชำระหนี้ให้แก่บริษัทฯ ครบถ้วน ทั้งนี้อัตราดอกเบี้ยผิดนัดชำระหนี้ หรือดอกเบี้ยผิดนัดตามอัตราที่กฎหมายกำหนด อาจมีการเปลี่ยนแปลงได้ ในกรณีที่มีการเปลี่ยนแปลงกฎหมายที่เกี่ยวข้อง เช่น ประกาศของกระทรวงการคลัง ประกาศของธนาคารแห่งประเทศไทย หรือ ประมวลกฎหมายแพ่งและพาณิชย์ ซึ่งออกบังคับใช้ภายหลังวันที่ทำสัญญานี้ อันเป็นเหตุให้การกำหนดอัตราดอกเบี้ยผิดนัดชำระหนี้ตามกฎหมายต้องเปลี่ยนแปลงไป ตัวแทนจำหน่ายตกลงยินยอมให้อัตราดอกเบี้ยผิดนัดชำระหนี้ตามสัญญาฉบับนี้เป็นไปตามกฎหมายที่เปลี่ยนแปลงไป ไม่ว่าอัตราดอกเบี้ยผิดนัดนั้นจะเพิ่มขึ้นหรือลดลง โดยมิได้รับความยินยอมจาก ตัวแทนจำหน่ายก่อน และให้ถือปฏิบัติเช่นนี้ตลอดไปจนกว่า ตัวแทนจำหน่ายจะชำระหนี้ให้แก่บริษัทฯ จนครบถ้วน
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <span className="shrink-0">(ค)</span>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0">(ค)</span>
                   <div className="flex-1">
                     บอกเลิกสัญญาฉบับนี้ได้โดยทันที โดยผลของการบอกเลิกสัญญาเป็นไปตามข้อ 7 ของสัญญานี้
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <span className="shrink-0">(ง)</span>
+                <div className="flex gap-4">
+                  <span className="w-8 shrink-0">(ง)</span>
                   <div className="flex-1">
                     เรียกร้องให้ตัวแทนจำหน่ายรับผิดในค่าเสียหายอื่นๆ (ถ้ามี)
                   </div>
@@ -486,50 +486,50 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <div className="mt-8 space-y-8 text-justify">
           {/* 7 */}
           <div className="space-y-4">
-            <div className="flex gap-2">
-              <span className="shrink-0 font-bold">7.</span>
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0 font-bold">7.</span>
               <span className="font-bold">การเลิกสัญญา</span>
             </div>
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">7.1</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">7.1</span>
               <div>
                 กรณีที่บริษัทฯ เป็นผู้ใช้สิทธิบอกเลิกสัญญานี้แล้ว ให้บริษัทฯ มีสิทธิดังต่อไปนี้
-                <div className="flex gap-2 mt-2">
-                  <span className="shrink-0">(ก)</span>
+                <div className="flex gap-4 mt-2">
+                  <span className="w-8 shrink-0">(ก)</span>
                   <span>มีสิทธิได้รับชดใช้บรรดาค่าใช้จ่าย ค่าฤชาธรรมเนียม หรือค่าธรรมเนียมทั้งปวงที่เกี่ยวเนื่องกับการดำเนินการทางกฎหมาย การทวงถาม การค้นหา ติดตามตัวแทนจำหน่าย</span>
                 </div>
               </div>
             </div>
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">7.2</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">7.2</span>
               <span>ตัวแทนจำหน่ายจะบอกเลิกสัญญาฉบับนี้มิได้ เว้นแต่จะได้รับความยินยอมจากบริษัทฯ</span>
             </div>
           </div>
 
           {/* 8 */}
           <div className="space-y-4">
-            <div className="flex gap-2">
-              <span className="shrink-0 font-bold">8.</span>
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0 font-bold">8.</span>
               <span className="font-bold">ความเป็นส่วนหนึ่งของสัญญา</span>
             </div>
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">8.1</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">8.1</span>
               <span>เอกสารประกอบ และ/หรือเอกสารแนบท้ายสัญญานี้ที่ทำขึ้นโดยบริษัทฯหรือในนามของบริษัทฯ โดยตัวแทนจำหน่าย หรือในนามของตัวแทนจำหน่าย ให้ถือเป็นส่วนหนึ่งของสัญญาฉบับนี้เสมือนว่าได้นำมาระบุไว้ครบถ้วนในสัญญาฉบับนี้</span>
             </div>
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">8.2</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">8.2</span>
               <span>หากข้อความใดในเอกสารแนบท้าย และ/หรือ เอกสารประกอบอื่นใดขัดหรือแย้งกับสัญญาฉบับนี้ให้ถือตามสัญญาฉบับนี้</span>
             </div>
           </div>
 
           {/* 9 */}
           <div className="space-y-4">
-            <div className="flex gap-2">
-              <span className="shrink-0 font-bold">9.</span>
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0 font-bold">9.</span>
               <span className="font-bold">การบอกกล่าว</span>
             </div>
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">9.1</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">9.1</span>
               <span>การติดต่อหรือบอกกล่าวซึ่งทำขึ้นโดยคู่สัญญาฝ่ายหนึ่งและส่งไปยังคู่สัญญาอีกฝ่ายหนึ่งให้ทำเป็นหนังสือ หากมิได้ระบุไว้เป็นอย่างอื่นอาจส่งโดยทางโทรสารหรือส่งทางไปรษณีย์ หรือให้คนนำไปส่งเองก็ได้ ให้ส่งไปยังคู่สัญญาอีกฝ่ายหนึ่งตามที่อยู่ที่ได้ระบุไว้ข้างต้นของสัญญาฉบับนี้ (เว้นแต่คู่สัญญาฝ่ายใดฝ่ายหนึ่งจะได้แจ้งที่อยู่อื่นใดซึ่งได้มีการระบุ โดยการแจ้งเป็นหนังสือไปยังอีกฝ่ายหนึ่งล่วงหน้า 7 (เจ็ด) วันก่อนส่งคำบอกกล่าว)</span>
             </div>
           </div>
@@ -545,29 +545,29 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <div className="mt-8 space-y-8 text-justify">
           {/* 9.2-9.3 */}
           <div className="space-y-4">
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">9.2</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">9.2</span>
               <div className="flex-1">
                 การติดต่อหรือคำบอกกล่าวจากบริษัทฯ ไปยังตัวแทนจำหน่ายให้ถือว่าตัวแทนจำหน่ายได้รับโดยถูกต้องแล้ว เมื่อ
                 <div className="mt-4 space-y-4 text-justify">
-                  <div className="flex gap-2">
-                    <span className="shrink-0">(ก)</span>
+                  <div className="flex gap-4">
+                    <span className="w-8 shrink-0">(ก)</span>
                     <div className="flex-1">ในกรณีที่ส่งโดยโทรสาร เมื่อมีการส่ง หรือ</div>
                   </div>
-                  <div className="flex gap-2">
-                    <span className="shrink-0">(ข)</span>
+                  <div className="flex gap-4">
+                    <span className="w-8 shrink-0">(ข)</span>
                     <div className="flex-1">ในกรณีทำเป็นหนังสือ เมื่อส่งไปถึงที่อยู่ของตัวแทนจำหน่ายดังกล่าวไว้ข้างต้นของสัญญาฉบับนี้ หรือเมื่อครบกำหนด 3 (สาม) วัน นับจากวันที่ได้ส่งทางไปรษณีย์พร้อมปิดดวงตราไปรษณียากรถึงตัวแทนจำหน่ายแล้ว และแม้หากว่าส่งให้ไม่ได้เพราะตัวแทนจำหน่ายย้ายที่อยู่ หรือที่อยู่ที่กล่าวนี้เปลี่ยนแปลงไป หรือถูกรื้อถอนไป โดยตัวแทนจำหน่ายไม่ได้แจ้งการย้าย หรือการเปลี่ยนแปลง หรือการรื้อถอนนั้นเป็นหนังสือต่อบริษัทฯ หรือการส่งโทรพิมพ์ หรือโทรสาร หรือจดหมายอิเล็กทรอนิกส์ตามหมายเลขหรือที่อยู่ที่ตัวแทนจำหน่ายแจ้งให้เจ้าของทราบ ให้ถือว่าตัวแทนจำหน่ายได้รับทราบข้อความตามหนังสือ หรือโทรพิมพ์ หรือโทรสาร หรือจดหมายอิเล็กทรอนิกส์นั้น</div>
                   </div>
-                  <div className="flex gap-2">
-                    <span className="shrink-0">(ค)</span>
+                  <div className="flex gap-4">
+                    <span className="w-8 shrink-0">(ค)</span>
                     <div className="flex-1">บริษัทฯ อาจเปลี่ยนแปลงหรือเพิ่มเติมวิธีการส่งบรรดาเอกสาร หรือ บอกกล่าวใดๆไปยังตัวแทนจำหน่ายด้วยวิธีการทางอิเล็กทรอนิกส์ เพื่อทดแทนหรือเพิ่มเติมจากการทำเป็นหนังสือได้โดยการส่งเอกสาร หรือ บอกกล่าวเป็นลายลักษณ์อักษร หรือ เป็นจดหมายอิเล็กทรอนิกส์ตามที่อยู่ Email address ที่ผู้เช่าซื้อได้แจ้งให้เจ้าของทราบ แม้ว่าหนังสือนั้นตัวแทนจำหน่ายจะได้รับหรือไม่ได้รับ หรือถูกตีกลับไม่ว่าด้วยเหตุใดก็ตามให้ถือว่าตัวแทนจำหน่ายได้รับทราบ และถือว่าบริษัทฯ ได้บอกกล่าวโดยชอบด้วยกฎหมายแล้ว</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">9.3</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">9.3</span>
               <div className="flex-1">
                 ทั้งนี้ การติดต่อหรือบอกกล่าวจากตัวแทนจำหน่ายไปยังบริษัทฯ จะมีผลสมบูรณ์ต่อเมื่อบริษัทฯ ได้รับทราบแล้วเท่านั้น
               </div>
@@ -576,16 +576,16 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
 
           {/* 10 */}
           <div className="space-y-4">
-            <div className="flex gap-2">
-              <span className="shrink-0 font-bold">10.</span>
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0 font-bold">10.</span>
               <span className="font-bold">การสละสิทธิ</span>
             </div>
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">10.1</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">10.1</span>
               <span>กรณีที่ตัวแทนจำหน่ายผิดนัดหรือผิดสัญญาฉบับนี้ครั้งใด ถ้าบริษัทฯ ยอมผ่อนผันการผิดนัดหรือผิดสัญญาครั้งนั้นๆ ไม่ให้ถือว่าเป็นการผ่อนผันการผิดนัดหรือผิดสัญญาครั้งอื่น</span>
             </div>
-            <div className="flex gap-2 ml-4">
-              <span className="shrink-0">10.2</span>
+            <div className="flex gap-4 ml-4">
+              <span className="w-8 shrink-0">10.2</span>
               <span>ความล่าช้าในการใช้สิทธิใดๆ ตามสัญญาฉบับนี้ ของบริษัทฯ ก็ดี ของผู้รับสิทธิจากบริษัทฯ หรือของผู้รับโอนสิทธิจากบริษัทฯ ก็ดี ไม่ถือว่าเป็นการสละสิทธิดังกล่าว ทั้งการใช้สิทธิเพียงครั้งเดียวหรือเพียงบางส่วนก็ไม่เป็นการตัดสิทธิของบริษัทฯ ที่จะใช้สิทธิอื่นๆ หรือสิทธินั้นต่อไปอีก</span>
             </div>
           </div>
@@ -601,8 +601,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
         <div className="mt-8 space-y-8 text-justify">
           {/* 11 */}
           <div className="space-y-4">
-            <div className="flex gap-2">
-              <span className="shrink-0 font-bold">11.</span>
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0 font-bold">11.</span>
               <span className="font-bold">การแยกต่างหากจากสัญญา</span>
             </div>
             <p>
@@ -612,8 +612,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
 
           {/* 12 */}
           <div className="space-y-4">
-            <div className="flex gap-2">
-              <span className="shrink-0 font-bold">12.</span>
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0 font-bold">12.</span>
               <span className="font-bold">การแก้ไขสัญญา</span>
             </div>
             <p>
@@ -623,8 +623,8 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
 
           {/* 13 */}
           <div className="space-y-4">
-            <div className="flex gap-2">
-              <span className="shrink-0 font-bold">13.</span>
+            <div className="flex gap-4">
+              <span className="w-8 shrink-0 font-bold">13.</span>
               <span className="font-bold">กฎหมายที่ใช้บังคับ</span>
             </div>
             <p>
