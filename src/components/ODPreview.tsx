@@ -1959,7 +1959,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         <PageHeader />
         <div className="space-y-6 pt-4">
           <div className="text-justify indent-12">
-            สัญญาฉบับนี้ทำขึ้นมา <Highlight>{isAgileOnly ? '2 (สอง)' : '3 (สาม)'}</Highlight> ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ได้อ่านข้อความในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาได้ลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
+            สัญญาฉบับนี้ทำขึ้นมา <Highlight>{isAgileOnly ? '2 (สอง)' : '3 (สาม)'}</Highlight> ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ได้อ่านข้อความในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ได้ลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
           </div>
 
           <div className="mt-4 grid grid-cols-2 border border-black min-h-[600px] text-[12px] font-bold">

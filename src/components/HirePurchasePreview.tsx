@@ -1147,7 +1147,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none">
         <PageHeader />
         <div className="mt-8 text-justify leading-relaxed indent-12">
-          สัญญาฉบับนี้ทำขึ้นมา <Highlight>{isAgileOnly ? '2 (สอง)' : '3 (สาม)'}</Highlight> ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญาจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
+          สัญญาฉบับนี้ทำขึ้นมา <Highlight>{isAgileOnly ? '2 (สอง)' : '3 (สาม)'}</Highlight> ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ได้อ่านข้อความและเข้าใจในสัญญาเพื่อเป็นหลักฐานในการทำสัญญานี้ คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}ได้ลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
         </div>
 
         <div className="mt-8 grid grid-cols-2 border border-black min-h-[600px] font-bold">
