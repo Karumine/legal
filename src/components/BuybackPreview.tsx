@@ -85,8 +85,9 @@ export default function BuybackPreview({ data, agileInfo, tkInfo, hpData, custom
           </div>
         </div>
 
-        <div className="indent-10 mb-6">
-          สัญญารับซื้อคืนฉบับนี้ (<b>“สัญญา”</b>) ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> (<b>“วันที่สัญญามีผลใช้บังคับ”</b>) โดยและระหว่าง:
+        <div className="mb-6 space-y-4">
+          <div className="indent-10">สัญญารับซื้อคืนฉบับนี้ (<b>“สัญญา”</b>) ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> (<b>“วันที่สัญญามีผลใช้บังคับ”</b>)</div>
+          <div>โดยและระหว่าง:</div>
         </div>
 
         <div className="space-y-4 mb-6">
