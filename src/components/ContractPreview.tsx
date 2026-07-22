@@ -75,7 +75,7 @@ export default function ContractPreview({ data }: Props) {
         <div className="mb-4 flex gap-4 text-justify">
           <span className="w-8 shrink-0">(1)</span>
           <div className="flex-1 text-justify">
-            <b><Highlight>{data.companyName}</Highlight></b> (โดย<Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.companyAddress, data.companyPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้รับค่าธรรมเนียม"</b>) และ
+            <b><Highlight>{data.companyName}</Highlight></b> (โดย<Highlight>{data.companyDirectors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(data.companyAddress, data.companyPostalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(data.companyTaxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้จะเรียกว่า <b>"ผู้รับค่าธรรมเนียม"</b>)
           </div>
         </div>
 
@@ -86,8 +86,11 @@ export default function ContractPreview({ data }: Props) {
           </div>
         </div>
 
-        <div className="indent-8 mb-6 font-bold">
-          คู่สัญญาทั้งสองฝ่ายได้ตกลงเข้าทำสัญญาฉบับนี้ขึ้นโดยมีข้อความดังต่อไปนี้
+        <div className="mb-6 flex gap-4 text-justify">
+          <span className="w-8 shrink-0"></span>
+          <div className="flex-1 font-bold">
+            คู่สัญญาทั้งสองฝ่ายได้ตกลงเข้าทำสัญญาฉบับนี้ขึ้นโดยมีข้อความดังต่อไปนี้
+          </div>
         </div>
 
         <div className="mb-4 flex gap-4 text-justify">
@@ -102,10 +105,10 @@ export default function ContractPreview({ data }: Props) {
           const label = CONTRACT_TYPE_LABELS[item.type];
           const isLast = index === page1ItemCount - 1;
           return (
-            <div key={item.id} className={`flex gap-4 text-justify ${isLast ? 'mb-6' : 'mb-2'}`}>
+            <div key={item.id} className={`ml-12 flex gap-4 text-justify ${isLast ? 'mb-6' : 'mb-2'}`}>
               <span className="w-8 shrink-0">1.{index + 1}.</span>
               <div className="flex-1 text-justify">
-                ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
+                ตาม{label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
               </div>
             </div>
           );
@@ -133,10 +136,10 @@ export default function ContractPreview({ data }: Props) {
               const actualIndex = index + 2;
               const label = CONTRACT_TYPE_LABELS[item.type];
               return (
-                <div key={item.id} className={`flex gap-4 text-justify ${actualIndex === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
+                <div key={item.id} className={`ml-12 flex gap-4 text-justify ${actualIndex === data.items.length - 1 ? 'mb-6' : 'mb-2'}`}>
                   <span className="w-8 shrink-0">1.{actualIndex + 1}.</span>
                   <div className="flex-1 text-justify">
-                    ตาม {label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
+                    ตาม{label.prefix} <Highlight>{item.contractNo}</Highlight> เป็นจำนวนเงิน <Highlight>{formatNum(item.amount)}</Highlight> บาท (<Highlight>{thaiBahtText(item.amount)}</Highlight>) {label.vatLabel}
                   </div>
                 </div>
               );
@@ -165,7 +168,7 @@ export default function ContractPreview({ data }: Props) {
           </div>
         </div>
 
-        <div className="indent-10 mb-12 mt-6">
+        <div className="indent-12 mb-12 mt-6 text-justify">
           สัญญาฉบับนี้ทำขึ้นสองฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาทั้งสองฝ่ายได้อ่านข้อความในสัญญาครบถ้วน และเข้าใจดี คู่สัญญาทั้งสองฝ่ายจึงลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
         </div>
 
