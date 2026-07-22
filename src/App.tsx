@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
-import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Save, Loader2, Share2, Plus, Trash2 } from 'lucide-react';
+import { Printer, FileText, Eye, EyeOff, ChevronDown, GripVertical, Shield, Handshake, Wrench, Receipt, ChevronRight, RotateCcw, Save, Loader2, Share2, Plus, Trash2, Copy } from 'lucide-react';
 import { initialAppData, CONTRACT_TYPE_LABELS, TODAY } from './types/app';
 import type { AppData, CompanyInfo, HirePurchaseData, GuarantorData, CompanyMode, ContractType, JointVentureData, ServiceAgreementData, FeePaymentData, Agreement } from './types/app';
 import CompanyModeSelector from './components/CompanyModeSelector';
@@ -127,6 +127,11 @@ function App() {
   // Dropdown menu for main contracts
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Sticky contract indicator
+  const agreementManagerRef = useRef<HTMLDivElement>(null);
+  const formScrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showStickyIndicator, setShowStickyIndicator] = useState(false);
 
   const scrollPositionsRef = useRef<Record<string, number>>({});
   const isInternalScrollRef = useRef(false);
@@ -257,6 +262,25 @@ function App() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // IntersectionObserver for sticky contract indicator
+  useEffect(() => {
+    const target = agreementManagerRef.current;
+    const root = formScrollContainerRef.current;
+    if (!target || !root) return;
+
+    const handleScroll = () => {
+      if (!target || !root) return;
+      const targetRect = target.getBoundingClientRect();
+      const rootRect = root.getBoundingClientRect();
+      // Show sticky indicator ONLY when the agreement manager section is scrolled past the top of the scroll container
+      setShowStickyIndicator(targetRect.bottom < rootRect.top);
+    };
+
+    root.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial scroll status
+    return () => root.removeEventListener('scroll', handleScroll);
+  }, [data.agreements.length]);
+
   // ── Scroll Management (Memory per tab) ──
   useLayoutEffect(() => {
     const panel = previewPanelRef.current;
@@ -372,6 +396,40 @@ function App() {
       activeAgreementId: id
     }));
     setActivePreview(`agreement-${id}`);
+  };
+
+  const duplicateAgreement = (targetId: string) => {
+    const target = data.agreements.find(a => a.id === targetId);
+    if (!target) return;
+
+    const newId = Date.now().toString();
+    // Deep clone the agreement data
+    const clonedData = JSON.parse(JSON.stringify(target.data));
+
+    // Clear contract number so user can fill the new number
+    if (clonedData.contractNo) {
+      clonedData.contractNo = '';
+    }
+
+    const duplicatedAgreement: Agreement = {
+      id: newId,
+      type: target.type,
+      data: clonedData,
+    };
+
+    setData(prev => {
+      // Insert duplicate right after the target agreement
+      const targetIndex = prev.agreements.findIndex(a => a.id === targetId);
+      const newAgreements = [...prev.agreements];
+      newAgreements.splice(targetIndex + 1, 0, duplicatedAgreement);
+      return {
+        ...prev,
+        agreements: newAgreements,
+        activeAgreementId: newId
+      };
+    });
+    setActivePreview(`agreement-${newId}`);
+    notify('คัดลอกสัญญาเรียบร้อยแล้ว!', 'success');
   };
 
   const removeAgreement = (id: string) => {
@@ -800,7 +858,52 @@ function App() {
         </div>
 
         {/* Form Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-5">
+        <div ref={formScrollContainerRef} className="flex-1 overflow-y-auto">
+          {/* Sticky Contract Indicator */}
+          <div
+            className={`sticky-contract-indicator ${
+              showStickyIndicator ? 'sticky-contract-indicator--visible' : ''
+            }`}
+          >
+            <div className="flex items-center gap-2.5 px-4 py-2">
+              <div className="shrink-0 w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <FileText size={14} className="text-blue-600 shrink-0" />
+              <span className="text-sm font-bold text-slate-800 truncate">
+                {activeAgreement ? (
+                  <>{CONTRACT_TYPE_LABELS[activeAgreement.type]}{data.agreements.filter(a => a.type === activeAgreement.type).length > 1 ? ` (${data.agreements.indexOf(activeAgreement) + 1})` : ''}</>
+                ) : '—'}
+              </span>
+              {activeAgreement && (activeAgreement.data as any).contractNo && (
+                <span className="text-xs text-slate-400 shrink-0">
+                  • {(activeAgreement.data as any).contractNo}
+                </span>
+              )}
+              {/* Quick-switch: compact numbered dots */}
+              {data.agreements.length > 1 && (
+                <div className="flex items-center gap-1 ml-auto shrink-0">
+                  {data.agreements.map((agreement, idx) => (
+                    <button
+                      key={agreement.id}
+                      onClick={() => {
+                        updateField('activeAgreementId', agreement.id);
+                        agreementManagerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      className={`w-6 h-6 flex items-center justify-center text-[10px] font-bold rounded-full transition-all ${
+                        data.activeAgreementId === agreement.id
+                          ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-200'
+                          : 'bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-200'
+                      }`}
+                      title={`${CONTRACT_TYPE_LABELS[agreement.type]}${(agreement.data as any).contractNo ? ` (${(agreement.data as any).contractNo})` : ''}`}
+                    >
+                      {idx + 1}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="p-6 space-y-5">
           {/* Step 1: Company Mode */}
           <CompanyModeSelector
             value={data.companyMode}
@@ -819,31 +922,53 @@ function App() {
           />
 
           {/* Step 3: Agreement Manager */}
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+          <div ref={agreementManagerRef} className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
             <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">สัญญาในเคสนี้</h3>
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2">
                 {data.agreements.map((agreement, idx) => (
                   <div
                     key={agreement.id}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-md border transition-all cursor-pointer ${data.activeAgreementId === agreement.id
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md border transition-all cursor-pointer group/tab ${data.activeAgreementId === agreement.id
                       ? 'bg-slate-800 text-white border-slate-800'
                       : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-400'
                       }`}
                     onClick={() => updateField('activeAgreementId', agreement.id)}
                   >
                     <FileText size={14} />
-                    <span className="text-sm font-medium">
-                      {CONTRACT_TYPE_LABELS[agreement.type]} {data.agreements.filter(a => a.type === agreement.type).length > 1 ? `(${idx + 1})` : ''}
-                    </span>
-                    {data.agreements.length > 1 && (
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-sm font-medium leading-tight">
+                        {CONTRACT_TYPE_LABELS[agreement.type]} {data.agreements.filter(a => a.type === agreement.type).length > 1 ? `(${idx + 1})` : ''}
+                      </span>
+                      {(agreement.data as any).contractNo && (
+                        <span className={`text-[10px] leading-tight truncate ${data.activeAgreementId === agreement.id ? 'text-slate-300' : 'text-slate-400'}`}>
+                          {(agreement.data as any).contractNo}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1 ml-1">
                       <button
-                        onClick={(e) => { e.stopPropagation(); removeAgreement(agreement.id); }}
-                        className="ml-1 hover:text-red-400 transition-colors"
+                        onClick={(e) => { e.stopPropagation(); duplicateAgreement(agreement.id); }}
+                        className={`p-1 rounded hover:bg-slate-700/50 transition-colors ${
+                          data.activeAgreementId === agreement.id ? 'text-slate-300 hover:text-white' : 'text-slate-400 hover:text-slate-700'
+                        }`}
+                        title="คัดลอกสัญญานี้"
                       >
-                        ×
+                        <Copy size={13} />
                       </button>
-                    )}
+                      {data.agreements.length > 1 && (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); removeAgreement(agreement.id); }}
+                          className={`p-1 rounded hover:text-red-400 transition-colors ${
+                            data.activeAgreementId === agreement.id ? 'text-slate-300' : 'text-slate-400'
+                          }`}
+                          title="ลบสัญญานี้"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1027,6 +1152,7 @@ function App() {
                 />
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>

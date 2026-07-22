@@ -160,3 +160,34 @@
     box-shadow: 0 0 0 1px #3b82f6 !important;
   }
 }
+
+/* Sticky Contract Indicator */
+.sticky-contract-indicator {
+  position: sticky;
+  top: 0; /* sticks to top of scroll container */
+  z-index: 15;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 2px solid #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0,0,0,0.06);
+  transform: translateY(-100%);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: transform 0.25s ease-out, opacity 0.2s ease-out, max-height 0.25s ease-out;
+  pointer-events: none;
+}
+
+.sticky-contract-indicator--visible {
+  transform: translateY(0);
+  opacity: 1;
+  max-height: 60px;
+  pointer-events: auto;
+}
+
+@media print {
+  .sticky-contract-indicator {
+    display: none !important;
+  }
+}
