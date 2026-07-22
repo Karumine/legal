@@ -1136,6 +1136,11 @@ function App() {
               id="preview-content-container"
               ref={previewContentRef}
               className="w-[210mm] print:w-[210mm] print:h-auto print:max-w-none space-y-8 print:space-y-0 shrink-0"
+              style={{
+                transform: `scale(${previewScale})`,
+                transformOrigin: 'top center',
+                marginBottom: `${contentHeight * (previewScale - 1)}px`
+              }}
             >
               {activePreview.startsWith('agreement-') && (
                 data.agreements.find(a => `agreement-${a.id}` === activePreview) &&
