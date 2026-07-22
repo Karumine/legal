@@ -79,7 +79,7 @@ export default function CreditFacilityPreview({ data, customerInfo, agileInfo, t
         </div>
 
         <div className="mb-6">
-          <b>สัญญาให้สินเชื่อ</b> (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{agileInfo.companyName}</Highlight> เพื่อให้มีผลใช้บังคับตั้งแต่วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> (“วันที่สัญญามีผลใช้บังคับ”)
+          <b>สัญญาให้สินเชื่อ</b> (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{agileInfo.companyName}</Highlight> เพื่อให้มีผลใช้บังคับตั้งแต่<b>วันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight> (“วันที่สัญญามีผลใช้บังคับ”)</b>
         </div>
 
         <div className="mb-4 mt-6">โดยและระหว่าง</div>

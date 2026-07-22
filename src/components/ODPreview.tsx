@@ -45,7 +45,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
         <div className="indent-10 mb-6">
-          <b>สัญญาให้สินเชื่อหมุนเวียน แบบมีเงื่อนไข</b> (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{data.madeAt || agileInfo.companyName}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight>
+          <b>สัญญาให้สินเชื่อหมุนเวียน แบบมีเงื่อนไข</b> (“สัญญา”) ฉบับนี้ ทำขึ้นที่ <Highlight>{data.madeAt || agileInfo.companyName}</Highlight> <b>เมื่อวันที่ <Highlight>{formatThaiDate(data.effectiveDate)}</Highlight></b>
         </div>
 
         <div className="mb-4 mt-6">โดยและระหว่าง</div>
@@ -84,7 +84,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               </div>
 
               <div className="pl-10">
-                (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้สินเชื่อ”</b>) และ
+                (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>“ผู้ให้สินเชื่อ”</b>) และ
               </div>
 
               <div className="flex gap-4 text-justify">
@@ -208,7 +208,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               <span className="font-bold">วัตถุประสงค์</span>
             </div>
             <div className="indent-8 text-justify">
-              ผู้กู้ตกลงที่จะนำสินเชื่อที่ได้รับจากผู้ให้สินเชื่อภายใต้สัญญาฉบับนี้ ไปใช้เพื่อวัตถุประสงค์สำหรับ <Highlight>{data.businessPurpose || 'ระบุวัตถุประสงค์การใช้สินเชื่อ'}</Highlight>
+              ผู้กู้ตกลงที่จะนำสินเชื่อที่ได้รับจากผู้ให้สินเชื่อภายใต้สัญญาฉบับนี้ ไปใช้เพื่อวัตถุประสงค์สำหรับ<Highlight>{data.businessPurpose || 'ระบุวัตถุประสงค์การใช้สินเชื่อ'}</Highlight>
             </div>
           </div>
 
@@ -3041,7 +3041,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
       {/* Page 47 (Annex 9 - Signature) */}
       <div data-section-id="od-annex-9-sig" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
         <PageHeader />
-        
+
         <div className="pt-20 text-[13px]">
           <div className="text-center mb-16">
             ขอแสดงความนับถือ

@@ -191,7 +191,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
         </div>
 
         <div className="mb-6 space-y-4">
-          <div>สัญญาเช่าซื้อ <b>(“สัญญา”)</b> ฉบับนี้ ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight></div>
+          <div>สัญญาเช่าซื้อ <b>(“สัญญา”)</b> ฉบับนี้ ทำขึ้นที่ บริษัท อาไจล์ แอสเซ็ทส์ จำกัด <b>เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight></b></div>
           <div>โดยและระหว่าง:</div>
         </div>
 
@@ -228,7 +228,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
               <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-8"></span>
                 <div className="flex-1">
-                  (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมกันว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
+                  (ซึ่ง 1. และ 2. ต่อไปจะเรียกรวมว่า <b>“ผู้ให้เช่าซื้อ”</b>) และ
                 </div>
               </div>
               <div className="flex gap-4 text-justify">
@@ -445,31 +445,41 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
             <span className="w-8 shrink-0">3.2</span>
             <div className="flex-1 space-y-4">
               <div className="underline">การชำระค่าเช่าซื้อ</div>
-              {type !== 'hirePurchaseBack' && (
-                <div className="flex gap-4">
-                  <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
-                  <div className="flex-1">
-                    ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก <b>(Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
-                    {data.hasCustomGreenText !== false && data.customGreenText && (
-                      <div className="mt-4">
-                        <GreenHighlight>{data.customGreenText}</GreenHighlight>
+              {(() => {
+                const downVal = parseFloat((data.downPayment || '0').toString().replace(/,/g, '')) || 0;
+                const downPct = parseFloat((data.downPaymentPercentage || '0').toString().replace(/,/g, '')) || 0;
+                const hasDownPayment = type !== 'hirePurchaseBack' && (downVal > 0 || downPct > 0);
+
+                return (
+                  <>
+                    {hasDownPayment && (
+                      <div className="flex gap-4">
+                        <span className="w-8 shrink-0 whitespace-nowrap">(ก)</span>
+                        <div className="flex-1">
+                          ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อครั้งแรก <b>(Down Payment) (“เงินดาวน์”) ในอัตราร้อยละ <Highlight>{data.downPaymentPercentage} ({thaiBahtText(data.downPaymentPercentage || '0').replace('บาทถ้วน', '').trim()})</Highlight> ของราคาทรัพย์สินที่เช่าซื้อ คิดเป็นเงินจำนวน <Highlight>{downPaymentAmount}</Highlight> บาท (<Highlight>{downPaymentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> ในวันที่เข้าทำสัญญาฉบับนี้ โดยคู่สัญญาทั้งสามฝ่ายตกลงให้เงินดาวน์ดังกล่าวเป็นส่วนหนึ่งของเงินค่าเช่าซื้อ
+                          {data.hasCustomGreenText !== false && data.customGreenText && (
+                            <div className="mt-4">
+                              <GreenHighlight>{data.customGreenText}</GreenHighlight>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
-                  </div>
-                </div>
-              )}
-              <div className="flex gap-4">
-                <span className="w-8 shrink-0 whitespace-nowrap">{type === 'hirePurchaseBack' ? '(ก)' : '(ข)'}</span>
-                <div className="flex-1">
-                  ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อ{type === 'hirePurchaseBack' ? 'เป็นงวด' : 'ที่เหลือทั้งหมด (จำนวนค่าเช่าซื้อที่หักด้วยเงินดาวน์)'} ให้แก่ผู้ให้เช่าซื้อ<b>เป็นจำนวนเงินทั้งสิ้น <Highlight>{remainingAmount}</Highlight> บาท (<Highlight>{remainingAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) โดยคิดดอกเบี้ย<Highlight>{(data.interestType === 'แบบคงที่' ? 'แบบคงที่ (Flat Interest Rate)' : 'แบบลดต้นลดดอก (Effective Interest Rate)')}</Highlight> ที่อัตราร้อยละ <Highlight>{data.interestRate} ({thaiBahtText(data.interestRate || '0').replace('บาทถ้วน', '').trim()})</Highlight> ต่อปี โดยผ่อนชำระค่าเช่าซื้อเป็นงวด งวดละ <Highlight>{installmentAmountText}</Highlight> บาท (<Highlight>{installmentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> (โดยแต่ละงวดเรียกว่า <b>“ค่างวดการเช่าซื้อ”</b>)
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <span className="w-8 shrink-0 whitespace-nowrap">{type === 'hirePurchaseBack' ? '(ข)' : '(ค)'}</span>
-                <div className="flex-1">
-                  <b>ผู้เช่าซื้อตกลงจะชำระค่างวดการเช่าซื้อให้แก่ผู้ให้เช่าซื้องวดแรก ภายในวันที่ <Highlight>{formatThaiDate(data.firstInstallmentDate)}</Highlight></b> และจะชำระค่าเช่าซื้อแต่ละงวดให้แก่ผู้ให้เช่าซื้อ ภายในวันที่ <Highlight>{data.paymentDay}</Highlight> ของทุกเดือน จนกว่าจะชำระค่างวดการเช่าซื้อให้แก่ผู้ให้เช่าซื้อครบถ้วนตามจำนวน รวมทั้งสิ้น <Highlight>{data.installments}</Highlight> งวด <b>โดยงวดสุดท้าย กำหนดชำระภายในวันที่ <Highlight>{formatThaiDate(data.lastInstallmentDate)}</Highlight></b>
-                </div>
-              </div>
+                    <div className="flex gap-4">
+                      <span className="w-8 shrink-0 whitespace-nowrap">{hasDownPayment ? '(ข)' : '(ก)'}</span>
+                      <div className="flex-1">
+                        ผู้เช่าซื้อตกลงชำระเงินค่าเช่าซื้อ{hasDownPayment ? 'ที่เหลือทั้งหมด (จำนวนค่าเช่าซื้อที่หักด้วยเงินดาวน์)' : 'เป็นงวด'} ให้แก่ผู้ให้เช่าซื้อ<b>เป็นจำนวนเงินทั้งสิ้น <Highlight>{remainingAmount}</Highlight> บาท (<Highlight>{remainingAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม) โดยคิดดอกเบี้ย<Highlight>{(data.interestType === 'แบบคงที่' ? 'แบบคงที่ (Flat Interest Rate)' : 'แบบลดต้นลดดอก (Effective Interest Rate)')}</Highlight> ที่อัตราร้อยละ <Highlight>{data.interestRate} ({thaiBahtText(data.interestRate || '0').replace('บาทถ้วน', '').trim()})</Highlight> ต่อปี โดยผ่อนชำระค่าเช่าซื้อเป็นงวด งวดละ <Highlight>{installmentAmountText}</Highlight> บาท (<Highlight>{installmentAmountThai}</Highlight>) (รวมภาษีมูลค่าเพิ่ม)</b> (โดยแต่ละงวดเรียกว่า <b>“ค่างวดการเช่าซื้อ”</b>)
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <span className="w-8 shrink-0 whitespace-nowrap">{hasDownPayment ? '(ค)' : '(ข)'}</span>
+                      <div className="flex-1">
+                        <b>ผู้เช่าซื้อตกลงจะชำระค่างวดการเช่าซื้อให้แก่ผู้ให้เช่าซื้องวดแรก ภายในวันที่ <Highlight>{formatThaiDate(data.firstInstallmentDate)}</Highlight></b> และจะชำระค่าเช่าซื้อแต่ละงวดให้แก่ผู้ให้เช่าซื้อ ภายในวันที่ <Highlight>{data.paymentDay}</Highlight> ของทุกเดือน จนกว่าจะชำระค่างวดการเช่าซื้อให้แก่ผู้ให้เช่าซื้อครบถ้วนตามจำนวน รวมทั้งสิ้น <Highlight>{data.installments}</Highlight> งวด <b>โดยงวดสุดท้าย กำหนดชำระภายในวันที่ <Highlight>{formatThaiDate(data.lastInstallmentDate)}</Highlight></b>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
 
