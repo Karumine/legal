@@ -252,7 +252,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
           <div className="flex gap-4 text-justify">
             <span className="w-8 shrink-0 whitespace-nowrap">ข.</span>
-            <div className="flex-1">ผู้ให้เช่าซื้อตกลงจะให้เช่าซื้อทรัพย์สินแก่ผู้เช่าซื้อตามเงื่อนไขและข้อกำหนดที่ระบุไว้ในสัญญาฉบับนี้</div>
+            <div className="flex-1">ผู้ให้เช่าซื้อตกลงจะให้เช่าซื้อทรัพย์สินแก่ผู้เช่าซื้อตามเงื่อนไขและข้อกำหนดที่ได้ระบุไว้ในสัญญาฉบับนี้</div>
           </div>
         </div>
 
@@ -276,9 +276,8 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           </div>
         )}
 
-        <div className={`flex gap-4 mb-6 ${isAgileOnly ? 'mt-8' : ''}`}>
-          <span className="w-8 shrink-0"></span>
-          <div className="flex-1 font-bold">คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จึงตกลงทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้</div>
+        <div className={`mb-6 ${isAgileOnly ? 'mt-8' : ''}`}>
+          คู่สัญญา{isAgileOnly ? 'ทั้งสองฝ่าย' : 'ทั้งสามฝ่าย'}จึงตกลงทำสัญญาฉบับนี้ขึ้น โดยมีข้อความดังต่อไปนี้
         </div>
 
         <div className="mb-6">
@@ -408,7 +407,7 @@ export default function HirePurchasePreview({ data, customerInfo, guarantors = [
           <div className="flex gap-4" data-section-id="hp-purpose">
             <span className="w-8 shrink-0">2.2</span>
             <div className="flex-1">
-              ผู้เช่าซื้อตกลงเช่าซื้อทรัพย์สินไปเพื่อใช้ในการประกอบกิจการเกี่ยวกับ <Highlight>{data.businessPurpose}</Highlight> เท่านั้น ณ สำนักงานใหญ่<Highlight>{data.installationLocation}</Highlight> <b>(“สถานที่ตั้ง”)</b> แต่หากภายหลังจากที่เข้าทำสัญญาฉบับนี้ ในกรณีที่ผู้เช่าซื้อจำเป็นต้องทำการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อจากสถานที่ตั้งเดิมที่เคยแจ้งไว้ตามสัญญาฉบับนี้ ผู้เช่าซื้อจะต้องได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อก่อนการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อออกจากสถานที่ตั้งเดิม
+              ผู้เช่าซื้อตกลงเช่าซื้อทรัพย์สินไปเพื่อใช้ในการประกอบกิจการเกี่ยวกับ <Highlight>{data.businessPurpose}</Highlight> เท่านั้น ณ สำนักงานใหญ่<Highlight>{data.installationLocation}</Highlight> <b>(“สถานที่ตั้ง”)</b> แต่หากภายหลังจากที่เข้าทำสัญญาฉบับนี้ ในกรณีถ้าผู้เช่าซื้อจำเป็นต้องทำการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อจากสถานที่ตั้งเดิมที่เคยแจ้งไว้ตามสัญญาฉบับนี้ ผู้เช่าซื้อจะต้องได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้เช่าซื้อก่อนการเคลื่อนย้ายทรัพย์สินที่เช่าซื้อออกจากสถานที่ตั้งเดิม
             </div>
           </div>
 
