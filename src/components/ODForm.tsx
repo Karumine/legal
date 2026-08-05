@@ -5,7 +5,7 @@ import { PercentageInput } from './PercentageInput';
 import type { ODData, LessorInfo, Agreement } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
-import { formatCurrency } from '../utils/formatters';
+import { formatCurrency, formatBankAccountNumber } from '../utils/formatters';
 
 
 interface Props {
@@ -254,6 +254,92 @@ export default function ODForm({ data, onChange, agreements = [], currentAgreeme
           </div>
         </div>
       </section>
+
+      {/* Bank Account Info for Clause 3.2 (ค) (1) */}
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('od-conditions')}>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+          <h3 className="font-semibold text-lg text-blue-700">ข้อมูลบัญชีธนาคารเพื่อการชำระหนี้ (ข้อ 3.2 (ค))</h3>
+        </div>
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">ธนาคาร</label>
+              <input
+                type="text"
+                name="bankAccountBank"
+                value={data.bankAccountBank || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                placeholder="ธนาคารกสิกรไทย"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">ชื่อบัญชี</label>
+              <input
+                type="text"
+                name="bankAccountName"
+                value={data.bankAccountName || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                placeholder="ชื่อบัญชี (หากไม่กรอกจะใช้ชื่อบริษัทผู้กู้)"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">ประเภทบัญชี</label>
+              <input
+                type="text"
+                name="bankAccountType"
+                value={data.bankAccountType || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                placeholder="ออมทรัพย์"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">สาขา</label>
+              <input
+                type="text"
+                name="bankAccountBranch"
+                value={data.bankAccountBranch || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                placeholder="ถนนเพชรบุรีตัดใหม่ (อิตัลไทย ทาวเวอร์)"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">หมายเลขบัญชี</label>
+              <input
+                type="text"
+                name="bankAccountNumber"
+                value={data.bankAccountNumber || ''}
+                onChange={(e) => {
+                  const formatted = formatBankAccountNumber(e.target.value);
+                  onChange({ ...data, bankAccountNumber: formatted });
+                }}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white font-mono"
+                placeholder="207-8-43222-8"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">ตัวแทนของผู้ให้สินเชื่อ (ผู้มีอำนาจสั่งจ่าย/ถอน)</label>
+              <input
+                type="text"
+                name="bankAccountRepresentative"
+                value={data.bankAccountRepresentative || ''}
+                onChange={handleChange}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white"
+                placeholder="นางสาววิสารัตน์ ทองหม่อม"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Annex 4 Details */}
       <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('od-annex4')}>
         <div className="flex items-center gap-2 mb-3">

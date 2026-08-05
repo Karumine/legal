@@ -5,7 +5,7 @@ import { PercentageInput } from './PercentageInput';
 import type { CreditFacilityData, LessorInfo, CompanyInfo, Agreement, CollateralAsset } from '../types/app';
 import { CONTRACT_TYPE_LABELS } from '../types/app';
 import { thaiBahtText } from '../utils/thaiBahtText';
-import { formatCurrency } from '../utils/formatters';
+import { formatCurrency, formatBankAccountNumber } from '../utils/formatters';
 import ThaiLocationSelector from './ThaiLocationSelector';
 
 interface Props {
@@ -1063,9 +1063,12 @@ export default function CreditFacilityForm({ data, onChange, customerInfo, agree
                 type="text"
                 name="bankAccountNumber"
                 value={data.bankAccountNumber || ''}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const formatted = formatBankAccountNumber(e.target.value);
+                  onChange({ ...data, bankAccountNumber: formatted });
+                }}
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-white font-mono"
-                placeholder="xxx-x-xxxxx-x"
+                placeholder="207-8-43222-8"
               />
             </div>
           </div>

@@ -318,7 +318,7 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
                     </div>
                     <div className="flex gap-4">
                       <span className="shrink-0 w-8">(4)</span>
-                      <div className="flex-1">ไม่ก่อให้เกิดการกระทำหรือเหตุใดๆ อันจะทำให้เกิดการผิดนัด การชำระหนี้ก่อนกำหนด การผิดสัญญา หรือการยกเลิกเพิกถอนซึ่งสัญญาใดๆ ที่ผู้ค้ำประกันเป็นคู่สัญญาอยู่ หรือมีภาระหน้าที่อยู่</div>
+                      <div className="flex-1">ไม่ก่อให้เกิดการกระทำการหรือเหตุใดๆ อันจะทำให้เกิดการผิดนัด การชำระหนี้ก่อนกำหนด การผิดสัญญา หรือการยกเลิกเพิกถอนซึ่งสัญญาใดๆ ที่ผู้ค้ำประกันเป็นคู่สัญญาอยู่ หรือมีภาระหน้าที่อยู่</div>
                     </div>
                     <div className="flex gap-4">
                       <span className="shrink-0 w-8">(5)</span>
@@ -462,7 +462,7 @@ export default function GuaranteePreview({ data, companyMode }: Props) {
           <div className="flex gap-4 text-justify mb-6">
             <span className="shrink-0 w-8">20.</span>
             <div className="flex-1">
-              ให้สัญญานี้อยู่ภายใต้บังคับและตีความตามกฎหมายไทย โดยให้ศาลไทยเป็นศาลอันมีเขตอำนาจแก้กรณี
+              ให้สัญญานี้อยู่ภายใต้บังคับและตีความตามกฎหมายไทย โดยให้ศาลไทยเป็นศาลอันมีเขตอำนาจแก่กรณี
             </div>
           </div>
         </div>

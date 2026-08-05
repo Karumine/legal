@@ -255,6 +255,14 @@ export interface ODData {
   annex4BillNo?: string;
   annex4BillDate?: string;
   annex4ReturnDate?: string;
+
+  // Bank Account Info (Clause 3.2 (ค) (1))
+  bankAccountBank?: string;
+  bankAccountName?: string;
+  bankAccountType?: string;
+  bankAccountBranch?: string;
+  bankAccountNumber?: string;
+  bankAccountRepresentative?: string;
 }
 
 export interface ServiceAgreementData {

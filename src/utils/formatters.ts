@@ -101,3 +101,29 @@ export const getAuthorizedSignatoryText = (company?: { entityType?: 'company' | 
     ? 'หุ้นส่วนผู้จัดการผู้มีอำนาจกระทำการ'
     : 'กรรมการผู้มีอำนาจกระทำการแทนบริษัท';
 };
+
+/**
+ * Formats a bank account number: XXX-X-XXXXX-X (10 digits max)
+ * Restricts input to numbers only and automatically formats with hyphens (-)
+ * @param value Raw string input
+ * @returns Formatted bank account number string with dashes
+ */
+export const formatBankAccountNumber = (value: string): string => {
+  if (!value) return '';
+  const digits = value.replace(/\D/g, '').substring(0, 10);
+
+  let formatted = '';
+  if (digits.length > 0) {
+    formatted += digits.substring(0, 3);
+    if (digits.length > 3) {
+      formatted += '-' + digits.substring(3, 4);
+      if (digits.length > 4) {
+        formatted += '-' + digits.substring(4, 9);
+        if (digits.length > 9) {
+          formatted += '-' + digits.substring(9, 10);
+        }
+      }
+    }
+  }
+  return formatted;
+};
