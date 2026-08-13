@@ -232,66 +232,6 @@ export default function ODForm({ data, onChange, agreements = [], currentAgreeme
               />
             </div>
 
-            {/* Conditions 3.3 Dynamic Section */}
-            <div className="pt-2 border-t border-blue-200" onFocusCapture={() => onFocusSection?.('od-conditions-extra-2')}>
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-xs font-bold text-blue-700">เงื่อนไขบังคับเพิ่มเติมก่อนการเบิกใช้สินเชื่อ (ข้อ 3.3)</label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const current = data.conditions33 || [];
-                    onChange({ ...data, conditions33: [...current, ''] });
-                  }}
-                  className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-[10px] font-bold hover:bg-blue-200 transition-colors flex items-center gap-1"
-                >
-                  <Plus size={12} /> เพิ่มเงื่อนไข
-                </button>
-              </div>
-              <p className="text-[10px] text-gray-400 mb-2 italic">
-                * ขึ้นบรรทัดใหม่และเริ่มด้วย (1), (2) ... เพื่อย่อหน้าข้อย่อยในหน้าพรีวิวโดยอัตโนมัติ
-              </p>
-              <div className="space-y-3">
-                {(data.conditions33 || []).map((condition, idx) => (
-                  <div key={idx} className="flex gap-2 items-start">
-                    <div className="shrink-0 w-6 h-6 flex items-center justify-center bg-gray-100 rounded text-[10px] font-bold text-gray-600">
-                      {['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][idx] || idx + 1}
-                    </div>
-                    <textarea
-                      value={condition}
-                      onChange={(e) => {
-                        const next = [...(data.conditions33 || [])];
-                        next[idx] = e.target.value;
-                        onChange({ ...data, conditions33: next });
-                      }}
-                      onInput={(e) => {
-                        const target = e.target as HTMLTextAreaElement;
-                        target.style.height = 'auto';
-                        target.style.height = `${target.scrollHeight}px`;
-                      }}
-                      className="flex-1 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-gray-50/50 auto-resize-textarea resize-none overflow-y-auto min-h-[40px]"
-                      placeholder={`ระบุเงื่อนไข (${['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][idx] || idx + 1})...`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const next = (data.conditions33 || []).filter((_, i) => i !== idx);
-                        onChange({ ...data, conditions33: next });
-                      }}
-                      className="p-1 text-red-400 hover:text-red-600 transition-colors"
-                      title="ลบเงื่อนไขนี้"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-                {(data.conditions33 || []).length === 0 && (
-                  <div className="text-center py-4 border-2 border-dashed border-gray-100 rounded-lg text-gray-400 text-xs">
-                    ยังไม่มีการเพิ่มเงื่อนไขเพิ่มเติม — กดปุ่ม "เพิ่มเงื่อนไข" เพื่อเพิ่มข้อใหม่
-                  </div>
-                )}
-              </div>
-            </div>
-
             <div className="pt-2">
               <label className="block text-xs font-medium text-gray-600 mb-1">ค่าอากรแสตมป์ (บาท)</label>
               <div className="flex gap-4 items-center">
@@ -397,6 +337,69 @@ export default function ODForm({ data, onChange, agreements = [], currentAgreeme
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Conditions 3.3 Dynamic Section */}
+      <section className="bg-white p-4 rounded-lg shadow-sm border border-blue-200" onFocusCapture={() => onFocusSection?.('od-conditions-extra-2')}>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+          <h3 className="font-semibold text-lg text-blue-700">เงื่อนไขบังคับเพิ่มเติมก่อนการเบิกใช้สินเชื่อ (ข้อ 3.3)</h3>
+        </div>
+        <div className="flex justify-between items-center mb-2">
+          <p className="text-[10px] text-gray-400 italic">
+            * ขึ้นบรรทัดใหม่และเริ่มด้วย (1), (2) ... เพื่อย่อหน้าข้อย่อยในหน้าพรีวิวโดยอัตโนมัติ
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              const current = data.conditions33 || [];
+              onChange({ ...data, conditions33: [...current, ''] });
+            }}
+            className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-[10px] font-bold hover:bg-blue-200 transition-colors flex items-center gap-1"
+          >
+            <Plus size={12} /> เพิ่มเงื่อนไข
+          </button>
+        </div>
+        <div className="space-y-3">
+          {(data.conditions33 || []).map((condition, idx) => (
+            <div key={idx} className="flex gap-2 items-start">
+              <div className="shrink-0 w-6 h-6 flex items-center justify-center bg-gray-100 rounded text-[10px] font-bold text-gray-600">
+                {['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][idx] || idx + 1}
+              </div>
+              <textarea
+                value={condition}
+                onChange={(e) => {
+                  const next = [...(data.conditions33 || [])];
+                  next[idx] = e.target.value;
+                  onChange({ ...data, conditions33: next });
+                }}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = 'auto';
+                  target.style.height = `${target.scrollHeight}px`;
+                }}
+                className="flex-1 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 border bg-gray-50/50 auto-resize-textarea resize-none overflow-y-auto min-h-[40px]"
+                placeholder={`ระบุเงื่อนไข (${['ก', 'ข', 'ค', 'ง', 'จ', 'ฉ', 'ช', 'ซ', 'ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม', 'ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'][idx] || idx + 1})...`}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const next = (data.conditions33 || []).filter((_, i) => i !== idx);
+                  onChange({ ...data, conditions33: next });
+                }}
+                className="p-1 text-red-400 hover:text-red-600 transition-colors"
+                title="ลบเงื่อนไขนี้"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          {(data.conditions33 || []).length === 0 && (
+            <div className="text-center py-4 border-2 border-dashed border-gray-100 rounded-lg text-gray-400 text-xs">
+              ยังไม่มีการเพิ่มเงื่อนไขเพิ่มเติม — กดปุ่ม "เพิ่มเงื่อนไข" เพื่อเพิ่มข้อใหม่
+            </div>
+          )}
         </div>
       </section>
 
