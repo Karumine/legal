@@ -31,6 +31,33 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
   const limit1 = Math.floor(loanAmt * (p1 / 100));
   const limit2 = Math.floor(loanAmt * (p2 / 100));
 
+  // Section 3.3 dynamic conditions overflow logic
+  const conditions33 = data.conditions33 || [];
+  const totalCond33Chars = conditions33.reduce((sum, s) => sum + s.length, 0);
+  // If total chars > 800 or more than 5 items, we need an overflow page
+  const hasCond33Overflow = totalCond33Chars > 800 || conditions33.length > 5;
+  // How many items fit on the first page (3.3 page)
+  const cond33FirstPageCount = hasCond33Overflow ? 3 : conditions33.length;
+  const baseTotalPages = 48;
+  const totalPages = baseTotalPages + (hasCond33Overflow ? 1 : 0);
+
+  // Render page footer with dynamic page numbering
+  // Pages >= 7 shift by 1 when overflow page is inserted after page 6
+  const renderPageFooter = (basePageNum: number) => {
+    const actualPage = (hasCond33Overflow && basePageNum >= 7) ? basePageNum + 1 : basePageNum;
+    return (
+      <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+        <div>
+          สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+        </div>
+        <div>
+          หน้า {actualPage} จาก {totalPages}
+        </div>
+      </div>
+    );
+  };
+
+
   return (
     <div className="text-gray-900 font-sans leading-[1.8] text-[13px] text-justify tracking-normal whitespace-pre-line space-y-8 print:space-y-0 mx-auto">
       {/* Page 1 */}
@@ -113,15 +140,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 1 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(1)}
       </div>
 
       {/* Page 2 */}
@@ -226,15 +245,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 2 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(2)}
       </div>
 
       {/* Page 3 */}
@@ -290,15 +301,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 3 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(3)}
       </div>
 
       {/* Page 4 */}
@@ -347,15 +350,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 4 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(4)}
       </div>
 
       {/* Page 5 */}
@@ -406,15 +401,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 5 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(5)}
       </div>
 
       {/* Page 6 */}
@@ -428,65 +415,121 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               <span className="mb-2 inline-block underline">เงื่อนไขบังคับเพิ่มเติมก่อนการเบิกใช้สินเชื่อ</span>
 
               <div className="space-y-4">
-                <div className="flex gap-2">
-                  <span className="shrink-0 w-8">(ก)</span>
-                  <div className="flex-1">
-                    กรณีที่นายพรรษา เริงพิทยา มิได้เป็นกรรมการผู้มีอำนาจลงนามผูกพันนิติบุคคลของผู้กู้เมื่อใดก็ตาม ผู้ให้สินเชื่อมีสิทธิพิจารณาบอกเลิกสัญญา และ/หรือ ระงับหรือเพิกถอนวงเงินใช้สินเชื่อทั้งหมดหรือบางส่วนได้ทันที โดยไม่ต้องบอกกล่าวล่วงหน้า ทั้งนี้ ผู้กู้ตกลงว่าจะไม่ติดใจ และไม่โต้แย้งใดๆ รวมถึงเรียกร้องค่าเสียหาย หรือยกเป็นข้อต่อสู้ในภายหลังได้
+                {/* Dynamic conditions — show first batch on this page */}
+                {conditions33.slice(0, cond33FirstPageCount).map((condition, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <span className="shrink-0 w-8">({THAI_INDEX[idx]})</span>
+                    <div className="flex-1">
+                      <Highlight className="block">
+                        {condition.split('\n').map((line, lIdx) => {
+                          const match = line.match(/^\s*(\(\d+\))\s*(.*)/);
+                          if (match) {
+                            return (
+                              <div key={lIdx} className="flex gap-2 pl-8">
+                                <span className="shrink-0">{match[1]}</span>
+                                <div className="flex-1">{match[2]}</div>
+                              </div>
+                            );
+                          }
+                          if (lIdx === 0) return <div key={lIdx}>{line || '\u00A0'}</div>;
+                          return (
+                            <div key={lIdx} className="flex gap-2 pl-8">
+                              <span className="shrink-0 opacity-0 select-none">(1)</span>
+                              <div className="flex-1">{line || '\u00A0'}</div>
+                            </div>
+                          );
+                        })}
+                      </Highlight>
+                    </div>
                   </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <span className="shrink-0 w-8">(ข)</span>
-                  <div className="flex-1">
-                    กรณีมีผู้ถือหุ้นรายใหม่รายใด นอกเหนือจากที่มีอยู่เดิม ณ วันทำสัญญาฉบับนี้ เข้าถือหุ้นในสัดส่วนตั้งแต่ร้อยละ 25 ขึ้นไป ผู้ถือหุ้นรายนั้นต้องเข้าทำสัญญาค้ำประกันภายในระยะเวลาที่ผู้ให้สินเชื่อกำหนดก่อน จึงจะสามารถเบิกใช้วงเงินได้
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <span className="shrink-0 w-8">(ค)</span>
-                  <div className="flex-1">
-                    กรณีผู้กู้มีหนี้คงค้างกับผู้ให้สินเชื่อ ผู้กู้ตกลงให้ผู้ให้สินเชื่อมีสิทธิในการหักหนี้คงค้างทั้งหมดก่อนการเบิกใช้วงเงินในแต่ละคราวได้
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <span className="shrink-0 w-8">(ง)</span>
-                  <div className="flex-1">
-                    กรณีผู้กู้มีหนี้คงค้างกับผู้ให้สินเชื่อในโครงการใดโครงการหนึ่ง ผู้กู้จะขอเบิกใช้เงินในโครงการนั้นที่มีหนี้คงค้างอยู่ไม่ได้ เว้นแต่ผู้ให้สินเชื่อเห็นสมควรพิจารณาอนุมัติเป็นรายกรณีไป
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <span className="shrink-0 w-8">(จ)</span>
-                  <div className="flex-1">
-                    ผู้ให้สินเชื่อสามารถหักค่าธรรมเนียมในอัตราาร้อยละ 0.5 ก่อนการรับสินเชื่อในแต่ละคราว โดยไม่ต้องแจ้งให้ผู้กู้ทราบล่วงหน้า และ/หรือ ผู้กู้สามารถชำระโดยตรงแก่ผู้ให้สินเชื่อ ในกรณีผู้ให้สินเชื่อเรียกให้ชำระก็ได้ ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้
-                  </div>
-                </div>
+                ))}
+                {conditions33.length === 0 && (
+                  <div className="text-gray-400 italic text-xs">— ยังไม่มีเงื่อนไขเพิ่มเติม —</div>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span className="shrink-0 w-8">3.4</span>
-            <div className="flex-1 text-justify">
-              <span className="mb-2 inline-block underline">การขอเบิกใช้สินเชื่อ</span>
-              <div>
-                ผู้กู้มีสิทธิเบิกใช้สินเชื่อได้หลายครั้ง (Multiple Drawdown) ภายใต้เงื่อนไขว่าผู้กู้ต้องปฏิบัติตามเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อตามข้อ 3.2 ของสัญญาฉบับนี้ในการเบิกใช้สินเชื่อแต่ละครั้ง และในกรณีที่ผู้กู้ได้ชำระคืน
+          {/* Section 3.4 only if NOT overflowing (stays on same page) */}
+          {!hasCond33Overflow && (
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">3.4</span>
+              <div className="flex-1 text-justify">
+                <span className="mb-2 inline-block underline">การขอเบิกใช้สินเชื่อ</span>
+                <div>
+                  ผู้กู้มีสิทธิเบิกใช้สินเชื่อได้หลายครั้ง (Multiple Drawdown) ภายใต้เงื่อนไขว่าผู้กู้ต้องปฏิบัติตามเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อตามข้อ 3.2 ของสัญญาฉบับนี้ในการเบิกใช้สินเชื่อแต่ละครั้ง และในกรณีที่ผู้กู้ได้ชำระคืน
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 6 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(6)}
       </div>
+
+      {/* Overflow Page for Section 3.3 — only rendered when conditions33 overflows */}
+      {hasCond33Overflow && (
+        <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
+          <PageHeader />
+
+          <div className="space-y-6 mt-4">
+            {/* Continuation of Section 3.3 items */}
+            <div className="flex gap-2">
+              <span className="invisible shrink-0 w-8">3.3</span>
+              <div className="flex-1 space-y-4">
+                {conditions33.slice(cond33FirstPageCount).map((condition, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <span className="shrink-0 w-8">({THAI_INDEX[idx + cond33FirstPageCount]})</span>
+                    <div className="flex-1 text-justify">
+                      <Highlight className="block">
+                        {condition.split('\n').map((line, lIdx) => {
+                          const match = line.match(/^\s*(\(\d+\))\s*(.*)/);
+                          if (match) {
+                            return (
+                              <div key={lIdx} className="flex gap-2 pl-8">
+                                <span className="shrink-0">{match[1]}</span>
+                                <div className="flex-1">{match[2]}</div>
+                              </div>
+                            );
+                          }
+                          if (lIdx === 0) return <div key={lIdx}>{line || '\u00A0'}</div>;
+                          return (
+                            <div key={lIdx} className="flex gap-2 pl-8">
+                              <span className="shrink-0 opacity-0 select-none">(1)</span>
+                              <div className="flex-1">{line || '\u00A0'}</div>
+                            </div>
+                          );
+                        })}
+                      </Highlight>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Section 3.4 moved to this overflow page */}
+            <div className="flex gap-2">
+              <span className="shrink-0 w-8">3.4</span>
+              <div className="flex-1 text-justify">
+                <span className="mb-2 inline-block underline">การขอเบิกใช้สินเชื่อ</span>
+                <div>
+                  ผู้กู้มีสิทธิเบิกใช้สินเชื่อได้หลายครั้ง (Multiple Drawdown) ภายใต้เงื่อนไขว่าผู้กู้ต้องปฏิบัติตามเงื่อนไขบังคับก่อนการเบิกใช้สินเชื่อตามข้อ 3.2 ของสัญญาฉบับนี้ในการเบิกใช้สินเชื่อแต่ละครั้ง และในกรณีที่ผู้กู้ได้ชำระคืน
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* This is the overflow page (page 7 in overflow layout) */}
+          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
+            <div>
+              สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
+            </div>
+            <div>
+              หน้า 7 จาก {totalPages}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Page 6 */}
       <div data-section-id="od-drawdown-cont" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
@@ -528,15 +571,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 7 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(7)}
       </div>
 
       {/* Page 7 */}
@@ -599,15 +634,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 8 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(8)}
       </div>
 
       {/* Page 8 */}
@@ -670,15 +697,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 9 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(9)}
       </div>
 
       {/* Page 9 */}
@@ -735,15 +754,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 10 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(10)}
       </div>
 
       {/* Page 10 */}
@@ -796,15 +807,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 11 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(11)}
       </div>
 
       {/* Page 11 */}
@@ -857,15 +860,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 12 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(12)}
       </div>
 
       {/* Page 12 */}
@@ -910,15 +905,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 13 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(13)}
       </div>
 
       {/* Page 13 */}
@@ -965,15 +952,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 14 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(14)}
       </div>
 
       {/* Page 14 */}
@@ -1012,15 +991,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 15 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(15)}
       </div>
 
       {/* Page 15 */}
@@ -1066,15 +1037,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 16 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(16)}
       </div>
 
       {/* Page 16 */}
@@ -1144,15 +1107,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 17 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(17)}
       </div>
 
       {/* Page 17 */}
@@ -1205,15 +1160,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 18 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(18)}
       </div>
 
       {/* Page 18 */}
@@ -1250,15 +1197,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 19 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(19)}
       </div>
 
       {/* Page 19 */}
@@ -1309,15 +1248,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 20 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(20)}
       </div>
 
       {/* Page 20 */}
@@ -1365,15 +1296,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             </div>
           </div>
 
-          {/* Footer info for print */}
-          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-            <div>
-              สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-            </div>
-            <div>
-              หน้า 21 จาก 48
-            </div>
-          </div>
+          {renderPageFooter(21)}
         </div>
       </div>
 
@@ -1422,15 +1345,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             </div>
           </div>
 
-          {/* Footer info for print */}
-          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-            <div>
-              สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-            </div>
-            <div>
-              หน้า 22 จาก 48
-            </div>
-          </div>
+          {renderPageFooter(22)}
         </div>
       </div>
       {/* Page 22 */}
@@ -1471,15 +1386,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             </div>
           </div>
 
-          {/* Footer info for print */}
-          <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-            <div>
-              สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-            </div>
-            <div>
-              หน้า 23 จาก 48
-            </div>
-          </div>
+          {renderPageFooter(23)}
         </div>
       </div>
       {/* Page 23 */}
@@ -1540,15 +1447,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 24 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(24)}
       </div>
       {/* Page 24 */}
       <div data-section-id="od-default-cont" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
@@ -1610,15 +1509,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 25 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(25)}
       </div>
       {/* Page 25 */}
       <div data-section-id="od-indemnity" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
@@ -1683,15 +1574,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 26 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(26)}
       </div>
       {/* Page 26 */}
       <div data-section-id="od-expenses-cont" className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 font-sans">
@@ -1749,15 +1632,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 27 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(27)}
       </div>
 
       {/* Page 27 */}
@@ -1803,15 +1678,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 28 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(28)}
       </div>
 
       {/* Page 28 */}
@@ -1873,15 +1740,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 29 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(29)}
       </div>
 
       {/* Page 29 */}
@@ -1942,15 +1801,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 30 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(30)}
       </div>
 
       {/* Page 30 */}
@@ -1983,15 +1834,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 31 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(31)}
       </div>
 
       {/* Page 31 (Signatories: Agile Assets & Borrower) */}
@@ -2083,15 +1926,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 32 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(32)}
       </div>
 
       {/* Page 32 (Signatories: TK Assets) */}
@@ -2145,15 +1980,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 33 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(33)}
       </div>
 
       {/* Page 33 (Annex 1: Conditions Precedent) */}
@@ -2227,15 +2054,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 34 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(34)}
       </div>
 
       {/* Page 34 (Annex 1: Conditions Precedent - Cont.) */}
@@ -2324,15 +2143,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 35 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(35)}
       </div>
 
       {/* Page 35 (Annex 2) */}
@@ -2345,15 +2156,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 36 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(36)}
       </div>
 
       {/* Page 36 (Annex 3) */}
@@ -2366,15 +2169,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 37 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(37)}
       </div>
 
       {/* Page 37 (Annex 4) */}
@@ -2431,15 +2226,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 38 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(38)}
       </div>
 
       {/* Page 38 (Annex 4 Acknowledgement) */}
@@ -2512,15 +2299,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 39 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(39)}
       </div>
 
       {/* Page 39 (Annex 5) */}
@@ -2567,15 +2346,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 40 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(40)}
       </div>
 
       {/* Page 40 (Annex 5 Signature & Acknowledgement) */}
@@ -2644,15 +2415,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 41 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(41)}
       </div>
 
       {/* Page 41 (Annex 5 Documents List) */}
@@ -2690,15 +2453,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 42 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(42)}
       </div>
 
       {/* Page 42 (Annex 6 - Credit Drawdown Request Form) */}
@@ -2853,15 +2608,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 43 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(43)}
       </div>
 
       {/* Page 43 (Annex 6 - Credit Drawdown Request Form - Cont.) */}
@@ -2913,15 +2660,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 44 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(44)}
       </div>
 
       {/* Page 44 (Annex 7 - Receipt of Credit Facility) */}
@@ -2985,15 +2724,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 45 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(45)}
       </div>
 
       {/* Page 45 (Annex 8) */}
@@ -3007,15 +2738,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
         </div>
 
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 46 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(46)}
       </div>
 
       {/* Page 46 (Annex 9) */}
@@ -3067,15 +2790,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 47 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(47)}
       </div>
 
       {/* Page 47 (Annex 9 - Signature) */}
@@ -3128,15 +2843,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
           </div>
         </div>
 
-        {/* Footer info for print */}
-        <div className="absolute bottom-4 left-0 right-0 px-24 flex justify-between items-end text-[10px] text-gray-600 font-sans">
-          <div>
-            สัญญาให้สินเชื่อหมุนเวียนเลขที่ <Highlight>{data.contractNo || '\u00A0'}</Highlight>
-          </div>
-          <div>
-            หน้า 48 จาก 48
-          </div>
-        </div>
+        {renderPageFooter(48)}
       </div>
     </div>
   );

@@ -248,6 +248,8 @@ export interface ODData {
 
   // Dynamic conditions (same as CF for consistency)
   conditions32?: string[];
+  // Dynamic conditions for section 3.3 (additional conditions before drawdown)
+  conditions33?: string[];
 
   // Annex 4: Payment Change Letter details
   annex4PONo?: string;
