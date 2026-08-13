@@ -34,9 +34,9 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
   // Section 3.3 dynamic conditions overflow logic
   const conditions33 = data.conditions33 || [];
   const totalCond33Chars = conditions33.reduce((sum, s) => sum + s.length, 0);
-  // If total chars > 800 or more than 5 items, we need an overflow page
-  const hasCond33Overflow = totalCond33Chars > 800 || conditions33.length > 5;
-  // How many items fit on the first page (3.3 page)
+  // ถ้าตัวอักษรเกิน 1900 หรือมีข้อ จ ขึ้นไป (length >= 5) ให้เกิดหน้าใหม่
+  const hasCond33Overflow = totalCond33Chars > 1900 || conditions33.length >= 5;
+  // ถ้า overflow ให้หน้าแรกแสดงแค่ 3 ข้อ (ก, ข, ค) แล้วดันข้อ ง เป็นต้นไป รวมถึง 3.4 ไปหน้าใหม่
   const cond33FirstPageCount = hasCond33Overflow ? 3 : conditions33.length;
   const baseTotalPages = 48;
   const totalPages = baseTotalPages + (hasCond33Overflow ? 1 : 0);
