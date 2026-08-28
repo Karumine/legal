@@ -83,14 +83,14 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-6">1)</span>
                 <div className="flex-1">
-                  <b><Highlight>{agileInfo.companyName}</Highlight></b> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อ”</b>)
+                  <b><Highlight>{agileInfo.companyName}</Highlight></b> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้ให้สินเชื่อ”</b>)
                 </div>
               </div>
 
               <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-6">2)</span>
                 <div className="flex-1">
-                  <b><Highlight>{customerInfo.companyName}</Highlight></b> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
+                  <b><Highlight>{customerInfo.companyName}</Highlight></b> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้กู้”</b>)
                 </div>
               </div>
             </>
@@ -99,14 +99,14 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-6">1)</span>
                 <div className="flex-1">
-                  <b><Highlight>{agileInfo.companyName}</Highlight></b> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 1”</b>)
+                  <b><Highlight>{agileInfo.companyName}</Highlight></b> (โดย <Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 1”</b>)
                 </div>
               </div>
 
               <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-6">2)</span>
                 <div className="flex-1">
-                  <b><Highlight>{tkInfo.companyName}</Highlight></b> (โดย <Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 2”</b>)
+                  <b><Highlight>{tkInfo.companyName}</Highlight></b> (โดย <Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้ให้สินเชื่อฝ่ายที่ 2”</b>)
                 </div>
               </div>
 
@@ -117,7 +117,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
               <div className="flex gap-4 text-justify">
                 <span className="shrink-0 w-6">3)</span>
                 <div className="flex-1">
-                  <b><Highlight>{customerInfo.companyName}</Highlight></b> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้กู้”</b>)
+                  <b><Highlight>{customerInfo.companyName}</Highlight></b> (โดย <Highlight>{customerInfo.directors}</Highlight> {getAuthorizedSignatoryText(customerInfo)}) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(customerInfo.address, customerInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(customerInfo.taxId)}</Highlight> (ซึ่งต่อไปนี้เรียกว่า <b>“ผู้กู้”</b>)
                 </div>
               </div>
             </>
@@ -284,7 +284,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
                     <div className="mt-4 flex gap-2">
                       <span className="shrink-0 w-8">(1)</span>
                       <div className="flex-1">
-                        ดำเนินการเปิดบัญชีธนาคารในนามของบริษัท <Highlight>{customerInfo.companyName}</Highlight> และดำเนินการให้ผู้ให้สินเชื่อ หรือตัวแทนของผู้ให้สินเชื่อเป็นผู้มีอำนาจลงนามสั่งจ่าย / ถอนเงิน หรือทำธุรกรรมของบัญชีดังกล่าวเท่านั้น
+                        ดำเนินการเปิดบัญชีธนาคารในนามของ <Highlight>{customerInfo.companyName}</Highlight> และดำเนินการให้ผู้ให้สินเชื่อ หรือตัวแทนของผู้ให้สินเชื่อเป็นผู้มีอำนาจลงนามสั่งจ่าย / ถอนเงิน หรือทำธุรกรรมของบัญชีดังกล่าวเท่านั้น
                       </div>
                     </div>
 
@@ -340,7 +340,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
                     <div className="mt-4 flex gap-2">
                       <span className="shrink-0 w-8">(1)</span>
                       <div className="flex-1">
-                        ดำเนินการส่งมอบสำเนาเอกสารใบคำสั่งซื้อ (PO) ของลูกค้าของผู้กู้ ใบวางบิลของผู้กู้ และเอกสารอื่นใดที่เกี่ยวข้องที่แสดงถึงสิทธิเรียกร้อง และ/หรือ หนี้ที่ผู้กู้มีต่อลูกค้าของผู้กู้ ที่ผู้ให้สินเชื่อยอมรับ พร้อมหลักฐานการตรวจรับสินค้า และ/หรือ ตรวจรับบริการที่มีลูกค้าของผู้กู้ หรือตัวแทนของลูกค้าของผู้กู้ได้ลงลายมือชื่อตรวจรับสินค้า และ/หรือ ตรวจรับบริการครบถ้วนสมบูรณ์ (“เอกสารที่เกี่ยวข้องกับลูกค้าของผู้กู้”) ให้แก่ผู้ให้สินเชื่อ ประกอบการเบิกใช้สินเชื่อแต่ละคราวตามข้อ 3.4 ของสัญญาฉบับนี้ (“โครงการ”) และให้ถือว่าเอกสารดังกล่าวเป็น <span className="font-bold underline decoration-1">เอกสารแนบท้ายหมายเลข 2</span> (สำเนาคำสั่งซื้อของลูกค้าของผู้กู้และสำเนาเอกสารวางบิลของผู้กู้) หรือ <span className="font-bold underline decoration-1">เอกสารแนบท้ายหมายเลข 3</span> <i>(ตารางแสดงใบคำสั่งซื้อและจำนวนเงินที่ผู้ให้สินเชื่อมีสิทธิหักเพื่อชำระคืนเงินในแต่ละรายการ)</i> (แล้วแต่กรณี) ของสัญญาฉบับนี้
+                        ดำเนินการส่งมอบสำเนาเอกสารใบคำสั่งซื้อ (PO) ของลูกค้าของผู้กู้ ใบวางบิลของผู้กู้ และเอกสารอื่นใดที่เกี่ยวข้องที่แสดงถึงสิทธิเรียกร้อง และ/หรือ หนี้ที่ผู้กู้มีต่อลูกค้าของผู้กู้ ที่ผู้ให้สินเชื่อยอมรับ พร้อมหลักฐานการตรวจรับสินค้า และ/หรือ ตรวจรับบริการที่มีลูกค้าของผู้กู้ หรือตัวแทนของลูกค้าของผู้กู้ได้ลงลายมือชื่อตรวจรับสินค้า และ/หรือ ตรวจรับบริการครบถ้วนสมบูรณ์ <b>(“เอกสารที่เกี่ยวข้องกับลูกค้าของผู้กู้”)</b> ให้แก่ผู้ให้สินเชื่อ ประกอบการเบิกใช้สินเชื่อแต่ละคราวตามข้อ 3.4 ของสัญญาฉบับนี้ <b>(“โครงการ”)</b> และให้ถือว่าเอกสารดังกล่าวเป็น <span className="font-bold underline decoration-1">เอกสารแนบท้ายหมายเลข 2</span> (สำเนาคำสั่งซื้อของลูกค้าของผู้กู้และสำเนาเอกสารวางบิลของผู้กู้) หรือ <span className="font-bold underline decoration-1">เอกสารแนบท้ายหมายเลข 3</span> <i>(ตารางแสดงใบคำสั่งซื้อและจำนวนเงินที่ผู้ให้สินเชื่อมีสิทธิหักเพื่อชำระคืนเงินในแต่ละรายการ)</i> (แล้วแต่กรณี) ของสัญญาฉบับนี้
                       </div>
                     </div>
                   </div>
@@ -741,7 +741,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             <div className="flex gap-2">
               <span className="shrink-0 w-8">5.1</span>
               <div className="flex-1 text-justify">
-                ภายใต้บังคับของสัญญาฉบับนี้ ผู้กู้ตกลงชำระคืนเงินต้นของสินเชื่อพร้อมดอกเบี้ย (ไม่ว่าทั้งหมดหรือบางส่วน) ให้แก่ผู้ให้สินเชื่อ ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ ในวันที่ครบกำหนดชำระหนี้ของมูลหนี้ที่เกิดขึ้นตามที่ระบุในเอกสารที่เกี่ยวข้องกับลูกค้าของผู้กู้ตามแต่ละโครงการ หรือวันอื่นใดที่ผู้ให้สินเชื่อกำหนด <b>(“วันครบกำหนดชำระเงิน”)</b>
+                ภายใต้บังคับของสัญญาฉบับนี้ ผู้กู้ตกลงชำระคืนเงินต้นของสินเชื่อพร้อมดอกเบี้ย (ไม่ว่าทั้งหมดหรือบางส่วน) ให้แก่ผู้ให้สินเชื่อ ตามสัดส่วนที่ระบุในข้อ 1.2 ของสัญญาฉบับนี้ ในวันที่ครบกำหนดชำระหนี้ของมูลหนี้ที่เกิดขึ้นตามที่ระบุในเอกสารที่เกี่ยวข้องกับลูกค้าของผู้กู้ตามแต่ละโครงการ หรือวันที่อื่นใดที่ผู้ให้สินเชื่อกำหนด <b>(“วันครบกำหนดชำระเงิน”)</b>
               </div>
             </div>
 
@@ -801,7 +801,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             <div className="flex gap-2">
               <span className="shrink-0 w-8">6.2</span>
               <div className="flex-1 text-justify">
-                ในกรณีที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งมีความประสงค์จะเปลี่ยนแปลงวิธีการชำระเงินที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้เป็นรูปแบบอื่น คู่สัญญาทั้งสามฝ่ายจะต้องตกลงกันเป็นลายลักษณ์อักษร
+                ในกรณีที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งมีความประสงค์จะเปลี่ยนแปลงวิธีการชำระตามที่ระบุในข้อ 6.1 ของสัญญาฉบับนี้เป็นรูปแบบอื่น คู่สัญญาทั้งสามฝ่ายจะต้องตกลงกันเป็นลายลักษณ์อักษร
               </div>
             </div>
           </div>
@@ -826,7 +826,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
             <div className="flex gap-2">
               <span className="shrink-0 w-8">6.4</span>
               <div className="flex-1 text-justify">
-                คู่สัญญาทั้งสามฝ่ายตกลงว่าถ้าวันครบกำหนดชำระเงินใด ๆ มิใช่วันทำการ ก็ให้เงินจำนวนนั้น ๆ ถึงกำหนดชำระในวันทำการก่อนวันถึงกำหนดชำระนั้น
+                คู่สัญญาทุกฝ่ายตกลงว่าถ้าวันครบกำหนดชำระเงินใด ๆ มิใช่วันทำการ ก็ให้เงินจำนวนนั้น ๆ ถึงกำหนดชำระในวันทำการก่อนวันถึงกำหนดชำระนั้น
               </div>
             </div>
 
@@ -851,7 +851,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
                   <div className="flex gap-2">
                     <span className="shrink-0 w-8">(ก)</span>
                     <div className="flex-1 text-justify">
-                      <b>สัญญาค้ำประกันโดยบุคคลภายนอก</b>: <Highlight>{(guarantors || []).filter(g => g.guarantorName?.trim()).map((g, i) => `${i + 1}. ${g.guarantorName}`).join(' ') || '....................'}</Highlight> โดยผู้ค้ำประกันอาจเป็นบุคคลธรรมดาหรือนิติบุคคลซึ่งไม่มีหนี้สินล้นพ้นตัว มีแหล่งรายได้ชัดเจนและมีคุณสมบัติอื่นๆ ตามที่ผู้ให้สินเชื่อกำหนด โดยผู้ให้สินเชื่อขอสงวนสิทธิในการใช้ดุลยพินิจฝ่ายเดียวในการพิจารณาคุณสมบัติในการเลือกบุคคลที่เป็นผู้ค้ำประกัน เพื่อเข้าค้ำประกันแทนหรือเพิ่มเติม เพื่อค้ำประกันหนี้สินใดๆ ภายใต้หรือที่เกี่ยวข้องกับสัญญาฉบับนี้
+                      <b>สัญญาค้ำประกันโดยบุคคลภายนอก</b>: <Highlight>{(guarantors || []).filter(g => g.guarantorName?.trim()).map((g, i) => `${i + 1}. ${g.guarantorName}`).join(' ') || '....................'}</Highlight> โดยผู้ค้ำประกันอาจเป็นบุคคลธรรมดาหรือนิติบุคคลซึ่งไม่มีหนี้สินล้นพ้นตัว มีแหล่งรายได้ชัดเจนและมีคุณสมบัติอื่นๆ ตามที่ผู้ให้สินเชื่อกำหนด โดยผู้ให้สินเชื่อขอสงวนสิทธิในการใช้ดุลยพินิจฝ่ายเดียวในการพิจารณาคุณสมบัติในการเลือกบุคคลผู้เป็นผู้ค้ำประกัน เพื่อเข้าค้ำประกันแทนหรือเพิ่มเติม เพื่อค้ำประกันหนี้สินใดๆ ภายใต้หรือที่เกี่ยวข้องกับสัญญาฉบับนี้
                     </div>
                   </div>
                 </div>
@@ -883,7 +883,7 @@ export default function ODPreview({ data, customerInfo, agileInfo, tkInfo, guara
                   การโอนสิทธิเรียกร้องในการรับชำระเงิน แบบมีเงื่อนไขตามข้อ 6.5 ของสัญญาฉบับนี้ เป็นการโอนสิทธิแบบมีเงื่อนไขและผู้กู้ในฐานะผู้โอนสิทธิจะยกเลิกหรือเพิกถอนไม่ได้ เว้นแต่ได้รับความยินยอมเป็นลายลักษณ์อักษรจากผู้ให้สินเชื่อในฐานะผู้รับโอนสิทธิ
                 </div>
                 <div>
-                  ทั้งนี้ ผู้ให้สินเชื่อต้องส่งหนังสือแจ้งการโอนสิทธิ เพื่อให้มีผลบังคับใช้ ซึ่งมีสาระสำคัญตามแบบที่กำหนดไว้ใน <b>เอกสารแนบท้ายหมายเลข 9</b> <i>(แบบของหนังสือแจ้งการโอนสิทธิมีผลบังคับใช้)</i> ให้แก่ลูกค้าของผู้กู้
+                  ทั้งนี้ ผู้ให้สินเชื่อต้องส่งหนังสือแจ้งการโอนสิทธิ เพื่อให้มีผลบังคับใช้ ซึ่งมีสาระสำคัญตามแบบที่กำหนดไว้ใน <u><b>เอกสารแนบท้ายหมายเลข 9</b></u> <i>(แบบของหนังสือแจ้งการโอนสิทธิมีผลบังคับใช้)</i> ให้แก่ลูกค้าของผู้กู้
                 </div>
                 <div>
                   อย่างไรก็ดี ผู้กู้ตกลงและยอมรับว่าผู้ให้สินเชื่อมีสิทธิ ที่จะบังคับสิทธิรับชำระเงินเพื่อการชำระหนี้หรือไม่ก็ได้ และการเลือกที่จะไม่บังคับชำระหนี้ด้วยการโอนสิทธิรับเงินนั้น ไม่เป็นเหตุให้จำนวนหนี้ที่ตามสัญญาฉบับนี้ลดลงตามมูลค่าของเงินที่มีสิทธิจะได้รับชำระจากลูกค้าของผู้กู้รายดังกล่าว

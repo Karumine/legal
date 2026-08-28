@@ -298,40 +298,48 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             คู่สัญญาทั้งสองฝ่ายจึงได้ตกลงทำสัญญาฉบับนี้ขึ้น โดยมีข้อความต่อไปนี้
           </div>
           <div className="space-y-6">
-            <div className="font-bold">1. ข้อตกลงในการค้าร่วม</div>
-            <div className="indent-10 text-justify">
-              คู่สัญญาทั้งสองฝ่ายตกลงแบ่งสัดส่วนการค้าร่วมกัน กล่าวคือ คู่สัญญาจะให้การสนับสนุนทางการเงินแก่ลูกค้าภายใต้สัญญาทางการเงินในสัดส่วน ดังต่อไปนี้
-            </div>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">1.</span>
+              <div className="flex-1 space-y-4">
+                <div className="font-bold">ข้อตกลงในการค้าร่วม</div>
+                <div className="text-justify leading-relaxed">
+                  คู่สัญญาทั้งสองฝ่ายตกลงแบ่งสัดส่วนการค้าร่วมกัน กล่าวคือ คู่สัญญาจะให้การสนับสนุนทางการเงินแก่ลูกค้าภายใต้สัญญาทางการเงินในสัดส่วน ดังต่อไปนี้
+                </div>
 
-            <table className="w-full border-collapse border border-black text-center">
-              <thead>
-                <tr className="bg-gray-100 print:bg-transparent">
-                  <th className="border border-black p-2 w-1/2">ผู้ค้าร่วม</th>
-                  <th className="border border-black p-2">สัดส่วน (ร้อยละ)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border border-black p-2">คู่สัญญาฝ่ายที่ 1</td>
-                  <td className="border border-black p-2">
-                    <Highlight>{data.proportion1}</Highlight> ({thaiNumberText(data.proportion1)})
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-black p-2">คู่สัญญาฝ่ายที่ 2</td>
-                  <td className="border border-black p-2">
-                    <Highlight>{data.proportion2}</Highlight> ({thaiNumberText(data.proportion2)})
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                <table className="w-full border-collapse border border-black text-center">
+                  <thead>
+                    <tr className="bg-gray-100 print:bg-transparent">
+                      <th className="border border-black p-2 w-1/2">ผู้ค้าร่วม</th>
+                      <th className="border border-black p-2">สัดส่วน (ร้อยละ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border border-black p-2">คู่สัญญาฝ่ายที่ 1</td>
+                      <td className="border border-black p-2">
+                        <Highlight>{data.proportion1}</Highlight> ({thaiNumberText(data.proportion1)})
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border border-black p-2">คู่สัญญาฝ่ายที่ 2</td>
+                      <td className="border border-black p-2">
+                        <Highlight>{data.proportion2}</Highlight> ({thaiNumberText(data.proportion2)})
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-6">
-            <div className="font-bold">2. การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน</div>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">2.</span>
+              <div className="font-bold">การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน</div>
+            </div>
 
-            <div className="flex gap-2">
-              <span className="shrink-0 w-6">2.1</span>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">2.1</span>
               <div className="flex-1 space-y-4">
                 <div className="text-justify leading-relaxed">
                   คู่สัญญาฝ่ายที่ 2 ตกลงรับบริการจากคู่สัญญาฝ่ายที่ 1 สำหรับการให้บริการที่เกี่ยวข้องกับการจัดหาลูกค้าและจัดทำสัญญาทางการเงิน และบริหารจัดการสัญญาทางการเงิน โดยคู่สัญญาฝ่ายที่ 1 มีขอบเขตอำนาจ หน้าที่ และเงื่อนไขในการให้บริการตามที่กำหนดใน<span className="font-bold underline">เอกสารแนบท้ายหมายเลข 1</span> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน)
@@ -342,8 +350,8 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <span className="shrink-0 w-6">2.2</span>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">2.2</span>
               <div className="flex-1 text-justify">
                 คู่สัญญาฝ่ายที่ 2 ตกลงชำระค่าตอบแทนให้แก่คู่สัญญาฝ่ายที่ 1 สำหรับการให้บริการตามที่ระบุในข้อ 2.1 ของสัญญาฉบับนี้ โดยมีรายละเอียดของค่าตอบแทนและวิธีการชำระค่าตอบแทนตามที่กำหนดใน<span className="font-bold underline">เอกสารแนบท้ายหมายเลข 2</span> (ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ)
               </div>
@@ -362,25 +370,31 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageHeader />
 
         <div className="space-y-6">
-          <div>
-            <div className="font-bold">3. ระยะเวลาและการมีผลบังคับใช้ของสัญญา</div>
-            <div className="indent-10 text-justify">
-              คู่สัญญาทั้งสองฝ่ายตกลงให้สัญญาฉบับนี้มีผลบังคับใชันับแต่วันที่คู่สัญญาลงนามในสัญญาฉบับนี้ และให้สัญญาฉบับนี้สิ้นสุดลงทันที เมื่อ (1) สัญญาทางการเงินสิ้นสุดลง และ (2) คู่สัญญาได้รับชำระหนี้ ดอกเบี้ย ค่าเสียหาย และค่าใช้จ่ายอื่น ๆ (ถ้ามี) ภายใต้สัญญาทางการเงินจนครบถ้วนแล้ว
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 font-bold">3.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">ระยะเวลาและการมีผลบังคับใช้ของสัญญา</div>
+              <div className="text-justify leading-relaxed">
+                คู่สัญญาทั้งสองฝ่ายตกลงให้สัญญาฉบับนี้มีผลบังคับใชันับแต่วันที่คู่สัญญาลงนามในสัญญาฉบับนี้ และให้สัญญาฉบับนี้สิ้นสุดลงทันที เมื่อ (1) สัญญาทางการเงินสิ้นสุดลง และ (2) คู่สัญญาได้รับชำระหนี้ ดอกเบี้ย ค่าเสียหาย และค่าใช้จ่ายอื่น ๆ (ถ้ามี) ภายใต้สัญญาทางการเงินจนครบถ้วนแล้ว
+              </div>
             </div>
           </div>
 
           <div className="space-y-6">
-            <div className="font-bold">4. วิธีการรับชำระเงินและค่าใช้จ่ายอื่น ๆ ที่เกิดขึ้นตามสัญญาทางการเงิน</div>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">4.</span>
+              <div className="font-bold">วิธีการรับชำระเงินและค่าใช้จ่ายอื่น ๆ ที่เกิดขึ้นตามสัญญาทางการเงิน</div>
+            </div>
 
-            <div className="flex gap-2">
-              <span className="shrink-0 w-6">4.1</span>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">4.1</span>
               <div className="flex-1 text-justify">
                 คู่สัญญาทั้งสองฝ่ายตกลงกำหนดให้ลูกค้าชำระค่างวดเช่าซื้อ และ/หรือ ค่าใช้จ่ายอื่น ๆ (ซึ่งรวมถึงดอกเบี้ย ค่าปรับ และ/หรือ ค่าใช้จ่ายต่าง ๆ ในการเข้าทำสัญญาทางการเงิน) ที่เกิดขึ้นตามสัญญาทางการเงิน <b>(“หนี้เงิน”)</b> ด้วยเงินสด เช็ค การโอนเงินเข้าบัญชี หรือด้วยการสั่งจ่ายเช็คล่วงหน้า (วิธีการใดวิธีการหนึ่งหรือหลายวิธี) หรือวิธีการอื่นใดตามที่คู่สัญญาตกลงร่วมกันเท่านั้น โดยรายละเอียดให้เป็นไปตามสัญญาทางการเงิน ทั้งนี้ ลูกค้าจะต้องชำระหนี้เงินให้แก่คู่สัญญาแต่ละรายโดยตรง ตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <span className="shrink-0 w-6">4.2</span>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">4.2</span>
               <div className="flex-1 text-justify">
                 คู่สัญญาทั้งสองฝ่ายตกลงว่าระหว่างคู่สัญญาด้วยกันเองและกับลูกค้า สิทธิและข้อเรียกร้องทุกประการของคู่สัญญาแต่ละรายในหนี้เงินของคู่สัญญาภายใต้สัญญาทางการเงิน เป็นสิทธิและข้อเรียกร้องที่เท่าเทียมกัน (Pari Passu) ระหว่างคู่สัญญาภายใต้สัญญาฉบับนี้ และตามสัดส่วนในการให้การสนับสนุนทางการเงินแก่ลูกค้าของคู่สัญญาแต่ละราย (Pro Rata) ดังนั้น หากคู่สัญญารายใดรายหนึ่งได้รับเงินจำนวนหนึ่งซึ่งมิใช่จำนวนเงินที่ตนจะมีสิทธิได้รับ หรือเกินกว่าจำนวนเงินที่ตนจะมีสิทธิได้รับตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้จากลูกค้า (ไม่ว่าโดยวิธีการใดก็ตาม) คู่สัญญาที่เป็นผู้ได้รับเงินนั้นจะต้องแจ้งจำนวนเงินที่ได้รับดังกล่าวให้คู่สัญญาอีกฝ่ายทราบทันที และคู่สัญญาทั้งสองฝ่ายจะดำเนินการร่วมกันจัดสรรจำนวนเงินที่ได้รับมานั้นตามสัดส่วนที่ถูกต้องตามสิทธิที่คู่สัญญาแต่ละรายมีภายใต้สัญญาฉบับนี้ต่อไป
               </div>
@@ -402,8 +416,8 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           <div className="space-y-6">
             <div className="font-bold">5. สิทธิ หน้าที่ และความรับผิดชอบระหว่างคู่สัญญา</div>
 
-            <div className="flex gap-2">
-              <span className="shrink-0 w-6">5.1</span>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">5.1</span>
               <div className="flex-1 space-y-4 text-justify">
                 <div>
                   คู่สัญญาทั้งสองฝ่ายตกลงร่วมกันซื้อทรัพย์สินที่จะให้เช่าซื้อ (ในกรณีของสัญญาเช่าซื้อ) โดยอ้างอิงตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ ตามเงื่อนไขและในวันเวลาที่คู่สัญญาทั้งสองฝ่ายเห็นพ้องต้องกัน
@@ -414,8 +428,8 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <span className="shrink-0 w-6">5.2</span>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">5.2</span>
               <div className="flex-1 space-y-4 text-justify">
                 <div>
                   คู่สัญญาทั้งสองฝ่ายตกลงว่าสิทธิ หน้าที่ และความรับผิดของคู่สัญญาแต่ละฝ่าย ภายใต้สัญญาทางการเงินจะแยกต่างหากจากกัน การที่คู่สัญญารายใดไม่ปฏิบัติตามหน้าที่ที่กำหนดไว้ในสัญญาทางการเงิน ไม่เป็นเหตุปลดเปลื้องคู่สัญญาอีกรายหนึ่งในการปฏิบัติตามหน้าที่ในส่วนของคู่สัญญารายนั้นและไม่เป็นเหตุให้คู่สัญญาอีกรายหนึ่งมีความรับผิดหรือภาระผูกพันใด ๆ เพิ่มเกินกว่าหน้าที่และภาระผูกพันของตนตามที่กำหนดไว้ในสัญญาทางการเงิน
@@ -439,15 +453,15 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageHeader />
 
         <div className="space-y-6 mt-8">
-          <div className="flex gap-2">
-            <span className="shrink-0 w-6">5.3</span>
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 whitespace-nowrap">5.3</span>
             <div className="flex-1 text-justify leading-relaxed">
               ในกรณีที่ลูกค้าตามสัญญาทางการเงิน ชำระหนี้เงินล่าช้า หรือไม่ปฏิบัติตามสัญญาทางการเงิน คู่สัญญาตกลงรับผิดชอบค่าใช้จ่ายในการดำเนินการต่าง ๆ เพื่อติดตามให้ลูกค้าชำระหนี้หรือปฏิบัติตามสัญญาทางการเงินตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span className="shrink-0 w-6">5.4</span>
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 whitespace-nowrap">5.4</span>
             <div className="flex-1 space-y-4">
               <div className="text-justify leading-relaxed">
                 เว้นแต่เป็นกรณีที่กำหนดให้ใช้มติเอกฉันท์ของคู่สัญญาในข้อ 5.5 ของสัญญาฉบับนี้ คู่สัญญาทั้งสองฝ่ายตกลงว่าการใช้สิทธิของคู่สัญญาหรือการดำเนินการใด ๆ ตามสัญญาทางการเงินกับลูกค้าในทุกกรณี ซึ่งรวมถึงแต่ไม่จำกัดเพียงการดำเนินการพิจารณาเครดิต การใช้สิทธิของคู่สัญญาภายใต้สัญญาทางการเงิน การส่งหนังสือบอกกล่าวการฟ้องร้องดำเนินคดีกับลูกค้า และการจัดหาทีมกฎหมาย ทนายความ และการอื่นใดที่เกี่ยวข้องจนเสร็จการ ให้ถือเป็นดุลยพินิจและการตัดสินใจของคู่สัญญาฝ่ายที่ 1 คู่สัญญาฝ่ายที่ 2 ยินยอมให้คู่สัญญาฝ่ายที่ 1 เป็นตัวแทนของคู่สัญญาฝ่ายที่ 2 และเป็นผู้ดำเนินการเพื่อให้การดำเนินการเป็นไปด้วยความสะดวก รวดเร็ว และต้องดำเนินการโดยถือเอาประโยชน์ของคู่สัญญาทั้งสองฝ่ายเป็นสำคัญ ทั้งนี้ ก่อนการดำเนินการตามวรรคแรก คู่สัญญาฝ่ายที่ 1 จะแจ้งให้คู่สัญญาฝ่ายที่ 2 ทราบภายในระยะเวลาตามสมควร และคู่สัญญาฝ่ายที่ 2 สงวนสิทธิ์ที่จะระงับ และ/หรือ ยับยั้งไม่ให้คู่สัญญาฝ่ายที่ 1 ดำเนินการได้ ไม่ว่าคู่สัญญาฝ่ายที่ 1 จะได้ดำเนินการแล้วหรือไม่ก็ตาม
@@ -474,44 +488,44 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
         <div className="space-y-6 mt-8">
           <div>
-            <div className="flex gap-2 mb-4">
-              <span className="shrink-0 w-6">5.5</span>
+            <div className="flex gap-4 mb-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">5.5</span>
               <div className="flex-1 space-y-4">
                 <div className="text-justify leading-relaxed">
                   คู่สัญญาทั้งสองฝ่ายตกลงว่าการใช้สิทธิหรือการดำเนินการใด ๆ ตามสัญญาทางการเงินกับลูกค้าในเรื่องดังต่อไปนี้ ต้องได้รับมติเอกฉันท์ของคู่สัญญา
                 </div>
                 <div className="space-y-4">
                   <div className="flex gap-4">
-                    <span className="shrink-0">(ก)</span>
+                    <span className="shrink-0 w-8 whitespace-nowrap">(ก)</span>
                     <div className="flex-1">การเปลี่ยนแปลงอัตราดอกเบี้ย</div>
                   </div>
                   <div className="flex gap-4">
-                    <span className="shrink-0">(ข)</span>
+                    <span className="shrink-0 w-8 whitespace-nowrap">(ข)</span>
                     <div className="flex-1">การเปลี่ยนแปลงกำหนดเวลาชำระคืนเงินต้น/ค่าเช่าซื้อ และ</div>
                   </div>
                   <div className="flex gap-4">
-                    <span className="shrink-0">(ค)</span>
+                    <span className="shrink-0 w-8 whitespace-nowrap">(ค)</span>
                     <div className="flex-1 text-justify">
                       การปลด ปลอด หรือไถ่ถอนหลักประกันใด ๆ หรือการดำเนินการอื่นใดที่มีผลทำให้หลักประกันของสัญญาทางการเงินนั้นมีมูลค่าลดลงหรือเสื่อมราคา หรือเกิดบุริมสิทธิหรือเกิดภาระติดพันขึ้นบนหลักประกันดังกล่าว หรือสิ้นผลหรือใช้บังคับไม่ได้อีกต่อไป
                     </div>
                   </div>
                   <div className="flex gap-4">
-                    <span className="shrink-0">(ง)</span>
+                    <span className="shrink-0 w-8 whitespace-nowrap">(ง)</span>
                     <div className="flex-1">การขอปรับปรุงโครงสร้างหนี้ รวมถึงเรื่องที่ส่งผลกระทบต่อหลักประกัน</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex gap-2 mb-4">
-              <span className="shrink-0 w-6">5.6</span>
+            <div className="flex gap-4 mb-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">5.6</span>
               <div className="flex-1 text-justify leading-relaxed">
                 คู่สัญญาทั้งสองฝ่ายตกลงว่าในกรณีที่มีการลงมติตามที่กำหนดในข้อ 5.4 และ/หรือ ข้อ 5.5 ของสัญญาฉบับนี้ คู่สัญญาทั้งสองฝ่ายจะปฏิบัติตามผลการลงมติอย่างเคร่งครัด ซึ่งรวมถึงแต่ไม่จำกัดเพียง การดำเนินการที่เกี่ยวข้องกับลูกค้าภายใต้สัญญาทางการเงิน และการแก้ไขสัญญาทางการเงิน
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <span className="shrink-0 w-6">5.7</span>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">5.7</span>
               <div className="flex-1 text-justify leading-relaxed">
                 คู่สัญญาทั้งสองฝ่ายตกลงว่าในกรณีที่จำนวนเงินที่ลูกค้าได้ชำระให้แก่คู่สัญญาตามสัญญาทางการเงิน ไม่เพียงพอที่จะชำระเงินจำนวนใด ๆ ที่ถึงกำหนดชำระ ณ ขณะนั้น ๆ ให้แก่คู่สัญญา หรือในกรณีที่จำนวนเงินที่ได้จากการบังคับหลักประกันไม่เพียงพอที่จะชำระเงินให้แก่คู่สัญญา ให้จัดสรรเงินที่ได้รับชำระหรือที่ได้คืนมาตามลำดับดังต่อไปนี้
               </div>
@@ -557,29 +571,29 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span className="shrink-0 w-6">5.8</span>
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 whitespace-nowrap">5.8</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาทั้งสองฝ่ายตกลงว่ากรรมสิทธิ์ของทรัพย์สินที่เช่าซื้อภายใต้สัญญาทางการเงิน เป็นของคู่สัญญาทั้งสองฝ่ายตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ จนกว่าจะมีการโอนกรรมสิทธิ์ให้แก่ลูกค้าตามเงื่อนไขของสัญญาทางการเงิน
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span className="shrink-0 w-6">5.9</span>
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 whitespace-nowrap">5.9</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาทั้งสองฝ่ายตกลงว่าสิทธิในการได้รับผลประโยชน์จากประกันภัยทรัพย์สินภายใต้สัญญาทางการเงิน เป็นของคู่สัญญาทั้งสองฝ่ายตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span className="shrink-0 w-6">5.10</span>
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 whitespace-nowrap">5.10</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาทั้งสองฝ่ายตกลงว่าสิทธิต่าง ๆ ของคู่สัญญาบนทรัพย์สินหลักประกันภายใต้สัญญาทางการเงิน ซึ่งรวมถึงแต่ไม่จำกัดเพียงการจำนอง เป็นของคู่สัญญาทั้งสองฝ่ายตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span className="shrink-0 w-6">5.11</span>
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 whitespace-nowrap">5.11</span>
             <div className="flex-1 space-y-4">
               <div className="text-justify leading-relaxed">
                 คู่สัญญาทั้งสองฝ่ายตกลงว่าจะไม่โอนสิทธิ และ/หรือ หน้าที่ของตนภายใต้สัญญาทางการเงินให้แก่บุคคลอื่น เว้นแต่ คู่สัญญาฝ่ายที่ประสงค์จะโอนสิทธิ และ/หรือ หน้าที่ (<span className="font-bold">“ผู้โอน”</span>) ได้บอกกล่าวเป็นลายลักษณ์อักษรล่วงหน้า 30 (สามสิบ) วัน ให้คู่สัญญาอีกฝ่ายทราบ และได้รับความยินยอมเป็นลายลักษณ์อักษรจากคู่สัญญาอีกฝ่าย
@@ -602,15 +616,15 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageHeader />
 
         <div className="space-y-6 mt-8">
-          <div className="flex gap-2">
-            <span className="shrink-0 w-6">5.12</span>
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 whitespace-nowrap">5.12</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาทั้งสองฝ่ายตกลงแบ่งสัดส่วนการค้าร่วมกัน ในอัตราส่วนตามข้อ 1. ซึ่งเมื่อถึงระยะเวลาในการชำระเงินค้าร่วมดังกล่าว คู่สัญญาฝ่ายใดฝ่ายหนึ่งผิดนัดไม่ชำระตามส่วนที่ได้ตกลงกันไว้ คู่สัญญาอีกฝ่ายหนึ่งมีสิทธิบอกเลิกสัญญาและเรียกค่าเสียหายกับคู่สัญญาอีกฝ่ายหนึ่งได้ ซึ่งแบ่งเป็นสัดส่วนตามที่ระบุในข้อ 1.
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <span className="shrink-0 w-6">5.13</span>
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 whitespace-nowrap">5.13</span>
             <div className="flex-1 text-justify leading-relaxed">
               การขอออกใบสั่งซื้อ (PO) ให้ออกในนามคู่สัญญาทั้งสองฝ่าย ซึ่งคู่สัญญาฝ่ายที่ 2 ยินยอมให้คู่สัญญาฝ่ายที่ 1 เป็นผู้ดำเนินการในกระบวนการต่าง ๆ ที่เกี่ยวข้องทั้งหมด
             </div>
@@ -619,15 +633,15 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           <div className="space-y-4">
             <div className="font-bold">6. คำรับรองและยืนยัน</div>
 
-            <div className="flex gap-2">
-              <span className="shrink-0 w-6">6.1</span>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">6.1</span>
               <div className="flex-1 text-justify leading-relaxed">
                 คู่สัญญาทั้งสองฝ่ายตกลงให้คำรับรองและยืนยันตามรายละเอียดที่ระบุไว้ใน <span className="font-bold underline">เอกสารแนบท้ายหมายเลข 3</span> (คำรับรองและยืนยัน) และคู่สัญญาทั้งสองฝ่ายเข้าใจดีว่าคำรับรองและยืนยันดังกล่าวถือเป็นสาระสำคัญในการปฏิบัติตามสัญญาฉบับนี้
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <span className="shrink-0 w-6">6.2</span>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 whitespace-nowrap">6.2</span>
               <div className="flex-1 text-justify leading-relaxed">
                 ในกรณีที่คู่สัญญาฝ่ายใดตรวจพบภายหลังวันที่สัญญาฉบับนี้มีผลบังคับใช้ ว่าคำรับรองและยืนยันใดของคู่สัญญาอีกฝ่ายไม่ถูกต้องหรือไม่เป็นจริง อันมีผลกระทบต่อการตัดสินใจในการเข้าทำและปฏิบัติตามสัญญาฉบับนี้ของคู่สัญญา คู่สัญญาฝ่ายที่ผิดคำรับรองและยืนยันยังคงต้องรับผิดต่อคู่สัญญาอีกฝ่ายในบรรดาความเสียหายใด ๆ ที่เกิดขึ้นดังกล่าว รวมทั้งรับผิดชอบค่าใช้จ่าย ค่าธรรมเนียม ค่าปรับใด ๆ (หากมี) ในการดำเนินการแก้ไขเปลี่ยนแปลงใด ๆ เพื่อให้เป็นไปตามคำรับรองและยืนยัน
               </div>
@@ -635,9 +649,14 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           </div>
 
           <div className="space-y-4">
-            <div className="font-bold">7. เหตุแห่งการผิดสัญญา</div>
-            <div className="text-justify leading-relaxed">
-              เมื่อเกิดเหตุการณ์ใดเหตุการณ์หนึ่งดังต่อไปนี้ขึ้น และไม่สามารถดำเนินการแก้ไขและปฏิบัติให้ถูกต้องตามสัญญาฉบับนี้ภายใน 60 (หกสิบ) วัน ให้ถือว่าเป็นเหตุแห่งการผิดสัญญา ยกเว้นกรณีที่เกิดเหตุการณ์ตามข้อ (ก) ให้ถือว่าเป็นเหตุแห่งการผิดสัญญาทันที
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">7.</span>
+              <div className="flex-1 space-y-4">
+                <div className="font-bold">เหตุแห่งการผิดสัญญา</div>
+                <div className="text-justify leading-relaxed">
+                  เมื่อเกิดเหตุการณ์ใดเหตุการณ์หนึ่งดังต่อไปนี้ขึ้น และไม่สามารถดำเนินการแก้ไขและปฏิบัติให้ถูกต้องตามสัญญาฉบับนี้ภายใน 60 (หกสิบ) วัน ให้ถือว่าเป็นเหตุแห่งการผิดสัญญา ยกเว้นกรณีที่เกิดเหตุการณ์ตามข้อ (ก) ให้ถือว่าเป็นเหตุแห่งการผิดสัญญาทันที
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -803,9 +822,14 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           </div>
 
           <div className="space-y-4 pt-4">
-            <div className="font-bold">11. การใช้สิทธิ</div>
-            <div className="text-justify leading-relaxed">
-              การที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งไม่ใช้สิทธิหรือล่าช้าในการใช้สิทธิใด ๆ ภายใต้สัญญาฉบับนี้ มิให้ถือว่าการไม่ใช้สิทธิหรือการล่าช้าดังกล่าวเป็นการสละสิทธิของคู่สัญญาฝ่ายนั้น
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">11.</span>
+              <div className="flex-1 space-y-4">
+                <div className="font-bold">การใช้สิทธิ</div>
+                <div className="text-justify leading-relaxed">
+                  การที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งไม่ใช้สิทธิหรือล่าช้าในการใช้สิทธิใด ๆ ภายใต้สัญญาฉบับนี้ มิให้ถือว่าการไม่ใช้สิทธิหรือการล่าช้าดังกล่าวเป็นการสละสิทธิของคู่สัญญาฝ่ายนั้น
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -822,37 +846,52 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
         <div className="space-y-6 mt-8">
           <div className="space-y-4">
-            <div className="font-bold">12. การแยกต่างหากของสัญญา</div>
-            <div className="text-justify leading-relaxed">
-              หากมีข้อความหรือข้อตกลงใดในสัญญาฉบับนี้ที่เป็นโมฆะ ไม่สมบูรณ์ หรือไม่มีผลบังคับใช้ ไม่ว่าด้วยเหตุใด ๆ ก็ตาม คู่สัญญาตกลงกัน ดังนี้
-            </div>
-            <div className="ml-8 space-y-4">
-              <div className="flex gap-4">
-                <span className="shrink-0">(ก)</span>
-                <div className="flex-1 text-justify leading-relaxed">
-                  ข้อความและข้อตกลงอื่น ๆ ที่เป็นโมฆะ ไม่สมบูรณ์หรือส่วนที่ไม่มีผลบังคับใช้ของสัญญาฉบับนี้ ไม่มีผลกระทบ หรือทำให้เสื่อมเสียต่อข้อความและข้อตกลงอื่น ๆ ที่ยังคงสมบูรณ์ในสัญญาฉบับนี้
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">12.</span>
+              <div className="flex-1 space-y-4">
+                <div className="font-bold">การแยกต่างหากของสัญญา</div>
+                <div className="text-justify leading-relaxed">
+                  หากมีข้อความหรือข้อตกลงใดในสัญญาฉบับนี้ที่เป็นโมฆะ ไม่สมบูรณ์ หรือไม่มีผลบังคับใช้ ไม่ว่าด้วยเหตุใด ๆ ก็ตาม คู่สัญญาตกลงกัน ดังนี้
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <span className="shrink-0">(ข)</span>
-                <div className="flex-1 text-justify leading-relaxed">
-                  ร่วมกันแก้ไขข้อความ และข้อตกลงที่เป็นโมฆะ ไม่สมบูรณ์ หรือไม่มีผลบังคับใช้ ให้สมบูรณ์และสอดคล้องกับบทบัญญัติแห่งกฎหมายและวัตถุประสงค์ของสัญญาฉบับนี้
+                <div className="space-y-4">
+                  <div className="flex gap-4">
+                    <span className="shrink-0 w-8 whitespace-nowrap">(ก)</span>
+                    <div className="flex-1 text-justify leading-relaxed">
+                      ข้อความและข้อตกลงอื่น ๆ ที่เป็นโมฆะ ไม่สมบูรณ์หรือส่วนที่ไม่มีผลบังคับใช้ของสัญญาฉบับนี้ ไม่มีผลกระทบ หรือทำให้เสื่อมเสียต่อข้อความและข้อตกลงอื่น ๆ ที่ยังคงสมบูรณ์ในสัญญาฉบับนี้
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <span className="shrink-0 w-8 whitespace-nowrap">(ข)</span>
+                    <div className="flex-1 text-justify leading-relaxed">
+                      ร่วมกันแก้ไขข้อความ และข้อตกลงที่เป็นโมฆะ ไม่สมบูรณ์ หรือไม่มีผลบังคับใช้ ให้สมบูรณ์และสอดคล้องกับบทบัญญัติแห่งกฎหมายและวัตถุประสงค์ของสัญญาฉบับนี้
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="space-y-4">
-            <div className="font-bold">13. การแก้ไขสัญญา</div>
-            <div className="text-justify leading-relaxed">
-              รายละเอียดในสัญญาฉบับนี้ คู่สัญญาฝ่ายใดฝ่ายหนึ่งจะเปลี่ยนแปลงหรือแก้ไขโดยไม่ได้รับการยินยอมเป็นลายลักษณ์อักษรจากคู่สัญญาอีกฝ่ายมิได้ เว้นแต่การเปลี่ยนแปลงและแก้ไขนั้น จะได้ทำเป็นลายลักษณ์อักษร และลงนามโดยคู่สัญญาทั้งสองฝ่ายตามสัญญาฉบับนี้ และให้ถือว่าการแก้ไขสัญญาดังกล่าวเป็นส่วนหนึ่งของสัญญาฉบับนี้
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">13.</span>
+              <div className="flex-1 space-y-4">
+                <div className="font-bold">การแก้ไขสัญญา</div>
+                <div className="text-justify leading-relaxed">
+                  รายละเอียดในสัญญาฉบับนี้ คู่สัญญาฝ่ายใดฝ่ายหนึ่งจะเปลี่ยนแปลงหรือแก้ไขโดยไม่ได้รับการยินยอมเป็นลายลักษณ์อักษรจากคู่สัญญาอีกฝ่ายมิได้ เว้นแต่การเปลี่ยนแปลงและแก้ไขนั้น จะได้ทำเป็นลายลักษณ์อักษร และลงนามโดยคู่สัญญาทั้งสองฝ่ายตามสัญญาฉบับนี้ และให้ถือว่าการแก้ไขสัญญาดังกล่าวเป็นส่วนหนึ่งของสัญญาฉบับนี้
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="space-y-4">
-            <div className="font-bold">14. กฎหมายที่ใช้บังคับ</div>
-            <div className="text-justify leading-relaxed">
-              สัญญาฉบับนี้ให้ใช้บังคับและตีความตามกฎหมายไทย ข้อพิพาท ข้อโต้แย้ง หรือสิทธิเรียกร้องใด ๆ ที่เกิดจากหรือที่เกี่ยวกับสัญญาฉบับนี้ซึ่งไม่สามารถตกลงกันได้ระหว่างคู่สัญญาให้นำเสนอต่อศาลไทยที่มีเขตอำนาจ
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">14.</span>
+              <div className="flex-1 space-y-4">
+                <div className="font-bold">กฎหมายที่ใช้บังคับ</div>
+                <div className="text-justify leading-relaxed">
+                  สัญญาฉบับนี้ให้ใช้บังคับและตีความตามกฎหมายไทย ข้อพิพาท ข้อโต้แย้ง หรือสิทธิเรียกร้องใด ๆ ที่เกิดจากหรือที่เกี่ยวกับสัญญาฉบับนี้ซึ่งไม่สามารถตกลงกันได้ระหว่างคู่สัญญาให้นำเสนอต่อศาลไทยที่มีเขตอำนาจ
+                </div>
+              </div>
             </div>
           </div>
 
