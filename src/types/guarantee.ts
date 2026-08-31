@@ -64,7 +64,7 @@ export const initialGuaranteeData: GuaranteeData = {
   borrowerDirectors: 'นางสาวปฐมา พรประภา และนายประพล พรประภา',
   borrowerAddress: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร',
   borrowerTaxId: '0107546000130',
-  borrowerPhone: '02-310-7000',
+  borrowerPhone: '02-310-7555',
 
   // Party 3 (Guarantors)
   guarantors: [

@@ -369,7 +369,7 @@ export const initialAppData: AppData = {
     address: '69 ถนนรามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพมหานคร 10240',
     postalCode: '10240',
     taxId: '0107546000130',
-    phone: '02-310-7000',
+    phone: '02-310-7555',
     email: 'prapol@tk.co.th',
     contactPerson: 'นายประพล พรประภา',
     entityType: 'company',
