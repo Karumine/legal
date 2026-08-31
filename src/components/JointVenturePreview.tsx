@@ -102,8 +102,11 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
     const part1 = (
       <div className="space-y-3">
-        <div className="font-normal text-justify">
-          2.{agreeIdx + 1} {label}{enLabel} เลขที่ <Highlight>{agreement.data.contractNo}</Highlight> โดยชำระค่า Service Fee ตามตารางที่แนบมาด้วย ดังนี้
+        <div className="flex gap-4 font-normal text-justify">
+          <span className="shrink-0 w-8">2.{agreeIdx + 1}.</span>
+          <div className="flex-1">
+            {label}{enLabel} เลขที่ <Highlight>{agreement.data.contractNo}</Highlight> โดยชำระค่า Service Fee ตามตารางที่แนบมาด้วย ดังนี้
+          </div>
         </div>
         <div className={periods > 1 ? "grid grid-cols-2 gap-4" : "w-1/2"}>
           <div>{renderColumn(1, rowsPage1Column1)}</div>
@@ -146,8 +149,11 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
     return (
       <div key={agreement.id} className="space-y-3">
-        <div className="font-normal text-justify">
-          1.{agreeIdx + 1}. {label}{enLabel} เลขที่ {agreement.data.contractNo} โดยชำระค่า Origination Fee ตามตารางที่แนบมาด้วย ดังนี้
+        <div className="flex gap-4 font-normal text-justify">
+          <span className="shrink-0 w-8">1.{agreeIdx + 1}.</span>
+          <div className="flex-1">
+            {label}{enLabel} เลขที่ {agreement.data.contractNo} โดยชำระค่า Origination Fee ตามตารางที่แนบมาด้วย ดังนี้
+          </div>
         </div>
 
         <table className="w-full border-collapse border border-black text-center text-[12px]">
@@ -244,17 +250,18 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         </div>
 
         <div className="indent-10 mb-4">
-          สัญญาค้าร่วม <b>(“สัญญา”)</b> ฉบับนี้ ทำขึ้นที่ <Highlight>{agileInfo.companyName}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight> โดยและระหว่าง
+          สัญญาค้าร่วม <b>(“สัญญา”)</b> ฉบับนี้ ทำขึ้นที่ <Highlight>{agileInfo.companyName}</Highlight> เมื่อวันที่ <Highlight>{formatThaiDate(data.contractDate)}</Highlight>
+          <div className="mt-4 indent-0">โดยและระหว่าง</div>
         </div>
         <div className="space-y-4 mb-6">
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-4">1.</span>
+          <div className="flex gap-4 text-justify">
+            <span className="shrink-0 w-8">1.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{agileInfo.companyName}</Highlight></span> (โดย<Highlight>{agileInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(agileInfo.address, agileInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(agileInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 1”</b>) และ
             </div>
           </div>
-          <div className="flex gap-2 text-justify">
-            <span className="shrink-0 w-4">2.</span>
+          <div className="flex gap-4 text-justify">
+            <span className="shrink-0 w-8">2.</span>
             <div className="flex-1">
               <span className="font-bold"><Highlight>{tkInfo.companyName}</Highlight></span> (โดย<Highlight>{tkInfo.directors}</Highlight> กรรมการผู้มีอำนาจกระทำการแทนบริษัท) มีสำนักงานจดทะเบียนตั้งอยู่เลขที่ <Highlight>{stripAddressPrefix(formatAddressWithPostalCode(tkInfo.address, tkInfo.postalCode))}</Highlight> ทะเบียนนิติบุคคลเลขที่ <Highlight>{formatThaiId(tkInfo.taxId)}</Highlight> (ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“คู่สัญญาฝ่ายที่ 2”</b>)
             </div>
@@ -264,19 +271,19 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <div className="font-bold mb-4">โดยที่</div>
         <div className="space-y-3 mb-6">
           <div className="flex gap-4">
-            <span>ก.</span>
+            <span className="shrink-0 w-8">ก.</span>
             <div className="flex-1">
               คู่สัญญาทั้งสองฝ่ายได้ตกลงกันทำสัญญาค้าร่วมฉบับนี้ เพื่อเป็นการระดมทุนระหว่างคู่สัญญา เพื่อประโยชน์ในการร่วมกันเข้าทำ <Highlight>{agreementRefs}</Highlight> <b>(“สัญญาทางการเงิน”)</b> กับผู้กู้/ผู้เช่าซื้อ <b>(“ลูกค้า”)</b> เนื่องจากสัญญาทางการเงินดังกล่าวเป็นการให้การสนับสนุนทางการเงินแก่ลูกค้าในวงเงินที่สูง และเพื่อเป็นการกำหนดสิทธิและหน้าที่ของคู่สัญญาในการดำเนินการใด ๆ ที่เกี่ยวข้องกับสัญญาทางการเงิน
             </div>
           </div>
           <div className="flex gap-4">
-            <span>ข.</span>
+            <span className="shrink-0 w-8">ข.</span>
             <div className="flex-1">
               การที่คู่สัญญาทั้งสองฝ่ายได้ตกลงกันทำสัญญาฉบับนี้ จะทำให้คู่สัญญาไม่ต้องรับภาระในการให้การสนับสนุนทางการเงิน และ/หรือ การปฏิบัติหน้าที่ตามข้อตกลงและเงื่อนไขภายใต้สัญญาทางการเงินที่มากจนเกินไป และเพื่อให้บรรลุตามวัตถุประสงค์ของคู่สัญญาทั้งสองฝ่ายในการเข้าทำสัญญาทางการเงินดังกล่าว
             </div>
           </div>
           <div className="flex gap-4">
-            <span>ค.</span>
+            <span className="shrink-0 w-8">ค.</span>
             <div className="flex-1">
               คู่สัญญาทั้งสองฝ่ายจะไม่มีการจดทะเบียนจัดตั้งบริษัทใหม่ และเข้าทำสัญญาฉบับนี้เพื่อประโยชน์ในการค้าร่วมเท่านั้น
             </div>
@@ -414,7 +421,10 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
         <div className="space-y-4 mt-8">
           <div className="space-y-6">
-            <div className="font-bold">5. สิทธิ หน้าที่ และความรับผิดชอบระหว่างคู่สัญญา</div>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">5.</span>
+              <div className="font-bold">สิทธิ หน้าที่ และความรับผิดชอบระหว่างคู่สัญญา</div>
+            </div>
 
             <div className="flex gap-4">
               <span className="shrink-0 w-8 whitespace-nowrap">5.1</span>
@@ -631,7 +641,10 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           </div>
 
           <div className="space-y-4">
-            <div className="font-bold">6. คำรับรองและยืนยัน</div>
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">6.</span>
+              <div className="font-bold">คำรับรองและยืนยัน</div>
+            </div>
 
             <div className="flex gap-4">
               <span className="shrink-0 w-8 whitespace-nowrap">6.1</span>
@@ -673,42 +686,42 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
         <div className="space-y-6 mt-8">
           <div className="flex gap-4">
-            <span className="shrink-0">(ก)</span>
+            <span className="shrink-0 w-8 whitespace-nowrap">(ก)</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาฝ่ายใดฝ่ายหนึ่งไม่รักษาหรือปฏิบัติตามข้อตกลง ข้อผูกพัน และข้อกำหนดใด ๆ อันเป็นหน้าที่ของตนตามที่ระบุไว้ในสัญญาฉบับนี้
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="shrink-0">(ข)</span>
+            <span className="shrink-0 w-8 whitespace-nowrap">(ข)</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาฝ่ายใดฝ่ายหนึ่งผิดคำรับรองและยืนยันใด ๆ ที่ให้ไว้ในสัญญาฉบับนี้ในสาระสำคัญ ไม่ว่าจะทั้งหมดหรือบางส่วน และ/หรือ คำรับรองและยืนยันใด ๆ ที่ให้ไว้ในสัญญาฉบับนี้เป็นคำรับรองและยืนยันที่ไม่เป็นความจริง หรือพิสูจน์ได้ว่าไม่เป็นความจริง ไม่ถูกต้อง หรืออาจจะก่อให้เกิดความเข้าใจผิดในสาระสำคัญ
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="shrink-0">(ค)</span>
+            <span className="shrink-0 w-8 whitespace-nowrap">(ค)</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาฝ่ายใดฝ่ายหนึ่งกระทำการหรือไม่กระทำการสิ่งใดซึ่งเป็นเหตุหรืออาจเป็นเหตุที่ก่อให้เกิดความเสียหายหรือเป็นอันตรายอย่างมีนัยสำคัญต่อคู่สัญญาอีกฝ่าย ภายใต้สัญญาฉบับนี้
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="shrink-0">(ง)</span>
+            <span className="shrink-0 w-8 whitespace-nowrap">(ง)</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาฝ่ายใดฝ่ายหนึ่งถูกฟ้องร้อง และ/หรือ ไม่ปฏิบัติตามคำพิพากษาของศาลใด ๆ จนเป็นเหตุให้หรืออาจเป็นเหตุให้มีผลกระทบในทางลบอย่างมีนัยสำคัญต่อความสามารถของคู่สัญญาในการปฏิบัติหน้าที่ใด ๆ ภายใต้สัญญาฉบับนี้
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="shrink-0">(จ)</span>
+            <span className="shrink-0 w-8 whitespace-nowrap">(จ)</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาฝ่ายใดฝ่ายหนึ่งมีหนี้สินล้นพ้นตัว (รวมทั้งการเข้าข้อสันนิษฐานตามกฎหมายล้มละลายเรื่องการมีหนี้สินล้นพ้นตัว) ล้มละลาย ถูกศาลสั่งให้เป็นคนไร้ความสามารถ คนเสมือนไร้ความสามารถ เลิกบริษัท ชำระบัญชี ควบรวมบริษัท หรือ กระทำการใด ๆ ที่สันนิษฐานได้ว่ามีหนี้สินล้นพ้นตัว หรือศาลมีคำสั่งรับคำร้องขอฟื้นฟูกิจการ คำสั่งฟื้นฟูกิจการ คำสั่งพิทักษ์ทรัพย์ (ไม่ว่าชั่วคราวหรือเด็ดขาด) ของคู่สัญญา จนเป็นเหตุให้หรืออาจเป็นเหตุให้มีผลกระทบในทางลบอย่างมีนัยสำคัญต่อความสามารถของคู่สัญญาในการปฏิบัติหน้าที่ใด ๆ ภายใต้สัญญาฉบับนี้
             </div>
           </div>
 
           <div className="flex gap-4">
-            <span className="shrink-0">(ฉ)</span>
+            <span className="shrink-0 w-8 whitespace-nowrap">(ฉ)</span>
             <div className="flex-1 text-justify leading-relaxed">
               คู่สัญญาฝ่ายใดฝ่ายหนึ่งไม่ดำเนินการส่งมอบเงินให้แก่ลูกค้าตามที่ระบุในข้อ 5.1. ของสัญญาฉบับนี้
             </div>
@@ -728,10 +741,10 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <div className="space-y-6 mt-8">
           {/* 8. */}
           <div className="flex gap-4">
-            <span className="shrink-0 w-6 font-bold text-[13px]">8.</span>
+            <span className="shrink-0 w-8 font-bold">8.</span>
             <div className="flex-1">
-              <span className="font-bold underline text-[13px]">การบอกเลิกสัญญา</span>
-              <div className="text-justify leading-relaxed mt-4 text-[12px]">
+              <span className="font-bold underline">การบอกเลิกสัญญา</span>
+              <div className="text-justify leading-relaxed mt-4">
                 หากเกิดเหตุแห่งการผิดสัญญาตามข้อ 7. ของสัญญาฉบับนี้ คู่สัญญาทั้งสองฝ่ายตกลงให้คู่สัญญาฝ่ายที่ไม่ได้ก่อให้เกิดเหตุแห่งการผิดสัญญาตามข้อ 7. ของสัญญาฉบับนี้ มีสิทธิฟ้องร้องให้คู่สัญญาอีกฝ่ายปฏิบัติตามสัญญานี้ หรือ บอกเลิกสัญญาและเรียกค่าเสียหายกับคู่สัญญาอีกฝ่ายได้
               </div>
             </div>
@@ -739,10 +752,10 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
           {/* 9. */}
           <div className="flex gap-4">
-            <span className="shrink-0 w-6 font-bold text-[13px]">9.</span>
+            <span className="shrink-0 w-8 font-bold">9.</span>
             <div className="flex-1">
-              <span className="font-bold underline text-[13px]">การโอนสิทธิและหน้าที่</span>
-              <div className="text-justify leading-relaxed mt-4 text-[12px]">
+              <span className="font-bold underline">การโอนสิทธิและหน้าที่</span>
+              <div className="text-justify leading-relaxed mt-4">
                 ตลอดอายุของสัญญาฉบับนี้ คู่สัญญาไม่สามารถโอนสิทธิและหน้าที่ ไม่ว่าจะทั้งหมดหรือบางส่วนภายใต้สัญญาฉบับนี้ให้แก่บุคคลอื่นได้ เว้นแต่ได้รับความยินยอมเป็นลายลักษณ์อักษรจากคู่สัญญาอีกฝ่าย
               </div>
             </div>
@@ -750,30 +763,30 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
 
           {/* 10. */}
           <div className="flex gap-4">
-            <span className="shrink-0 w-6 font-bold text-[13px]">10.</span>
+            <span className="shrink-0 w-8 font-bold">10.</span>
             <div className="flex-1">
-              <span className="font-bold underline text-[13px]">คำบอกกล่าว</span>
-              <div className="text-justify leading-relaxed mt-4 text-[12px]">
+              <span className="font-bold underline">คำบอกกล่าว</span>
+              <div className="text-justify leading-relaxed mt-4">
                 เว้นแต่สัญญาฉบับนี้จะระบุเป็นอย่างอื่น คำบอกกล่าวใด ๆ ที่ต้องส่งให้คู่สัญญาอีกฝ่าย จะต้องส่ง ณ สถานที่อยู่ดังที่ระบุไว้ข้างล่าง หรือสถานที่อื่นตามที่คู่สัญญาจะได้แจ้งให้ทราบเป็นลายลักษณ์อักษร คำบอกกล่าวนั้นอาจส่งด้วยตนเอง พนักงานส่งเอกสาร ไปรษณีย์ลงทะเบียน หรือจดหมายอิเล็กทรอนิกส์ โดยการส่งคำบอกกล่าวให้ถือว่ามีผล ดังนี้
               </div>
 
-              <div className="mt-4 space-y-4 text-[12px]">
+              <div className="mt-4 space-y-4">
                 <div className="flex gap-4">
-                  <span className="shrink-0">(ก)</span>
+                  <span className="shrink-0 w-8 whitespace-nowrap">(ก)</span>
                   <div className="flex-1 text-justify leading-relaxed">
                     นับแต่เวลาที่ไปถึง หากส่งด้วยตนเอง หรือพนักงานส่งเอกสาร
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <span className="shrink-0">(ข)</span>
+                  <span className="shrink-0 w-8 whitespace-nowrap">(ข)</span>
                   <div className="flex-1 text-justify leading-relaxed">
                     ภายในวันที่กำหนดในใบตอบรับทางไปรษณีย์หรือใบรับที่เป็นลายลักษณ์อักษรอื่นในกรณีที่มีการส่งทางไปรษณีย์ หรือ
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <span className="shrink-0">(ค)</span>
+                  <span className="shrink-0 w-8 whitespace-nowrap">(ค)</span>
                   <div className="flex-1 text-justify leading-relaxed">
                     ภายในวันที่จดหมายอิเล็กทรอนิกส์ส่งไปยังคู่สัญญาฝ่ายผู้รับตามรายละเอียดที่คู่สัญญาฝ่ายผู้รับได้แจ้งไว้ด้านล่าง
                   </div>
@@ -820,18 +833,6 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           <div className="text-justify leading-relaxed">
             หากคู่สัญญาฝ่ายหนึ่งฝ่ายใดต้องการเปลี่ยนสถานที่อยู่ คู่สัญญาฝ่ายนั้นต้องแจ้งให้คู่สัญญาอีกฝ่ายทราบล่วงหน้าเป็นลายลักษณ์อักษรไม่น้อยกว่า 5 (ห้า) วันทำการก่อนวันที่ย้ายหรือเปลี่ยนแปลงสถานที่อยู่ ในกรณีเช่นนี้คู่สัญญาฝ่ายที่ได้รับแจ้งการเปลี่ยนแปลงสถานที่อยู่จะส่งคำบอกกล่าวให้แก่คู่สัญญาฝ่ายที่แจ้งเปลี่ยนแปลงสถานที่อยู่ตามรายละเอียดที่ได้รับแจ้งดังกล่าว
           </div>
-
-          <div className="space-y-4 pt-4">
-            <div className="flex gap-4">
-              <span className="shrink-0 w-8 font-bold">11.</span>
-              <div className="flex-1 space-y-4">
-                <div className="font-bold">การใช้สิทธิ</div>
-                <div className="text-justify leading-relaxed">
-                  การที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งไม่ใช้สิทธิหรือล่าช้าในการใช้สิทธิใด ๆ ภายใต้สัญญาฉบับนี้ มิให้ถือว่าการไม่ใช้สิทธิหรือการล่าช้าดังกล่าวเป็นการสละสิทธิของคู่สัญญาฝ่ายนั้น
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <PageFooter pageNum={11} />
@@ -845,6 +846,18 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageHeader />
 
         <div className="space-y-6 mt-8">
+          <div className="space-y-4">
+            <div className="flex gap-4">
+              <span className="shrink-0 w-8 font-bold">11.</span>
+              <div className="flex-1 space-y-4">
+                <div className="font-bold">การใช้สิทธิ</div>
+                <div className="text-justify leading-relaxed">
+                  การที่คู่สัญญาฝ่ายใดฝ่ายหนึ่งไม่ใช้สิทธิหรือล่าช้าในการใช้สิทธิใด ๆ ภายใต้สัญญาฉบับนี้ มิให้ถือว่าการไม่ใช้สิทธิหรือการล่าช้าดังกล่าวเป็นการสละสิทธิของคู่สัญญาฝ่ายนั้น
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-4">
             <div className="flex gap-4">
               <span className="shrink-0 w-8 font-bold">12.</span>
@@ -911,7 +924,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageHeader />
 
         <div className="space-y-6 mt-8">
-          <div className="text-justify leading-relaxed indent-16">
+          <div className="text-justify leading-relaxed indent-10">
             สัญญาฉบับนี้ทำขึ้นมา 2 (สอง) ฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาทั้งสองฝ่ายได้อ่านข้อความในสัญญาเพื่อเป็นหลักฐานในการทำสัญญาฉบับนี้ คู่สัญญาทั้งสองฝ่ายได้ลงนามในสัญญาฉบับนี้ต่อหน้าพยาน ณ วันที่ซึ่งได้ระบุไว้ในหน้าแรกของสัญญาฉบับนี้
           </div>
 
@@ -1170,8 +1183,8 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                             <div className="text-[14px]">ค่าตอบแทนที่เกี่ยวข้องกับการให้บริการ</div>
                           </div>
                           <div className="flex gap-4 pt-4 text-left font-normal">
-                            <span className="shrink-0 font-bold">1.</span>
-                            <div className="space-y-1">
+                            <span className="shrink-0 w-8 font-bold">1.</span>
+                            <div className="flex-1 space-y-1">
                               <span className="font-bold">ค่าตอบแทนการจัดหาลูกค้า (Origination Fee)</span>
                               <div className="text-justify leading-relaxed mt-2">
                                 {(() => {
@@ -1197,7 +1210,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
                         )
                       )}
 
-                      <div className="pl-8 mt-4">
+                      <div className="mt-4">
                         {renderAgreementTable(agreement, itemsInDocIdx)}
                       </div>
                     </div>
@@ -1215,7 +1228,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
         <PageHeader />
 
         <div className="space-y-6 font-normal">
-          <div className="space-y-4 text-[12px] leading-relaxed mb-6">
+          <div className="space-y-4 leading-relaxed mb-6">
             <div className="text-justify">
               ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันที่ธนาคารเปิดดำเนินการเพื่อประกอบธุรกิจเป็นการทั่วไปในประเทศไทย <b>(“วันทำการ”)</b> ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
             </div>
@@ -1224,9 +1237,9 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
             </div>
           </div>
 
-          <div className=" flex gap-4 pt-4">
-            <span className="shrink-0 font-bold">2.</span>
-            <div className="text-justify">
+          <div className="flex gap-4 pt-4 text-left font-normal">
+            <span className="shrink-0 w-8 font-bold">2.</span>
+            <div className="flex-1 space-y-1">
               <span className="font-bold">ค่าตอบแทนการบริหารจัดการลูกค้า (Service Fee)</span>
               <div className="mt-2 leading-relaxed">
                 เนื่องจากคู่สัญญาฝ่ายที่ 1 รับหน้าที่และให้บริการในการบริหารจัดการลูกค้า ตามที่ระบุในข้อ 2. ของ <b><u>เอกสารแนบท้ายหมายเลข 1</u></b> (การให้บริการที่เกี่ยวข้องกับสัญญาทางการเงิน) ดังนั้น คู่สัญญาทั้งสองฝ่ายตกลงให้คู่สัญญาฝ่ายที่ 2 เป็นผู้ชำระค่าตอบแทนให้แก่คู่สัญญาฝ่ายที่ 1 <span className="bg-[#ccffcc] print:bg-transparent">ในอัตราร้อยละ {saData.serviceFeeRate} ({translateRateToThai(saData.serviceFeeRate)})</span> ต่อปี ของจำนวนเงินที่คู่สัญญาฝ่ายที่ 2 ให้การสนับสนุนทางการเงินแก่ลูกค้าในสัญญาทางการเงิน อ้างอิงตามสัดส่วนที่ระบุในข้อ 1. ของสัญญาฉบับนี้ โดยกำหนดชำระเป็นรายเดือน ตลอดอายุสัญญาฉบับนี้ รายละเอียดปรากฏตามตารางที่แนบมาด้วยนี้
@@ -1244,7 +1257,7 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           let currentPageOffset = 0;
 
           const renderClosingText = () => (
-            <div className="mt-8 space-y-4 font-normal text-[12px]">
+            <div className="mt-8 space-y-4 font-normal">
               <div className="text-justify">
                 ทั้งนี้ ในกรณีที่วันครบกำหนดชำระค่าตอบแทนไม่ใช่วันทำการ ให้คู่สัญญาฝ่ายที่ 2 ชำระเงินดังกล่าวในวันทำการแรกถัดจากวันที่กำหนดให้ชำระค่าตอบแทน
               </div>
@@ -1303,37 +1316,37 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
           <div className="text-[14px]">คำรับรองและยืนยัน (Representations and Warranties)</div>
         </div>
 
-        <div className="space-y-6 font-normal text-[12px] pt-4">
-          <div className="grid grid-cols-[30px_1fr] gap-2">
-            <span className="font-bold">1.</span>
-            <div className="space-y-6">
-              <span className="font-bold">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 1</span>
-              <div>ณ วันที่ตามสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ คู่สัญญาฝ่ายที่ 1 ให้คำรับรองและยืนยันว่า</div>
+        <div className="space-y-6 font-normal pt-4">
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 font-bold">1.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 1</div>
+              <div className="leading-relaxed">ณ วันที่ตามสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ คู่สัญญาฝ่ายที่ 1 ให้คำรับรองและยืนยันว่า</div>
 
-              <div className="space-y-6 ml-4">
-                <div className="grid grid-cols-[40px_1fr] gap-2">
-                  <span className="shrink-0">(ก)</span>
-                  <div className="text-justify">คู่สัญญาฝ่ายที่ 1 เป็นบริษัทจำกัดที่จัดตั้งขึ้นและดำรงอยู่อย่างถูกต้องตามกฎหมายไทย</div>
+              <div className="space-y-4 pt-2">
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(ก)</span>
+                  <div className="flex-1 text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 เป็นบริษัทจำกัดที่จัดตั้งขึ้นและดำรงอยู่อย่างถูกต้องตามกฎหมายไทย</div>
                 </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
-                  <span className="shrink-0">(ข)</span>
-                  <div className="text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 มีอำนาจในการเข้าทำสัญญา การปฏิบัติตามสัญญา การจัดทำเอกสาร และการดำเนินการอื่นใดตามที่ระบุไว้ในสัญญาฉบับนี้ ตลอดจนการกระทำต่าง ๆ ที่เกี่ยวเนื่องกับสัญญาฉบับนี้ และการกระทำดังกล่าวไม่ขัดต่อวัตถุประสงค์และข้อบังคับของคู่สัญญาฝ่ายที่ 1</div>
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(ข)</span>
+                  <div className="flex-1 text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 มีอำนาจในการเข้าทำสัญญา การปฏิบัติตามสัญญา การจัดทำเอกสาร และการดำเนินการอื่นใดตามที่ระบุไว้ในสัญญาฉบับนี้ ตลอดจนการกระทำต่าง ๆ ที่เกี่ยวเนื่องกับสัญญาฉบับนี้ และการกระทำดังกล่าวไม่ขัดต่อวัตถุประสงค์และข้อบังคับของคู่สัญญาฝ่ายที่ 1</div>
                 </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
-                  <span className="shrink-0">(ค)</span>
-                  <div className="text-justify leading-relaxed">การที่คู่สัญญาฝ่ายที่ 1 เข้าทำสัญญาฉบับนี้หรือปฏิบัติตามความผูกพันใด ๆ ในสัญญาฉบับนี้ ไม่เป็นการขัดแย้งหรือฝ่าฝืนข้อกำหนด เงื่อนไข หรือคำรับรองใด ๆ ในส่วนที่เป็นสาระสำคัญภายใต้สัญญาที่มีนัยสำคัญที่คู่สัญญาฝ่ายที่ 1 ได้ทำหรือให้กับบุคคลอื่น หรือข้อกำหนดหรือเงื่อนไขตามที่ระบุไว้ในการอนุญาต ใบอนุญาต ความเห็นชอบ หรือสิทธิหรือประโยชน์อื่นใดที่คู่สัญญาฝ่ายที่ 1 ได้รับ</div>
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(ค)</span>
+                  <div className="flex-1 text-justify leading-relaxed">การที่คู่สัญญาฝ่ายที่ 1 เข้าทำสัญญาฉบับนี้หรือปฏิบัติตามความผูกพันใด ๆ ในสัญญาฉบับนี้ ไม่เป็นการขัดแย้งหรือฝ่าฝืนข้อกำหนด เงื่อนไข หรือคำรับรองใด ๆ ในส่วนที่เป็นสาระสำคัญภายใต้สัญญาที่มีนัยสำคัญที่คู่สัญญาฝ่ายที่ 1 ได้ทำหรือให้กับบุคคลอื่น หรือข้อกำหนดหรือเงื่อนไขตามที่ระบุไว้ในการอนุญาต ใบอนุญาต ความเห็นชอบ หรือสิทธิหรือประโยชน์อื่นใดที่คู่สัญญาฝ่ายที่ 1 ได้รับ</div>
                 </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
-                  <span className="shrink-0">(ง)</span>
-                  <div className="text-justify">คู่สัญญาฝ่ายที่ 1 ไม่อยู่ในระหว่างการเลิกบริษัทหรือขั้นตอนการฟ้องหรือการดำเนินกระบวนการล้มละลาย</div>
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(ง)</span>
+                  <div className="flex-1 text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 ไม่อยู่ในระหว่างการเลิกบริษัทหรือขั้นตอนการฟ้องหรือการดำเนินกระบวนการล้มละลาย</div>
                 </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
-                  <span className="shrink-0">(จ)</span>
-                  <div className="text-justify leading-relaxed">เท่าที่คู่สัญญาฝ่ายที่ 1 ทราบ ไม่มีข้อพิพาททางกฎหมายกับบุคคลใด ๆ และ ทั้งในและนอกศาล ที่มีผลกระทบในทางลบอย่างมีนัยสำคัญต่อการเข้าและปฏิบัติตามสัญญาฉบับนี้หรือส่งผลกระทบในทางลบอย่างมีนัยสำคัญกับการให้บริการแก่คู่สัญญาฝ่ายที่ 2 และเท่าที่คู่สัญญาฝ่ายที่ 1 ทราบ ไม่มีเหตุ หรือข้อขัดแย้ง การถูกฟ้องร้องและการเรียกร้องค่าเสียหายเป็นลายลักษณ์อักษรจากหรือกับบุคคลอื่น ที่ส่งผลกระทบในทางลบอย่างมีนัยสำคัญต่อความสามารถของคู่สัญญาฝ่ายที่ 1 ในการปฏิบัติตามสัญญาฉบับนี้ได้อย่างสมบูรณ์ หรืออาจส่งผลกระทบในทางลบอย่างมีนัยสำคัญกับการให้บริการแก่คู่สัญญาฝ่ายที่ 2</div>
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(จ)</span>
+                  <div className="flex-1 text-justify leading-relaxed">เท่าที่คู่สัญญาฝ่ายที่ 1 ทราบ ไม่มีข้อพิพาททางกฎหมายกับบุคคลใด ๆ และ ทั้งในและนอกศาล ที่มีผลกระทบในทางลบอย่างมีนัยสำคัญต่อการเข้าและปฏิบัติตามสัญญาฉบับนี้หรือส่งผลกระทบในทางลบอย่างมีนัยสำคัญกับการให้บริการแก่คู่สัญญาฝ่ายที่ 2 และเท่าที่คู่สัญญาฝ่ายที่ 1 ทราบ ไม่มีเหตุ หรือข้อขัดแย้ง การถูกฟ้องร้องและการเรียกร้องค่าเสียหายเป็นลายลักษณ์อักษรจากหรือกับบุคคลอื่น ที่ส่งผลกระทบในทางลบอย่างมีนัยสำคัญต่อความสามารถของคู่สัญญาฝ่ายที่ 1 ในการปฏิบัติตามสัญญาฉบับนี้ได้อย่างสมบูรณ์ หรืออาจส่งผลกระทบในทางลบอย่างมีนัยสำคัญกับการให้บริการแก่คู่สัญญาฝ่ายที่ 2</div>
                 </div>
-                <div className="grid grid-cols-[40px_1fr] gap-2">
-                  <span className="shrink-0">(ฉ)</span>
-                  <div className="text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 มีความรู้ความสามารถและประสบการณ์ให้การจัดหาและบริหารจัดการลูกค้าและมีบุคลากรที่เพียงพอและเหมาะสมต่อการให้บริการที่เกี่ยวข้องกับสัญญาทางการเงินตามที่กำหนดในสัญญาฉบับนี้แก่คู่สัญญาฝ่ายที่ 2</div>
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(ฉ)</span>
+                  <div className="flex-1 text-justify leading-relaxed">คู่สัญญาฝ่ายที่ 1 มีความรู้ความสามารถและประสบการณ์ให้การจัดหาและบริหารจัดการลูกค้าและมีบุคลากรที่เพียงพอและเหมาะสมต่อการให้บริการที่เกี่ยวข้องกับสัญญาทางการเงินตามที่กำหนดในสัญญาฉบับนี้แก่คู่สัญญาฝ่ายที่ 2</div>
                 </div>
               </div>
             </div>
@@ -1346,43 +1359,45 @@ export default function JointVenturePreview({ data, agileInfo, tkInfo, agreement
       <div className="print-page relative min-h-[1050px] p-24 bg-white shadow-lg print:shadow-none border-b border-gray-100 mt-8 print:mt-0">
         <PageHeader />
 
-        <div className="pl-8 flex gap-2 pt-4">
-          <span className="shrink-0 font-bold">2.</span>
-          <div className="text-justify">
-            <span className="font-bold">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 2</span>
-            <div className="mt-4 leading-loose">
-              ณ วันที่ตามสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ คู่สัญญาฝ่ายที่ 2 ให้คำรับรองและยืนยันว่า
-            </div>
+        <div className="space-y-6 font-normal pt-4">
+          <div className="flex gap-4">
+            <span className="shrink-0 w-8 font-bold">2.</span>
+            <div className="flex-1 space-y-4">
+              <div className="font-bold">คำรับรองและยืนยันของคู่สัญญาฝ่ายที่ 2</div>
+              <div className="leading-relaxed">
+                ณ วันที่ตามสัญญาฉบับนี้และตลอดระยะเวลาของสัญญาฉบับนี้ คู่สัญญาฝ่ายที่ 2 ให้คำรับรองและยืนยันว่า
+              </div>
 
-            <div className="mt-4 space-y-4">
-              <div className="flex gap-4">
-                <span className="shrink-0">(ก)</span>
-                <div>
-                  คู่สัญญาฝ่ายที่ 2 เป็นบริษัท[มหาชน]จำกัดที่จัดตั้งขึ้นและดำรงอยู่อย่างถูกต้องตามกฎหมายไทย
+              <div className="space-y-4 pt-2">
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(ก)</span>
+                  <div className="flex-1 text-justify leading-relaxed">
+                    คู่สัญญาฝ่ายที่ 2 เป็นบริษัท[มหาชน]จำกัดที่จัดตั้งขึ้นและดำรงอยู่อย่างถูกต้องตามกฎหมายไทย
+                  </div>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <span className="shrink-0">(ข)</span>
-                <div>
-                  คู่สัญญาฝ่ายที่ 2 มีอำนาจในการเข้าทำสัญญาการปฏิบัติตามสัญญา การจัดทำเอกสาร และการดำเนินการอื่นใดตามที่ระบุไว้ในสัญญาฉบับนี้ ตลอดจนการกระทำต่าง ๆ ที่เกี่ยวเนื่องกับสัญญาฉบับนี้ และการกระทำดังกล่าวไม่ขัดต่อวัตถุประสงค์และข้อบังคับของคู่สัญญาฝ่ายที่ 2
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(ข)</span>
+                  <div className="flex-1 text-justify leading-relaxed">
+                    คู่สัญญาฝ่ายที่ 2 มีอำนาจในการเข้าทำสัญญาการปฏิบัติตามสัญญา การจัดทำเอกสาร และการดำเนินการอื่นใดตามที่ระบุไว้ในสัญญาฉบับนี้ ตลอดจนการกระทำต่าง ๆ ที่เกี่ยวเนื่องกับสัญญาฉบับนี้ และการกระทำดังกล่าวไม่ขัดต่อวัตถุประสงค์และข้อบังคับของคู่สัญญาฝ่ายที่ 2
+                  </div>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <span className="shrink-0">(ค)</span>
-                <div>
-                  การที่ผู้ให้บริการเข้าทำสัญญาฉบับนี้หรือปฏิบัติตามความผูกพันใด ๆ ในสัญญาฉบับนี้ ไม่เป็นการขัดแย้งหรือฝ่าฝืนข้อกำหนด เงื่อนไข หรือคำรับรองใด ๆ ในส่วนที่เป็นสาระสำคัญภายใต้สัญญาที่มีนัยสำคัญที่คู่สัญญาฝ่ายที่ 2 ได้ทำหรือให้กับบุคคลอื่น หรือข้อกำหนดหรือเงื่อนไขตามที่ระบุไว้ในการอนุญาต ใบอนุญาต ความเห็นชอบ หรือสิทธิหรือประโยชน์อื่นใดที่คู่สัญญาฝ่ายที่ 2 ได้รับ
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(ค)</span>
+                  <div className="flex-1 text-justify leading-relaxed">
+                    การที่ผู้ให้บริการเข้าทำสัญญาฉบับนี้หรือปฏิบัติตามความผูกพันใด ๆ ในสัญญาฉบับนี้ ไม่เป็นการขัดแย้งหรือฝ่าฝืนข้อกำหนด เงื่อนไข หรือคำรับรองใด ๆ ในส่วนที่เป็นสาระสำคัญภายใต้สัญญาที่มีนัยสำคัญที่คู่สัญญาฝ่ายที่ 2 ได้ทำหรือให้กับบุคคลอื่น หรือข้อกำหนดหรือเงื่อนไขตามที่ระบุไว้ในการอนุญาต ใบอนุญาต ความเห็นชอบ หรือสิทธิหรือประโยชน์อื่นใดที่คู่สัญญาฝ่ายที่ 2 ได้รับ
+                  </div>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <span className="shrink-0">(ง)</span>
-                <div>
-                  คู่สัญญาฝ่ายที่ 2 ไม่อยู่ในระหว่างการเลิกบริษัทหรือขั้นตอนการฟ้องหรือการดำเนินขบวนการล้มละลาย
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(ง)</span>
+                  <div className="flex-1 text-justify leading-relaxed">
+                    คู่สัญญาฝ่ายที่ 2 ไม่อยู่ในระหว่างการเลิกบริษัทหรือขั้นตอนการฟ้องหรือการดำเนินขบวนการล้มละลาย
+                  </div>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <span className="shrink-0">(จ)</span>
-                <div>
-                  เท่าที่คู่สัญญาฝ่ายที่ 2 ทราบ ไม่มีข้อพิพาททางกฎหมายกับบุคคลใด ๆ และ ทั้งในและนอกศาล ที่มีผลกระทบในทางลบอย่างมีนัยสำคัญต่อการเข้าทำและปฏิบัติตามสัญญาฉบับนี้ และเท่าที่คู่สัญญาฝ่ายที่ 2 ทราบ ไม่มีเหตุ หรือ ข้อขัดแย้ง การถูกฟ้องร้องและการเรียกร้องค่าเสียหายเป็นลายลักษณ์อักษรจากหรือกับบุคคลอื่น ที่ส่งผลกระทบในทางลบอย่างมีนัยสำคัญต่อความสามารถของคู่สัญญาฝ่ายที่ 2 ในการปฏิบัติตามสัญญาฉบับนี้ได้อย่างสมบูรณ์
+                <div className="flex gap-4">
+                  <span className="shrink-0 w-8">(จ)</span>
+                  <div className="flex-1 text-justify leading-relaxed">
+                    เท่าที่คู่สัญญาฝ่ายที่ 2 ทราบ ไม่มีข้อพิพาททางกฎหมายกับบุคคลใด ๆ และ ทั้งในและนอกศาล ที่มีผลกระทบในทางลบอย่างมีนัยสำคัญต่อการเข้าทำและปฏิบัติตามสัญญาฉบับนี้ และเท่าที่คู่สัญญาฝ่ายที่ 2 ทราบ ไม่มีเหตุ หรือ ข้อขัดแย้ง การถูกฟ้องร้องและการเรียกร้องค่าเสียหายเป็นลายลักษณ์อักษรจากหรือกับบุคคลอื่น ที่ส่งผลกระทบในทางลบอย่างมีนัยสำคัญต่อความสามารถของคู่สัญญาฝ่ายที่ 2 ในการปฏิบัติตามสัญญาฉบับนี้ได้อย่างสมบูรณ์
+                  </div>
                 </div>
               </div>
             </div>
